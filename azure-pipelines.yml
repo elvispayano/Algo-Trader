@@ -1,0 +1,12 @@
+# Initial Pipeline
+
+trigger:
+- master
+- feature/*
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: echo Building!
