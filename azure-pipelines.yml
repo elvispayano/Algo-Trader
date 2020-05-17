@@ -2,7 +2,7 @@
 
 trigger:
 - master
-- feature/*s
+- feature/*
 
 stages:
 - stage: Test
