@@ -1,0 +1,23 @@
+# Initial Pipeline
+
+trigger:
+- master
+- feature/*
+
+stages:
+- stage: Test
+  jobs:
+  - job: Python
+    steps:
+    - script: pip install xmlrunner 
+    - task: PythonScript@0
+      inputs:
+        scriptSource: 'filePath'
+        workingDirectory: './tools/python'
+        scriptPath: './tools/python/run_tests.py'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        searchFolder: './tools/python/reports'
+        mergeTestResults: true
