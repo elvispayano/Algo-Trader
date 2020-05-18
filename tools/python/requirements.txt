@@ -1,0 +1,9 @@
+# Requirements.txt
+# List of the nonstandard modules that are utilized by this
+# tool suite 
+# 
+# Author: Elvis Payano
+
+# Requirements without version specifiers
+yfinance
+xmlrunner

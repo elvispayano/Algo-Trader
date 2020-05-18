@@ -1,15 +1,28 @@
-#----------------------------------------------------------------------
+# ticker
+# Yahoo Finance interface file that provides up to data information for
+# tickers listed on the stock exchange. Data is all adjusted into current
+# currency standards.
+#
+# Author: Elvis Payano
+
 # Imports
-#----------------------------------------------------------------------
 import yfinance as yf
 
-#----------------------------------------------------------------------
-# Support Functions
-#----------------------------------------------------------------------
-# Fetch Ticker Data
-def FetchHistory(tick):
+# Fetch
+# Returns a structured dictionary element that contains requested
+# historical data
+#
+# Input:
+#   Tick = String element of a ticker symbol
+#
+# Output:
+#   HistData = Dictionary with requested fields
+def fetch(tick, fp='max', fi='1d'):
+  if type(tick) is not type(str()):
+    raise(TypeError)
+
   Ticker = yf.Ticker(tick)
-  hist = Ticker.history(period='max', interval='1d')
+  hist = Ticker.history(period=fp, interval=fi)
   return yfhist2cell(hist)
 
 def yfextractelement(history,content):

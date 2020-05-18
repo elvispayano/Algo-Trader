@@ -9,7 +9,8 @@ stages:
   jobs:
   - job: Python
     steps:
-    - script: pip install xmlrunner 
+    - script: pip install -r ./requirements.txt
+      workingDirectory: ./tools/python
     - task: PythonScript@0
       inputs:
         scriptSource: 'filePath'
