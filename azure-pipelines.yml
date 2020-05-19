@@ -9,8 +9,12 @@ stages:
   jobs:
   - job: Python
     steps:
+    - script: pip install .
+      workingDirectory: ./tools/python/modules/ticker
+      displayName: Local Module Installation
     - script: pip install -r ./requirements.txt
       workingDirectory: ./tools/python
+      displayName: External Module Configuration
     - task: PythonScript@0
       inputs:
         scriptSource: 'filePath'

@@ -1,4 +1,5 @@
-# ticker
+# Interface
+#
 # Yahoo Finance interface file that provides up to data information for
 # tickers listed on the stock exchange. Data is all adjusted into current
 # currency standards.
@@ -6,24 +7,7 @@
 # Author: Elvis Payano
 
 # Imports
-import yfinance as yf
-
-# Fetch
-# Returns a structured dictionary element that contains requested
-# historical data
-#
-# Input:
-#   Tick = String element of a ticker symbol
-#
-# Output:
-#   HistData = Dictionary with requested fields
-def fetch(tick, fp='max', fi='1d'):
-  if type(tick) is not type(str()):
-    raise(TypeError)
-
-  Ticker = yf.Ticker(tick)
-  hist = Ticker.history(period=fp, interval=fi)
-  return yfhist2cell(hist)
+import yfinance
 
 def yfextractelement(history,content):
   element = list()
@@ -56,3 +40,26 @@ def yfhist2cell(history):
     Cell.append(Group)
 
   return Cell
+
+# Fetch
+#
+# Returns a Pandas Data structure that contains the requested
+# historical data
+#
+# Input:
+#   Tick = String element of a ticker symbol
+#
+# Output:
+#   HistData = Pandas Data Type
+def fetch(tick, fp='max', fi='1d'):
+  # Validate input types
+  if (type(tick) is not type(str())) or \
+     (type(fp) is not type(str())) or \
+     (type(fi) is not type(str())):
+    raise(TypeError)
+
+  # Request and return ticker historical data
+  return yfinance.Ticker(tick).history(period=fp, interval=fi)
+
+if __name__ == '__main__':
+  fetch("MSFT")
