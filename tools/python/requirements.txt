@@ -5,5 +5,7 @@
 # Author: Elvis Payano
 
 # Requirements without version specifiers
-yfinance
+./modules/ticker
+coverage
 xmlrunner
+yfinance

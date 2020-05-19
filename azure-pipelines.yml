@@ -9,12 +9,15 @@ stages:
   jobs:
   - job: Python
     steps:
-    - script: pip install .
-      workingDirectory: ./tools/python/modules/ticker
-      displayName: Local Module Installation
-    - script: pip install -r ./requirements.txt
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.7'
+        addToPath: true
+    - script: |
+        pip install --upgrade pip
+        pip install -r ./requirements.txt
+      displayName: Install Requirements
       workingDirectory: ./tools/python
-      displayName: External Module Configuration
     - task: PythonScript@0
       inputs:
         scriptSource: 'filePath'
@@ -26,3 +29,7 @@ stages:
         testResultsFiles: '**/TEST-*.xml'
         searchFolder: './tools/python/reports'
         mergeTestResults: true
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: 'tools/python/coverage.xml'

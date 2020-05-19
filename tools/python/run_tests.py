@@ -3,6 +3,7 @@ import unittest
 
 # Import Installed Libraries
 import xmlrunner
+import coverage
 
 # Main Function Handle
 if __name__ == '__main__':
@@ -18,5 +19,14 @@ if __name__ == '__main__':
     # Initialize XML generating test runner
     runner = xmlrunner.XMLTestRunner(output='./reports')
 
+    # Start coverage analyzer
+    cov = coverage.Coverage()
+
     # Run all tests within test suite
+    cov.start()
     runner.run(testSuite)
+    cov.stop()
+
+    # Save coverage reports
+    cov.save()
+    cov.xml_report()
