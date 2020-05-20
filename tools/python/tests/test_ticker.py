@@ -16,7 +16,10 @@ class TestTickerInterface(TestCase):
             "Close": [184.91],
             "Volume": [34415475],
         }
-        self.mocked_output = DataFrame(data=data,index=Col)
+        self.m_hist = DataFrame(data=data,index=Col)
+        
+        cell_data = ["2020-05-18", 185.75, 186.20, 183.98, 184.91, 34415474]
+        self.m_hist_c = cell_data
 
     def tearDown(self):
         pass
@@ -27,12 +30,24 @@ class TestTickerInterface(TestCase):
             interface.fetch("XYZ", fp=[1,2,3])
             interface.fetch("XYZ", fi=[1,2,3])
 
-        with mock.patch('ticker.interface.yfinance.ticker.TickerBase.history') as mocked_history:
-            mocked_history.return_Value = self.mocked_output
-            output = interface.fetch("XYZ")
-            mocked_history.assert_called_with(period='max', interval='1d')
+        with mock.patch('ticker.interface.yfinance.ticker.TickerBase.history') as m_history_fun:
+            m_history_fun.return_Value = self.m_hist
+            interface.fetch("XYZ")
+            m_history_fun.assert_called_with(period='max', interval='1d')
+
             interface.fetch("ABC",fp="1w",fi="1m")
-            mocked_history.assert_called_with(period='1w', interval='1m')
+            m_history_fun.assert_called_with(period='1w', interval='1m')
+
+    def test_hist2cell(self):
+        invalid_input = list()
+        with self.assertRaises(TypeError):
+            interface.hist2cell(invalid_input)
+
+        #interface.hist2cell(self.m_hist)
+        #self.assertEqual(self.m_hist_c, interface.hist2cell(self.m_hist))
+
+        
+
     
         
 

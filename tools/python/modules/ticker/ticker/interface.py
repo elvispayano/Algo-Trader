@@ -8,6 +8,7 @@
 
 # Imports
 import yfinance
+from pandas.core.frame import DataFrame
 
 def yfextractelement(history,content):
   element = list()
@@ -25,7 +26,16 @@ def yfextractelement(history,content):
 
   return element
 
-def yfhist2cell(history):
+def hist2cell(history):
+  # Validate input types
+  if type(history) is not type(DataFrame()):
+    raise(TypeError)
+
+  # Capture entry data
+  elements = list()
+  for title in history.axes[1]:
+    elements.append(title)
+
   Cell = list()
 
   Date      = yfextractelement(history,"Datetime")
@@ -60,6 +70,3 @@ def fetch(tick, fp='max', fi='1d'):
 
   # Request and return ticker historical data
   return yfinance.Ticker(tick).history(period=fp, interval=fi)
-
-if __name__ == '__main__':
-  fetch("MSFT")

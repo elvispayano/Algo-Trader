@@ -3,3 +3,6 @@ source =
 	ticker
 
 [report] precision 2
+exclude_lines = 
+	from
+	import
