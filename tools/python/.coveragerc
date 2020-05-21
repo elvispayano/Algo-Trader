@@ -1,7 +1,17 @@
+# Coverage RC
+#
+# Coverage configuration to limit coverage analysis to 
+# relevant files
+#
+# Author: Elvis Payano
+
+# Configure Runtime
+# Which modules to run code coverage on
 [run]
 source =
 	ticker
 
+# Configure Report Generation
 [report] precision 2
 exclude_lines = 
 	from

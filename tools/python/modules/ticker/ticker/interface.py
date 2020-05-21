@@ -27,22 +27,23 @@ def dataframe2cell(history):
     raise(TypeError)
 
   # Capture entry data
-  entry_rows = list(history.index)
+  dates = list(history.index)
   columns = list(history.columns)
 
-  # Populate 2D array elements
+  # Gather data and iterate through each element to enter into
+  # a growing 2D list
   CellData = list()
   count = 0
-  for entry in entry_rows:
-    temp_list = list()
-    temp_list.append(str(entry))
+  for day in dates:
+    data = list()
+    data.append(str(day))
     for col in columns:
-      temp_val = float(history[str(col)][count])
-      if temp_val.is_integer():
-        temp_list.append(int(temp_val))
+      data_value = float(history[str(col)][count])
+      if data_value.is_integer():
+        data.append(int(data_value))
       else:
-        temp_list.append(temp_val)
-    CellData.append(temp_list)
+        data.append(data_value)
+    CellData.append(data)
     count = count + 1
 
   return CellData

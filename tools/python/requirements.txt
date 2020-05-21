@@ -6,6 +6,7 @@
 
 # Requirements without version specifiers
 ./modules/ticker
+pandas
 coverage
 xmlrunner
 yfinance

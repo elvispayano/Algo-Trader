@@ -1,3 +1,9 @@
+# Interface (Tests)
+#
+# Run tests and on the ticker interface functions
+#
+# Author: Elvis Payano
+
 # Import Standard Modules
 from unittest import TestCase, mock
 from pandas.core.frame import DataFrame
