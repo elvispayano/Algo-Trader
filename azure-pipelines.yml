@@ -1,23 +1,60 @@
-# Initial Pipeline
+# Azure Pipeline
+#
+# Pipeline configuration that defines the stages and steps required for
+# building, testing, and deploying project
+#
+# Author: Elvis Payano
 
+# Triggers
+# Run pipeline on master and all feature branches
 trigger:
 - master
 - feature/*
 
 stages:
+  # Testing Stage
+  # Generate & publish all test & coverage results
 - stage: Test
   jobs:
+
+    # Test & Coverage reports for python
   - job: Python
     steps:
-    - script: pip install xmlrunner 
+
+      # Configure python environment
+    - task: UsePythonVersion@0
+      displayName: Version Configuration
+      inputs:
+        versionSpec: '3.7'
+        addToPath: true
+
+      # Install external modules
+    - script: |
+        pip install --upgrade pip
+        pip install -r ./requirements.txt
+      displayName: Install Requirements
+      workingDirectory: ./tools/python
+
+      # Generate test & coverage reports
     - task: PythonScript@0
+      displayName: Run Python
       inputs:
         scriptSource: 'filePath'
         workingDirectory: './tools/python'
         scriptPath: './tools/python/run_tests.py'
+
+      # Publish test results
     - task: PublishTestResults@2
+      displayName: Publish Test Results
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/TEST-*.xml'
         searchFolder: './tools/python/reports'
         mergeTestResults: true
+
+      # Publish coverage results
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Coverage Results
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: 'tools/python/coverage.xml'
