@@ -10,46 +10,42 @@
 import yfinance
 from pandas.core.frame import DataFrame
 
-def yfextractelement(history,content):
-  element = list()
-
-  if "Datetime" in content:
-    temp = history.axes[0]
-    data = list()
-    for i in range(0,len(temp)):
-      data.append(str(temp[i]).replace("-04:00",""))
-  else:
-    data = history[content]
-
-  for entry in data:
-    element.append(entry)
-
-  return element
-
-def hist2cell(history):
+# DataFrame2Cell
+#
+# Convert pandas DataFrame type into a 2D element array where the first
+# column represents the datetime.
+#
+# Input:
+#   History = Pandas Data Type
+#
+# Output
+#   CellData = 2D list of "History" contents
+#
+def dataframe2cell(history):
   # Validate input types
   if type(history) is not type(DataFrame()):
     raise(TypeError)
 
   # Capture entry data
-  elements = list()
-  for title in history.axes[1]:
-    elements.append(title)
+  entry_rows = list(history.index)
+  columns = list(history.columns)
 
-  Cell = list()
+  # Populate 2D array elements
+  CellData = list()
+  count = 0
+  for entry in entry_rows:
+    temp_list = list()
+    temp_list.append(str(entry))
+    for col in columns:
+      temp_val = float(history[str(col)][count])
+      if temp_val.is_integer():
+        temp_list.append(int(temp_val))
+      else:
+        temp_list.append(temp_val)
+    CellData.append(temp_list)
+    count = count + 1
 
-  Date      = yfextractelement(history,"Datetime")
-  Open      = yfextractelement(history,"Open")
-  High      = yfextractelement(history,"High")
-  Low       = yfextractelement(history,"Low")
-  Close     = yfextractelement(history,"Close")
-  Volume    = yfextractelement(history,"Volume")
-  
-  for i in range(0,len(Open)):
-    Group = [Date[i], Open[i], High[i], Low[i], Close[i], Volume[i]]
-    Cell.append(Group)
-
-  return Cell
+  return CellData
 
 # Fetch
 #
@@ -61,6 +57,7 @@ def hist2cell(history):
 #
 # Output:
 #   HistData = Pandas Data Type
+#
 def fetch(tick, fp='max', fi='1d'):
   # Validate input types
   if (type(tick) is not type(str())) or \
