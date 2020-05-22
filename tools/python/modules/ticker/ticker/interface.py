@@ -23,8 +23,8 @@ from pandas.core.frame import DataFrame
 #
 def dataframe2cell(history):
   # Validate input types
-  if type(history) is not type(DataFrame()):
-    raise(TypeError)
+  if not isinstance(history, DataFrame):
+    raise TypeError
 
   # Capture entry data
   dates = list(history.index)
@@ -32,7 +32,7 @@ def dataframe2cell(history):
 
   # Gather data and iterate through each element to enter into
   # a growing 2D list
-  CellData = list()
+  cellData = list()
   count = 0
   for day in dates:
     data = list()
@@ -43,10 +43,10 @@ def dataframe2cell(history):
         data.append(int(data_value))
       else:
         data.append(data_value)
-    CellData.append(data)
+    cellData.append(data)
     count = count + 1
 
-  return CellData
+  return cellData
 
 # Fetch
 #
@@ -61,10 +61,8 @@ def dataframe2cell(history):
 #
 def fetch(tick, fp='max', fi='1d'):
   # Validate input types
-  if (type(tick) is not type(str())) or \
-     (type(fp) is not type(str())) or \
-     (type(fi) is not type(str())):
-    raise(TypeError)
+  if not isinstance(tick, str) or not isinstance(fp, str) or not isinstance(fi, str):
+    raise TypeError
 
   # Request and return ticker historical data
   return yfinance.Ticker(tick).history(period=fp, interval=fi)

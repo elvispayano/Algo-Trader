@@ -1,0 +1,57 @@
+# Python Pipepine
+#
+# Pipeline configuration that defines the stages and steps required for
+# building and testing python tools within project
+#
+# Author: Elvis Payano
+
+name: Python Development
+
+# Triggers
+# Run pipeline on master and all feature branches
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  Testing:
+    # Ensure Ubuntu runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout source
+    - uses: actions/checkout@v2
+
+      # Configure python environment
+    - name: Configure Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    # Install external moduels
+    - name: Install Dependencies
+      working-directory: ./tools/python
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./requirements.txt
+
+    # Run Tests
+    - name: Run Unit & Coverage Tests
+      working-directory: ./tools/python
+      run: python ./run_tests.py
+
+    # Publish test results
+    - name: Publish Test Results
+      uses: AutoModality/action-xunit-viewer@v1.0.1
+      with:
+        results: ./tools/python/reports
+        output: '**/TEST-*.xml'
+
+    # Publish coverage results
+    - name: Publish Coverage Report
+      uses: 5monkeys/cobertura-action@master
+      with:
+        path: ./tools/python/coverage.xml
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        minimum_coverage: 75
