@@ -13,14 +13,6 @@
 %% Configuration
 Ticker = "MSFT";
 
-%% Configure Local Python
-SysPyPath = getenv("PYTHONPATH");
-LocPyPath = sprintf('%s/../Python',pwd);
-addpath(LocPyPath);
-if ~contains(SysPyPath,LocPyPath)
-    setenv("PYTHONPATH",sprintf("%s;%s",SysPyPath,LocPyPath))
-end
-
 %% Load Training & Simulation Data
 [TrainData, SimData] = LoadData(Ticker);
 
