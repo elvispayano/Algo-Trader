@@ -1,3 +1,13 @@
+%% Run Tests
+%
+% Description:
+% This functions is mainly for CI/CD to run all discovered tests and
+% generate an J-Unit formatted XML report that can be analyzed and
+% published
+%
+% Author:
+% Elvis Payano
+
 function runTest()
 
 %% Prepare Report Generation Area

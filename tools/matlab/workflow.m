@@ -1,14 +1,11 @@
 %% Stock Trading Agent
 %
-% Author:
-% Elvis Payano
-% 
-% Date:
-% May 10th, 2020
-%
 % Description:
 % This workflow is designed to take a user defined stock and train/simulate
 % a Neural Network to assess trade positions
+%
+% Author:
+% Elvis Payano
 
 %% Configuration
 Ticker = "MSFT";

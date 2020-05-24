@@ -1,4 +1,11 @@
-classdef dataCollectionTest < matlab.unittest.TestCase & matlab.mock.TestCase
+%% Data Collection Test Suite
+%
+% Description:
+% Test suite for the Data Collection class
+%
+% Author:
+% Elvis Payano
+classdef dataCollectionTest < matlab.unittest.TestCase
     properties (Access = private)
         obj
     end

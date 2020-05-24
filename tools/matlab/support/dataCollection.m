@@ -1,12 +1,24 @@
+%% Data Collection
+%
+% Description:
+% This class handles requesting and capturing all requested stock data from
+% the python ticker module. It can additionally be used for performing
+% common feature extractions.
+%
+% Author:
+% Elvis Payano
+
 classdef dataCollection < python
-    % Private Variables
+    %% Private Variables
     properties (Access = private)
         dataRaw;
         dataFormatted;
     end
     
-    % Constructor
+    %% Functions
     methods (Static)
+        %% Constructor
+        % Ensures that the required Python engine is loaded
         function self = dataCollection()
             if str2double(python.getVersion()) <= 3.5
                 err = MException('dataCollection:pythonError', ...
@@ -16,9 +28,9 @@ classdef dataCollection < python
         end
     end
     
-    % Public Functions
     methods
-        % Update Contents
+        %% Gather History
+        % Capture historical stock data from the Python ticker module
         function self = gatherHistory(self, ticker_in, period_in, interval_in)
             arguments
                 self (1,1) {isa(self,'dataCollection')}
@@ -41,15 +53,21 @@ classdef dataCollection < python
             self.dataFormatted = python.dataframe2cell(self.dataRaw);
         end
         
-        % Get Functions
+        %% Get Raw Data
+        % Return historical stock data in Dataframe format
         function output = getRawData(self)
             output = self.dataRaw;
         end
         
+        %% Get Formatted Data
+        % Return historical stock data in 2D Python list format
         function output = getFormattedData(self)
             output = self.dataFormatted;
         end
         
+        %% Get Headers
+        % Returns headers for row labels (dates) and column entries (open,
+        % close, etc.)
         function output = getHeaders(self)
             output = cell(1,int64(self.dataRaw.columns.size) + 1);
             output{1} = string(self.dataRaw.axes(1,1).pop().name);
@@ -60,7 +78,8 @@ classdef dataCollection < python
         end
     end
     
-    % Input Verification
+    %% Member Of
+    % Custom input verification checking method
     methods (Static, Access = private)
         function memberOf(input,set)
             mustBeMember(lower(input),set)
