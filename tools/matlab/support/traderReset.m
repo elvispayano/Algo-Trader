@@ -1,3 +1,12 @@
+%% Trader Reset
+%
+% Description:
+% This function resets the Reinforcement Learning Environment to the
+% default state to ensure a proper starting point for each training episode
+%
+% Author:
+% Elvis Payano
+
 function [InitObs, Trader] = traderReset(DataSet, Ticker)
 
 %% Initialize Trader Portfolio

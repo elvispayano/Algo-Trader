@@ -1,3 +1,12 @@
+%% Trader Step
+%
+% Description:
+% This function provides the constantly updating environment that the agent
+% will be stepping through as it runs each episode
+%
+% Author:
+% Elvis Payano
+
 function [NextObs, Reward, IsDone, Trader] = traderStep(Action, Trader, DataSet, Ticker, isTrain)
 
 %% Initialize Workspace
