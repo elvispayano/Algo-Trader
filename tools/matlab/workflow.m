@@ -13,10 +13,15 @@ Ticker = "MSFT";
 %% Load Training & Simulation Data
 [TrainData, SimData] = LoadData(Ticker);
 
-%% Reset Function Handle Creation
-ResetTrainHandle = @()TraderReset(TrainData);
-ResetSimHandle   = @()TraderReset(SimData);
+%% Trader Handle Simulation Creation
+resetTrainHandle = @()traderReset(TrainData, Ticker);
+stepTrainHandle = @(Action, Trader) traderStep(Action, Trader, TrainData, Ticker, true);
 
-%% Step Function Handle Creation
-% StepTrainHandle = @(Action, Trader) TraderStep(Action, Trader, TrainData, true);
-% StepSimHandle   = @(Action, Trader) TraderStep(Action, Trader, SimData, false);
+%% Environment Creation
+actionInfo = rlFiniteSetSpec(1:3);
+actionInfo.Name = 'Trader Actions';
+
+obsInfo = rlNumericSpec([39 1]);
+obsInfo.Name = 'Stock Trading States';
+
+env = rlFunctionEnv(obsInfo, actionInfo, stepTrainHandle, resetTrainHandle);

@@ -23,7 +23,7 @@ classdef portfolio
             self.Balance  = 0;
             self.PnL      = 0;
         end
-        
+
         %% Buy
         % Increase quantity of a holding by a specified quantity
         function self = buy(self, stock, quantity, price)
@@ -65,6 +65,12 @@ classdef portfolio
         % Return the account balance of the portfolio
         function balance = getBalance(self)
             balance = self.Balance;
+        end
+        
+        %% Get Profit & Loss
+        % Return the realized profit or loss
+        function profitLoss = getProfitLoss(self)
+            profitLoss = self.PnL;
         end
         
         %% Deposit
