@@ -18,8 +18,10 @@ classdef dataCollectionTest < matlab.unittest.TestCase
         end
     end
     
-    methods (Test)        
-        function testInput(tc)
+    methods (Test)   
+        %% Test Inputs
+        % Verify inputs are required in an expected data format
+        function testInputs(tc)
             tc.verifyError(@()tc.obj.gatherHistory('1'), ...
                 'dataCollection:gatherHistory:invalidInput')
             
@@ -27,7 +29,9 @@ classdef dataCollectionTest < matlab.unittest.TestCase
                 'dataCollection:gatherHistory:invalidInput')
         end
         
-        function testOutput(tc)
+        %% Test Outputs
+        % Verify outputs are provided in the expected data format
+        function testOutputs(tc)
             dataObj = tc.obj.gatherHistory('MSFT');
             tc.verifyClass(dataObj.getRawData(),'py.pandas.core.frame.DataFrame')
             tc.verifyClass(dataObj.getFormattedData(),'py.list')
