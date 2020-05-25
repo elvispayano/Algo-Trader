@@ -8,16 +8,26 @@
 % Elvis Payano
 
 %% Configuration
-Ticker = "MSFT";
+% Configuration is user defined and will establish what data is used for
+% training and simulation.
+Ticker = 'MSFT';
 
 %% Load Training & Simulation Data
+% Using the defied Ticker, seperate the collected data into training and
+% simulation data. The training data will be used for the initial training.
+% The simulation data will be used for evaluation of performance with new
+% unseen data.
 [TrainData, SimData] = LoadData(Ticker);
 
-%% Trader Handle Simulation Creation
+%% Environment Creation
+% The RL Agent requires a defined environment that can be configured for a
+% fresh run for each episode. The environment consists of an
+% reset function (for initialization), a step function (for simulation),
+% expected actions (taken by the agent), and expected observations (the
+% data fed into the agent) in response to it's actions.
 resetTrainHandle = @()traderReset(TrainData, Ticker);
 stepTrainHandle = @(Action, Trader) traderStep(Action, Trader, TrainData, Ticker, true);
 
-%% Environment Creation
 actionInfo = rlFiniteSetSpec(1:3);
 actionInfo.Name = 'Trader Actions';
 
@@ -26,7 +36,10 @@ obsInfo.Name = 'Stock Trading States';
 
 env = rlFunctionEnv(obsInfo, actionInfo, stepTrainHandle, resetTrainHandle);
 
-%% Actor, Critic Agent Creation
+%% Agent Creation
+% The agent in this design consists of an Actor (that takes the trading
+% actions) and a Critic (that evaluates the actions taken). Together the
+% two networks are referred to as the agent.
 repOpts = rlRepresentationOptions();
 repOpts.LearnRate = 1e-3;
 repOpts.GradientThreshold = 1;
