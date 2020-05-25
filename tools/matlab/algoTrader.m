@@ -82,3 +82,31 @@ agentOpts.EntropyLossWeight = 0.3;
 agentOpts.DiscountFactor = 0.9;
 
 agent = rlACAgent(actor, critic, agentOpts);
+
+%% Agent Training & Evaluation
+% Training and evaluating the designed Agent is crucial to ensure
+% performance not just within a training environment with data that it has
+% seen before, but to get a true sense of performance with brand new data.
+% This process will allow for deficiencies to be discovered that would not
+% have been found in a pure training environment.
+
+% Training
+trainOpts = rlTrainingOptions();
+trainOpts.MaxEpisodes = 5e3;
+trainOpts.MaxStepsPerEpisode = height(TrainData);
+trainOpts.Verbose = true;
+trainOpts.Plots = 'training-progress';
+trainOpts.StopTrainingCriteria = 'AverageReward';
+trainOpts.StopTrainingValue = 1e3;
+
+performance = train(agent, env, trainOpts);
+
+% Evaluation
+resetEvalHandle = @()traderReset(TrainData, Ticker);
+stepEvalHandle  = @(Action, Trader) traderStep(Action, Trader, TrainData, Ticker, false);
+envEval         = rlFunctionEnv(obsInfo, actionInfo, stepEvalHandle, resetEvalHandle);
+
+simOpts = rlSimulationOptions();
+simOpts.MaxSteps = height(SimData);
+
+exp = sim(envEval, agent, simOpts);
