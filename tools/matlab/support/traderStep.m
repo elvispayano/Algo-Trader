@@ -17,16 +17,16 @@ endInd  = Trader.EndInd;
 %% Action & Reward
 Reward = 0;
 switch Action
-    case 0 % Buy
+    case 1 % Buy
         if account.getBalance() < 1000
             Reward = Reward - 1;
         else
             account = account.buy(Ticker,1,100);
         end
         
-    case 1 % Hold
+    case 2 % Hold
         
-    case 2 % Sell
+    case 3 % Sell
         if account.getHoldings(Ticker) <= 0
             Reward = Reward - 1;
         else
