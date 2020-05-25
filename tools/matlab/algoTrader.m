@@ -102,8 +102,8 @@ trainOpts.StopTrainingValue = 1e3;
 performance = train(agent, env, trainOpts);
 
 % Evaluation
-resetEvalHandle = @()traderReset(TrainData, Ticker);
-stepEvalHandle  = @(Action, Trader) traderStep(Action, Trader, TrainData, Ticker, false);
+resetEvalHandle = @()traderReset(SimData, Ticker);
+stepEvalHandle  = @(Action, Trader) traderStep(Action, Trader, SimData, Ticker, false);
 envEval         = rlFunctionEnv(obsInfo, actionInfo, stepEvalHandle, resetEvalHandle);
 
 simOpts = rlSimulationOptions();
