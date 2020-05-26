@@ -71,5 +71,52 @@ classdef portfolioTest < matlab.unittest.TestCase
             tc.verifyEqual(tc.obj.getHoldings(tc.STK), 0)
             tc.verifyEqual(tc.obj.getBalance(), 1000)
         end
+        
+        %% Test Profit/Loss Analysis
+        % Validate Profit calculation
+        function testProfit(tc)
+            % Funds required for valid trades
+            tc.obj = tc.obj.deposit(1000);
+            
+            % Buy and Sell a Holding
+            tc.obj = tc.obj.buy(tc.STK, 1, 100);
+            tc.obj = tc.obj.sell(tc.STK, 1, 110);
+            
+            % Verify $10 profit
+            tc.verifyEqual(tc.obj.getProfitLoss(), 10);
+            tc.verifyEqual(tc.obj.getBalance(), 1010);
+        end
+        
+        % Validate Loss calculation
+        function testLoss(tc)
+            % Funds required for valid trades
+            tc.obj = tc.obj.deposit(1000);
+            
+            % Buy and Sell a Holding
+            tc.obj = tc.obj.buy(tc.STK, 1, 100);
+            tc.obj = tc.obj.sell(tc.STK, 1, 90);
+            
+            % Verify $10 profit
+            tc.verifyEqual(tc.obj.getProfitLoss(), -10);
+            tc.verifyEqual(tc.obj.getBalance(), 990);
+        end
+        
+        % Validate Multi-trade calculation
+        function testMultiTrade(tc)
+            % Funds required for valid trades
+            tc.obj = tc.obj.deposit(1000);
+            
+            % Multiple buys of a holding
+            tc.obj = tc.obj.buy(tc.STK, 3, 100);
+            tc.obj = tc.obj.buy(tc.STK, 5, 105);
+            
+            % Multiple sells of a holding
+            tc.obj = tc.obj.sell(tc.STK, 4, 110);
+            tc.verifyEqual(tc.obj.getProfitLoss(), 35);
+            
+            tc.obj = tc.obj.sell(tc.STK, 2, 100);
+            tc.verifyEqual(tc.obj.getProfitLoss(), 25);
+            tc.verifyEqual(tc.obj.getBalance(), 815);
+        end
     end
 end

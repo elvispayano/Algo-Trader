@@ -12,16 +12,18 @@ classdef portfolio
         Holdings
         Balance
         Purchases
-        Sell
+        Sales
         PnL
     end    
     methods
         %% Constructor
         % Setup class with initialized values
         function self = portfolio()
-            self.Holdings = struct();
-            self.Balance  = 0;
-            self.PnL      = 0;
+            self.Holdings  = struct();
+            self.Balance   = 0;
+            self.PnL       = 0;
+            self.Purchases = struct();
+            self.Sales     = struct();
         end
 
         %% Buy
@@ -35,6 +37,8 @@ classdef portfolio
             end
             self.Holdings.(stock).Quantity = self.Holdings.(stock).Quantity + quantity;
             self.Balance = self.Balance - price*quantity;
+            
+            self = self.recordBuy(stock, quantity, price);
         end
         
         %% Sell
@@ -48,6 +52,8 @@ classdef portfolio
             
             self.Holdings.(stock).Quantity = self.Holdings.(stock).Quantity - quantity;
             self.Balance = self.Balance + price*quantity;
+            
+            self = self.recordSell(stock, quantity, price);
         end
         
         %% Get Holdings
@@ -103,6 +109,42 @@ classdef portfolio
         function pError(~,ID,Message)
             err = MException(ID, Message);
             throw(err);
+        end
+        
+        %% Record Buy
+        % Keep a growing record of all holdings purchased.
+        function self = recordBuy(self, stock, quantity, price)
+            if ~isfield(self.Purchases, stock)
+                self.Purchases.(stock) = [];
+            end
+            
+            for entry = 1:quantity
+                self.Purchases.(stock)(end+1) = price;
+            end
+        end
+        
+        %% Record Sell
+        % Keep a growing record of all holdings sold. Additionally
+        % calculate realized profits or losses from each sale
+        function self = recordSell(self, stock, quantity, price)
+            if ~isfield(self.Sales, stock)
+                self.Sales.(stock) = [];
+            end
+            
+            % Capture PL calculation indexes
+            plStartInd = length(self.Sales.(stock)) + 1;
+            plEndInd   = plStartInd + quantity - 1;
+            
+            % Update Sell Records
+            for entry = 1:quantity
+                self.Sales.(stock)(end+1) = price;
+            end
+            
+            buy  = self.Purchases.(stock)(plStartInd:plEndInd);
+            sell = self.Sales.(stock)(plStartInd:plEndInd);
+            
+            self.PnL = self.PnL + sum(sell-buy);
+            
         end
     end
 end

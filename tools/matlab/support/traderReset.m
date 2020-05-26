@@ -20,10 +20,10 @@ States = [
     account.getBalance();
     account.getHoldings(Ticker);
     account.getProfitLoss();
-    DataSet.Open(ind);
-    DataSet.Close(ind);
-    DataSet.High(ind);
-    DataSet.Low(ind);
+    reshape(DataSet.Open(ind),[],1);
+    reshape(DataSet.Close(ind),[],1);
+    reshape(DataSet.High(ind),[],1);
+    reshape(DataSet.Low(ind),[],1);
 ];
 
 %% Configure Trader
