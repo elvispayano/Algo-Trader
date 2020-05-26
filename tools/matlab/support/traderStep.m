@@ -64,6 +64,16 @@ end
 
 end
 
+%% Current Day Random Price
+%
+% Description:
+% This function generates a random value between the current days high and
+% low. As intraday data is not available, a random value is used to
+% simulate an action taking at an arbitrary point during the day.
+%
+% Author:
+% Elvis Payano
+
 function curPrice = randPrice(dataSet, curDay)
 highLow = [ dataSet.Low(curDay); dataSet.High(curDay)];
 rng = [0; 1];

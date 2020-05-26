@@ -43,8 +43,10 @@ for i = 1:length(pData)
     end
 end
 
+%% Split Data Sets
 History =  sortrows(struct2table(Data));
 
+% Desired data split based on amount of entries available
 rng = 1:1:length(History.Date);
 sim_data    = rng < length(History.Date)*(1-Opts.SplitFactor);
 
@@ -55,6 +57,7 @@ for i = 1:length(headers)
     Train.(headers{i}) = reshape(History.(headers{i})(~sim_data),[],1);
 end
 
+%% Output
 SimData = sortrows(struct2table(Sim));
 TrainData = sortrows(struct2table(Train));
 end
