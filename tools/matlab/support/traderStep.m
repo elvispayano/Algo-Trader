@@ -31,6 +31,7 @@ switch Action
             Reward = Reward - 1;
         else
             account = account.sell(Ticker,1,100);
+            Reward = account.getProfitLoss()/1000;
         end
 end
 %% Simulation Update
