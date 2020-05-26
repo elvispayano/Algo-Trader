@@ -16,12 +16,13 @@ endInd  = Trader.EndInd;
 
 %% Action & Reward
 Reward = 0;
+curPrice = randPrice(DataSet, max(ind));
 switch Action
     case 1 % Buy
         if account.getBalance() < 1000
             Reward = Reward - 1;
         else
-            account = account.buy(Ticker,1,100);
+            account = account.buy(Ticker,1,curPrice);
         end
         
     case 2 % Hold
@@ -30,8 +31,8 @@ switch Action
         if account.getHoldings(Ticker) <= 0
             Reward = Reward - 1;
         else
-            account = account.sell(Ticker,1,100);
-            Reward = account.getProfitLoss()/1000;
+            account = account.sell(Ticker,1,curPrice);
+            Reward = Reward + account.getProfitLoss()/10;
         end
 end
 %% Simulation Update
@@ -42,15 +43,29 @@ NextObs = [
     account.getBalance();
     account.getHoldings(Ticker);
     account.getProfitLoss();
-    DataSet.Open(ind);
-    DataSet.Close(ind);
-    DataSet.High(ind);
-    DataSet.Low(ind);
-];
+    reshape(DataSet.Open(ind),[],1);
+    reshape(DataSet.Close(ind),[],1);
+    reshape(DataSet.High(ind),[],1);
+    reshape(DataSet.Low(ind),[],1);
+    ];
+
+Trader.Index = ind;
+Trader.Account = account;
 
 IsDone = false;
-if max(ind) >= endInd
+if max(ind) >= endInd - 10
     IsDone = true;
+        
+    fprintf('Total Profits: $%3.2f \t Account Balance: $%3.2f \t Current Holdings: %d\n', ...
+        account.getProfitLoss(), ...
+        account.getBalance(), ...
+        account.getHoldings(Ticker));
 end
 
+end
+
+function curPrice = randPrice(dataSet, curDay)
+highLow = [ dataSet.Low(curDay); dataSet.High(curDay)];
+rng = [0; 1];
+curPrice = interp1(rng, highLow, rand());
 end

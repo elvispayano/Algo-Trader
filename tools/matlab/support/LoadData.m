@@ -40,36 +40,21 @@ for i = 1:length(pData)
         else
             Data.(headers{j})(end+1) = double(entry{j});
         end
-        if i == length(pData)
-            Data.(headers{j}) = reshape(Data.(headers{j}),[],1);
-        end
     end
 end
 
 History =  sortrows(struct2table(Data));
 
-%% Determine Data Time
-date_start = History.Date(1);
-date_end   = History.Date(end);
-total_time = floor(days(date_end-date_start));
-
-train_time = total_time*Opts.SplitFactor;
-sim_time   = total_time*(1-Opts.SplitFactor);
-
-%% Capture Data for Simulation & Training
-sim_start_date = date_end - sim_time;
-sim_end_date = date_start + train_time;
-
-sim_data    = History.Date > sim_start_date;
-train_data  = History.Date < sim_end_date;
+rng = 1:1:length(History.Date);
+sim_data    = rng < length(History.Date)*(1-Opts.SplitFactor);
 
 Sim = struct();
 Train = struct();
 for i = 1:length(headers)
-    Sim.(headers{i}) = History.(headers{i})(sim_data);
-    Train.(headers{i}) = History.(headers{i})(train_data);
+    Sim.(headers{i}) = reshape(History.(headers{i})(sim_data),[],1);
+    Train.(headers{i}) = reshape(History.(headers{i})(~sim_data),[],1);
 end
 
-SimData = struct2table(Sim);
-TrainData = struct2table(Train);
+SimData = sortrows(struct2table(Sim));
+TrainData = sortrows(struct2table(Train));
 end
