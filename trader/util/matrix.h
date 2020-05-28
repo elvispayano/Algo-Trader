@@ -6,24 +6,39 @@ class Matrix {
 public:
   // Implementation & Functions
   Matrix(void);
-  Matrix(size_t r, size_t c, T = 0.0);
+  Matrix(size_t r, size_t c);
+  Matrix(size_t r, size_t c, T val);
 
   void Clear(T = 0.0);
   void Resize(size_t r, size_t c);
+  void Resize(size_t r, size_t c, T val);
   size_t Rows(void) { return mr; }
   size_t Cols(void) { return mc; }
 
   // Operators
-  T& operator()(int, int);
+  T& operator()(size_t r, size_t c);
+
+  // Matrix Operations
   Matrix<T> operator+(Matrix<T>);
   Matrix<T> operator-(Matrix<T>);
   void operator+=(Matrix<T>);
   void operator-=(Matrix<T>);
 
+  // Scalar Operations
+  Matrix<T> operator+(T);
+  Matrix<T> operator-(T);
+  Matrix<T> operator*(T);
+  Matrix<T> operator/(T);
+  void operator+=(T);
+  void operator-=(T);
+  void operator*=(T);
+  void operator/=(T);
+
 private:
   size_t mr;
   size_t mc;
   T* mat;
+  T junk = 0;
 };
 
 //----------------------------------------------------------------
@@ -39,12 +54,21 @@ Matrix<T>::Matrix(void) {
 }
 
 template<typename T>
-Matrix<T>::Matrix(size_t r, size_t c, T init_val) {
+Matrix<T>::Matrix(size_t r, size_t c) {
   mr = r;
   mc = c;
   mat = 0;
   Resize(mr, mc);
-  Clear(static_cast<T>(init_val));
+  Clear(static_cast<T>(0.0));
+}
+
+template<typename T>
+Matrix<T>::Matrix(size_t r, size_t c, T val) {
+  mr = r;
+  mc = c;
+  mat = 0;
+  Resize(mr, mc);
+  Clear(val);
 }
 
 template<typename T>
@@ -62,32 +86,48 @@ void Matrix<T>::Resize(size_t r, size_t c) {
   mc = c;
   if (mat) delete mat; mat = 0;
   mat = new T[mr * mc];
-  Clear(0.0);
+  Clear(static_cast<T>(0.0));
+}
+
+template<typename T>
+void Matrix<T>::Resize(size_t r, size_t c, T val) {
+  mr = r;
+  mc = c;
+  if (mat) delete mat; mat = 0;
+  mat = new T[mr * mc];
+  Clear(val);
 }
 
 //----------------------------------------------------------------
 // Operator Assignment
 //----------------------------------------------------------------
 template<typename T>
-T& Matrix<T>::operator()(int r, int c) {
-  T output = 0;
-  if ((mr > r) && (mc > c)) {
-    return mat[r + mc * c];
-  }
-  return output;
+T& Matrix<T>::operator()(size_t r, size_t c) {
+  if (r >= mr) return junk;
+  if (c >= mc) return junk;
+  return mat[r + mc * c];
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator+(Matrix<T> inp) {
-  Matrix<T> Output(Rows(), Cols());
-  if (Rows() != inp.Rows() || Cols() != Cols()) {
-    return Output;
+  Matrix<T> Output(mr, mc, 0.0);
+  if (mr != inp.Rows()) return Output;
+  if (mc != inp.Cols()) return Output;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) + inp(r, c);
+    }
   }
-  else {
-    for (unsigned int row_ind = 0; row_ind < Rows(); ++row_ind) {
-      for (unsigned int col_ind = 0; col_ind < Cols(); ++col_ind) {
-        Output(row_ind, col_ind) = this->operator()(row_ind, col_ind) + inp(row_ind, col_ind);
-      }
+  return Output;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator+(T scalar) {
+  Matrix<T> Output(mr, mr);
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) + scalar;
     }
   }
   return Output;
@@ -95,26 +135,45 @@ Matrix<T> Matrix<T>::operator+(Matrix<T> inp) {
 
 template<typename T>
 void Matrix<T>::operator+=(Matrix<T> inp) {
-  if (Rows() == inp.Rows() || Cols() == Cols()) {
-    for (unsigned int row_ind = 0; row_ind < Rows(); ++row_ind) {
-      for (unsigned int col_ind = 0; col_ind < Cols(); ++col_ind) {
-        this->operator()(row_ind, col_ind) += inp(row_ind, col_ind);
-      }
+  if (mr != inp.Rows()) return;
+  if (mc != inp.Cols()) return;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) += inp(r, c);
+    }
+  }
+}
+
+template<typename T>
+void Matrix<T>::operator+=(T scalar) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) += scalar;
     }
   }
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(Matrix<T> inp) {
-  Matrix<T> Output(Rows(), Cols());
-  if (Rows() != inp.Rows() || Cols() != Cols()) {
-    return Output;
+  Matrix<T> Output(mr, mc, 0.0);
+  if (mr != inp.Rows()) return Output;
+  if (mc != inp.Cols()) return Output;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) - inp(r, c);
+    }
   }
-  else {
-    for (unsigned int row_ind = 0; row_ind < Rows(); ++row_ind) {
-      for (unsigned int col_ind = 0; col_ind < Cols(); ++col_ind) {
-        Output(row_ind, col_ind) = this->operator()(row_ind, col_ind) - inp(row_ind, col_ind);
-      }
+  return Output;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator-(T scalar) {
+  Matrix<T> Output(mr, mr);
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) - scalar;
     }
   }
   return Output;
@@ -122,11 +181,61 @@ Matrix<T> Matrix<T>::operator-(Matrix<T> inp) {
 
 template<typename T>
 void Matrix<T>::operator-=(Matrix<T> inp) {
-  if (Rows() == inp.Rows() || Cols() == Cols()) {
-    for (unsigned int row_ind = 0; row_ind < Rows(); ++row_ind) {
-      for (unsigned int col_ind = 0; col_ind < Cols(); ++col_ind) {
-        this->operator()(row_ind, col_ind) -= inp(row_ind, col_ind);
-      }
+  if (mr != inp.Rows()) return;
+  if (mc != inp.Cols()) return;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) -= inp(r, c);
+    }
+  }
+}
+
+template<typename T>
+void Matrix<T>::operator-=(T scalar) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) -= scalar;
+    }
+  }
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(T scalar) {
+  Matrix<T> Output(mr, mr, 0.0);
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) * scalar;
+    }
+  }
+  return Output;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator/(T scalar) {
+  Matrix<T> Output(mr, mr, 0.0);
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      Output(r, c) = this->operator()(r, c) / scalar;
+    }
+  }
+  return Output;
+}
+
+template<typename T>
+void Matrix<T>::operator*=(T scalar) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) *= scalar;
+    }
+  }
+}
+
+template<typename T>
+void Matrix<T>::operator/=(T scalar) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) /= scalar;
     }
   }
 }
