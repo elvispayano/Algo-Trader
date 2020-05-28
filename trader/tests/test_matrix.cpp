@@ -63,7 +63,7 @@ TEST_F(MatrixTest, ScalarAddition) {
   EXPECT_DOUBLE_EQ(scaAdd(2, 2), 4.0);
 
   matA += 2.0;
-  EXPECT_DOUBLE_EQ(matA(2, 2), 8.0);
+  EXPECT_DOUBLE_EQ(matA(2, 2), 4.0);
 }
 
 TEST_F(MatrixTest, MatrixSubtraction) {
@@ -78,15 +78,19 @@ TEST_F(MatrixTest, ScalarSubtraction) {
   dMatrix mat(matA - 2.0);
   EXPECT_DOUBLE_EQ(mat(2, 2), 0.0);
 
-  matA -= matB;
-  EXPECT_DOUBLE_EQ(matA(2, 2), -2.0);
-
   matA -= 2.0;
-  EXPECT_DOUBLE_EQ(matA(2, 2), -4.0);
+  EXPECT_DOUBLE_EQ(matA(2, 2), 0.0);
 }
 
 TEST_F(MatrixTest, MatrixMultiplication) {
-  EXPECT_TRUE(false);
+  dMatrix mat1(3, 2, 2.0);
+  dMatrix mat2(2, 3, 4.0);
+
+  dMatrix mat(mat1 * mat2);
+  EXPECT_EQ(mat.Rows(), 3);
+  EXPECT_EQ(mat.Cols(), 3);
+
+  EXPECT_DOUBLE_EQ(mat(2, 2), 16);
 }
 
 TEST_F(MatrixTest, ScalarMultiplication) {
@@ -97,14 +101,9 @@ TEST_F(MatrixTest, ScalarMultiplication) {
   EXPECT_DOUBLE_EQ(matA(2, 2), 4.0);
 }
 
-TEST_F(MatrixTest, MatrixDivision) {
-  EXPECT_TRUE(false);
-}
-
-
 TEST_F(MatrixTest, ScalarDivision) {
-  dMatrix matMult(matA / 2);
-  EXPECT_DOUBLE_EQ(matMult(2, 2), 1.0);
+  dMatrix mat(matA / 2);
+  EXPECT_DOUBLE_EQ(mat(2, 2), 1.0);
 
   matA /= 2;
   EXPECT_DOUBLE_EQ(matA(2, 2), 1.0);
