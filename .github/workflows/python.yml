@@ -8,11 +8,8 @@
 name: Python Development
 
 # Triggers
-# Run pipeline on master and all feature branches
+# Run pipeline on all merges to master
 on:
-  push:
-    branches:
-    - master
   pull_request:
     branches:
     - master
@@ -23,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout source
+    # Checkout source
     - uses: actions/checkout@v2
 
-      # Configure python environment
+    # Configure python environment
     - name: Configure Python
       uses: actions/setup-python@v2
       with:

@@ -1,0 +1,30 @@
+# C++ Pipeline
+#
+# Pipeline configuration that defines the stages and steps required for
+# building and testing pythong tools within the project
+#
+# Author: Elvis Payano
+
+name: C++ Development
+
+# Triggers
+# Run pipeline on all merges to master
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  Build:
+    # Ensure Ubuntu runner
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v2
+
+    # Run CMake
+    - name: Build
+      working-directory: ./trader
+      run: |
+        cmake .
