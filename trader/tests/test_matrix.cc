@@ -18,7 +18,6 @@ protected:
 public:
   dMatrix matA;
   dMatrix matB;
-
 };
 
 TEST_F(MatrixTest, Initialize) {

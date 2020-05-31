@@ -43,13 +43,14 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-set(SRC
+set(HEADERS
   "test_main.h"
 )
 
 set(SRC
   "test_main.cpp"
-  "test_matrix.cpp"
+  "test_activation.cc"
+  "test_matrix.cc"
 )
 
 add_library(tests ${HEADERS} ${SRC})
@@ -58,5 +59,4 @@ set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(tests PRIVATE gtest_main)
 target_link_libraries(tests PRIVATE utilities)
-
-add_test(NAME MatrixTest COMMAND tests)
+target_link_libraries(tests PRIVATE neuralnetwork)
