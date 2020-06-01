@@ -5,6 +5,7 @@
 #
 # Library Dependencies:
 # - Utilities
+# - Neural Network
 # - GTest (External)
 #
 # Author: Elvis Payano
