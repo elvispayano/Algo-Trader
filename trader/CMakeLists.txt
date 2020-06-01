@@ -9,21 +9,24 @@
 #
 # Author: Elvis Payano
 
+# CMake requirements
 cmake_minimum_required (VERSION 3.8)
-project (trader)
 
+# Project description 
+project(trader)
+
+# Project build directories
 add_subdirectory(util)
 add_subdirectory(trader)
 add_subdirectory(neuralnetwork)
 add_subdirectory(tests)
 
-
-# Now simply link against gtest or gtest_main as needed. Eg
-# Add source to this project's executable.
+# Executable definition
 add_executable (${PROJECT_NAME} "main.cpp")
+
+# Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE main)
 target_link_libraries(${PROJECT_NAME} PRIVATE tests)
 
+# Conditional definitions
 add_compile_definitions("DEBUG")
-
-add_test(NAME MatrixTest COMMAND tests)

@@ -10,6 +10,7 @@
 #
 # Author: Elvis Payano
 
+# CMake requirements
 cmake_minimum_required(VERSION 3.8)
 
 # Download and unpack googletest at configure time
@@ -44,20 +45,28 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+# Library header files
 set(HEADERS
   "test_main.h"
 )
 
+# Library source files
 set(SRC
   "test_main.cpp"
   "test_activation.cc"
   "test_matrix.cc"
 )
 
+# Define library requirements
 add_library(tests ${HEADERS} ${SRC})
+
+# Provide dependents with header include directory
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+# Configure library properties
 set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
 
+# Link library dependencies
 target_link_libraries(tests PRIVATE gtest_main)
 target_link_libraries(tests PRIVATE utilities)
 target_link_libraries(tests PRIVATE neuralnetwork)

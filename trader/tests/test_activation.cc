@@ -1,15 +1,15 @@
 /*
-	Title:
-		Activation Unit Test
+  Title:
+    Activation Unit Test
 
-	Description:
-		This Unit Test will configure the activation layer and
-		test the results of the Transfer Functions with controlled
-		inputs. Tests will be separated by Transfer Function 
-		configuration.
+  Description:
+    This Unit Test will configure the activation layer and
+    test the results of the Transfer Functions with controlled
+    inputs. Tests will be separated by Transfer Function 
+    configuration.
 
-	Author:
-		Elvis Payano
+  Author:
+    Elvis Payano
 */
 
 // Neural Network Includes
@@ -20,113 +20,113 @@
 
 // Unit Test Framework Setup
 class ActivationTest :
-	public ::testing::Test,
-	public Activation {
+  public ::testing::Test,
+  public Activation {
 protected:
-	// Ensure each tests has the inputs configured with the 
-	// expected inputs size and values
-	void SetUp(void) override {
-		in_pos.Resize(1, 1, 10);
-		in_neg.Resize(1, 1,-10);
-		in_zer.Resize(1, 1,  0);
+  // Ensure each tests has the inputs configured with the 
+  // expected inputs size and values
+  void SetUp(void) override {
+    in_pos.Resize(1, 1, 10);
+    in_neg.Resize(1, 1,-10);
+    in_zer.Resize(1, 1,  0);
 
-		out.Resize(1, 1, 0.0);
-	}
+    out.Resize(1, 1, 0.0);
+  }
 
 public:
-	dMatrix in_pos;
-	dMatrix in_neg;
-	dMatrix in_zer;
+  dMatrix in_pos;
+  dMatrix in_neg;
+  dMatrix in_zer;
 
-	dMatrix out;
+  dMatrix out;
 };
 
 /*
-		Test:					None
-		Description:
-			Run test using the "None" Transfer Function
+    Test:          None
+    Description:
+      Run test using the "None" Transfer Function
 */
 TEST_F(ActivationTest, None) {
-	setTF(ActivationTypes::NONE);
+  setTF(ActivationTypes::NONE);
 
-	out = perform(in_pos);
-	EXPECT_DOUBLE_EQ(out(0, 0), 10);
+  out = perform(in_pos);
+  EXPECT_DOUBLE_EQ(out(0, 0), 10);
 
-	out = perform(in_neg);
-	EXPECT_DOUBLE_EQ(out(0, 0), -10);
+  out = perform(in_neg);
+  EXPECT_DOUBLE_EQ(out(0, 0), -10);
 
-	out = perform(in_zer);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0);
+  out = perform(in_zer);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0);
 };
 
 /*
-		Test:					Binary
-		Description:
-			Run test using the "Binary" Transfer Function
+    Test:          Binary
+    Description:
+      Run test using the "Binary" Transfer Function
 */
 TEST_F(ActivationTest, Binary) {
-	setTF(ActivationTypes::BINARY);
+  setTF(ActivationTypes::BINARY);
 
-	out = perform(in_pos);
-	EXPECT_DOUBLE_EQ(out(0, 0), 1);
+  out = perform(in_pos);
+  EXPECT_DOUBLE_EQ(out(0, 0), 1);
 
-	out = perform(in_neg);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0);
+  out = perform(in_neg);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0);
 
-	out = perform(in_zer);
-	EXPECT_DOUBLE_EQ(out(0, 0), 1);
+  out = perform(in_zer);
+  EXPECT_DOUBLE_EQ(out(0, 0), 1);
 };
 
 /*
-		Test:					Rectified Linear Unit
-		Description:
-			Run test using the "Relu" Transfer Function
+    Test:          Rectified Linear Unit
+    Description:
+      Run test using the "Relu" Transfer Function
 */
 TEST_F(ActivationTest, Relu) {
-	setTF(ActivationTypes::RELU);
+  setTF(ActivationTypes::RELU);
 
-	out = perform(in_pos);
-	EXPECT_DOUBLE_EQ(out(0, 0), 10);
+  out = perform(in_pos);
+  EXPECT_DOUBLE_EQ(out(0, 0), 10);
 
-	out = perform(in_neg);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0);
+  out = perform(in_neg);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0);
 
-	out = perform(in_zer);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0);
+  out = perform(in_zer);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0);
 };
 
 /*
-		Test:					Sigmoid
-		Description:
-			Run test using the "Sigmoid" Transfer Function
+    Test:          Sigmoid
+    Description:
+      Run test using the "Sigmoid" Transfer Function
 */
 TEST_F(ActivationTest, Sigmoid) {
-	setTF(ActivationTypes::SIGMOID);
+  setTF(ActivationTypes::SIGMOID);
 
-	out = perform(in_pos);
-	EXPECT_GT(out(0, 0), 0.999);
+  out = perform(in_pos);
+  EXPECT_GT(out(0, 0), 0.999);
 
-	out = perform(in_neg);
-	EXPECT_LT(out(0, 0), 0.001);
+  out = perform(in_neg);
+  EXPECT_LT(out(0, 0), 0.001);
 
-	out = perform(in_zer);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0.5);
+  out = perform(in_zer);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0.5);
 };
 
 /*
-		Test:					Hyperbolic Tangent
-		Description:
-			Run test using the "tanh" Transfer Function
+    Test:          Hyperbolic Tangent
+    Description:
+      Run test using the "tanh" Transfer Function
 */
 TEST_F(ActivationTest, TanH) {
-	setTF(ActivationTypes::TANH);
+  setTF(ActivationTypes::TANH);
 
-	out = perform(in_pos);
-	EXPECT_GT(out(0, 0), 0.999);
+  out = perform(in_pos);
+  EXPECT_GT(out(0, 0), 0.999);
 
-	out = perform(in_neg);
-	EXPECT_LT(out(0, 0),-0.999);
+  out = perform(in_neg);
+  EXPECT_LT(out(0, 0),-0.999);
 
-	out = perform(in_zer);
-	EXPECT_DOUBLE_EQ(out(0, 0), 0);
+  out = perform(in_zer);
+  EXPECT_DOUBLE_EQ(out(0, 0), 0);
 };

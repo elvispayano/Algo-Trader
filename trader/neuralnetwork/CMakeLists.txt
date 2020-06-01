@@ -8,18 +8,27 @@
 #
 # Author: Elvis Payano
 
+# CMake requirements
 cmake_minimum_required(VERSION 3.8)
 
+# Library header files
 set(HEADERS
   "activation.h"
 )
 
+# Library source files
 set(SRC
   "activation.cpp"
 )
 
+# Define library requirements
 add_library(neuralnetwork ${HEADERS} ${SRC})
+
+# Provide dependents with header include directory
 target_include_directories(neuralnetwork PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+# Configure library properties
 set_target_properties(neuralnetwork PROPERTIES LINKER_LANGUAGE CXX)
 
+# Link library dependencies
 target_link_libraries(neuralnetwork PRIVATE utilities)
