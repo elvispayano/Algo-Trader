@@ -8,6 +8,7 @@ public:
   Matrix(void);
   Matrix(size_t r, size_t c);
   Matrix(size_t r, size_t c, T val);
+  ~Matrix(void);
 
   void Clear(T = 0.0);
   void Resize(size_t r, size_t c);
@@ -76,6 +77,11 @@ Matrix<T>::Matrix(size_t r, size_t c, T val) {
   mat = 0;
   Resize(mr, mc);
   Clear(val);
+}
+
+template<typename T>
+Matrix<T>::~Matrix(void) {
+  if (mat) delete mat; mat = 0;
 }
 
 template<typename T>

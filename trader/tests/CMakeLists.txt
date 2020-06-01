@@ -1,4 +1,16 @@
-# Test Header
+# Unit Testing CMake
+#
+# Description:
+# This CMake file will generate the GTest Unit Test library and link the appropriate libraries
+#
+# Library Dependencies:
+# - Utilities
+# - Neural Network
+# - GTest (External)
+#
+# Author: Elvis Payano
+
+# CMake requirements
 cmake_minimum_required(VERSION 3.8)
 
 # Download and unpack googletest at configure time
@@ -33,16 +45,28 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+# Library header files
+set(HEADERS
+  "test_main.h"
+)
+
+# Library source files
 set(SRC
   "test_main.cpp"
-  "test_matrix.cpp"
+  "test_activation.cc"
+  "test_matrix.cc"
 )
 
-add_executable(tests ${SRC})
+# Define library requirements
+add_library(tests ${HEADERS} ${SRC})
 
-target_link_libraries(tests PUBLIC
-  gtest_main
-  util
-)
+# Provide dependents with header include directory
+target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_test(NAME MatrixTest COMMAND tests --gtest_output=xml)
+# Configure library properties
+set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
+
+# Link library dependencies
+target_link_libraries(tests PRIVATE gtest_main)
+target_link_libraries(tests PRIVATE utilities)
+target_link_libraries(tests PRIVATE neuralnetwork)

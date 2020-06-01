@@ -1,16 +1,32 @@
-﻿# CMakeList.txt : CMake project for trader, include source and define
-# project specific logic here.
+﻿# Main CMake
 #
-cmake_minimum_required (VERSION 3.8)
-project (trader)
+# Description:
+# This CMake file will generate link all libraries and generate the runtime executable
+#
+# Library Dependencies:
+# - Trader Main
+# - Tests
+#
+# Author: Elvis Payano
 
+# CMake requirements
+cmake_minimum_required (VERSION 3.8)
+
+# Project description 
+project(trader)
+
+# Project build directories
 add_subdirectory(util)
 add_subdirectory(trader)
+add_subdirectory(neuralnetwork)
 add_subdirectory(tests)
 
-
-# Now simply link against gtest or gtest_main as needed. Eg
-# Add source to this project's executable.
+# Executable definition
 add_executable (${PROJECT_NAME} "main.cpp")
+
+# Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE main)
-target_link_libraries(${PROJECT_NAME} PRIVATE util)
+target_link_libraries(${PROJECT_NAME} PRIVATE tests)
+
+# Conditional definitions
+add_compile_definitions("DEBUG")
