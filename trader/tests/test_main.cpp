@@ -2,6 +2,7 @@
 #include "test_main.h"
 
 #include "test_activation.cc"
+#include "test_fully_connected_layer.cc"
 #include "test_matrix.cc"
 
 void test_main(void) {

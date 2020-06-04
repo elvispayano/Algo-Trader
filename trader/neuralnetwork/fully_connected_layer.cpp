@@ -13,6 +13,6 @@ FullyConnectedLayer::~FullyConnectedLayer(void) {
 }
 
 dMatrix FullyConnectedLayer::processLayer(dMatrix input) {
-  dMatrix output;
+  dMatrix output = performTF(weight * input + bias);
   return output;
 }

@@ -27,6 +27,9 @@ LayerBase::LayerBase(void) {
   weight.Clear(0.0);
   bias.Clear(0.0);
   setTF(ActivationTypes::NONE);
+
+  inputCount = 0;
+  nodeCount  = 0;
 }
 
 /*
@@ -41,6 +44,9 @@ LayerBase::LayerBase(ActivationTypes selectTF) {
   weight.Clear(0.0);
   bias.Clear(0.0);
   setTF(selectTF);
+
+  inputCount = 0;
+  nodeCount  = 0;
 }
 
 /*
@@ -52,4 +58,9 @@ LayerBase::LayerBase(ActivationTypes selectTF) {
 */
 LayerBase::~LayerBase(void) {
 
+}
+
+void LayerBase::reconfigure(void) {
+  weight.Resize(nodeCount, inputCount, 0.0);
+  bias.Resize(inputCount, 1, 0.0);
 }

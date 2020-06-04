@@ -54,6 +54,7 @@ set(HEADERS
 set(SRC
   "test_main.cpp"
   "test_activation.cc"
+  "test_fully_connected_layer.cc"
   "test_matrix.cc"
 )
 

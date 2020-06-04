@@ -87,7 +87,7 @@ dMatrix Activation::performTF(dMatrix input) {
     break;
 
   default: //ActivationTypes::NONE
-    output = input;
+    output = none(input);
   }
 
   return output;

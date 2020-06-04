@@ -65,7 +65,6 @@ template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c) {
   mr = r;
   mc = c;
-  mat = 0;
   Resize(mr, mc);
   Clear(static_cast<T>(0.0));
 }
@@ -74,14 +73,13 @@ template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c, T val) {
   mr = r;
   mc = c;
-  mat = 0;
   Resize(mr, mc);
   Clear(val);
 }
 
 template<typename T>
 Matrix<T>::~Matrix(void) {
-  if (mat) delete mat; mat = 0;
+  //if (mat) delete mat; mat = 0;
 }
 
 template<typename T>
@@ -97,7 +95,7 @@ template<typename T>
 void Matrix<T>::Resize(size_t r, size_t c) {
   mr = r;
   mc = c;
-  if (mat) delete mat; mat = 0;
+  //if (mat) delete mat;
   mat = new T[mr * mc];
   Clear(static_cast<T>(0.0));
 }

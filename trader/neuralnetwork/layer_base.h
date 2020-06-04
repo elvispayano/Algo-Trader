@@ -32,17 +32,27 @@ public:
   // Process layer inputs 
   virtual dMatrix processLayer(dMatrix input) = 0;
 
+  // Configure Layer
+  void reconfigure(void);
+
   // Layer Setters
-  void setWeight(dMatrix input) { weight = input; }
-  void setBias(dMatrix input)   { bias   = input; }
+  void setInputCount(size_t count) { inputCount = count; }
+  void setNodeCount(size_t  count) { nodeCount  = count; }
+  void setWeight(dMatrix input)    { weight     = input; }
+  void setBias(dMatrix input)      { bias       = input; }
 
   // Layer Getters
-  dMatrix getWeight(void) { return weight; }
-  dMatrix getBias(void)   { return bias;   }
+  size_t  getInputCount(void) { return inputCount; }
+  size_t  getNodeCount(void)  { return nodeCount;  }
+  dMatrix getWeight(void)     { return weight;     }
+  dMatrix getBias(void)       { return bias;       }
 
 protected:
   dMatrix weight;
   dMatrix bias;
+
+  size_t inputCount;
+  size_t nodeCount;
 };
 
 #endif /* LAYER_BASE_H */

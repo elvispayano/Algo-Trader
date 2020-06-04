@@ -42,9 +42,9 @@ public:
 };
 
 /*
-    Test:          None
-    Description:
-      Run test using the "None" Transfer Function
+  Test:          None
+  Description:
+    Run test using the "None" Transfer Function
 */
 TEST_F(ActivationTest, None) {
   setTF(ActivationTypes::NONE);
@@ -60,9 +60,9 @@ TEST_F(ActivationTest, None) {
 };
 
 /*
-    Test:          Binary
-    Description:
-      Run test using the "Binary" Transfer Function
+  Test:          Binary
+  Description:
+    Run test using the "Binary" Transfer Function
 */
 TEST_F(ActivationTest, Binary) {
   setTF(ActivationTypes::BINARY);
@@ -78,9 +78,9 @@ TEST_F(ActivationTest, Binary) {
 };
 
 /*
-    Test:          Rectified Linear Unit
-    Description:
-      Run test using the "Relu" Transfer Function
+  Test:          Rectified Linear Unit
+  Description:
+    Run test using the "Relu" Transfer Function
 */
 TEST_F(ActivationTest, Relu) {
   setTF(ActivationTypes::RELU);
@@ -96,9 +96,9 @@ TEST_F(ActivationTest, Relu) {
 };
 
 /*
-    Test:          Sigmoid
-    Description:
-      Run test using the "Sigmoid" Transfer Function
+  Test:          Sigmoid
+  Description:
+    Run test using the "Sigmoid" Transfer Function
 */
 TEST_F(ActivationTest, Sigmoid) {
   setTF(ActivationTypes::SIGMOID);
@@ -114,9 +114,9 @@ TEST_F(ActivationTest, Sigmoid) {
 };
 
 /*
-    Test:          Hyperbolic Tangent
-    Description:
-      Run test using the "tanh" Transfer Function
+  Test:          Hyperbolic Tangent
+  Description:
+    Run test using the "tanh" Transfer Function
 */
 TEST_F(ActivationTest, TanH) {
   setTF(ActivationTypes::TANH);
