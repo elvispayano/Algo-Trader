@@ -44,7 +44,7 @@ Activation::Activation(ActivationTypes tfSelect) {
 
 /*
     Destructor:   ~Activation
-    Inputs:       tfSelect (ActivationTypes [enum])
+    Inputs:       None (void)
 
     Description:
       Clear any dynamically allocated memory
@@ -54,7 +54,7 @@ Activation::~Activation(void) {
 }
 
 /*
-    Function:     perform
+    Function:     performTF
     Inputs:       input (dMatrix)
     Output:       output (dMatrix)
 
@@ -63,7 +63,7 @@ Activation::~Activation(void) {
       function. The input is an m-by-n matrix and the output
       will be of the same size
 */
-dMatrix Activation::perform(dMatrix input) {
+dMatrix Activation::performTF(dMatrix input) {
   // Initialize output
   dMatrix output(input.Rows(), input.Cols(), 0.0);
 

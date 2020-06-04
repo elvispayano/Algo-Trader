@@ -35,7 +35,7 @@ public:
 
 protected:
   // Process layer values through configured activation function
-  dMatrix perform(dMatrix);
+  dMatrix performTF(dMatrix);
 
 private:
   // Transfer funciton selection trigger
