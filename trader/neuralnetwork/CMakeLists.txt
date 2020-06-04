@@ -14,11 +14,15 @@ cmake_minimum_required(VERSION 3.8)
 # Library header files
 set(HEADERS
   "activation.h"
+  "fully_connected_layer.h"
+  "layer_base.h"
 )
 
 # Library source files
 set(SRC
   "activation.cpp"
+  "fully_connected_layer.cpp"
+  "layer_base.cpp"
 )
 
 # Define library requirements
