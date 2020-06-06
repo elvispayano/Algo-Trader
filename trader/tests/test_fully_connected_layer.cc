@@ -58,6 +58,6 @@ TEST_F(FullyConnectedTest, Configuration) {
   EXPECT_EQ(4, weight.Rows());
 
   dMatrix bias = getBias();
-  EXPECT_EQ(1, bias.Cols());
-  EXPECT_EQ(4, bias.Rows());
+  EXPECT_EQ(1 , bias.Cols());
+  EXPECT_EQ(10, bias.Rows());
 }

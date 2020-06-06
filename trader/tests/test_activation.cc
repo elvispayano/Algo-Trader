@@ -47,7 +47,7 @@ public:
     Run test using the "None" Transfer Function
 */
 TEST_F(ActivationTest, None) {
-  setTF(ActivationTypes::NONE);
+  setTF(ActivationTypes::LINEAR);
 
   out = performTF(in_pos);
   EXPECT_DOUBLE_EQ(out(0, 0), 10);

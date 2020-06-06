@@ -26,7 +26,7 @@
 LayerBase::LayerBase(void) {
   weight.Clear(0.0);
   bias.Clear(0.0);
-  setTF(ActivationTypes::NONE);
+  setTF(ActivationTypes::LINEAR);
 
   inputCount = 0;
   nodeCount  = 0;

@@ -26,6 +26,7 @@ public:
   T& operator()(size_t r, size_t c);
 
   // Matrix Operations
+  void operator=(Matrix<T>);
   Matrix<T> operator+(Matrix<T>);
   Matrix<T> operator-(Matrix<T>);
   Matrix<T> operator*(Matrix<T>);
@@ -57,24 +58,22 @@ Matrix<T>::Matrix(void) {
   mr = 0;
   mc = 0;
   mat = 0;
-  Resize(mr, mc);
-  Clear(static_cast<T>(0));
 }
 
 template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c) {
   mr = r;
   mc = c;
-  Resize(mr, mc);
-  Clear(static_cast<T>(0.0));
+  mat = 0;
+  Resize(mr, mc, 0);
 }
 
 template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c, T val) {
   mr = r;
   mc = c;
-  Resize(mr, mc);
-  Clear(val);
+  mat = 0;
+  Resize(mr, mc, val);
 }
 
 template<typename T>
@@ -93,18 +92,16 @@ void Matrix<T>::Clear(T init_val) {
 
 template<typename T>
 void Matrix<T>::Resize(size_t r, size_t c) {
-  mr = r;
-  mc = c;
-  //if (mat) delete mat;
-  mat = new T[mr * mc];
-  Clear(static_cast<T>(0.0));
+  Resize(r, c, 0);
 }
 
 template<typename T>
 void Matrix<T>::Resize(size_t r, size_t c, T val) {
+  if (r == 0) return;
+  if (c == 0) return;
   mr = r;
   mc = c;
-  if (mat) delete mat; mat = 0;
+  //if (mat) delete mat; mat = 0;
   mat = new T[mr * mc];
   Clear(val);
 }
@@ -135,6 +132,18 @@ T& Matrix<T>::operator()(size_t r, size_t c) {
   if (r >= mr) return junk;
   if (c >= mc) return junk;
   return mat[r + mc * c];
+}
+
+template<typename T>
+void Matrix<T>::operator=(Matrix<T> inp) {
+  if (mr != inp.Rows()) return;
+  if (mc != inp.Cols()) return;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) = inp(r, c);
+    }
+  }
 }
 
 template<typename T>
