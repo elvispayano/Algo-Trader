@@ -1,5 +1,5 @@
 enum class ActivationTypes {
-  NONE,
+  LINEAR,
   BINARY,
   RELU,
   TANH,

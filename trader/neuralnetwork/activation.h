@@ -31,21 +31,15 @@ public:
   ~Activation(void);
 
   // Activation Configuration
-  void setTF(ActivationTypes select) { TF = select; };
+  void setTF(ActivationTypes select);
 
 protected:
   // Process layer values through configured activation function
-  dMatrix perform(dMatrix);
+  dMatrix performTF(dMatrix);
 
 private:
   // Transfer funciton selection trigger
-  ActivationTypes TF;
-
-  dMatrix tanh(dMatrix);  // Transfer Function: Hyperbolic Tanger
-  dMatrix sig (dMatrix);  // Transfer Function: Sigmoid
-  dMatrix relu(dMatrix);  // Transfer Function: Rectified Linear Unit
-  dMatrix bin (dMatrix);  // Transfer Function: Binary
-  dMatrix none(dMatrix);  // Transfer Function: None
+  dMatrix(*transferFunction)(dMatrix);
 };
 
 #endif /*ACTIVATION_H*/
