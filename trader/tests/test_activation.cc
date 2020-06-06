@@ -3,7 +3,7 @@
     Activation Unit Test
 
   Description:
-    This Unit Test will configure the activation layer and
+    This unit test will configure the activation layer and
     test the results of the Transfer Functions with controlled
     inputs. Tests will be separated by Transfer Function 
     configuration.
