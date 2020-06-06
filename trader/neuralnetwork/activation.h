@@ -15,11 +15,9 @@
 #ifndef ACTIVATION_H
 #define ACTIVATION_H
 
-// Neural Network Includes
-#include "activation_types.h"
-
 // Utility Includes
 #include "matrix.h"
+#include "network_types.h"
 
 class Activation {
 public:

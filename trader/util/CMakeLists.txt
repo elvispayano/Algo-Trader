@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.8)
 set(HEADERS
   "utl_math.h"
   "matrix.h"
-  "activation_types.h"
+  "network_types.h"
   )
 
 set(SRC

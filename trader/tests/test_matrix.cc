@@ -1,7 +1,6 @@
 #include "matrix.h"
 #include "gtest/gtest.h"
 
-
 class MatrixTest : public ::testing::Test {
 protected:
   void SetUp(void) override {
@@ -10,9 +9,6 @@ protected:
 
     matA.Clear(2.0);
     matB.Clear(4.0);
-  }
-
-  void TearDown(void) override {
   }
 
 public:

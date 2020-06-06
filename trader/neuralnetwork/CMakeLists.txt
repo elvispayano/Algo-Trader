@@ -16,6 +16,7 @@ set(HEADERS
   "activation.h"
   "fully_connected_layer.h"
   "layer_base.h"
+  "neural_network.h"
 )
 
 # Library source files
@@ -23,6 +24,7 @@ set(SRC
   "activation.cpp"
   "fully_connected_layer.cpp"
   "layer_base.cpp"
+  "neural_network.cpp"
 )
 
 # Define library requirements

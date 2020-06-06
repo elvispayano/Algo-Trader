@@ -24,9 +24,8 @@ protected:
   // Ensure each tests has the inputs configured with the 
   // expected inputs size and values
   void SetUp(void) override {
-    in.Resize(2, 2, 2.0);
-
-    out.Resize(2, 2, 0.0);
+    setInputCount(10);
+    setNodeCount(4);
   }
 
 public:
@@ -39,23 +38,22 @@ public:
   Description:
 */
 
-TEST_F(FullyConnectedTest, Configuration) {
-  setInputCount(10);
-  setNodeCount(4);
-  
-  dMatrix weight_nc = getWeight();
-  EXPECT_EQ(0, weight_nc.Cols());
-  EXPECT_EQ(0, weight_nc.Rows());
+TEST_F(FullyConnectedTest, NoConfigure) {
+  dMatrix weight = getWeight();
+  EXPECT_EQ(0, weight.Cols());
+  EXPECT_EQ(0, weight.Rows());
 
-  dMatrix bias_nc = getBias();
-  EXPECT_EQ(0, bias_nc.Cols());
-  EXPECT_EQ(0, bias_nc.Rows());
+  dMatrix bias = getBias();
+  EXPECT_EQ(0, bias.Cols());
+  EXPECT_EQ(0, bias.Rows());
+}
 
-  reconfigure();
+TEST_F(FullyConnectedTest, Configure) {
+  //reconfigure();
 
   dMatrix weight = getWeight();
-  EXPECT_EQ(10,weight.Cols());
-  EXPECT_EQ(4, weight.Rows());
+  EXPECT_EQ(10, weight.Cols());
+  EXPECT_EQ(4 , weight.Rows());
 
   dMatrix bias = getBias();
   EXPECT_EQ(1 , bias.Cols());
