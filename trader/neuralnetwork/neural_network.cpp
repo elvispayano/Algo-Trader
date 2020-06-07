@@ -7,6 +7,9 @@
     and configuring all neural network layers. This class will
     be the main interface for outside implementations.
 
+  Tests:
+    test_neural_network.cc
+
   Author:
     Elvis Payano
 */
