@@ -8,6 +8,9 @@
     class contains a subset of the functionality that is
     required for the data flow through any given layer.
 
+  Tests:
+    test_activation.cc
+
   Author:
     Elvis Payano
 */

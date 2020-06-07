@@ -1,3 +1,18 @@
+/*
+  Title:
+    Matrix
+
+  Description:
+    This matrix template class contains all the functionality
+    for processing matrix data.
+
+  Tests:
+    test_matrix.cc
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef MATRIX_H
 #define MATRIX_H
 
