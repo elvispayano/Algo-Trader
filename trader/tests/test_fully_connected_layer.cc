@@ -40,12 +40,12 @@ public:
 
 TEST_F(FullyConnectedTest, NoConfigure) {
   dMatrix weight = getWeight();
-  EXPECT_EQ(0, weight.Cols());
-  EXPECT_EQ(0, weight.Rows());
+  EXPECT_EQ(1, weight.Cols());
+  EXPECT_EQ(1, weight.Rows());
 
   dMatrix bias = getBias();
-  EXPECT_EQ(0, bias.Cols());
-  EXPECT_EQ(0, bias.Rows());
+  EXPECT_EQ(1, bias.Cols());
+  EXPECT_EQ(1, bias.Rows());
 }
 
 TEST_F(FullyConnectedTest, Configure) {

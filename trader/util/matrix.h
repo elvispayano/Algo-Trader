@@ -4,15 +4,15 @@
 template<typename T>
 class Matrix {
 public:
-  // Implementation & Functions
+  // Constructors
   Matrix(void);
-  Matrix(size_t r, size_t c);
-  Matrix(size_t r, size_t c, T val);
+  Matrix(size_t r, size_t c, T val = 0.0);
+
+  // Destructor
   ~Matrix(void);
 
   void Clear(T = 0.0);
-  void Resize(size_t r, size_t c);
-  void Resize(size_t r, size_t c, T val);
+  void Resize(size_t r, size_t c, T val = 0.0);
   size_t Rows(void) { return mr; }
   size_t Cols(void) { return mc; }
 
@@ -32,6 +32,7 @@ public:
   Matrix<T> operator*(Matrix<T>);
   void operator+=(Matrix<T>);
   void operator-=(Matrix<T>);
+  void operator*=(Matrix<T>);
 
   // Scalar Operations
   Matrix<T> operator+(T);
@@ -55,30 +56,19 @@ private:
 //----------------------------------------------------------------
 template<typename T>
 Matrix<T>::Matrix(void) {
-  mr = 0;
-  mc = 0;
-  mat = 0;
-}
-
-template<typename T>
-Matrix<T>::Matrix(size_t r, size_t c) {
-  mr = r;
-  mc = c;
-  mat = 0;
-  Resize(mr, mc, 0);
+  mat = nullptr;
+  Resize(1, 1, 0);
 }
 
 template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c, T val) {
-  mr = r;
-  mc = c;
-  mat = 0;
-  Resize(mr, mc, val);
+  mat = nullptr;
+  Resize(r, c, val);
 }
 
 template<typename T>
 Matrix<T>::~Matrix(void) {
-  //if (mat) delete mat; mat = 0;
+  //if (mat) delete[] mat; mat = nullptr;
 }
 
 template<typename T>
@@ -91,17 +81,12 @@ void Matrix<T>::Clear(T init_val) {
 }
 
 template<typename T>
-void Matrix<T>::Resize(size_t r, size_t c) {
-  Resize(r, c, 0);
-}
-
-template<typename T>
 void Matrix<T>::Resize(size_t r, size_t c, T val) {
   if (r == 0) return;
   if (c == 0) return;
   mr = r;
   mc = c;
-  //if (mat) delete mat; mat = 0;
+  if (mat) delete[] mat; mat = nullptr;
   mat = new T[mr * mc];
   Clear(val);
 }
@@ -290,6 +275,18 @@ Matrix<T> Matrix<T>::operator*(Matrix<T> inp) {
     }
   }
   return Output;
+}
+
+template<typename T>
+void Matrix<T>::operator*=(Matrix<T> inp) {
+  if (mc != inp.Rows()) return;
+  Matrix<T> out(this->operator*(inp));
+  Resize(out.Rows(), out.Cols());
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) = out(r, c);
+    }
+  }
 }
 
 template<typename T>
