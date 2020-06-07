@@ -1,12 +1,19 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef UTL_MATH_H
+#define UTL_MATH_H
 
-#include "matrix.h"
+template<typename T>
+T htan(T);
 
-dMatrix tanh(dMatrix);  // Transfer Function: Hyperbolic Tanger
-dMatrix sig (dMatrix);  // Transfer Function: Sigmoid
-dMatrix relu(dMatrix);  // Transfer Function: Rectified Linear Unit
-dMatrix bin (dMatrix);  // Transfer Function: Binary
-dMatrix lin (dMatrix);  // Transfer Function: None
+template<typename T>
+T sigmoid(T);
 
-#endif /* MATH_H */
+template<typename T>
+T relu(T);
+
+template<typename T>
+T binary(T);
+
+template<typename T>
+T linear(T);
+
+#endif /* UTL_MATH_H */

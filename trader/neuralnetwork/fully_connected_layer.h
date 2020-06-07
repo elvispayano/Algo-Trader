@@ -30,7 +30,7 @@ public:
   FullyConnectedLayer(ActivationTypes);
 
   // Destructor
-  ~FullyConnectedLayer(void) {};
+  ~FullyConnectedLayer(void);
 
   // Layer update
   dMatrix processLayer(dMatrix input);

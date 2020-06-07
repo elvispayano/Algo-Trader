@@ -67,15 +67,15 @@ Activation::~Activation(void) {
 void Activation::setTF(ActivationTypes selector) {
   switch (selector) {
   case ActivationTypes::SIGMOID:
-    transferFunction = sig;
+    transferFunction = sigmoid;
     break;
 
   case ActivationTypes::TANH:
-    transferFunction = tanh;
+    transferFunction = htan;
     break;
 
   case ActivationTypes::BINARY:
-    transferFunction = bin;
+    transferFunction = binary;
     break;
 
   case ActivationTypes::RELU:
@@ -83,7 +83,7 @@ void Activation::setTF(ActivationTypes selector) {
     break;
 
   default: // ActivationTypes::LINEAR
-    transferFunction = lin;
+    transferFunction = linear;
     break;
 
   }
@@ -101,6 +101,6 @@ void Activation::setTF(ActivationTypes selector) {
 */
 dMatrix Activation::performTF(dMatrix input) {
   // Initialize output
-  dMatrix output = transferFunction(input);
+  dMatrix output;// = transferFunction(input);
   return output;
 }

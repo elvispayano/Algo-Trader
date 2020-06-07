@@ -28,8 +28,6 @@ protected:
 
 public:
   FullyConnectedLayer layer;
-  dMatrix in;
-  dMatrix out;
 };
 
 /*
