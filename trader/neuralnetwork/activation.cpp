@@ -101,6 +101,6 @@ void Activation::setTF(ActivationTypes selector) {
 */
 dMatrix Activation::performTF(dMatrix input) {
   // Initialize output
-  dMatrix output;// = transferFunction(input);
+  dMatrix output = input.forEach(transferFunction);
   return output;
 }

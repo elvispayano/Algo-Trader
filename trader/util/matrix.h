@@ -33,6 +33,8 @@ public:
 
   Matrix<T> GetRow(size_t r);
   Matrix<T> GetCol(size_t c);
+  
+  Matrix<T> forEach(double(*func)(double));
 
   T Determinant(void);
   Matrix<T> SubMatrix(size_t r, size_t c);
@@ -316,6 +318,17 @@ Matrix<T> Matrix<T>::SubMatrix(size_t r, size_t c) {
     }
   }
   return Output;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::forEach(double(*func)(double)) {
+  Matrix<T> output(mr, mc, 0.0);
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      output(r, c) = func(this->operator()(r, c));
+    }
+  }
+  return output;
 }
 
 //----------------------------------------------------------------
