@@ -134,8 +134,8 @@ TEST_F(MatrixTest, ResizeValue) {
 double add2(double x) { return x + 2; }
 TEST_F(MatrixTest, ForEach) {
   dMatrix mat(2, 2, 2.0);
-  dMatrix out = mat.forEach(add2);
-  EXPECT_DOUBLE_EQ(4.0, out(0, 0));
+  mat.forEach(add2);
+  EXPECT_DOUBLE_EQ(4.0, mat(0, 0));
 }
 
 /*

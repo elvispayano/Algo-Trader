@@ -34,7 +34,9 @@ public:
   Matrix<T> GetRow(size_t r);
   Matrix<T> GetCol(size_t c);
   
-  Matrix<T> forEach(double(*func)(double));
+  void forEach(T(*func)(T));
+  void forEach(T(*func)(T, T), T scalar);
+  Matrix<T> forEach(T(*func)(T, T), Matrix<T> inp);
 
   T Determinant(void);
   Matrix<T> SubMatrix(size_t r, size_t c);
@@ -150,16 +152,9 @@ void Matrix<T>::operator=(Matrix<T> inp) {
 
 template<typename T>
 Matrix<T> Matrix<T>::operator+(Matrix<T> inp) {
-  Matrix<T> Output(mr, mc, 0.0);
-  if (mr != inp.Rows()) return Output;
-  if (mc != inp.Cols()) return Output;
-
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) + inp(r, c);
-    }
-  }
-  return Output;
+  auto lambda = [](T x, T y)->T { return x + y; };
+  Matrix<T> output = forEach(lambda, inp);
+  return output;
 }
 
 template<typename T>
@@ -187,25 +182,15 @@ void Matrix<T>::operator+=(Matrix<T> inp) {
 
 template<typename T>
 void Matrix<T>::operator+=(T scalar) {
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) += scalar;
-    }
-  }
+  auto lambda = [](T x, T y)->T { return x + y; };
+  forEach(lambda, scalar);
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator-(Matrix<T> inp) {
-  Matrix<T> Output(mr, mc, 0.0);
-  if (mr != inp.Rows()) return Output;
-  if (mc != inp.Cols()) return Output;
-
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) - inp(r, c);
-    }
-  }
-  return Output;
+  auto lambda = [](T x, T y)->T { return x - y; };
+  Matrix<T> output = forEach(lambda, inp);
+  return output;
 }
 
 template<typename T>
@@ -233,11 +218,8 @@ void Matrix<T>::operator-=(Matrix<T> inp) {
 
 template<typename T>
 void Matrix<T>::operator-=(T scalar) {
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) -= scalar;
-    }
-  }
+  auto lambda = [](T x, T y)->T { return x - y; };
+  forEach(lambda, scalar);
 }
 
 template<typename T>
@@ -264,20 +246,14 @@ Matrix<T> Matrix<T>::operator/(T scalar) {
 
 template<typename T>
 void Matrix<T>::operator*=(T scalar) {
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) *= scalar;
-    }
-  }
+  auto lambda = [](T x, T y)->T { return x * y; };
+  forEach(lambda, scalar);
 }
 
 template<typename T>
 void Matrix<T>::operator/=(T scalar) {
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) /= scalar;
-    }
-  }
+  auto lambda = [](T x, T y)->T { return x / y; };
+  forEach(lambda, scalar);
 }
 
 template<typename T>
@@ -321,11 +297,32 @@ Matrix<T> Matrix<T>::SubMatrix(size_t r, size_t c) {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::forEach(double(*func)(double)) {
-  Matrix<T> output(mr, mc, 0.0);
+void Matrix<T>::forEach(T(*func)(T)) {
   for (size_t r = 0; r < mr; ++r) {
     for (size_t c = 0; c < mc; ++c) {
-      output(r, c) = func(this->operator()(r, c));
+      this->operator()(r, c) = func(this->operator()(r, c));
+    }
+  }
+}
+
+template<typename T>
+void Matrix<T>::forEach(T(*func)(T, T), T scalar) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) = func(this->operator()(r, c), scalar);
+    }
+  }
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::forEach(T(*func)(T, T), Matrix<T> inp) {
+  Matrix<T> output(mr, mc, 0.0);
+  if (mr != inp.Rows()) return output;
+  if (mc != inp.Cols()) return output;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      output(r,c) = func(this->operator()(r, c), inp(r,c));
     }
   }
   return output;
