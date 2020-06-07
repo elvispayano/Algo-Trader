@@ -3,7 +3,7 @@
     Fully Connected Layer Test
 
   Description:
-    This Unit Test will configure a fully connected layer
+    This unit test will configure a fully connected layer
     and test data as it is passed through.
 
   Author:
@@ -17,45 +17,49 @@
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup
-class FullyConnectedTest :
-  public ::testing::Test,
-  public FullyConnectedLayer {
+class FullyConnectedTest : public ::testing::Test {
 protected:
   // Ensure each tests has the inputs configured with the 
   // expected inputs size and values
   void SetUp(void) override {
-    setInputCount(10);
-    setNodeCount(4);
+    layer.setInputCount(10);
+    layer.setNodeCount(4);
   }
 
 public:
+  FullyConnectedLayer layer;
   dMatrix in;
   dMatrix out;
 };
 
 /*
-  Test:
+  Test:         Constructor Default
   Description:
+    Create layer with default constructor
 */
-
-TEST_F(FullyConnectedTest, NoConfigure) {
-  dMatrix weight = getWeight();
+TEST_F(FullyConnectedTest, ConstructorDefault) {
+  dMatrix weight = layer.getWeight();
   EXPECT_EQ(1, weight.Cols());
   EXPECT_EQ(1, weight.Rows());
 
-  dMatrix bias = getBias();
+  dMatrix bias = layer.getBias();
   EXPECT_EQ(1, bias.Cols());
   EXPECT_EQ(1, bias.Rows());
 }
 
-TEST_F(FullyConnectedTest, Configure) {
+/*
+  Test:         Reconfigure
+  Description:
+    Reconfigure layer with SetUp settings
+*/
+TEST_F(FullyConnectedTest, Reconfigure) {
   //reconfigure();
 
-  dMatrix weight = getWeight();
+  dMatrix weight = layer.getWeight();
   EXPECT_EQ(10, weight.Cols());
   EXPECT_EQ(4 , weight.Rows());
 
-  dMatrix bias = getBias();
+  dMatrix bias = layer.getBias();
   EXPECT_EQ(1 , bias.Cols());
   EXPECT_EQ(10, bias.Rows());
 }

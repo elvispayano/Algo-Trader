@@ -19,7 +19,7 @@ struct LayerConfiguration {
   ActivationTypes Activation;
 
   LayerConfiguration() :
-    Layer(LayerTypes::FULLYCONNECTED),
+    Layer(LayerTypes::UNKNOWN),
     Activation(ActivationTypes::LINEAR) {}
 };
 
