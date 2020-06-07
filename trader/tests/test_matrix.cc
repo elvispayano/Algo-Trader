@@ -127,6 +127,18 @@ TEST_F(MatrixTest, ResizeValue) {
 }
 
 /*
+  Test:         For Each
+  Description:
+    Each element in matrix is modified by inserted function
+*/
+double add2(double x) { return x + 2; }
+TEST_F(MatrixTest, ForEach) {
+  dMatrix mat(2, 2, 2.0);
+  mat.forEach(add2);
+  EXPECT_DOUBLE_EQ(4.0, mat(0, 0));
+}
+
+/*
   Test:         Matrix Addition
   Description:
     Perform addition of 2 matrices
