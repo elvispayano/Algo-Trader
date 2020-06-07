@@ -21,8 +21,8 @@
 class MatrixTest : public ::testing::Test {
 protected:
   void SetUp(void) override {
-    matA.Resize(2, 2, 2.0);
-    matB.Resize(2, 2, 4.0);
+    matA.resize(2, 2, 2.0);
+    matB.resize(2, 2, 4.0);
   }
 
 public:
@@ -37,8 +37,8 @@ public:
 */
 TEST_F(MatrixTest, ConstructorDefault) {
   dMatrix mat;
-  EXPECT_EQ(1, mat.Rows());
-  EXPECT_EQ(1, mat.Cols());
+  EXPECT_EQ(1, mat.rows());
+  EXPECT_EQ(1, mat.cols());
 }
 
 /*
@@ -49,8 +49,8 @@ TEST_F(MatrixTest, ConstructorDefault) {
 */
 TEST_F(MatrixTest, ConstructorSize) {
   dMatrix mat(2, 4);
-  EXPECT_EQ(2, mat.Rows());
-  EXPECT_EQ(4, mat.Cols());
+  EXPECT_EQ(2, mat.rows());
+  EXPECT_EQ(4, mat.cols());
 }
 
 /*
@@ -61,8 +61,8 @@ TEST_F(MatrixTest, ConstructorSize) {
 */
 TEST_F(MatrixTest, ConstructorValue) {
   dMatrix mat(4, 2, 2.0);
-  EXPECT_EQ(4, mat.Rows());
-  EXPECT_EQ(2, mat.Cols());
+  EXPECT_EQ(4, mat.rows());
+  EXPECT_EQ(2, mat.cols());
   EXPECT_DOUBLE_EQ(2.0, mat(0, 0));
 }
 
@@ -75,7 +75,7 @@ TEST_F(MatrixTest, ClearDefault) {
   dMatrix mat(2, 2, 2.0);
   EXPECT_DOUBLE_EQ(2.0, mat(0, 0));
 
-  mat.Clear();
+  mat.clear();
   EXPECT_DOUBLE_EQ(0.0, mat(0, 0));
 }
 
@@ -89,7 +89,7 @@ TEST_F(MatrixTest, ClearValue) {
   dMatrix mat(2, 2, 2.0);
   EXPECT_DOUBLE_EQ(2.0, mat(0, 0));
 
-  mat.Clear(4.0);
+  mat.clear(4.0);
   EXPECT_DOUBLE_EQ(4.0, mat(0, 0));
 }
 
@@ -100,12 +100,12 @@ TEST_F(MatrixTest, ClearValue) {
 */
 TEST_F(MatrixTest, ResizeDefault) {
   dMatrix mat(2, 2, 2.0);
-  EXPECT_EQ(2, mat.Rows());
-  EXPECT_EQ(2, mat.Cols());
+  EXPECT_EQ(2, mat.rows());
+  EXPECT_EQ(2, mat.cols());
 
-  mat.Resize(4, 3);
-  EXPECT_EQ(4, mat.Rows());
-  EXPECT_EQ(3, mat.Cols());
+  mat.resize(4, 3);
+  EXPECT_EQ(4, mat.rows());
+  EXPECT_EQ(3, mat.cols());
   EXPECT_DOUBLE_EQ(0.0, mat(0, 0));
 }
 
@@ -117,12 +117,12 @@ TEST_F(MatrixTest, ResizeDefault) {
 */
 TEST_F(MatrixTest, ResizeValue) {
   dMatrix mat(2, 2, 2.0);
-  EXPECT_EQ(2, mat.Rows());
-  EXPECT_EQ(2, mat.Cols());
+  EXPECT_EQ(2, mat.rows());
+  EXPECT_EQ(2, mat.cols());
 
-  mat.Resize(4, 3, 3.0);
-  EXPECT_EQ(4, mat.Rows());
-  EXPECT_EQ(3, mat.Cols());
+  mat.resize(4, 3, 3.0);
+  EXPECT_EQ(4, mat.rows());
+  EXPECT_EQ(3, mat.cols());
   EXPECT_DOUBLE_EQ(3.0, mat(0, 0));
 }
 
@@ -228,8 +228,8 @@ TEST_F(MatrixTest, MatrixMultiplication) {
   dMatrix mat2(2, 3, 4.0);
   dMatrix mat(mat1 * mat2);
   
-  EXPECT_EQ(mat.Rows(), 3);
-  EXPECT_EQ(mat.Cols(), 3);
+  EXPECT_EQ(mat.rows(), 3);
+  EXPECT_EQ(mat.cols(), 3);
   EXPECT_DOUBLE_EQ(mat(0, 0), 16);
 }
 
@@ -243,8 +243,8 @@ TEST_F(MatrixTest, MatrixMultiplicationAssignment) {
   dMatrix mat2(2, 3, 4.0);
   mat1 *= mat2;
   
-  EXPECT_EQ(mat1.Rows(), 3);
-  EXPECT_EQ(mat1.Cols(), 3);
+  EXPECT_EQ(mat1.rows(), 3);
+  EXPECT_EQ(mat1.cols(), 3);
   EXPECT_DOUBLE_EQ(mat1(0, 0), 16);
 }
 
