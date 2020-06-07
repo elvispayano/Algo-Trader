@@ -1,19 +1,10 @@
 #ifndef UTL_MATH_H
 #define UTL_MATH_H
 
-template<typename T>
-T htan(T);
-
-template<typename T>
-T sigmoid(T);
-
-template<typename T>
-T relu(T);
-
-template<typename T>
-T binary(T);
-
-template<typename T>
-T linear(T);
+double binary(double);  // Transfer Function: Binary
+double htan(double);    // Transfer Function: Hyperbolic Tangent
+double linear(double);  // Transfer Function: Linear
+double relu(double);    // Transfer Function: Rectified Linear Unit
+double sigmoid(double); // Transfer Function: Sigmoid
 
 #endif /* UTL_MATH_H */

@@ -57,6 +57,7 @@ set(SRC
   "test_fully_connected_layer.cc"
   "test_matrix.cc"
   "test_neural_network.cc"
+  "test_utl_math.cc"
 )
 
 # Define library requirements
