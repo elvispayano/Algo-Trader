@@ -61,7 +61,11 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
     layers.push_back(new FullyConnectedLayer);
     break;
 
-  default:
+  default: 
+    // LayerTypes::UNKNOWN
+    // Unknown layer types are not added to the stack and the return
+    // keyword ensures function breaks out and no configuration is
+    // attempted
     return;
   }
   
