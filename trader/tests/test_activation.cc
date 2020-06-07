@@ -26,11 +26,9 @@ protected:
   // Ensure each tests has the inputs configured with the 
   // expected inputs size and values
   void SetUp(void) override {
-    in_pos.Resize(1, 1, 10);
-    in_neg.Resize(1, 1,-10);
-    in_zer.Resize(1, 1,  0);
-
-    out.Resize(1, 1, 0.0);
+    in_pos.Clear( 10);
+    in_neg.Clear(-10);
+    in_zer.Clear(  0);
   }
 
 public:
