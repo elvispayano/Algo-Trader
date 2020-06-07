@@ -60,6 +60,15 @@ LayerBase::~LayerBase(void) {
 
 }
 
+/*
+  Function:     reconfigure
+  Inputs:       None (void)
+
+  Description:
+    Use the configured settings of nodeCount & inputCount
+    to set the appropriate size for the layer weights and
+    biases.
+*/
 void LayerBase::reconfigure(void) {
   weight.Resize(nodeCount, inputCount, 0.0);
   bias.Resize(inputCount, 1, 0.0);
