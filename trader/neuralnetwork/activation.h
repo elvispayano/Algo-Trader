@@ -39,8 +39,8 @@ protected:
   dMatrix performTF(dMatrix);
 
 private:
-  // Transfer funciton selection trigger
-  dMatrix(*transferFunction)(dMatrix);
+  // Transfer function selection trigger
+  double(*transferFunction)(double);
 };
 
 #endif /*ACTIVATION_H*/

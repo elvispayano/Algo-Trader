@@ -1,12 +1,26 @@
-#ifndef MATH_H
-#define MATH_H
+/*
+  Title:
+    Utl Math
 
-#include "matrix.h"
+  Description:
+    This library contains standard math functions that are
+    required within the project. All created standard functions
+    should be included here.
 
-dMatrix tanh(dMatrix);  // Transfer Function: Hyperbolic Tanger
-dMatrix sig (dMatrix);  // Transfer Function: Sigmoid
-dMatrix relu(dMatrix);  // Transfer Function: Rectified Linear Unit
-dMatrix bin (dMatrix);  // Transfer Function: Binary
-dMatrix lin (dMatrix);  // Transfer Function: None
+  Tests:
+    test_utl_math.cc
 
-#endif /* MATH_H */
+  Author:
+    Elvis Payano
+*/
+
+#ifndef UTL_MATH_H
+#define UTL_MATH_H
+
+double binary(double);  // Transfer Function: Binary
+double htan(double);    // Transfer Function: Hyperbolic Tangent
+double linear(double);  // Transfer Function: Linear
+double relu(double);    // Transfer Function: Rectified Linear Unit
+double sigmoid(double); // Transfer Function: Sigmoid
+
+#endif /* UTL_MATH_H */

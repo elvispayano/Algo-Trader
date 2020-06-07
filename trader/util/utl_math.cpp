@@ -1,3 +1,18 @@
+/*
+  Title:
+    Utl Math
+
+  Description:
+    This library contains standard math functions that are
+    required within the project. All created standard functions
+    should be included here.
+
+  Tests:
+    test_utl_math.cc
+
+  Author:
+    Elvis Payano
+*/
 
 // Utility Includes
 #include "utl_math.h"
@@ -7,108 +22,82 @@
 
 /*
   Function:     sig
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
+  Inputs:       x (double)
+  Output:       y (double)
 
   Description:
-    Process all entries in the input matrix through
-    the Sigmoid transfer function.
+    Process input through Sigmoid transfer function.
 
   Transfer Function Equation:
     f(x) = 1/(1+e^(-x))
 */
-dMatrix sig(dMatrix input) {
-  dMatrix output(input.Rows(), input.Cols(), 0.0);
-  for (size_t r = 0; r < output.Rows(); ++r) {
-    for (size_t c = 0; c < output.Cols(); ++c) {
-      output(r, c) = 1 / (1 + exp(-input(r, c)));
-    }
-  }
-  return output;
+double sigmoid(double x) {
+  return 1 / (1 + exp(-x));
 }
 
 /*
-  Function:     tanh
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
+  Function:     htan
+  Inputs:       x (double)
+  Output:       y (double)
 
   Description:
-    Process all entries in the input matrix through
-    the Hyperbolic Tangent transfer function.
+    Process input through Hyperbolic Tangent transfer
+    function.
 
   Transfer Function Equation:
     f(x) = (e^x - e^(-x))/(e^x + e^(-x))
 */
-dMatrix tanh(dMatrix input) {
-  dMatrix output(input.Rows(), input.Cols(), 0.0);
-  for (size_t r = 0; r < output.Rows(); ++r) {
-    for (size_t c = 0; c < output.Cols(); ++c) {
-      double x = input(r, c);
-      output(r, c) = (exp(x) - exp(-x)) / (exp(x) + exp(-x));
-    }
-  }
-  return output;
+double htan(double x) {
+  return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
 }
 
 /*
-  Function:     bin
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
+  Function:     binary
+  Inputs:       x (double)
+  Output:       y (double)
 
   Description:
-    Process all entries in the input matrix through
-    the Binary transfer function.
+    Process input through Binary transfer function.
 
   Transfer Function Equation:
-    f(x) = 1   | x >= 0
-    f(x) = 0   | x <  0
+    f(x) = 1  | x >= 0
+    f(x) = 0  | x <  0
 */
-dMatrix bin(dMatrix input) {
-  dMatrix output(input.Rows(), input.Cols(), 0.0);
-  for (size_t r = 0; r < output.Rows(); ++r) {
-    for (size_t c = 0; c < output.Cols(); ++c) {
-      if (input(r, c) >= 0) output(r, c) = 1;
-      else output(r, c) = 0;
-    }
-  }
-  return output;
+double binary(double x) {
+  if (x >= 0) return 1;
+  return 0;
 }
 
 /*
   Function:     relu
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
+  Inputs:       x (double)
+  Output:       y (double)
 
   Description:
-    Process all entries in the input matrix through
-    the Rectified Linear Unit transfer function.
+    Process input through Recitified Linear Unit
+    transfer function.
 
   Transfer Function Equation:
-    f(x) = x   | x >  0
-    f(x) = 0   | x <= 0
+    f(x) = x  | x >  0
+    f(x) = 0  | x <= 0
 */
-dMatrix relu(dMatrix input) {
-  dMatrix output(input.Rows(), input.Cols(), 0.0);
-  for (size_t r = 0; r < output.Rows(); ++r) {
-    for (size_t c = 0; c < output.Cols(); ++c) {
-      if (input(r, c) > 0) output(r, c) = input(r, c);
-      else output(r, c) = 0;
-    }
-  }
-  return output;
+double relu(double x) {
+  if (x > 0) return x;
+  return 0;
 }
 
 /*
   Function:     lin
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
+  Inputs:       x (double)
+  Output:       y (double)
 
   Description:
-    No processing of inputs through a transfer function
+    No processing of inputs through a transfer
+    function.
 
   Transfer Function Equation:
-    f(x) = f(x)
+    f(x) = x
 */
-dMatrix lin(dMatrix input) {
-  return input;
-};
+double linear(double x) {
+  return x;
+}
