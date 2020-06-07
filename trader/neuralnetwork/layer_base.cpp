@@ -50,11 +50,11 @@ LayerBase::LayerBase(ActivationTypes selectTF) {
 }
 
 /*
-    Destructor:   ~Layer Base
-    Inputs:       None (void)
+  Destructor:   ~Layer Base
+  Inputs:       None (void)
 
-    Description:
-      Clear any dynamically allocated memory
+  Description:
+    Clear any dynamically allocated memory
 */
 LayerBase::~LayerBase(void) {
 
