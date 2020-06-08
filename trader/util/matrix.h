@@ -42,8 +42,14 @@ public:
   
   // Process functions over all elements
   void forEach(T(*func)(T));
-  void forEach(T(*func)(T, T), T scalar);
-  Matrix<T> forEach(T(*func)(T, T), Matrix<T> inp);
+
+  // Matrix For Each
+  void forEach(T(*func)(T, T), Matrix<T> in, Matrix<T>& out);
+  void forEach(T(*func)(T, T), Matrix<T> in);
+
+  // Scalar For Each
+  void forEach(T(*func)(T, T), T in, Matrix<T>& out);
+  void forEach(T(*func)(T, T), T in);
 
   // Get submatrix that does not include elements from
   // row (r) or column (c)
@@ -187,13 +193,35 @@ Matrix<T> Matrix<T>::getCol(size_t c) {
 }
 
 /*
-  Function:   For Each
-  Inputs:     Varies:
-                T func(T)
-                T func(T,T) & input  [Matrix<T>]
-                T func(T,T) & scalar [T]
+  Function:   subMatrix
+  Inputs:     row (size_t), col (size_t)
+  Output:     Matrix (Matrix<T>)
+
   Description:
-    Run function through every element within the matrix
+    Return a matrix of size (mr-1)x(mc-1) that contains all elements of
+    original matrix except for those found in the row & col provided
+*/
+template<typename T>
+Matrix<T> Matrix<T>::subMatrix(size_t r, size_t c) {
+  Matrix<T> Output(mr - 1, mc - 1, 0.0);
+  size_t sr = 0;
+  size_t sc = 0;
+  for (size_t row = 0; row < mr; ++row) {
+    for (size_t col = 0; col < mc; ++col) {
+      if (row == r || col == c) continue;
+      Output(sr++, sc++) = this->operator()(row, col);
+    }
+  }
+  return Output;
+}
+
+/*
+  Function:   For Each
+  Inputs:   T(*func)(T)
+
+  Description
+    Run function with every element of matrix as input and assign
+    to current element
 */
 template<typename T>
 void Matrix<T>::forEach(T(*func)(T)) {
@@ -204,27 +232,84 @@ void Matrix<T>::forEach(T(*func)(T)) {
   }
 }
 
+/*
+  Function:   For Each
+  Inputs:   T(*func)(T x , T y), Matrix<T> in, Matrix<T>& out
+  
+  Description:
+    Run function on every element with "self" elements as x and "in"
+    elements as y. Output is captured using the "out" entry
+*/
 template<typename T>
-void Matrix<T>::forEach(T(*func)(T, T), T scalar) {
+void Matrix<T>::forEach(T(*func)(T, T), Matrix<T> in, Matrix<T>& out) {
+  if (mr != in.rows()) return;
+  if (mc != in.cols()) return;
+
+  if (mr != out.rows()) return;
+  if (mc != out.cols()) return;
+
   for (size_t r = 0; r < mr; ++r) {
     for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) = func(this->operator()(r, c), scalar);
+      out(r, c) = func(this->operator()(r, c), in(r, c));
     }
   }
 }
 
+/*
+  Function:   For Each
+  Inputs:   T(*func)(T x , T y), Matrix<T> in
+
+  Description:
+    Run function on every element with "self" elements as x and "in"
+    elements as y. Output is assigned to "self" current element
+*/
 template<typename T>
-Matrix<T> Matrix<T>::forEach(T(*func)(T, T), Matrix<T> inp) {
-  Matrix<T> output(mr, mc, 0.0);
-  if (mr != inp.rows()) return output;
-  if (mc != inp.cols()) return output;
+void Matrix<T>::forEach(T(*func)(T, T), Matrix<T> in) {
+  if (mr != in.rows()) return;
+  if (mc != in.cols()) return;
 
   for (size_t r = 0; r < mr; ++r) {
     for (size_t c = 0; c < mc; ++c) {
-      output(r, c) = func(this->operator()(r, c), inp(r, c));
+      this->operator()(r, c) = func(this->operator()(r, c), in(r, c));
+    } 
+  }
+}
+
+/*
+  Function:   For Each
+  Inputs:   T(*func)(T x , T y), T in, Matrix<T>& out
+
+  Description:
+    Run function on every element with "self" elements as x and "in"
+    y. Output is captured using the "out" entry
+*/
+template<typename T>
+void Matrix<T>::forEach(T(*func)(T, T), T in, Matrix<T>& out) {
+  if (mr != out.rows()) return;
+  if (mc != out.cols()) return;
+
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      out(r, c) = func(this->operator()(r, c), in);
     }
   }
-  return output;
+}
+
+/*
+  Function:   For Each
+  Inputs:   T(*func)(T x , T y), T in
+
+  Description:
+    Run function on every element with "self" elements as x and "in"
+    y. Output is assigned to "self" current element
+*/
+template<typename T>
+void Matrix<T>::forEach(T(*func)(T, T), T in) {
+  for (size_t r = 0; r < mr; ++r) {
+    for (size_t c = 0; c < mc; ++c) {
+      this->operator()(r, c) = func(this->operator()(r, c), in);
+    }
+  }
 }
 
 /*
@@ -253,122 +338,54 @@ T& Matrix<T>::operator()(size_t r, size_t c) {
 */
 template<typename T>
 void Matrix<T>::operator=(Matrix<T> inp) {
-  if (mr != inp.rows()) return;
-  if (mc != inp.cols()) return;
-
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) = inp(r, c);
-    }
-  }
+  auto lambda = [](T x, T y)->T { return y; };
+  forEach(lambda, inp);
 }
 
+/*
+  Operator:   +
+  Input:      Input (Matrix<T>)
+  Output:     Output (Matrix<T>)
+
+  Description:
+    Add contents of current matrix and input matrix
+    and return within output matrix
+*/
 template<typename T>
 Matrix<T> Matrix<T>::operator+(Matrix<T> inp) {
   auto lambda = [](T x, T y)->T { return x + y; };
-  Matrix<T> output = forEach(lambda, inp);
+  Matrix<T> output(mr, mc, 0.0);
+  
+  forEach(lambda, inp, output);
   return output;
 }
 
-template<typename T>
-Matrix<T> Matrix<T>::operator+(T scalar) {
-  Matrix<T> Output(mr, mr);
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) + scalar;
-    }
-  }
-  return Output;
-}
+/*
+  Operator:   -
+  Input:      Input (Matrix<T>)
+  Output:     Output (Matrix<T>)
 
-template<typename T>
-void Matrix<T>::operator+=(Matrix<T> inp) {
-  if (mr != inp.rows()) return;
-  if (mc != inp.cols()) return;
-
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) += inp(r, c);
-    }
-  }
-}
-
-template<typename T>
-void Matrix<T>::operator+=(T scalar) {
-  auto lambda = [](T x, T y)->T { return x + y; };
-  forEach(lambda, scalar);
-}
-
+  Description:
+    Subtract contents of current matrix and input matrix
+    and return within output matrix
+*/
 template<typename T>
 Matrix<T> Matrix<T>::operator-(Matrix<T> inp) {
   auto lambda = [](T x, T y)->T { return x - y; };
-  Matrix<T> output = forEach(lambda, inp);
+  Matrix<T> output(mr, mc, 0.0);
+
+  forEach(lambda, inp, output);
   return output;
 }
 
-template<typename T>
-Matrix<T> Matrix<T>::operator-(T scalar) {
-  Matrix<T> Output(mr, mr);
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) - scalar;
-    }
-  }
-  return Output;
-}
+/*
+  Operator:   *
+  Input:      Input (Matrix<T>)
+  Output:     Output (Matrix<T>)
 
-template<typename T>
-void Matrix<T>::operator-=(Matrix<T> inp) {
-  if (mr != inp.rows()) return;
-  if (mc != inp.cols()) return;
-
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      this->operator()(r, c) -= inp(r, c);
-    }
-  }
-}
-
-template<typename T>
-void Matrix<T>::operator-=(T scalar) {
-  auto lambda = [](T x, T y)->T { return x - y; };
-  forEach(lambda, scalar);
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::operator*(T scalar) {
-  Matrix<T> Output(mr, mr, 0.0);
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) * scalar;
-    }
-  }
-  return Output;
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::operator/(T scalar) {
-  Matrix<T> Output(mr, mr, 0.0);
-  for (size_t r = 0; r < mr; ++r) {
-    for (size_t c = 0; c < mc; ++c) {
-      Output(r, c) = this->operator()(r, c) / scalar;
-    }
-  }
-  return Output;
-}
-
-template<typename T>
-void Matrix<T>::operator*=(T scalar) {
-  auto lambda = [](T x, T y)->T { return x * y; };
-  forEach(lambda, scalar);
-}
-
-template<typename T>
-void Matrix<T>::operator/=(T scalar) {
-  auto lambda = [](T x, T y)->T { return x / y; };
-  forEach(lambda, scalar);
-}
-
+  Description:
+    Perform matrix multiplication and output matrix
+*/
 template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T> inp) {
   Matrix<T> Output(mr, inp.cols(), 0.0);
@@ -383,6 +400,111 @@ Matrix<T> Matrix<T>::operator*(Matrix<T> inp) {
   return Output;
 }
 
+/*
+  Operator:   +
+  Input:      Input (T)
+  Output:     Output (Matrix<T>)
+
+  Description:
+    Add scalar to every element of current matrix
+    and return within output matrix
+*/
+template<typename T>
+Matrix<T> Matrix<T>::operator+(T scalar) {
+  auto lambda = [](T x, T y)->T { return x + y; };
+  Matrix<T> output(mr, mc, 0.0);
+
+  forEach(lambda, scalar, output);
+  return output;
+}
+
+/*
+  Operator:   -
+  Input:      Input (T)
+  Output:     Output (Matrix<T>)
+
+  Description:
+    Subtract scalar to every element of current matrix
+    and return within output matrix
+*/
+template<typename T>
+Matrix<T> Matrix<T>::operator-(T scalar) {
+  auto lambda = [](T x, T y)->T { return x - y; };
+  Matrix<T> output(mr, mc, 0.0);
+
+  forEach(lambda, scalar, output);
+  return output;
+}
+
+/*
+  Operator:   *
+  Input:      Input (T)
+  Output:     Output (Matrix<T>)
+
+  Description:
+    Multiply scalar to every element of current matrix
+    and return within output matrix
+*/
+template<typename T>
+Matrix<T> Matrix<T>::operator*(T scalar) {
+  auto lambda = [](T x, T y)->T { return x * y; };
+  Matrix<T> output(mr, mc, 0.0);
+
+  forEach(lambda, scalar, output);
+  return output;
+}
+
+/*
+  Operator:   /
+  Input:      Input (T)
+  Output:     Output (Matrix<T>)
+
+  Description:
+    Divide every element of current matrix with a scalar
+    and return within output matrix
+*/
+template<typename T>
+Matrix<T> Matrix<T>::operator/(T scalar) {
+  auto lambda = [](T x, T y)->T { return x / y; };
+  Matrix<T> output(mr, mc, 0.0);
+
+  forEach(lambda, scalar, output);
+  return output;
+}
+
+/*
+  Operator:   +=
+  Input:      Input (Matrix<T>)
+
+  Description:
+    Add contents of input matrix into current matrix
+*/
+template<typename T>
+void Matrix<T>::operator+=(Matrix<T> inp) {
+  auto lambda = [](T x, T y)->T { return x + y; };
+  forEach(lambda, inp);
+}
+
+/*
+  Operator:   -=
+  Input:      Input (Matrix<T>)
+
+  Description:
+    Subtract contents of input matrix from current matrix
+*/
+template<typename T>
+void Matrix<T>::operator-=(Matrix<T> inp) {
+  auto lambda = [](T x, T y)->T { return x - y; };
+  forEach(lambda, inp);
+}
+
+/*
+  Operator:   *=
+  Input:      Input (Matrix<T>)
+
+  Description:
+    Perform matrix multiplication
+*/
 template<typename T>
 void Matrix<T>::operator*=(Matrix<T> inp) {
   if (mc != inp.rows()) return;
@@ -395,23 +517,58 @@ void Matrix<T>::operator*=(Matrix<T> inp) {
   }
 }
 
+/*
+  Operator:   +=
+  Input:      Input (T)
+
+  Description:
+    Add scalar to every element of current matrix
+*/
 template<typename T>
-Matrix<T> Matrix<T>::subMatrix(size_t r, size_t c) {
-  Matrix<T> Output(mr - 1, mc - 1, 0.0);
-  size_t sr = 0;
-  size_t sc = 0;
-  for (size_t row = 0; row < mr; ++row) {
-    for (size_t col = 0; col < mc; ++col) {
-      if (row == r || col == c) continue;
-      Output(sr++, sc++) = this->operator()(row, col);
-    }
-  }
-  return Output;
+void Matrix<T>::operator+=(T scalar) {
+  auto lambda = [](T x, T y)->T { return x + y; };
+  forEach(lambda, scalar);
 }
 
-//----------------------------------------------------------------
-// Common Typedefs
-//----------------------------------------------------------------
+/*
+  Operator:   -=
+  Input:      Input (T)
+
+  Description:
+    Subtract scalar from every element of current matrix
+*/
+template<typename T>
+void Matrix<T>::operator-=(T scalar) {
+  auto lambda = [](T x, T y)->T { return x - y; };
+  forEach(lambda, scalar);
+}
+
+/*
+  Operator:   *=
+  Input:      Input (T)
+
+  Description:
+    Multiply scalar with every element of current matrix
+*/
+template<typename T>
+void Matrix<T>::operator*=(T scalar) {
+  auto lambda = [](T x, T y)->T { return x * y; };
+  forEach(lambda, scalar);
+}
+
+/*
+  Operator:   /=
+  Input:      Input (T)
+
+  Description:
+    Divide every element in current matrix by scalar
+*/
+template<typename T>
+void Matrix<T>::operator/=(T scalar) {
+  auto lambda = [](T x, T y)->T { return x / y; };
+  forEach(lambda, scalar);
+}
+
 typedef Matrix<double> dMatrix;
 typedef Matrix<int>    iMatrix;
 typedef Matrix<float>  fMatrix;
