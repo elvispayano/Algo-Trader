@@ -14,6 +14,9 @@
 #ifndef NETWORK_TYPES_H
 #define NETWORK_TYPES_H
 
+// Utility Includes
+#include "matrix.h"
+
 /*
   Enum:         Activation Types
   Description:
@@ -48,10 +51,16 @@ enum class LayerTypes {
 struct LayerConfiguration {
   LayerTypes Layer;
   ActivationTypes Activation;
+  size_t layerHeight;
+  size_t layerWidth;
+  dMatrix weight;
+  dMatrix bias;
 
   LayerConfiguration() :
     Layer(LayerTypes::UNKNOWN),
-    Activation(ActivationTypes::LINEAR) {}
+    Activation(ActivationTypes::LINEAR),
+    layerHeight(0),
+    layerWidth(0) {}
 };
 
 #endif /* NETOWRK_TYPES_H */

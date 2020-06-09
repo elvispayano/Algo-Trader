@@ -65,7 +65,8 @@ Activation::~Activation(void) {
     by layers
 */
 void Activation::setTF(ActivationTypes selector) {
-  switch (selector) {
+  tfType = selector;
+  switch (tfType) {
   case ActivationTypes::SIGMOID:
     transferFunction = sigmoid;
     break;

@@ -33,5 +33,5 @@ public:
 };
 
 TEST_F(ActivationTest, Configuration) {
-  FAIL();
+  EXPECT_EQ(ActivationTypes::LINEAR, getTF());
 }

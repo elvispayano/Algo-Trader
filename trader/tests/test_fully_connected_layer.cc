@@ -35,29 +35,11 @@ public:
   Description:
     Create layer with default constructor
 */
-TEST_F(FullyConnectedTest, ConstructorDefault) {
-  dMatrix weight = layer.getWeight();
-  EXPECT_EQ(1, weight.cols());
-  EXPECT_EQ(1, weight.rows());
+TEST_F(FullyConnectedTest, ProcessLayer) {
+  layer.setTF(ActivationTypes::SIGMOID);
 
-  dMatrix bias = layer.getBias();
-  EXPECT_EQ(1, bias.cols());
-  EXPECT_EQ(1, bias.rows());
-}
+  dMatrix input(4, 10, 0.0);
+  dMatrix output = layer.processLayer(input);
 
-/*
-  Test:         Reconfigure
-  Description:
-    Reconfigure layer with SetUp settings
-*/
-TEST_F(FullyConnectedTest, Reconfigure) {
-  //reconfigure();
-
-  dMatrix weight = layer.getWeight();
-  EXPECT_EQ(10, weight.cols());
-  EXPECT_EQ(4 , weight.rows());
-
-  dMatrix bias = layer.getBias();
-  EXPECT_EQ(1 , bias.cols());
-  EXPECT_EQ(10, bias.rows());
+  EXPECT_DOUBLE_EQ(0.5, output(0, 0));
 }

@@ -22,8 +22,10 @@
 class NeuralNetworkTest : public ::testing::Test {
 protected:
   void SetUp(void) override {
-    config.Activation = ActivationTypes::SIGMOID;
-    config.Layer      = LayerTypes::FULLYCONNECTED;
+    config.Activation  = ActivationTypes::SIGMOID;
+    config.Layer       = LayerTypes::FULLYCONNECTED;
+    config.layerHeight = 3;
+    config.layerWidth  = 2;
   }
 
 public:

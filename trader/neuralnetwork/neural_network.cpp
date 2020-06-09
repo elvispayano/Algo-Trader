@@ -72,5 +72,15 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
     return;
   }
   
+  // Layer configuration
   layers.back()->setTF(configuration.Activation);
+  layers.back()->setInputCount(configuration.layerHeight);
+  layers.back()->setNodeCount(configuration.layerWidth);
+
+  // Process new configuration
+  layers.back()->reconfigure();
+
+  // Apply weights & biases
+  layers.back()->setWeight(configuration.weight);
+  layers.back()->setBias(configuration.bias);
 }
