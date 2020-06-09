@@ -24,8 +24,8 @@
     default activation function (None)
 */
 LayerBase::LayerBase(void) {
-  weight.Clear(0.0);
-  bias.Clear(0.0);
+  weight.clear(0.0);
+  bias.clear(0.0);
   setTF(ActivationTypes::LINEAR);
 
   inputCount = 0;
@@ -41,8 +41,8 @@ LayerBase::LayerBase(void) {
     the selected activation function
 */
 LayerBase::LayerBase(ActivationTypes selectTF) {
-  weight.Clear(0.0);
-  bias.Clear(0.0);
+  weight.clear(0.0);
+  bias.clear(0.0);
   setTF(selectTF);
 
   inputCount = 0;
@@ -70,6 +70,6 @@ LayerBase::~LayerBase(void) {
     biases.
 */
 void LayerBase::reconfigure(void) {
-  weight.Resize(nodeCount, inputCount, 0.0);
-  bias.Resize(inputCount, 1, 0.0);
+  weight.resize(nodeCount, inputCount, 0.0);
+  bias.resize(inputCount, 1, 0.0);
 }

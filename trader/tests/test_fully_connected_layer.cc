@@ -37,12 +37,12 @@ public:
 */
 TEST_F(FullyConnectedTest, ConstructorDefault) {
   dMatrix weight = layer.getWeight();
-  EXPECT_EQ(1, weight.Cols());
-  EXPECT_EQ(1, weight.Rows());
+  EXPECT_EQ(1, weight.cols());
+  EXPECT_EQ(1, weight.rows());
 
   dMatrix bias = layer.getBias();
-  EXPECT_EQ(1, bias.Cols());
-  EXPECT_EQ(1, bias.Rows());
+  EXPECT_EQ(1, bias.cols());
+  EXPECT_EQ(1, bias.rows());
 }
 
 /*
@@ -54,10 +54,10 @@ TEST_F(FullyConnectedTest, Reconfigure) {
   //reconfigure();
 
   dMatrix weight = layer.getWeight();
-  EXPECT_EQ(10, weight.Cols());
-  EXPECT_EQ(4 , weight.Rows());
+  EXPECT_EQ(10, weight.cols());
+  EXPECT_EQ(4 , weight.rows());
 
   dMatrix bias = layer.getBias();
-  EXPECT_EQ(1 , bias.Cols());
-  EXPECT_EQ(10, bias.Rows());
+  EXPECT_EQ(1 , bias.cols());
+  EXPECT_EQ(10, bias.rows());
 }
