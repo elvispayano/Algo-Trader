@@ -16,6 +16,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <vector>
+
 template<typename T>
 class Matrix {
 public:
@@ -85,7 +87,7 @@ private:
   size_t mr; // Matrix row size
   size_t mc; // Matrix col size
 
-  T* mat; // Matrix array pointer
+  std::vector<T> mat;
 
   // Junk value to return if attempting to address matrix
   // from out of bounds
@@ -102,13 +104,13 @@ private:
 */
 template<typename T>
 Matrix<T>::Matrix(void) {
-  mat = nullptr;
+  mat.clear();
   resize(1, 1, 0);
 }
 
 template<typename T>
 Matrix<T>::Matrix(size_t r, size_t c, T val = 0) {
-  mat = nullptr;
+  mat.clear();
   resize(r, c, val);
 }
 
@@ -121,7 +123,7 @@ Matrix<T>::Matrix(size_t r, size_t c, T val = 0) {
 */
 template<typename T>
 Matrix<T>::~Matrix(void) {
-  //if (mat) delete[] mat; mat = nullptr;
+  mat.clear();
 }
 
 /*
@@ -151,8 +153,9 @@ void Matrix<T>::resize(size_t r, size_t c, T val) {
   if (r == 0) return;
   if (c == 0) return;
   mr = r; mc = c;
-  if (mat) delete[] mat; mat = nullptr;
-  mat = new T[mr * mc];
+
+  mat.clear();
+  mat.resize(mr * mc);
   clear(val);
 }
 
@@ -326,7 +329,7 @@ template<typename T>
 T& Matrix<T>::operator()(size_t r, size_t c) {
   if (r >= mr) return junk;
   if (c >= mc) return junk;
-  return mat[r + mc * c];
+  return mat[r + mr * c];
 }
 
 /*

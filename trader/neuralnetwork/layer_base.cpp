@@ -71,5 +71,5 @@ LayerBase::~LayerBase(void) {
 */
 void LayerBase::reconfigure(void) {
   weight.resize(nodeCount, inputCount, 0.0);
-  bias.resize(inputCount, 1, 0.0);
+  bias.resize(nodeCount, 1, 0.0);
 }

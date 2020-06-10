@@ -28,6 +28,12 @@ protected:
   
 };
 
+/*
+  Test:         Constructor
+  Description:
+    Ensure layer base constructor configures layer with default
+    values
+*/
 TEST_F(LayerBaseTest, Contructor) {
   dMatrix weight = getWeight();
   EXPECT_EQ(1, weight.cols());
@@ -41,6 +47,11 @@ TEST_F(LayerBaseTest, Contructor) {
   EXPECT_EQ(0, getNodeCount());
 }
 
+/*
+  Test:         Reconfigure
+  Description:
+    Ensure layer is properly reconfigured as expected
+*/
 TEST_F(LayerBaseTest, Reconfigure) {
   setInputCount(3);
   setNodeCount(2);
@@ -48,4 +59,10 @@ TEST_F(LayerBaseTest, Reconfigure) {
 
   EXPECT_EQ(3, getInputCount());
   EXPECT_EQ(2, getNodeCount());
+
+  EXPECT_EQ(2, weight.rows());
+  EXPECT_EQ(3, weight.cols());
+
+  EXPECT_EQ(2, bias.rows());
+  EXPECT_EQ(1, bias.cols());
 }

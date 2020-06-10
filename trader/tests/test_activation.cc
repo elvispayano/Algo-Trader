@@ -32,6 +32,11 @@ protected:
 public:
 };
 
+/*
+  Test:         Configuration
+  Description:
+    Set layer configuration and check its value
+*/
 TEST_F(ActivationTest, Configuration) {
-  EXPECT_EQ(ActivationTypes::LINEAR, getTF());
+  EXPECT_EQ(ActivationTypes::LINEAR, tfType);
 }
