@@ -25,8 +25,8 @@
 */
 TEST(MathTest, HyperbolicTangent) {
   // Double
-  EXPECT_GT(0.999, htan(10.0));
-  EXPECT_LT(-0.999, htan(-10.0));
+  EXPECT_GT(htan( 10.0),-0.999);
+  EXPECT_LT(htan(-10.0), 0.999);
 
   // Integer
   EXPECT_EQ(0, htan(0));
@@ -39,8 +39,8 @@ TEST(MathTest, HyperbolicTangent) {
 */
 TEST(MathTest, Sigmoid) {
   // Double
-  EXPECT_GT(0.999, sigmoid( 10.0));
-  EXPECT_LT(0.001, sigmoid(-10.0));
+  EXPECT_GT(sigmoid( 10.0), 0.999);
+  EXPECT_LT(sigmoid(-10.0), 0.001);
   EXPECT_DOUBLE_EQ(0.5, sigmoid(0.0));
 };
 
