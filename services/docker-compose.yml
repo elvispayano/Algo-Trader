@@ -10,3 +10,9 @@ services:
     - POSTGRES_PASSWORD=password
     - POSTGRES_USER=postgres
     user: postgres
+    volumes:
+    - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db:
+  
