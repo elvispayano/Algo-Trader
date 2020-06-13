@@ -30,6 +30,7 @@ public:
 
   // Network SQL Interface
   int networkCount(void);
+  char* getNetwork(int id);
 };
 
 #endif /* PG_NETWORK_H */

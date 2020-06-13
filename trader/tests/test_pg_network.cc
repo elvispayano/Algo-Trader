@@ -44,3 +44,21 @@ TEST_F(PGNetworkTest, NetworkCount) {
 
   EXPECT_EQ(0, networkCount());
 }
+
+/*
+  Test:         Get Networks
+  Description:
+    Ensure that the sql connection returns the expected network data from
+    the database
+*/
+TEST_F(PGNetworkTest, GetNetwork) {
+  // Requesting valid data
+  EXPECT_STREQ("MSFT", getNetwork(1));
+
+  // Requesting invalid data
+  EXPECT_EQ(NULL, getNetwork(0));
+
+  // Requesting invlid connection
+  disconnect();
+  EXPECT_EQ(NULL, getNetwork(1));
+}

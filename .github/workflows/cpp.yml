@@ -29,9 +29,9 @@ jobs:
       run: |
         cmake .
         cmake --build .
-
-    # Run Binary
-    - name: Run
-      working-directory: ./build/x64-Debug
-      run: |  
+        
+    # Execute
+    - name: Run Debug
+      working-directory: ./trader/Debug
+      run: |
         ./trader.exe

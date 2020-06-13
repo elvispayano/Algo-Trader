@@ -63,3 +63,15 @@ int PGNetwork::networkCount(void) {
   int value = atoi(valueStr);
   return value;
 }
+/*
+  Function:     getNetwork
+  Inputs:       id (int)
+  Outputs:      ticker (char*)
+
+  Description:
+    Obtain the ticker symbol associated with the provided id
+*/
+char* PGNetwork::getNetwork(int id) {
+  if ((id < 1) || (id >= networkCount())) return NULL;
+  return execFunc("get_network", id);
+}
