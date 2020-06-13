@@ -18,6 +18,9 @@
 // Interface Includes
 #include "pg_connect.h"
 
+// Standard Includes
+#include <stdlib.h>
+
 /*
   Constructor:    PGConnect
   Inputs:         None (void)
@@ -172,4 +175,20 @@ char* PGConnect::execFunc(char* func, char* ticker) {
   char query[40];
   sprintf_s(query, "SELECT * FROM %s('%s')", func, ticker);
   return exec(query);
+}
+
+/*
+  Function:     pg2i
+  Inputs:       in (char*)
+  Outputs:      out (int)
+
+  Description:
+    Convert the postgres response character array into a integer
+*/
+int PGConnect::pg2i(char* in) {
+  // Null check
+  if (!in) return 0;
+
+  // Convert to integer
+  return atoi(in);
 }

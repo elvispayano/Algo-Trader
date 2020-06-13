@@ -52,6 +52,9 @@ protected:
   void connect(void);
   void disconnect(void);
 
+  // Common Conversions
+  int pg2i(char* input);
+
   // Postgres Connection
   PGconn* connection;
   PGresult* result;

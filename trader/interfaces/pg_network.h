@@ -32,9 +32,6 @@ public:
   int networkCount(void);
   char* getNetwork(int id);
   int layerCount(char* ticker);
-
-private:
-  int pg2i(char* input);
 };
 
 #endif /* PG_NETWORK_H */
