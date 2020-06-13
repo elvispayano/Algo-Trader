@@ -17,16 +17,12 @@
 // Interface Includes
 #include "pg_network.h"
 
-// Standard Includes
-#include <stdlib.h>
-
 /*
   Constructor:  PGNetwork
   Inputs:       None (void)
 
   Description:
     Set table settings
-
 */
 PGNetwork::PGNetwork(void) {
   table = "networks";
@@ -38,7 +34,6 @@ PGNetwork::PGNetwork(void) {
 
   Description:
     Default destructor
-
 */
 PGNetwork::~PGNetwork(void) {
 
@@ -81,20 +76,4 @@ char* PGNetwork::getNetwork(int id) {
 int PGNetwork::layerCount(char* ticker) {
   char* sVal = execFunc("layer_count",ticker);
   return pg2i(sVal);
-}
-
-/*
-  Function:     pg2i
-  Inputs:       in (char*)
-  Outputs:      out (int)
-
-  Description:
-    Convert the postgres response character array into a integer
-*/
-int PGNetwork::pg2i(char* in) {
-  // Null check
-  if (!in) return 0;
-
-  // Convert to integer
-  return atoi(in);
 }

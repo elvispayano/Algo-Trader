@@ -37,6 +37,7 @@ public:
   char* execFunc(char* func);
   char* execFunc(char* func, int id);
   char* execFunc(char* func, char* ticker);
+  char* execFunc(char* func, char* ticker, int num);
 
 protected:
   // Configure connection
@@ -51,6 +52,9 @@ protected:
   // Establish or Terminate Connection
   void connect(void);
   void disconnect(void);
+
+  // Common Conversions
+  int pg2i(char* input);
 
   // Postgres Connection
   PGconn* connection;

@@ -6,6 +6,7 @@
 #include "test_matrix.cc"
 #include "test_neural_network.cc"
 #include "test_pg_connect.cc"
+#include "test_pg_layer.cc"
 #include "test_pg_network.cc"
 #include "test_utl_math.cc"
 
