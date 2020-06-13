@@ -1,0 +1,2 @@
+INSERT INTO networks (TICKER) VALUES ('MSFT');
+INSERT INTO networks (TICKER) VALUES ('LMT');

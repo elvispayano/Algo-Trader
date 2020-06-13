@@ -109,3 +109,19 @@ void PGConnect::disconnect(void) {
 ConnStatusType PGConnect::getStatus(void) {
   return PQstatus(connection);
 }
+
+/*
+  Function:     execFunc
+  Inputs:       func (const char*)
+
+  Description:
+    Execute the provided function using the format
+      "SELECT * FROM func()"
+    where func is the provided database function
+*/
+char* PGConnect::execFunc(char* func) {
+  char buffer[40];
+  sprintf_s(buffer, "SELECT * FROM %s()", func);
+  result = PQexec(connection, buffer);
+  return PQgetvalue(result, 0, 0);
+}

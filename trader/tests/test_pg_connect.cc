@@ -30,7 +30,6 @@ protected:
 
     EXPECT_EQ(getStatus(), ConnStatusType::CONNECTION_BAD);
   }
-
 };
 
 /*

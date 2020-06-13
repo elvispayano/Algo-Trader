@@ -33,6 +33,9 @@ public:
   ConnStatusType getStatus(void);
   bool isConnected(void) { return connected; }
 
+  // SQL Interface Functions
+  char* execFunc(char* func);
+
 protected:
   // Configure connection
   void setHost    (const char* host)     { this->host     = host;     };
@@ -47,6 +50,13 @@ protected:
   void connect(void);
   void disconnect(void);
 
+  // Postgres Connection
+  PGconn* connection;
+  PGresult* result;
+
+  // Table to query
+  const char* table;
+
 private:
   // Connection parameters
   const char* host;
@@ -56,10 +66,6 @@ private:
   const char* password;
   const char* options;
   const char* tty;
-
-  // Postgres Connection
-  PGconn* connection;
-  PGresult* result;
 
   bool connected;
 };
