@@ -17,6 +17,7 @@ project(trader)
 
 # Project build directories
 add_subdirectory(util)
+add_subdirectory(interfaces)
 add_subdirectory(trader)
 add_subdirectory(neuralnetwork)
 add_subdirectory(tests)
