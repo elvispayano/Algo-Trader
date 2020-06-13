@@ -24,8 +24,14 @@ jobs:
     - uses: actions/checkout@v2
 
     # Run CMake
-    - name: Build
+    - name: Build Debug
       working-directory: ./trader
       run: |
         cmake .
         cmake --build .
+
+    # Run Binary
+    - name: Run
+      working-directory: ./build/x64-Debug
+      run: |  
+        ./trader.exe
