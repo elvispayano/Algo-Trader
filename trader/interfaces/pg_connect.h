@@ -37,6 +37,7 @@ public:
   char* execFunc(char* func);
   char* execFunc(char* func, int id);
   char* execFunc(char* func, char* ticker);
+  char* execFunc(char* func, char* ticker, int num);
 
 protected:
   // Configure connection

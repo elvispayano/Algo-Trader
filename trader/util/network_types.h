@@ -28,7 +28,8 @@ enum class ActivationTypes {
   BINARY,
   RELU,
   TANH,
-  SIGMOID
+  SIGMOID,
+  UNKNOWN
 };
 
 /*
@@ -53,12 +54,14 @@ struct LayerConfiguration {
   ActivationTypes Activation;
   size_t layerHeight;
   size_t layerWidth;
+  size_t offset;
   dMatrix weight;
   dMatrix bias;
 
   LayerConfiguration() :
     Layer(LayerTypes::UNKNOWN),
     Activation(ActivationTypes::LINEAR),
+    offset(0),
     layerHeight(0),
     layerWidth(0) {}
 };

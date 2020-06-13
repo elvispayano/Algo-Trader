@@ -17,6 +17,9 @@
 // Interface Includes
 #include "pg_connect.h"
 
+// Utility Includes
+#include "network_types.h"
+
 class PGLayer : public PGConnect {
 public:
   // Constructor
@@ -24,4 +27,18 @@ public:
 
   // Destructor
   ~PGLayer(void);
+
+  LayerConfiguration getLayer(char* ticker, int layerNum);
+
+protected:
+  int getInputs(void);
+  int getNodes(void);
+  int getInd(void);
+  LayerTypes getLayerType(void);
+  ActivationTypes getActivationType(void);
+
+private:
+  LayerConfiguration layerOut;
+  char* ticker;
+  int layerNum;
 };
