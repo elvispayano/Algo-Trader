@@ -102,10 +102,58 @@ void PGConnect::disconnect(void) {
 /*
   Function:     getStatus
   Inputs:       None (void)
+  Outputs:      status (ConnStatusType)
 
   Description:
     Get the recorded status for the current postgres connection
 */
 ConnStatusType PGConnect::getStatus(void) {
   return PQstatus(connection);
+}
+
+/*
+  Function:     exec
+  Inputs:       query (char*)
+  Outputs:      resultValue (char*)
+
+  Description:
+    Execute the provided query
+*/
+char* PGConnect::exec(char* query) {
+  // Prevent function usage if connection is not established
+  if (getStatus() != ConnStatusType::CONNECTION_OK) return NULL;
+  result = PQexec(connection, query);
+  return PQgetvalue(result, 0, 0);
+}
+
+/*
+  Function:     execFunc
+  Inputs:       func (char*)
+  Outputs:      result (char*)
+
+  Description:
+    Execute the provided function using the format
+      "SELECT * FROM func()"
+    where func is the provided database function
+*/
+char* PGConnect::execFunc(char* func) {
+  char query[40];
+  sprintf_s(query, "SELECT * FROM %s()", func);
+  return exec(query);
+}
+
+/*
+  Function:     execFunc
+  Inputs:       func (const char*), id (int)
+  Outputs:      results (char*)
+
+  Description:
+    Execute the provided function using the format
+      "SELECT * FROM func(id)"
+    where func is the provided database function and id is the function input
+*/
+char* PGConnect::execFunc(char* func, int id) {
+  char query[40];
+  sprintf_s(query, "SELECT * FROM %s(%d)", func, id);
+  return exec(query);
 }
