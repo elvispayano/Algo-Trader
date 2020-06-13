@@ -29,7 +29,7 @@
 
 */
 PGNetwork::PGNetwork(void) {
-  table = "network";
+  table = "networks";
 }
 
 /*
@@ -55,6 +55,9 @@ PGNetwork::~PGNetwork(void) {
 int PGNetwork::networkCount(void) {
   // Database response
   char* valueStr = execFunc("network_count");
+
+  // Null check
+  if (!valueStr) return 0;
 
   // Convert to integer
   int value = atoi(valueStr);

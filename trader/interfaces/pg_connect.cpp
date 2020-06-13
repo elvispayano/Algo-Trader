@@ -120,8 +120,14 @@ ConnStatusType PGConnect::getStatus(void) {
     where func is the provided database function
 */
 char* PGConnect::execFunc(char* func) {
-  char buffer[40];
-  sprintf_s(buffer, "SELECT * FROM %s()", func);
-  result = PQexec(connection, buffer);
+  char query[40];
+  sprintf_s(query, "SELECT * FROM %s()", func);
+  return exec(query);
+}
+
+char* PGConnect::exec(char* query) {
+  // Prevent function usage if connection is not established
+  if (getStatus() != ConnStatusType::CONNECTION_OK) return NULL;
+  result = PQexec(connection, query);
   return PQgetvalue(result, 0, 0);
 }

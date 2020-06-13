@@ -27,6 +27,7 @@ protected:
     setDatabase("dbname = gtest");
     setPort("5431");
     connect();
+    ASSERT_EQ(getStatus(), ConnStatusType::CONNECTION_OK);
   }
 };
 
@@ -38,4 +39,8 @@ protected:
 */
 TEST_F(PGNetworkTest, NetworkCount) {
   EXPECT_EQ(2, networkCount());
+
+  disconnect();
+
+  EXPECT_EQ(0, networkCount());
 }

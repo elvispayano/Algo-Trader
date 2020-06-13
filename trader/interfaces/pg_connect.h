@@ -58,6 +58,9 @@ protected:
   const char* table;
 
 private:
+  // Execute query
+  char* exec(char* query);
+
   // Connection parameters
   const char* host;
   const char* port;
