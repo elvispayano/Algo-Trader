@@ -144,7 +144,7 @@ char* PGConnect::execFunc(char* func) {
 
 /*
   Function:     execFunc
-  Inputs:       func (const char*), id (int)
+  Inputs:       func (char*), id (int)
   Outputs:      results (char*)
 
   Description:
@@ -155,5 +155,21 @@ char* PGConnect::execFunc(char* func) {
 char* PGConnect::execFunc(char* func, int id) {
   char query[40];
   sprintf_s(query, "SELECT * FROM %s(%d)", func, id);
+  return exec(query);
+}
+
+/*
+  Function:     execFunc
+  Inputs:       func (char*), ticker (char*)
+  Outputs:      results (char*)
+
+  Description:
+    Execute the provided function using the format
+      "SELECT * FROM func(id)"
+    where func is the provided database function and id is the function input
+*/
+char* PGConnect::execFunc(char* func, char* ticker) {
+  char query[40];
+  sprintf_s(query, "SELECT * FROM %s('%s')", func, ticker);
   return exec(query);
 }
