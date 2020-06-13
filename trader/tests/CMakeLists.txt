@@ -58,6 +58,7 @@ set(SRC
   "test_matrix.cc"
   "test_neural_network.cc"
   "test_pg_connect.cc"
+  "test_pg_layer.cc"
   "test_pg_network.cc"
   "test_utl_math.cc"
 )

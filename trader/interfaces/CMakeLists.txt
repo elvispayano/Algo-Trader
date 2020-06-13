@@ -17,12 +17,14 @@ find_package (PostgreSQL REQUIRED)
 # Library header files
 set(HEADERS
   "pg_connect.h"
+  "pg_layer.h"
   "pg_network.h"
 )
 
 # Library source files
 set(SRC
   "pg_connect.cpp"
+  "pg_layer.cpp"
   "pg_network.cpp"
 )
 
