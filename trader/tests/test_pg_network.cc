@@ -58,7 +58,25 @@ TEST_F(PGNetworkTest, GetNetwork) {
   // Requesting invalid data
   EXPECT_EQ(NULL, getNetwork(0));
 
-  // Requesting invlid connection
+  // Requesting with invlid connection
   disconnect();
   EXPECT_EQ(NULL, getNetwork(1));
+}
+
+/*
+  Test:         Expected Layers
+  Description:
+    Ensure that the sql connection returns the expected layer count from the
+    database
+*/
+TEST_F(PGNetworkTest, LayerCount) {
+  // Requesting valid data
+  EXPECT_EQ(3, layerCount("MSFT"));
+
+  // Requesting invalid data
+  EXPECT_EQ(0, layerCount("XYZ"));
+
+  // Requesting with invalid connection
+  disconnect();
+  EXPECT_EQ(0, layerCount("MSFT"));
 }

@@ -36,6 +36,7 @@ public:
   // SQL Interface Functions
   char* execFunc(char* func);
   char* execFunc(char* func, int id);
+  char* execFunc(char* func, char* ticker);
 
 protected:
   // Configure connection

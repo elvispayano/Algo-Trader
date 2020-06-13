@@ -55,13 +55,7 @@ PGNetwork::~PGNetwork(void) {
 int PGNetwork::networkCount(void) {
   // Database response
   char* valueStr = execFunc("network_count");
-
-  // Null check
-  if (!valueStr) return 0;
-
-  // Convert to integer
-  int value = atoi(valueStr);
-  return value;
+  return pg2i(valueStr);
 }
 /*
   Function:     getNetwork
@@ -74,4 +68,33 @@ int PGNetwork::networkCount(void) {
 char* PGNetwork::getNetwork(int id) {
   if ((id < 1) || (id >= networkCount())) return NULL;
   return execFunc("get_network", id);
+}
+
+/*
+  Function:     layerCount
+  Inputs:       ticker (char*)
+  Outputs:      count (int)
+
+  Description:
+    Obtain the expected layer count for each neural network in the database
+*/
+int PGNetwork::layerCount(char* ticker) {
+  char* sVal = execFunc("layer_count",ticker);
+  return pg2i(sVal);
+}
+
+/*
+  Function:     pg2i
+  Inputs:       in (char*)
+  Outputs:      out (int)
+
+  Description:
+    Convert the postgres response character array into a integer
+*/
+int PGNetwork::pg2i(char* in) {
+  // Null check
+  if (!in) return 0;
+
+  // Convert to integer
+  return atoi(in);
 }
