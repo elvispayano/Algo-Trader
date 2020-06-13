@@ -33,26 +33,57 @@ protected:
   }
 };
 
+/*
+  Test:         Inputs
+  Description:
+    Ensure expected results using the SQL "layer_inputs" function
+*/
 TEST_F(PGLayerTest, Inputs) {
   EXPECT_EQ(4, getInputs());
 }
 
+/*
+  Test:         Nodes
+  Description:
+    Ensure expected results using the SQL "layer_nodes" function
+*/
 TEST_F(PGLayerTest, Nodes) {
   EXPECT_EQ(2, getNodes());
 }
 
+/*
+  Test:         Index
+  Description:
+    Ensure expected results using the SQL "layer_ind" function
+*/
 TEST_F(PGLayerTest, Index) {
   EXPECT_EQ(1, getInd());
 }
 
+/*
+  Test:         LayerType
+  Description:
+    Ensure expected results using the SQL "layer_type" function
+*/
 TEST_F(PGLayerTest, LayerType) {
   EXPECT_EQ(LayerTypes::FULLYCONNECTED, getLayerType());
 }
 
+/*
+  Test:         ActivationType
+  Description:
+    Ensure expected results using the SQL "activation_type" function
+*/
 TEST_F(PGLayerTest, ActivationType) {
   EXPECT_EQ(ActivationTypes::RELU, getActivationType());
 }
 
+/*
+  Test:         Configuration
+  Description:
+    Ensure expected results are formatted properly within the layer
+    configuration output
+*/
 TEST_F(PGLayerTest, Configuration) {
   LayerConfiguration capture = getLayer("MSFT", 1);
 

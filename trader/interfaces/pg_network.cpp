@@ -23,7 +23,6 @@
 
   Description:
     Set table settings
-
 */
 PGNetwork::PGNetwork(void) {
   table = "networks";
@@ -35,7 +34,6 @@ PGNetwork::PGNetwork(void) {
 
   Description:
     Default destructor
-
 */
 PGNetwork::~PGNetwork(void) {
 
@@ -79,4 +77,3 @@ int PGNetwork::layerCount(char* ticker) {
   char* sVal = execFunc("layer_count",ticker);
   return pg2i(sVal);
 }
-

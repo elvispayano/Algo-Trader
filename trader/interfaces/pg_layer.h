@@ -28,9 +28,11 @@ public:
   // Destructor
   ~PGLayer(void);
 
+  // Layer SQL Interface
   LayerConfiguration getLayer(char* ticker, int layerNum);
 
 protected:
+  // Layer SQL Interface
   int getInputs(void);
   int getNodes(void);
   int getInd(void);
