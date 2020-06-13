@@ -2,6 +2,7 @@
 #include "test_main.h"
 
 #include "test_activation.cc"
+#include "test_pg_connect.cc"
 #include "test_layer_base.cc"
 #include "test_matrix.cc"
 #include "test_neural_network.cc"

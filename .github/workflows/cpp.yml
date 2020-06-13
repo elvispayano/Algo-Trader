@@ -17,7 +17,7 @@ on:
 jobs:
   Build:
     # Ensure Ubuntu runner
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     # Checkout source
@@ -28,3 +28,4 @@ jobs:
       working-directory: ./trader
       run: |
         cmake .
+        
