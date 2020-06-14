@@ -56,9 +56,14 @@ LayerConfiguration PGLayer::getLayer(char* ticker, int layerNum) {
   // Prep configuration output
   layerOut.layerHeight = getNodes();
   layerOut.layerWidth = getInputs();
-  layerOut.offset = getInd();
   layerOut.Activation = getActivationType();
   layerOut.Layer = getLayerType();
+
+  // Load weights and biases
+  layerOut.weight.resize(getNodes(), getInputs());
+  layerOut.weight = getWeight();
+  layerOut.bias.resize(getNodes(), 1);
+  layerOut.bias = getBias();
 
   return layerOut;
 }
@@ -132,4 +137,38 @@ ActivationTypes PGLayer::getActivationType(void) {
     return ActivationTypes::UNKNOWN;
   }
   return static_cast<ActivationTypes>(val);
+}
+
+/*
+  Function:     getWeight
+  Inputs:       None (void)
+
+  Description:
+    SQL request for all weight values for the layer
+*/
+dMatrix PGLayer::getWeight(void) {
+  dMatrix out(layerOut.layerHeight, layerOut.layerWidth, 0.0);
+  int ind = getInd();
+  for (size_t c = 0; c < out.cols(); ++c)
+    for (size_t r = 0; r < out.rows(); ++r)
+      out(r, c) = pg2f(execFunc("get_wb", ticker, ind++));
+
+  return out;
+}
+
+/*
+  Function:     getBias
+  Inputs:       None (void)
+
+  Description:
+    SQL request for all bias values for the layer
+*/
+dMatrix PGLayer::getBias(void) {
+  dMatrix out(layerOut.layerHeight, 1, 0.0);
+  int ind = getInd() + layerOut.layerHeight*layerOut.layerWidth;
+  for (size_t c = 0; c < out.cols(); ++c)
+    for (size_t r = 0; r < out.rows(); ++r)
+      out(r, c) = pg2f(execFunc("get_wb", ticker, ind++));
+
+  return out;
 }

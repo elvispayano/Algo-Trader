@@ -14,6 +14,9 @@
 // Interface Includes
 #include "pg_layer.h"
 
+// Utility Includes
+#include "matrix.h"
+
 // Google Test Includes
 #include <gtest/gtest.h>
 
@@ -39,7 +42,7 @@ protected:
     Ensure expected results using the SQL "layer_inputs" function
 */
 TEST_F(PGLayerTest, Inputs) {
-  EXPECT_EQ(4, getInputs());
+  EXPECT_EQ(3, getInputs());
 }
 
 /*
@@ -79,6 +82,28 @@ TEST_F(PGLayerTest, ActivationType) {
 }
 
 /*
+  Test:         Weight
+  Description:
+    Ensure expected results using the SQL "get_wb" function
+*/
+TEST_F(PGLayerTest, Weight) {
+  dMatrix out = getWeight();
+  EXPECT_EQ(2, out.rows());
+  EXPECT_EQ(3, out.cols());
+}
+
+/*
+  Test:         Bias
+  Description:
+    Ensure expected results using the SQL "get_wb" function
+*/
+TEST_F(PGLayerTest, Bias) {
+  dMatrix out = getBias();
+  EXPECT_EQ(2, out.rows());
+  EXPECT_EQ(1, out.cols());
+}
+
+/*
   Test:         Configuration
   Description:
     Ensure expected results are formatted properly within the layer
@@ -87,9 +112,11 @@ TEST_F(PGLayerTest, ActivationType) {
 TEST_F(PGLayerTest, Configuration) {
   LayerConfiguration capture = getLayer("MSFT", 1);
 
-  EXPECT_EQ(4, capture.layerWidth);
+  EXPECT_EQ(3, capture.layerWidth);
   EXPECT_EQ(2, capture.layerHeight);
-  EXPECT_EQ(1, capture.offset);
   EXPECT_EQ(LayerTypes::FULLYCONNECTED, capture.Layer);
   EXPECT_EQ(ActivationTypes::RELU, capture.Activation);
+
+  EXPECT_DOUBLE_EQ(capture.weight(0, 1), 3.5);
+  EXPECT_DOUBLE_EQ(capture.bias(0, 0), 7.5);
 }

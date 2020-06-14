@@ -19,6 +19,7 @@
 
 // Utility Includes
 #include "network_types.h"
+#include "matrix.h"
 
 class PGLayer : public PGConnect {
 public:
@@ -38,6 +39,8 @@ protected:
   int getInd(void);
   LayerTypes getLayerType(void);
   ActivationTypes getActivationType(void);
+  dMatrix getWeight(void);
+  dMatrix getBias(void);
 
 private:
   LayerConfiguration layerOut;
