@@ -61,7 +61,7 @@ int PGNetwork::networkCount(void) {
     Obtain the ticker symbol associated with the provided id
 */
 char* PGNetwork::getNetwork(int id) {
-  if ((id < 1) || (id >= networkCount())) return NULL;
+  if ((id < 1) || (id > networkCount())) return NULL;
   return execFunc("get_network", id);
 }
 

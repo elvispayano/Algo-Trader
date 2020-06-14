@@ -14,12 +14,15 @@
     Elvis Payano
 */
 
+#ifndef NEURAL_NETWORK_H
+#define NEURAL_NETWORK_H
+
 // Standard Includes
 #include <vector>
 
 // Utility Includes
-#include "network_types.h"
 #include "matrix.h"
+#include "network_types.h"
 
 // Forward Declaration
 class LayerBase;
@@ -36,7 +39,17 @@ public:
   void addLayer(LayerConfiguration configuration);
   size_t getLayerCount(void) { return layers.size(); }
 
+  // Network Identification
+  void setTicker(char* in) { ticker = in; }
+  char* getTicker(void) { return ticker; }
+
+  // Process Network Inputs
+  dMatrix process(dMatrix data);
+
 private:
   // Layer Elements
   std::vector<LayerBase*> layers;
+  char* ticker;
 };
+
+#endif /* NEURAL_NETWORK_H */

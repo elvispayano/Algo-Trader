@@ -39,7 +39,6 @@ public:
   char* execFunc(char* func, char* ticker);
   char* execFunc(char* func, char* ticker, int num);
 
-protected:
   // Configure connection
   void setHost    (const char* host)     { this->host     = host;     };
   void setPort    (const char* port)     { this->port     = port;     };
@@ -52,6 +51,8 @@ protected:
   // Establish or Terminate Connection
   void connect(void);
   void disconnect(void);
+
+protected:
 
   // Common Conversions
   int pg2i(char* input);
