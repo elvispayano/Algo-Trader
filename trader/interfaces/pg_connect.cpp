@@ -208,3 +208,19 @@ int PGConnect::pg2i(char* in) {
   // Convert to integer
   return atoi(in);
 }
+
+/*
+  Function:     pg2f
+  Inputs:       in (char*)
+  Outputs:      out (float)
+
+  Description:
+    Convert the postgres response character array into a float
+*/
+float PGConnect::pg2f(char* in) {
+  // Null check
+  if (!in) return 0;
+
+  // Convert to integer
+  return atof(in);
+}

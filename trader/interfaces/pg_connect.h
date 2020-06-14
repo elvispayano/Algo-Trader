@@ -55,6 +55,7 @@ protected:
 
   // Common Conversions
   int pg2i(char* input);
+  float pg2f(char* input);
 
   // Postgres Connection
   PGconn* connection;

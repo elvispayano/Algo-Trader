@@ -54,6 +54,13 @@ CREATE FUNCTION public.layer_activation(IN tick text, IN layer integer)
     
 AS $BODY$ SELECT ACT_TYPE FROM layers WHERE TICKER = tick AND LAYER_NUM = layer$BODY$;
 
+/* Create Get WB Function*/
+CREATE FUNCTION public.get_wb(IN tick text, IN ind integer)
+    RETURNS real
+    LANGUAGE 'sql'
+    
+AS $BODY$ SELECT VALUE FROM weights_biases WHERE TICKER = tick AND INDEX = ind$BODY$;
+
 /*
 
 Sample function usage
