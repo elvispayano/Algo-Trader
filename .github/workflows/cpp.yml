@@ -10,14 +10,30 @@ name: C++ Development
 # Triggers
 # Run pipeline on all merges to master
 on:
+  push:
+    branches:
+      - feature/*
   pull_request:
     branches:
     - master
+    paths:
+    - '**.cpp'
+    - '**.h'
 
 jobs:
   Build:
     # Ensure Ubuntu runner
     runs-on: windows-latest
+
+    # Run service containers
+    services:
+      postgres:
+        image: postgres:9.6.18
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+        ports:
+        - "5431:5432"
 
     steps:
     # Checkout source
