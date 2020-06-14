@@ -30,6 +30,7 @@
     that will be later configured.
 */
 NeuralNetwork::NeuralNetwork(void) {
+  ticker = NULL;
   layers.clear();
 }
 
@@ -83,4 +84,18 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
   // Apply weights & biases
   layers.back()->setWeight(configuration.weight);
   layers.back()->setBias(configuration.bias);
+}
+
+/*
+  Functions:    Process
+  Inputs:       Data (dMatrix)
+  Outputs:      Action (dMatrix)
+
+  Description:
+    Process input data through each layer and return a processed
+    matrix containing the desired action to be performed
+*/
+dMatrix NeuralNetwork::process(dMatrix data) {
+  dMatrix action;
+  return action;
 }

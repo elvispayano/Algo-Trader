@@ -37,4 +37,4 @@ target_include_directories(neuralnetwork PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 set_target_properties(neuralnetwork PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link library dependencies
-target_link_libraries(neuralnetwork PRIVATE utilities)
+target_link_libraries(neuralnetwork PUBLIC utilities)

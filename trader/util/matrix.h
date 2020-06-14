@@ -84,8 +84,8 @@ public:
   void operator/=(T);
 
 private:
-  size_t mr; // Matrix row size
-  size_t mc; // Matrix col size
+  size_t mr = 0; // Matrix row size
+  size_t mc = 0; // Matrix col size
 
   std::vector<T> mat;
 
