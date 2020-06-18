@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 
 #ifdef DEBUG
   // Run Google Test if in debug
-  test_main();
+  test_main(argc, argv);
   return 0;
 #endif
   database = 0;
