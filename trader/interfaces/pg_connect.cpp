@@ -18,6 +18,9 @@
 // Interface Includes
 #include "pg_connect.h"
 
+// Postgres Includes
+#include <libpq-fe.h>
+
 // Standard Includes
 #include <stdlib.h>
 
@@ -110,7 +113,7 @@ void PGConnect::disconnect(void) {
   Description:
     Get the recorded status for the current postgres connection
 */
-ConnStatusType PGConnect::getStatus(void) {
+size_t PGConnect::getStatus(void) {
   return PQstatus(connection);
 }
 
@@ -187,9 +190,9 @@ char* PGConnect::execFunc(char* func, char* ticker) {
       "SELECT * FROM func(id, num)"
     where func is the provided database function and id & num are the function inputs
 */
-char* PGConnect::execFunc(char* func, char* ticker, int num) {
+char* PGConnect::execFunc(std::string func, char* ticker, int num) {
   char query[50];
-  sprintf_s(query, "SELECT * FROM %s('%s', %d)", func, ticker, num);
+  sprintf_s(query, "SELECT * FROM %s('%s', %d)", func.c_str(), ticker, num);
   return exec(query);
 }
 
@@ -201,12 +204,12 @@ char* PGConnect::execFunc(char* func, char* ticker, int num) {
   Description:
     Convert the postgres response character array into a integer
 */
-int PGConnect::pg2i(char* in) {
+int PGConnect::pg2i(std::string in) {
   // Null check
-  if (!in) return 0;
+  if (in.empty()) return 0;
 
   // Convert to integer
-  return atoi(in);
+  return atoi(in.c_str());
 }
 
 /*
@@ -217,10 +220,10 @@ int PGConnect::pg2i(char* in) {
   Description:
     Convert the postgres response character array into a float
 */
-float PGConnect::pg2f(char* in) {
+float PGConnect::pg2f(std::string in) {
   // Null check
-  if (!in) return 0;
+  if (in.empty()) return 0;
 
   // Convert to integer
-  return atof(in);
+  return atof(in.c_str());
 }

@@ -27,14 +27,14 @@ protected:
   // Ensure each test has a properly configured connection
   // to the postgres database
   void SetUp(void) override {
-    pgN->setDatabase("dbname = gtest");
-    pgN->setPort("5431");
+    //pgN->setDatabase("dbname = gtest");
+    //pgN->setPort("5431");
+    //
+    //pgL->setDatabase("dbname = gtest");
+    //pgL->setPort("5431");
 
-    pgL->setDatabase("dbname = gtest");
-    pgL->setPort("5431");
-
-    ASSERT_EQ(pgN->getStatus(), ConnStatusType::CONNECTION_OK);
-    ASSERT_EQ(pgL->getStatus(), ConnStatusType::CONNECTION_OK);
+    //ASSERT_EQ(pgN->getStatus(), ConnStatusType::CONNECTION_OK);
+    //ASSERT_EQ(pgL->getStatus(), ConnStatusType::CONNECTION_OK);
   }
 };
 

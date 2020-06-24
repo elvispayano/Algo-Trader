@@ -21,6 +21,7 @@
 // Interface Includes
 #include "pg_layer.h"
 #include "pg_network.h"
+#include "pg_connect.h"
 
 // Neural Network Includes
 #include "neural_network.h"
@@ -33,8 +34,9 @@
     Initialize the trader and PG objects
 */
 Trader::Trader(void) {
+  PGConnect x;
   pgN = new PGNetwork();
-  pgL = new PGLayer();
+  pgL = new PGLayer(&x);
   
   networks.clear();
 }
@@ -63,8 +65,8 @@ Trader::~Trader(void) {
     Configure the trader with all the requisite neural networks
 */
 void Trader::setup(void) {
-  pgN->connect();
-  pgL->connect();
+  //pgN->connect();
+  //pgL->connect();
 
   for (size_t i = 1; i <= pgN->networkCount(); ++i) {
     // Create a new network
@@ -80,8 +82,8 @@ void Trader::setup(void) {
     networks.push_back(net);
   }
 
-  pgN->disconnect();
-  pgL->disconnect();
+  //pgN->disconnect();
+  //pgL->disconnect();
 }
 
 /*

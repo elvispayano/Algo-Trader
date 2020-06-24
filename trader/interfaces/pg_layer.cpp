@@ -16,6 +16,7 @@
 
 // Interface Includes
 #include "pg_layer.h"
+#include "pg_connect.h"
 
 /*
   Constructor:  PGLayer
@@ -24,7 +25,8 @@
   Description:
     Initialize class variables with default (invalid) values
 */
-PGLayer::PGLayer(void) {
+PGLayer::PGLayer(PGConnect* connection) {
+  dbConnect = connection;
   ticker = NULL;
   layerNum = 0;
 }
@@ -76,8 +78,8 @@ LayerConfiguration PGLayer::getLayer(char* ticker, int layerNum) {
     SQL request specifying how many inputs are present for the layer
 */
 int PGLayer::getInputs(void) {
-  char* out = execFunc("layer_inputs", ticker, layerNum);
-  return pg2i(out);
+  char* out = dbConnect->execFunc("layer_inputs", ticker, layerNum);
+  return dbConnect->pg2i(out);
 }
 
 /*
@@ -88,8 +90,8 @@ int PGLayer::getInputs(void) {
     SQL request specifying how many nodes are present for the layer
 */
 int PGLayer::getNodes(void) {
-  char* out = execFunc("layer_nodes", ticker, layerNum);
-  return pg2i(out);
+  char* out = dbConnect->execFunc("layer_nodes", ticker, layerNum);
+  return dbConnect->pg2i(out);
 }
 
 /*
@@ -101,8 +103,8 @@ int PGLayer::getNodes(void) {
     weight and bias values within the database
 */
 int PGLayer::getInd(void) {
-  char* out = execFunc("layer_ind", ticker, layerNum);
-  return pg2i(out);
+  char* out = dbConnect->execFunc("layer_ind", ticker, layerNum);
+  return dbConnect->pg2i(out);
 }
 
 /*
@@ -113,8 +115,8 @@ int PGLayer::getInd(void) {
     SQL request for the layer type configurations
 */
 LayerTypes PGLayer::getLayerType(void) {
-  char* qRet = execFunc("layer_type", ticker, layerNum);
-  int val = pg2i(qRet);
+  char* qRet = dbConnect->execFunc("layer_type", ticker, layerNum);
+  int val = dbConnect->pg2i(qRet);
 
   if (val >= static_cast<int>(LayerTypes::UNKNOWN)) {
     return LayerTypes::UNKNOWN;
@@ -130,8 +132,8 @@ LayerTypes PGLayer::getLayerType(void) {
     SQL request for the activation type configurations
 */
 ActivationTypes PGLayer::getActivationType(void) {
-  char* qRet = execFunc("layer_activation", ticker, layerNum);
-  int val = pg2i(qRet);
+  char* qRet = dbConnect->execFunc("layer_activation", ticker, layerNum);
+  int val = dbConnect->pg2i(qRet);
 
   if (val >= static_cast<int>(ActivationTypes::UNKNOWN)) {
     return ActivationTypes::UNKNOWN;
@@ -147,11 +149,13 @@ ActivationTypes PGLayer::getActivationType(void) {
     SQL request for all weight values for the layer
 */
 dMatrix PGLayer::getWeight(void) {
-  dMatrix out(layerOut.layerHeight, layerOut.layerWidth, 0.0);
+  dMatrix out(getNodes(), getInputs(), 0.0);
   int ind = getInd();
   for (size_t c = 0; c < out.cols(); ++c)
-    for (size_t r = 0; r < out.rows(); ++r)
-      out(r, c) = pg2f(execFunc("get_wb", ticker, ind++));
+    for (size_t r = 0; r < out.rows(); ++r) {
+      std::string temp = dbConnect->execFunc("get_wb", ticker, ind++);
+      out(r, c) = dbConnect->pg2f(temp);
+    }
 
   return out;
 }
@@ -164,11 +168,11 @@ dMatrix PGLayer::getWeight(void) {
     SQL request for all bias values for the layer
 */
 dMatrix PGLayer::getBias(void) {
-  dMatrix out(layerOut.layerHeight, 1, 0.0);
+  dMatrix out(getNodes(), 1, 0.0);
   int ind = getInd() + layerOut.layerHeight*layerOut.layerWidth;
   for (size_t c = 0; c < out.cols(); ++c)
     for (size_t r = 0; r < out.rows(); ++r)
-      out(r, c) = pg2f(execFunc("get_wb", ticker, ind++));
+      out(r, c) = dbConnect->pg2f(dbConnect->execFunc("get_wb", ticker, ind++));
 
   return out;
 }

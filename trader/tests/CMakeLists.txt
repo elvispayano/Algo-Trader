@@ -57,7 +57,6 @@ set(SRC
   "test_layer_base.cc"
   "test_matrix.cc"
   "test_neural_network.cc"
-  "test_pg_connect.cc"
   "test_pg_layer.cc"
   "test_pg_network.cc"
   "test_utl_math.cc"
@@ -74,6 +73,7 @@ set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link library dependencies
 target_link_libraries(tests PRIVATE gtest_main)
+target_link_libraries(tests PRIVATE gmock_main)
 target_link_libraries(tests PRIVATE utilities)
 target_link_libraries(tests PRIVATE neuralnetwork)
 target_link_libraries(tests PRIVATE interfaces)

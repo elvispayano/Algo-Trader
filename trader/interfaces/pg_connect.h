@@ -18,8 +18,12 @@
 #ifndef PG_CONNECT_H
 #define PG_CONNECT_H
 
-// Postgres Includes
-#include <libpq-fe.h>
+// Standard Includes
+#include <string>
+
+// Forward Declarations
+class pg_conn;
+class pg_result;
 
 class PGConnect {
 public:
@@ -30,14 +34,14 @@ public:
   ~PGConnect(void);
 
   // Status Indication Functions
-  ConnStatusType getStatus(void);
-  bool isConnected(void) { return connected; }
+  size_t getStatus(void);
+  virtual bool isConnected(void) { return connected; }
 
   // SQL Interface Functions
-  char* execFunc(char* func);
-  char* execFunc(char* func, int id);
-  char* execFunc(char* func, char* ticker);
-  char* execFunc(char* func, char* ticker, int num);
+  virtual char* execFunc(char* func);
+  virtual char* execFunc(char* func, int id);
+  virtual char* execFunc(char* func, char* ticker);
+  virtual char* execFunc(std::string func, char* ticker, int num);
 
   // Configure connection
   void setHost    (const char* host)     { this->host     = host;     };
@@ -52,15 +56,13 @@ public:
   void connect(void);
   void disconnect(void);
 
-protected:
-
   // Common Conversions
-  int pg2i(char* input);
-  float pg2f(char* input);
+  virtual int pg2i(std::string input);
+  virtual float pg2f(std::string input);
 
   // Postgres Connection
-  PGconn* connection;
-  PGresult* result;
+  pg_conn* connection;
+  pg_result* result;
 
   // Table to query
   const char* table;

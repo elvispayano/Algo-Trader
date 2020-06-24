@@ -14,16 +14,17 @@
     Elvis Payano
 */
 
-// Interface Includes
-#include "pg_connect.h"
-
 // Utility Includes
 #include "network_types.h"
 #include "matrix.h"
 
-class PGLayer : public PGConnect {
+// Forward Declarations
+class PGConnect;
+
+class PGLayer {
 public:
   // Constructor
+  PGLayer(PGConnect* connection);
   PGLayer(void);
 
   // Destructor
@@ -32,7 +33,6 @@ public:
   // Layer SQL Interface
   LayerConfiguration getLayer(char* ticker, int layerNum);
 
-protected:
   // Layer SQL Interface
   int getInputs(void);
   int getNodes(void);
@@ -43,6 +43,7 @@ protected:
   dMatrix getBias(void);
 
 private:
+  PGConnect* dbConnect;
   LayerConfiguration layerOut;
   char* ticker;
   int layerNum;
