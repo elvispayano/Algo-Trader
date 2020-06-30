@@ -54,6 +54,7 @@ set(HEADERS
 set(SRC
   "test_main.cpp"
   "test_activation.cc"
+  "test_database_base.cc"
   "test_layer_base.cc"
   "test_matrix.cc"
   "test_neural_network.cc"

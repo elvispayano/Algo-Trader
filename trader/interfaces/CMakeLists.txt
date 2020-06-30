@@ -14,18 +14,29 @@ cmake_minimum_required(VERSION 3.8)
 
 find_package (PostgreSQL REQUIRED)
 
+# TWS API Definitions
+set(IB_INCLUDE_DIR "C:\\TWS_API\\source\\CppClient\\client")
+set(IB_LIB
+  "C:\\TWS_API\\source\\CppClient\\lib\\TwsSocketClient.lib"
+  "C:\\TWS_API\\source\\CppClient\\Debug\\IB.lib"
+)
+
 # Library header files
 set(HEADERS
+  "database_base.h"
   "pg_connect.h"
   "pg_layer.h"
   "pg_network.h"
+  "postgres.h"
 )
 
 # Library source files
 set(SRC
+  "database_base.cpp"
   "pg_connect.cpp"
   "pg_layer.cpp"
   "pg_network.cpp"
+  "postgres.cpp"
 )
 
 # Define library requirements
