@@ -6,13 +6,8 @@ class MockDatabase : public DatabaseBase {
 public:
   bool connect(void) { return false; }
   void disconnect(void) {}
-  int getNetworkCount(void) { return 0; }
-  std::string getNetwork(size_t id) { return NULL; }
-  int getLayerCount(std::string ticker) { return 0; }
 
-  int getInputs(std::string ticker, int layerNum) { return 0; }
-  int getNodes(std::string ticker, int layerNum) {return 0;}
-  int getIndex(std::string ticker, int layerNum) {return 0;}
+  LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) override { LayerConfiguration* x; return x; }
 };
 
 class DatabaseTest : public ::testing::Test {
@@ -35,5 +30,5 @@ TEST_F(DatabaseTest, IntConversion) {
 }
 
 TEST_F(DatabaseTest, FloatConversion) {
-  EXPECT_FLOAT_EQ(5.5f, mDB->toInt("5.5"));
+  EXPECT_FLOAT_EQ(5.5f, mDB->toFloat("5.5"));
 }

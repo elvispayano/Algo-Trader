@@ -13,6 +13,7 @@
 
 #include "postgres.h"
 #include <libpq-fe.h>
+#include "network_types.h"
 
 /*
   Constructor:  Postgres
@@ -239,4 +240,20 @@ int Postgres::getNodes(std::string ticker, int layerNum) {
 int Postgres::getIndex(std::string ticker, int layerNum) {
   std::string valueStr = execFunc("layer_index", ticker.c_str(), layerNum);
   return toInt(valueStr);
+}
+
+/*
+  Function:     getLayer
+  Inputs:       ticker (string), layerNum (int)
+
+  Description:
+    SQL request for all configurations parameters for a specified layer within the
+    requested network.
+*/
+LayerConfiguration* Postgres::getLayer(std::string ticker, unsigned int layerNum) {
+  LayerConfiguration* layer;
+
+
+
+  return layer;
 }
