@@ -64,7 +64,7 @@ set(SRC
 )
 
 # Define library requirements
-add_library(tests ${HEADERS} ${SRC})
+add_library(tests OBJECT ${HEADERS} ${SRC})
 
 # Provide dependents with header include directory
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
