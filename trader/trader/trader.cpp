@@ -19,8 +19,7 @@
 #include "trader.h"
 
 // Interface Includes
-#include "pg_layer.h"
-#include "pg_network.h"
+#include "database_base.h"
 
 // Neural Network Includes
 #include "neural_network.h"
@@ -32,10 +31,7 @@
   Description:
     Initialize the trader and PG objects
 */
-Trader::Trader(void) {
-  pgN = new PGNetwork();
-  pgL = new PGLayer();
-  
+Trader::Trader(DatabaseBase* dbIn): database(dbIn) {
   networks.clear();
 }
 
@@ -47,9 +43,6 @@ Trader::Trader(void) {
     Ensure proper memory cleanup
 */
 Trader::~Trader(void) {
-  if (pgN) delete pgN;
-  if (pgL) delete pgL;
-
   for (size_t i = 0; i < networks.size(); ++i)
     if (networks[i]) delete networks[i];
   networks.clear();
@@ -63,25 +56,20 @@ Trader::~Trader(void) {
     Configure the trader with all the requisite neural networks
 */
 void Trader::setup(void) {
-  pgN->connect();
-  pgL->connect();
 
-  for (size_t i = 1; i <= pgN->networkCount(); ++i) {
+  for (size_t i = 1; i <= database->getNetworkCount(); ++i) {
     // Create a new network
-    NeuralNetwork* net = new NeuralNetwork;
+    std::string ticker = database->getNetwork(i);
+    NeuralNetwork* net = new NeuralNetwork(ticker);
 
-    char* ticker = pgN->getNetwork(i);
-    net->setTicker(ticker);
-
-    for (size_t layerNum = 1; layerNum <= pgN->layerCount(ticker); ++layerNum)
-      net->addLayer(pgL->getLayer(ticker, layerNum));
+    // Configure network
+    for (size_t layerNum = 1; layerNum <= database->getLayerCount(ticker); ++layerNum) {
+      net->addLayer(database->getLayer(ticker, layerNum));
+      }
     
     // Add network to vector
     networks.push_back(net);
   }
-
-  pgN->disconnect();
-  pgL->disconnect();
 }
 
 /*

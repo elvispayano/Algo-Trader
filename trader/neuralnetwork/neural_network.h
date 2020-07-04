@@ -19,6 +19,7 @@
 
 // Standard Includes
 #include <vector>
+#include <string>
 
 // Utility Includes
 #include "matrix.h"
@@ -30,7 +31,7 @@ class LayerBase;
 class NeuralNetwork {
 public:
   // Constructor
-  NeuralNetwork(void);
+  NeuralNetwork(std::string ticker);
 
   // Destructor
   ~NeuralNetwork(void);
@@ -40,8 +41,7 @@ public:
   size_t getLayerCount(void) { return layers.size(); }
 
   // Network Identification
-  void setTicker(char* in) { ticker = in; }
-  char* getTicker(void) { return ticker; }
+  char* getTicker(void) { return (char*)ticker.c_str(); }
 
   // Process Network Inputs
   dMatrix process(dMatrix data);
@@ -49,7 +49,7 @@ public:
 private:
   // Layer Elements
   std::vector<LayerBase*> layers;
-  char* ticker;
+  std::string ticker;
 };
 
 #endif /* NEURAL_NETWORK_H */

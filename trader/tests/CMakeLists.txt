@@ -54,17 +54,16 @@ set(HEADERS
 set(SRC
   "test_main.cpp"
   "test_activation.cc"
+  "test_database_base.cc"
   "test_layer_base.cc"
   "test_matrix.cc"
   "test_neural_network.cc"
-  "test_pg_connect.cc"
-  "test_pg_layer.cc"
-  "test_pg_network.cc"
+  "test_trader.cc"
   "test_utl_math.cc"
 )
 
 # Define library requirements
-add_library(tests ${HEADERS} ${SRC})
+add_library(tests OBJECT ${HEADERS} ${SRC})
 
 # Provide dependents with header include directory
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -74,6 +73,7 @@ set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link library dependencies
 target_link_libraries(tests PRIVATE gtest_main)
+target_link_libraries(tests PRIVATE gmock_main)
 target_link_libraries(tests PRIVATE utilities)
 target_link_libraries(tests PRIVATE neuralnetwork)
 target_link_libraries(tests PRIVATE interfaces)

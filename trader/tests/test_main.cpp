@@ -1,15 +1,17 @@
+/*
+  Title:
+    Test Main
+
+  Description:
+    This function implements Google Test and runs all tests that are found within
+    project.
+
+  Author:
+    Elvis Payano
+*/
+
 #include <gtest/gtest.h>
 #include "test_main.h"
-
-#include "test_activation.cc"
-#include "test_layer_base.cc"
-#include "test_matrix.cc"
-#include "test_neural_network.cc"
-#include "test_pg_connect.cc"
-#include "test_pg_layer.cc"
-#include "test_pg_network.cc"
-#include "test_trader.cc"
-#include "test_utl_math.cc"
 
 void test_main(void) {
   ::testing::InitGoogleTest();

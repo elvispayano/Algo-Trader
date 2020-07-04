@@ -22,14 +22,13 @@
 #include <vector>
 
 // Forward Declarations
-class PGNetwork;
-class PGLayer;
 class NeuralNetwork;
+class DatabaseBase;
 
 class Trader {
 public:
   // Constructor
-  Trader(void);
+  Trader(DatabaseBase* dbIn);
 
   // Destructor
   ~Trader(void);
@@ -41,11 +40,9 @@ public:
   void perform(void);
 
   std::vector<NeuralNetwork*> getNetworks(void) { return networks; }
-protected:
-  PGNetwork* pgN;
-  PGLayer* pgL;
 
 private:
+  DatabaseBase* database;
   std::vector<NeuralNetwork*> networks;
 };
 

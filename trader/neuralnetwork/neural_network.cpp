@@ -29,8 +29,8 @@
     Initialize a neural network and initialize layer workspace
     that will be later configured.
 */
-NeuralNetwork::NeuralNetwork(void) {
-  ticker = NULL;
+NeuralNetwork::NeuralNetwork(std::string ticker) {
+  this->ticker = ticker;
   layers.clear();
 }
 
