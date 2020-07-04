@@ -36,7 +36,10 @@ public:
 
   bool connect(void) override { return false; }
   void disconnect(void) override {}
-  LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) { return NULL; }
+  LayerConfiguration getLayer(std::string ticker, unsigned int layerNum) { return temp; }
+
+private:
+  LayerConfiguration temp;
 };
 
 // Unit Test Framework Setup
@@ -52,6 +55,9 @@ protected:
   void TearDown(void) override {
     if (trader)
       delete trader;
+
+    if (db)
+      delete db;
   }
 
 public:

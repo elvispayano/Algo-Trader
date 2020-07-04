@@ -11,16 +11,18 @@
     Elvis Payano
 */
 
+// Interface Includes
 #include "postgres.h"
+
+// Postgres (External) Includes
 #include <libpq-fe.h>
-#include "network_types.h"
 
 /*
   Constructor:  Postgres
-  Inputs:       None (void)
+  Inputs:       host, port, opt, tty, database, username, password (all char*)
 
   Description:
-    Setup default configuration for postgres database connection
+    Setup configuration for postgres database connection
 */
 Postgres::Postgres( char* host, char* port, char* opt,  char* tty,
                     char* db,   char* user, char* pass) : 
@@ -50,21 +52,23 @@ Postgres::~Postgres(void) {
 
   Description:
     Attempt to establish a connection to a postgres database using the configured 
-    parameters. Limited to 3 attempts
+    parameters.
 */
 bool Postgres::connect(void) {
-  ConnStatusType status = ConnStatusType::CONNECTION_BAD;
-
+  // Limit to a maximum of 3 attempts
   int counter = 0;
   while (counter < 3) {
-    ++counter;
+    // Attemp connection
     connection = PQsetdbLogin(host.c_str(), port.c_str(), "", "", "dbname = postgres", "postgres", "password");
 
-    status = PQstatus(connection);
-    if (status == ConnStatusType::CONNECTION_OK)
-      return true;
+    // Check connection status
+    if (PQstatus(connection) == ConnStatusType::CONNECTION_OK)
+      return true; // Connection established
+
+    // Update counter
+    ++counter;
   }
-  return false;
+  return false; // No connection established
 }
 
 /*
@@ -76,11 +80,17 @@ bool Postgres::connect(void) {
     databse.
 */
 void Postgres::disconnect(void) {
-  ConnStatusType status = PQstatus(connection);
-  if (status == ConnStatusType::CONNECTION_OK)
+  if (PQstatus(connection) == ConnStatusType::CONNECTION_OK)
     PQfinish(connection);
 }
 
+/*
+  Function:     clearQuery
+  Inputs:       None (void)
+
+  Description:
+    Clear query buffer of any 
+*/
 void Postgres::clearQuery(void) {
   memset(queryBuffer, '\0', 100);
 }
@@ -95,8 +105,7 @@ void Postgres::clearQuery(void) {
 */
 char* Postgres::exec(std::string query) {
   // Prevent function usage if connection is not established
-  ConnStatusType status = PQstatus(connection);
-  if (status != ConnStatusType::CONNECTION_OK) return NULL;
+  if (PQstatus(connection) != ConnStatusType::CONNECTION_OK) return NULL;
   results = PQexec(connection, query.c_str());
   return PQgetvalue(results, 0, 0);
 }
@@ -250,9 +259,8 @@ int Postgres::getIndex(std::string ticker, int layerNum) {
     SQL request for all configurations parameters for a specified layer within the
     requested network.
 */
-LayerConfiguration* Postgres::getLayer(std::string ticker, unsigned int layerNum) {
-  LayerConfiguration* layer;
-
+LayerConfiguration Postgres::getLayer(std::string ticker, unsigned int layerNum) {
+  LayerConfiguration layer;
 
 
   return layer;

@@ -17,6 +17,9 @@
 // Interface Includes
 #include "database_base.h"
 
+// Utilities Includes
+#include "network_types.h"
+
 // Forward Declaration
 struct pg_conn;
 struct pg_result;
@@ -36,7 +39,7 @@ public:
   int getLayerCount(std::string ticker) override;
 
   // Layer configuration
-  LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) override;
+  LayerConfiguration getLayer(std::string ticker, unsigned int layerNum) override;
 
 private:
   int getInputs(std::string ticker, int layerNum);

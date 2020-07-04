@@ -37,7 +37,7 @@ public:
   ~NeuralNetwork(void);
 
   // Layer Configuration
-  void addLayer(LayerConfiguration* configuration);
+  void addLayer(LayerConfiguration configuration);
   size_t getLayerCount(void) { return layers.size(); }
 
   // Network Identification

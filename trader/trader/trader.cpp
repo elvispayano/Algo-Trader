@@ -19,7 +19,6 @@
 #include "trader.h"
 
 // Interface Includes
-#include "postgres.h"
 #include "database_base.h"
 
 // Neural Network Includes
@@ -44,9 +43,6 @@ Trader::Trader(DatabaseBase* dbIn): database(dbIn) {
     Ensure proper memory cleanup
 */
 Trader::~Trader(void) {
-  if (database)
-    delete database;
-
   for (size_t i = 0; i < networks.size(); ++i)
     if (networks[i]) delete networks[i];
   networks.clear();

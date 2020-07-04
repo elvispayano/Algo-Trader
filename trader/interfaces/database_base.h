@@ -1,13 +1,35 @@
+/*
+  Title:
+    Database Base
+
+  Description:
+    This class is the template configuration for managing connections to external
+    Databases. This base implementation will allow for the selected solution to be
+    independent of how the project is designed.
+
+  Test:
+    test_database_base.cc
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef DATABASE_BASE_H
 #define DATABASE_BASE_H
 
+// Standard Includes
 #include <string>
-struct LayerConfiguration;
+
+// Utilities Includes
+#include "network_types.h"
 
 class DatabaseBase {
 public:
-  DatabaseBase(void);
-  ~DatabaseBase(void);
+  // Constructor
+  DatabaseBase(void) {};
+
+  // Destructor
+  ~DatabaseBase(void) {};
 
   // Connection management
   virtual bool connect(void) = 0;
@@ -19,7 +41,7 @@ public:
   virtual int getLayerCount(std::string ticker) = 0;
 
   // Layer configuration
-  virtual LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) = 0;
+  virtual LayerConfiguration getLayer(std::string ticker, unsigned int layerNum) = 0;
 
   // Support functions
   int toInt(std::string in);

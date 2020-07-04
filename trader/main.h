@@ -1,9 +1,15 @@
+/*
+  Title:
+    Main
 
-// Interface Includes
-#include "postgres.h"
+  Description:
+    The entrance into the program that will configure all connections as
+    expected, run the neural networks, and interface with all external
+    applications.
 
-// Neural Network Includes
-#include "neural_network.h"
+  Author:
+    Elvis Payano
+*/
 
 // Standard Includes
 #include <vector>

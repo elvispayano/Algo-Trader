@@ -1,13 +1,34 @@
-﻿// trader.cpp : Defines the entry point for the application.
-//
+﻿/*
+  Title:
+    Main
+
+  Description:
+    The entrance into the program that will configure all connections as
+    expected, run the neural networks, and interface with all external
+    applications.
+
+  Author:
+    Elvis Payano
+*/
+
+// Interface Includes
+#include "postgres.h"
+
+// Neural Network Includes
+#include "neural_network.h"
+
+// Main Include
+#include "main.h"
+
+// Debug configuration execution
 #ifdef DEBUG
 #include "test_main.h"
 #endif
 
-#include "main.h"
-
 int main(int argc, char **argv) {
+
 #ifdef DEBUG
+  // Run Google Test if in debug
   test_main();
   return 0;
 #endif
@@ -18,7 +39,7 @@ int main(int argc, char **argv) {
   database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
   if (!database->connect())
     return 1;
-  int x = database->getNetworkCount();
+  
   for (size_t it = 1; it <= database->getNetworkCount(); ++it) {
     std::string ticker = database->getNetwork(it);
     NeuralNetwork* x = new NeuralNetwork(ticker);
