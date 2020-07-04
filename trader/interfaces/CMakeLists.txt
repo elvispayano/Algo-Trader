@@ -24,18 +24,12 @@ set(IB_LIB
 # Library header files
 set(HEADERS
   "database_base.h"
-  "pg_connect.h"
-  "pg_layer.h"
-  "pg_network.h"
   "postgres.h"
 )
 
 # Library source files
 set(SRC
   "database_base.cpp"
-  "pg_connect.cpp"
-  "pg_layer.cpp"
-  "pg_network.cpp"
   "postgres.cpp"
 )
 
