@@ -54,7 +54,9 @@ IBWrapper::~IBWrapper(void)
 bool IBWrapper::connect(const char* host, int port, int clientId)
 {
 	bool response = isConnected();
-	while (!isConnected()) {
+	size_t count = 0;
+	while (!isConnected() && count < 3) {
+		++count;
 		if (!response)
 		{
 			// Attempting Connection
