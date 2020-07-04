@@ -32,7 +32,7 @@
   Description:
     Initialize the trader and PG objects
 */
-Trader::Trader(Postgres* dbIn): database(dbIn) {
+Trader::Trader(DatabaseBase* dbIn): database(dbIn) {
   networks.clear();
 }
 
@@ -68,8 +68,7 @@ void Trader::setup(void) {
 
     // Configure network
     for (size_t layerNum = 1; layerNum <= database->getLayerCount(ticker); ++layerNum) {
-      LayerConfiguration x = *database->getLayer(ticker, layerNum);
-      net->addLayer(x);
+      net->addLayer(database->getLayer(ticker, layerNum));
       }
     
     // Add network to vector

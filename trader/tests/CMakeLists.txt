@@ -58,6 +58,7 @@ set(SRC
   "test_layer_base.cc"
   "test_matrix.cc"
   "test_neural_network.cc"
+  "test_trader.cc"
   "test_utl_math.cc"
 )
 

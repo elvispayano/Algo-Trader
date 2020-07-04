@@ -23,12 +23,12 @@
 
 // Forward Declarations
 class NeuralNetwork;
-class Postgres;
+class DatabaseBase;
 
 class Trader {
 public:
   // Constructor
-  Trader(Postgres* dbIn);
+  Trader(DatabaseBase* dbIn);
 
   // Destructor
   ~Trader(void);
@@ -42,7 +42,7 @@ public:
   std::vector<NeuralNetwork*> getNetworks(void) { return networks; }
 
 private:
-  Postgres* database;
+  DatabaseBase* database;
   std::vector<NeuralNetwork*> networks;
 };
 

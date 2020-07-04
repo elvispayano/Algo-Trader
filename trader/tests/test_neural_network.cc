@@ -57,7 +57,7 @@ TEST_F(NeuralNetworkTest, ConstructorDefault) {
 */
 TEST_F(NeuralNetworkTest, AddLayersKnown) {
   // Add a known layer type
-  network->addLayer(config);
+  network->addLayer(&config);
   EXPECT_EQ(1, network->getLayerCount());
 }
 
@@ -69,6 +69,6 @@ TEST_F(NeuralNetworkTest, AddLayersKnown) {
 TEST_F(NeuralNetworkTest, AddLayersUnknown) {
   // Reject an unknown layer type
   config.Layer = LayerTypes::UNKNOWN;
-  network->addLayer(config);
+  network->addLayer(&config);
   EXPECT_EQ(0, network->getLayerCount());
 }

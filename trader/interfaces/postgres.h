@@ -30,14 +30,15 @@ public:
   bool connect(void) override;
   void disconnect(void) override;
   
-  // Required database interfaces
+  // Network configuration
+  int getNetworkCount(void) override;
+  std::string getNetwork(size_t id) override;
+  int getLayerCount(std::string ticker) override;
+
+  // Layer configuration
   LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) override;
 
 private:
-  int getNetworkCount(void);
-  std::string getNetwork(size_t id);
-  int getLayerCount(std::string ticker);
-
   int getInputs(std::string ticker, int layerNum);
   int getNodes(std::string ticker, int layerNum);
   int getIndex(std::string ticker, int layerNum);

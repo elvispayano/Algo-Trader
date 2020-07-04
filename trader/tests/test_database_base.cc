@@ -7,7 +7,10 @@ public:
   bool connect(void) { return false; }
   void disconnect(void) {}
 
-  LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) override { LayerConfiguration* x; return x; }
+  LayerConfiguration* getLayer(std::string ticker, unsigned int layerNum) override { return NULL; }
+  int getNetworkCount(void) override { return 1; }
+  std::string getNetwork(size_t id) override { return "XYZ"; }
+  int getLayerCount(std::string ticker) override { return 1; }
 };
 
 class DatabaseTest : public ::testing::Test {

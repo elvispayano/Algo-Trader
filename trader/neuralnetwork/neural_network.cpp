@@ -59,8 +59,11 @@ NeuralNetwork::~NeuralNetwork(void) {
     contains all the required elements to select the type of layer,
     the implemented activation, and the size of the layer.
 */
-void NeuralNetwork::addLayer(LayerConfiguration configuration) {
-  switch (configuration.Layer) {
+void NeuralNetwork::addLayer(LayerConfiguration* configuration) {
+  if (!configuration)
+    return;
+
+  switch (configuration->Layer) {
   case LayerTypes::FULLYCONNECTED:
     layers.push_back(new FullyConnectedLayer);
     break;
@@ -74,16 +77,16 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
   }
   
   // Layer configuration
-  layers.back()->setTF(configuration.Activation);
-  layers.back()->setInputCount(configuration.layerHeight);
-  layers.back()->setNodeCount(configuration.layerWidth);
+  layers.back()->setTF(configuration->Activation);
+  layers.back()->setInputCount(configuration->layerHeight);
+  layers.back()->setNodeCount(configuration->layerWidth);
 
   // Process new configuration
   layers.back()->reconfigure();
 
   // Apply weights & biases
-  layers.back()->setWeight(configuration.weight);
-  layers.back()->setBias(configuration.bias);
+  layers.back()->setWeight(configuration->weight);
+  layers.back()->setBias(configuration->bias);
 }
 
 /*
