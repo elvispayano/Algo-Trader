@@ -124,11 +124,13 @@ public:
 	void disconnect(void) const;
 	bool isConnected(void) const;
 
+	float getLast(void);
 protected:
 
 	//![socket_declare]
 	EReaderOSSignal Signal;
 	EClientSocket* const pClient;
+
 	//! [socket_declare]
 	State m_state;
 	time_t m_sleepDeadline;

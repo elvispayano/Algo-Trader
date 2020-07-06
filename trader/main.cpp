@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     return 1;
 
   // Configure broker connection
-  broker = new InteractiveBroker();
+  broker = new InteractiveBroker("127.0.0.1", 6550, 0);
   if (!broker->connect())
     return 1;
 

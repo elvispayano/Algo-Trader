@@ -94,6 +94,13 @@ void IBWrapper::disconnect(void) const
 	}
 }
 
+float IBWrapper::getLast(void) {
+	Contract contract;
+	
+	//pClient->reqMktData(1, contract,)
+	return 0.0f;
+}
+
 void IBWrapper::processMessages(void)
 {
 	time_t now = time(NULL);

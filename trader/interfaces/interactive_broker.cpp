@@ -3,7 +3,9 @@
 #include "ib_wrapper.h"
 #include "interactive_broker.h"
 
-InteractiveBroker::InteractiveBroker(void) {
+InteractiveBroker::InteractiveBroker(std::string host, int port, int clientID) : 
+  host(host), port(port), clientID(clientID) {
+
   ib = new IBWrapper();
 }
 
@@ -13,9 +15,13 @@ InteractiveBroker::~InteractiveBroker(void) {
 }
 
 bool InteractiveBroker::connect(void) {
-  return false;
+  return ib->connect(host.c_str(), port, clientID);
 }
 
 void InteractiveBroker::disconnect(void) {
+  ib->disconnect();
+}
 
+void InteractiveBroker::getPrice(void) {
+  ib->getLast();
 }
