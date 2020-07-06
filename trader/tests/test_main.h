@@ -10,4 +10,4 @@
     Elvis Payano
 */
 
-void test_main(void);
+void test_main(int argc, char** argv);

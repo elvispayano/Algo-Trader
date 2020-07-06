@@ -15,9 +15,11 @@
 #include <vector>
 
 // Forward Declaration
-class Postgres;
+class BrokerBase;
+class DatabaseBase;
 class NeuralNetwork;
 
 // Object Creation
-Postgres* database;
+DatabaseBase* database;
+BrokerBase* broker;
 std::vector<NeuralNetwork*> networks;

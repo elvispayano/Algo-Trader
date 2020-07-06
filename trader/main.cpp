@@ -12,6 +12,8 @@
 */
 
 // Interface Includes
+#include "ib_wrapper.h"
+#include "interactive_broker.h"
 #include "postgres.h"
 
 // Neural Network Includes
@@ -29,7 +31,7 @@ int main(int argc, char **argv) {
 
 #ifdef DEBUG
   // Run Google Test if in debug
-  test_main();
+  test_main(argc, argv);
   return 0;
 #endif
   database = 0;
@@ -39,6 +41,14 @@ int main(int argc, char **argv) {
   database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
   if (!database->connect())
     return 1;
+
+  // Configure broker connection
+  IBWrapper* wrapper;
+  wrapper = new IBWrapper();
+  broker = new InteractiveBroker(wrapper, "127.0.0.1", 6550, 0);
+  if (!broker->connect())
+    return 1;
+
   
   for (size_t it = 1; it <= database->getNetworkCount(); ++it) {
     std::string ticker = database->getNetwork(it);
@@ -48,7 +58,12 @@ int main(int argc, char **argv) {
   }
   
   // Memory Cleanup
-  if (database) delete database;
+  if (database)
+    delete database;
+
+  if (broker)
+    delete broker;
+
   for (size_t it = 0; it < networks.size(); ++it)
     if (networks[it])
       delete networks[it];

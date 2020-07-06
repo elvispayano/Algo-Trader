@@ -17,7 +17,7 @@ on:
 jobs:
   Build:
     # Ensure Ubuntu runner
-    runs-on: windows-latest
+    runs-on: self-hosted
 
     steps:
     # Checkout source
@@ -34,4 +34,4 @@ jobs:
     - name: Run Debug
       working-directory: ./trader/Debug
       run: |
-        ./trader.exe
+        ./trader.exe --gtest_output=xml
