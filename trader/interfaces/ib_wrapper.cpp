@@ -51,32 +51,29 @@ IBWrapper::~IBWrapper(void)
 	Description:
 		Connect to the TWS platform using the provided configuration
 */
-bool IBWrapper::connect(const char* host, int port, int clientId)
+bool IBWrapper::connect(std::string host, int port, int clientId)
 {
 	bool response = isConnected();
-	size_t count = 0;
-	while (!isConnected() && count < 3) {
-		++count;
-		if (!response)
-		{
-			// Attempting Connection
-			printf("Attempting Connection to %s:%d ClientId:%d\n", host, port, clientId);
-			response = pClient->eConnect(host, port, clientId);
+	if (response)
+		return true;
 
-			if (response)
-			{
-				printf("Connected to %s:%d ClientId:%d\n", host, port, clientId);
-				pReader = new EReader(pClient, &Signal);
-				pReader->start();
-				pClient->reqMarketDataType(MarketDataType::DELAYED);
-			}
-			else
-			{
-				printf("Failed Connection to %s:%d ClientId:%d\n", host, port, clientId);
-				printf("Reattempting Connection\n");
-			}
-		}
+	// Attempting Connection
+	printf("Attempting Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
+	response = pClient->eConnect(host.c_str(), port, clientId);
+	
+	if (response)
+	{
+		printf("Connected to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
+		pReader = new EReader(pClient, &Signal);
+		pReader->start();
+		pClient->reqMarketDataType(MarketDataType::DELAYED);
 	}
+	else
+	{
+		printf("Failed Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
+		printf("Reattempting Connection\n");
+	}
+	
 	return response;
 }
 
@@ -85,7 +82,7 @@ bool IBWrapper::isConnected(void) const
 	return pClient->isConnected();
 }
 
-void IBWrapper::disconnect(void) const
+void IBWrapper::disconnect(void)
 {
 	if (isConnected())
 	{

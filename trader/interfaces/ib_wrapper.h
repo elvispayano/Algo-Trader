@@ -15,6 +15,8 @@
 #ifndef IB_WRAPPER_H
 #define IB_WRAPPER_H
 
+#include <string>
+
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
 #include "EReader.h"
@@ -120,8 +122,8 @@ public:
 	// Required Interface Functions
 	void processMessages(void);
 
-	bool connect(const char* host, int port, int clientId = 0);
-	void disconnect(void) const;
+	virtual bool connect(std::string host, int port, int clientId = 0);
+	virtual void disconnect(void);
 	bool isConnected(void) const;
 
 	float getLast(void);

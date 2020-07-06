@@ -12,6 +12,7 @@
 */
 
 // Interface Includes
+#include "ib_wrapper.h"
 #include "interactive_broker.h"
 #include "postgres.h"
 
@@ -42,7 +43,9 @@ int main(int argc, char **argv) {
     return 1;
 
   // Configure broker connection
-  broker = new InteractiveBroker("127.0.0.1", 6550, 0);
+  IBWrapper* wrapper;
+  wrapper = new IBWrapper();
+  broker = new InteractiveBroker(wrapper, "127.0.0.1", 6550, 0);
   if (!broker->connect())
     return 1;
 

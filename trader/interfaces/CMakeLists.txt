@@ -25,7 +25,6 @@ set(IB_LIB
 set(HEADERS
   "broker_base.h"
   "database_base.h"
-  "ib_connect.h"
   "ib_wrapper.h"
   "interactive_broker.h"
   "postgres.h"
@@ -34,7 +33,6 @@ set(HEADERS
 # Library source files
 set(SRC
   "database_base.cpp"
-  "ib_connect.cpp"
   "ib_wrapper.cpp"
   "interactive_broker.cpp"
   "postgres.cpp"
