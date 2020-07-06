@@ -50,73 +50,33 @@ public:
 };
 
 /*
-  Test:         Valid Connection
+  Test:         Single Connection/Termination
   Description:
-    Manage valid connection to Interactive Broker API.
+    Manage valid connection prodcedure to Interactive Broker API. Establish and
+    terminate a single connection
 */
-TEST_F(InteractiveBrokerTest, ValidConnection) {
+TEST_F(InteractiveBrokerTest, SingleConnection) {
   EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
   
   connected = ib->connect();
+  ib->disconnect();
   
   EXPECT_TRUE(connected);
 }
 
 /*
-  Test:         Invalid Connection
+  Test:         Double Connection/Termination
   Description:
-    Manage invalid connection to Interactive Broker API
-*/
-TEST_F(InteractiveBrokerTest, InvalidConnection) {
-  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(3).WillRepeatedly(::testing::Return(false));
-  
-  EXPECT_THROW(connected = ib->connect(), std::runtime_error);
-  
-  EXPECT_FALSE(connected);
-}
-
-/*
-  Test:         Double Connection
-  Description:
-    Prevent establishing new connection if current connection has already
-    been created
+    Prevent establishing or terminating multiple connections
 */
 TEST_F(InteractiveBrokerTest, DoubleConnection) {
   EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
-  
   connected = ib->connect();
   connected = ib->connect();
-  
   EXPECT_TRUE(connected);
-}
 
-/*
-  Test:         Safe Disconnection
-  Description:
-    Safely terminate connection to Interactive Broker API
-*/
-TEST_F(InteractiveBrokerTest, ValidTermination) {
-  ib->disconnect();
-  
-  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
-  ib->connect();
-  
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   ib->disconnect();
-}
-
-/*
-  Test:         Safe Disconnection
-  Description:
-    Only terminate if an established connection to the Interactive Broker
-    API exists
-*/
-TEST_F(InteractiveBrokerTest, SingleTermination) {
-  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
-  ib->connect();
-  
-  EXPECT_CALL(*wrapper, disconnect()).Times(1);
-  ib->disconnect();
-  
   ib->disconnect();
 }

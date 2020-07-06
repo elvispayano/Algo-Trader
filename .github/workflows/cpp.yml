@@ -10,9 +10,6 @@ name: C++ Development
 # Triggers
 # Run pipeline on all merges to master
 on:
-  push:
-    branches:
-    - feature/*
   pull_request:
     branches:
     - master
