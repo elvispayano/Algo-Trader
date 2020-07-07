@@ -38,7 +38,7 @@ public:
   bool connect(void) override;
   void disconnect(void) override;
 
-  void getPrice(void) override;
+  void updateTicker(std::string ticker) override;
 
 private:
   IBWrapper* ib;

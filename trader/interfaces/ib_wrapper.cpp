@@ -91,7 +91,7 @@ void IBWrapper::disconnect(void)
   }
 }
 
-float IBWrapper::getLast(void) {
+float IBWrapper::getCurrentPrice(void) {
   Contract contract;
   
   //pClient->reqMktData(1, contract,)

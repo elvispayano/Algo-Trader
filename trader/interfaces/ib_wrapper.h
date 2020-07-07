@@ -126,7 +126,7 @@ public:
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  float getLast(void);
+  virtual float getCurrentPrice(void);
 protected:
 
   //![socket_declare]

@@ -32,9 +32,15 @@ protected:
   void SetUp(void) override {
     wrapper = new MockedWrapper();
     ib = new InteractiveBroker(wrapper, host, 6550, 0);
+
+    EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+    ASSERT_TRUE(ib->connect());
   }
 
   void TearDown(void) override {
+    EXPECT_CALL(*wrapper, disconnect()).Times(1);
+    ib->disconnect();
+
     if (ib)
       delete ib;
     if (wrapper)
@@ -46,37 +52,42 @@ public:
   InteractiveBroker* ib;
 
   std::string host = "127.0.0.1";
-  bool connected = false;
+  std::string ticker = "XYZ";
 };
 
 /*
-  Test:         Single Connection/Termination
+  Test:         Connection Management
   Description:
-    Manage valid connection prodcedure to Interactive Broker API. Establish and
-    terminate a single connection
+    Ensure that the connection to the IB API is properly handled
 */
-TEST_F(InteractiveBrokerTest, SingleConnection) {
-  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+TEST_F(InteractiveBrokerTest, ConnectionManagement) {
+  // Disconnect
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
-  
-  connected = ib->connect();
   ib->disconnect();
-  
-  EXPECT_TRUE(connected);
+
+  // Attempt failing connection
+  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(3).WillRepeatedly(::testing::Return(false));
+  bool isConnected = false;
+  EXPECT_THROW(isConnected = ib->connect(), std::runtime_error);
+  EXPECT_FALSE(isConnected);
+
+  // Connect
+  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+  EXPECT_TRUE(ib->connect());
 }
 
 /*
-  Test:         Double Connection/Termination
+  Test:         Redundant Connections
   Description:
-    Prevent establishing or terminating multiple connections
+    Properly handle redudant connection attempts
 */
-TEST_F(InteractiveBrokerTest, DoubleConnection) {
-  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
-  connected = ib->connect();
-  connected = ib->connect();
-  EXPECT_TRUE(connected);
+TEST_F(InteractiveBrokerTest, RedundantConnection) {
+  EXPECT_TRUE(ib->connect());
 
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   ib->disconnect();
   ib->disconnect();
+
+  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+  EXPECT_TRUE(ib->connect());
 }
