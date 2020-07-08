@@ -24,6 +24,7 @@ class MockedWrapper : public IBWrapper {
 public:
   MOCK_METHOD3(connect, bool(std::string, int, int));
   MOCK_METHOD0(disconnect, void(void));
+  MOCK_METHOD1(getCurrentPrice, float(std::string));
 };
 
 // Unit test framework setup
@@ -90,4 +91,24 @@ TEST_F(InteractiveBrokerTest, RedundantConnection) {
 
   EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
   EXPECT_TRUE(ib->connect());
+}
+
+/*
+  Test:         Update Ticker
+  Description:
+    Update current ticker parameters using the Broker interface
+*/
+TEST_F(InteractiveBrokerTest, UpdateTicker) {
+  // Test using an established connection
+  EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1).WillOnce(::testing::Return(5));
+  ib->updateTicker(ticker);
+
+  // Test using a invalid connection
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
+  ib->disconnect();
+
+  EXPECT_THROW(ib->updateTicker(ticker), std::logic_error);
+
+  EXPECT_CALL(*wrapper, connect(host, 6550, 0)).Times(1).WillOnce(::testing::Return(true));
+  ib->connect();
 }

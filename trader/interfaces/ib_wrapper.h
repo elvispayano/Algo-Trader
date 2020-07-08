@@ -16,6 +16,7 @@
 #define IB_WRAPPER_H
 
 #include <string>
+#include <thread>
 
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
@@ -126,7 +127,14 @@ public:
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  virtual float getCurrentPrice(void);
+  virtual float getCurrentPrice(std::string ticker);
+  void startListener(void);
+  void stopListener(void);
+
+private:
+  double priceHigh, priceLow, priceOpen, priceClose;
+  bool listening;
+  std::thread* messages;
 protected:
 
   //![socket_declare]

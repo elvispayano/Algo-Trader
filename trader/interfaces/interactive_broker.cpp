@@ -92,4 +92,6 @@ void InteractiveBroker::updateTicker(std::string ticker) {
     throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
     return;
   }
+
+  float curVal = ib->getCurrentPrice(ticker);
 }
