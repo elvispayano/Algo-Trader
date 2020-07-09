@@ -10,10 +10,12 @@
     Elvis Payano
 */
 
-
 // Interface Includes
 #include "ib_wrapper.h"
 #include "interactive_broker.h"
+
+// Utility Includes
+#include "stock.h"
 
 // Google Test Includes
 #include <gtest/gtest.h>
@@ -24,7 +26,7 @@ class MockedWrapper : public IBWrapper {
 public:
   MOCK_METHOD3(connect, bool(std::string, int, int));
   MOCK_METHOD0(disconnect, void(void));
-  MOCK_METHOD1(getCurrentPrice, float(std::string));
+  MOCK_METHOD1(getCurrentPrice, Stock(std::string));
 };
 
 // Unit test framework setup
@@ -99,8 +101,10 @@ TEST_F(InteractiveBrokerTest, RedundantConnection) {
     Update current ticker parameters using the Broker interface
 */
 TEST_F(InteractiveBrokerTest, UpdateTicker) {
+  // Configure Output
+  Stock out;
   // Test using an established connection
-  EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1).WillOnce(::testing::Return(5));
+  EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1).WillOnce(::testing::Return(out));
   ib->updateTicker(ticker);
 
   // Test using a invalid connection

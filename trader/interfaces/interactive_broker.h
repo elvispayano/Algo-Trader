@@ -20,6 +20,9 @@
 // Interface Includes
 #include "broker_base.h"
 
+// Utility Includes
+#include "stock.h"
+
 // Standard Includes
 #include <string>
 
@@ -38,7 +41,7 @@ public:
   bool connect(void) override;
   void disconnect(void) override;
 
-  void updateTicker(std::string ticker) override;
+  Stock updateTicker(std::string ticker) override;
 
 private:
   IBWrapper* ib;

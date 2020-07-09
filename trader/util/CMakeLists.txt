@@ -14,9 +14,11 @@ set(HEADERS
   "utl_math.h"
   "matrix.h"
   "network_types.h"
+  "stock.h"
   )
 
 set(SRC
+  "stock.cpp"
   "utl_math.cpp"
 )
 

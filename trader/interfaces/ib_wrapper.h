@@ -15,6 +15,8 @@
 #ifndef IB_WRAPPER_H
 #define IB_WRAPPER_H
 
+#include "stock.h"
+
 #include <string>
 #include <thread>
 
@@ -127,12 +129,12 @@ public:
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  virtual float getCurrentPrice(std::string ticker);
+  virtual Stock getCurrentPrice(std::string ticker);
   void startListener(void);
   void stopListener(void);
 
 private:
-  double priceHigh, priceLow, priceOpen, priceClose;
+  Stock data;
   bool listening;
   std::thread* messages;
 protected:

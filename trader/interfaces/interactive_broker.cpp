@@ -87,11 +87,18 @@ void InteractiveBroker::disconnect(void) {
   }
 }
 
-void InteractiveBroker::updateTicker(std::string ticker) {
+/*
+  Function:     updateTicker
+  Inputs:       ticker (string)
+
+  Description:
+    Request latest values for the provided ticker
+*/
+Stock InteractiveBroker::updateTicker(std::string ticker) {
+  Stock output;
   if (!isConnected) {
     throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
-    return;
+    return output;
   }
-
-  float curVal = ib->getCurrentPrice(ticker);
+   return ib->getCurrentPrice(ticker);
 }

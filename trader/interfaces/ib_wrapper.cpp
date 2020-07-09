@@ -79,11 +79,25 @@ bool IBWrapper::connect(std::string host, int port, int clientId)
   return response;
 }
 
+/*
+  Function:     isConnected
+  Inputs:       None (void)
+
+  Description:
+    Check connection status to the Interactive Broker API
+*/
 bool IBWrapper::isConnected(void) const
 {
   return pClient->isConnected();
 }
 
+/*
+  Function:     disconnect
+  Inputs:       None (void)
+
+  Description:
+    Terminate connection from the Interactive Broker API
+*/
 void IBWrapper::disconnect(void)
 {
   if (isConnected())
@@ -94,6 +108,14 @@ void IBWrapper::disconnect(void)
   }
 }
 
+/*
+  Function:     startListener
+  Inputs:       None (void)
+
+  Description:
+    Start a separate thread to handle processing all responses from the
+    Interactive Broker API. Thread will run continously until terminated
+*/
 void IBWrapper::startListener(void) {
   if (listening)
     return;
@@ -102,6 +124,13 @@ void IBWrapper::startListener(void) {
   messages = new std::thread(std::bind(&IBWrapper::processMessages, this));
 }
 
+/*
+  Function:     stopListener
+  Inputs:       None (void)
+
+  Description:
+    Signal message processing thread to complete and terminate
+*/
 void IBWrapper::stopListener(void) {
   if (!listening)
     return;
@@ -112,30 +141,42 @@ void IBWrapper::stopListener(void) {
     delete messages;
 }
 
-float IBWrapper::getCurrentPrice(std::string ticker) {
+/*
+  Function:     getCurrentPrice
+  Inputs:       ticker (String)
+
+  Description:
+    Request price updates for the provided ticker symbol. Implemented as
+    a blocking function and will wait until a response is received
+*/
+Stock IBWrapper::getCurrentPrice(std::string ticker) {
   Contract contract;
   contract.exchange = "SMART";
   contract.symbol = ticker;
   contract.secType = "STK";
   contract.currency = "USD";
   contract.primaryExchange = "ISLAND";
-  
-  priceHigh = 0.0;
-  priceLow = 0.0;
-  priceOpen = 0.0;
-  priceClose = 0.0;
+
+  data.reset();
   pClient->reqMktData(1, contract, "221", false, false, NULL);
   //pClient->reqTickByTickData(2, contract, "Last", 1, true);
+  while (!data.isComplete());
 
   pClient->cancelMktData(1);
   //pClient->cancelTickByTickData(2);
-  return priceHigh;
+  return data;
 }
 
+/*
+  Function:     processMessages
+  Inputs:       None (void)
+
+  Description:
+    Continuously attempt to process responses from the Interactive Broker API
+*/
 void IBWrapper::processMessages(void)
 {
   while (listening) {
-    printf("Processing Messages\n");
     time_t now = time(NULL);
 
     // Below are few quick-to-test examples on the IB API functions 
@@ -371,30 +412,30 @@ void IBWrapper::tickPrice(TickerId tickerId, TickType field, double price, const
 
   switch (field) {
   case DELAYED_HIGH:
-    priceHigh = price;
+    data.setHigh(price);
     printf("Delayed High Price: %f\n", price);
     break;
 
   case DELAYED_LOW:
-    priceLow = price;
+    data.setLow(price);
     printf("Delayed Low Price: %f\n", price);
     break;
 
   case DELAYED_OPEN:
-    priceOpen = price;
     printf("Delayed Open Price: %f\n", price);
     break;
 
   case DELAYED_CLOSE:
-    priceClose = price;
     printf("Delayed Close Price: %f\n", price);
     break;
 
   case DELAYED_BID:
+    data.setBid(price);
     printf("Delayed Bid Price: %f\n", price);
     break;
 
   case DELAYED_ASK:
+    data.setAsk(price);
     printf("Delayed Ask Price: %f\n", price);
     break;
 
