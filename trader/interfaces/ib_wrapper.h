@@ -15,8 +15,14 @@
 #ifndef IB_WRAPPER_H
 #define IB_WRAPPER_H
 
-#include <string>
+// Utility Includes
+#include "stock.h"
 
+// Standard Includes
+#include <string>
+#include <thread>
+
+// Interactive Broker Includes
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
 #include "EReader.h"
@@ -126,7 +132,14 @@ public:
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  float getLast(void);
+  virtual Stock getCurrentPrice(std::string ticker);
+  void startListener(void);
+  void stopListener(void);
+
+private:
+  Stock data;
+  bool listening;
+  std::thread* messages;
 protected:
 
   //![socket_declare]
