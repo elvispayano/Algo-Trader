@@ -15,11 +15,14 @@
 #ifndef IB_WRAPPER_H
 #define IB_WRAPPER_H
 
+// Utility Includes
 #include "stock.h"
 
+// Standard Includes
 #include <string>
 #include <thread>
 
+// Interactive Broker Includes
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
 #include "EReader.h"

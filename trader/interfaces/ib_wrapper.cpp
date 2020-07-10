@@ -1,4 +1,21 @@
+/*
+  Title:
+    IB Wrapper
+
+  Description:
+    This class is responsible for configuring and establishing the
+    connection to the TWS platform. The main object of this class is
+    to ensure that when a request of API call is made, there is a
+    valid connection.
+
+  Author:
+    Interactive Broker
+*/
+
+// Interface Includes
 #include "ib_wrapper.h"
+
+// Standard Includes
 #include <functional>
 
 // Interactive Broker Includes

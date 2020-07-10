@@ -11,10 +11,10 @@
 cmake_minimum_required(VERSION 3.8)
 
 set(HEADERS
-  "utl_math.h"
   "matrix.h"
   "network_types.h"
   "stock.h"
+  "utl_math.h"
   )
 
 set(SRC
