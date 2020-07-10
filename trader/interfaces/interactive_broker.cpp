@@ -18,6 +18,9 @@
 #include "ib_wrapper.h"
 #include "interactive_broker.h"
 
+// Standard Includes
+#include <functional>
+
 /*
   Constructor:  InteractiveBroker
   Inputs:       wrapper (IBWrapper*), host (string), port (int), clientID (int)
@@ -27,6 +30,8 @@
 */
 InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
   isConnected = false;
+  disconnectTrigger = false;
+  tProcess = 0;
 }
 
 /*
@@ -79,9 +84,11 @@ bool InteractiveBroker::connect(void) {
 */
 void InteractiveBroker::disconnect(void) {
   if (isConnected) {
-    ib->disconnect();
+    disconnectTrigger = true;
     isConnected = false;
   }
+  if (tProcess)
+    tProcess->join();
 }
 
 /*
@@ -102,14 +109,23 @@ void InteractiveBroker::connectionManager(void) {
   if (!connect())
     throw std::runtime_error("Connection Error: Unable to connect to Interactive Broker API");
   
-  process();
-
-  disconnect();
+  tProcess = new std::thread(std::bind(&InteractiveBroker::process, this));
 }
 
+#include <chrono>
 void InteractiveBroker::process(void) {
-  sendRequest(1);
-  recvResponse();
+  auto now = std::chrono::system_clock::now();
+  
+  while (!disconnectTrigger) {
+    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - now;
+    if (elapsed_seconds.count() < 0.05)
+      continue;
+    now = std::chrono::system_clock::now();
+    recvResponse();
+    sendRequest(1);
+  }
+  
+  ib->disconnect();
 }
 
 void InteractiveBroker::recvResponse(void) {
@@ -117,5 +133,9 @@ void InteractiveBroker::recvResponse(void) {
 }
 
 void InteractiveBroker::sendRequest(int i) {
-  ib->getCurrentPrice("XYZ");
+  if (requests.empty())
+    return;
+
+  requests.pop_back();
+  ib->getCurrentPrice("MSFT");
 }

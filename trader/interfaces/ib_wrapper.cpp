@@ -15,9 +15,6 @@
 // Interface Includes
 #include "ib_wrapper.h"
 
-// Standard Includes
-#include <functional>
-
 // Interactive Broker Includes
 #include "EClientSocket.h"
 #include "CommissionReport.h"
@@ -26,7 +23,7 @@
 #include "Order.h"
 #include "OrderState.h"
 
-// System Includes
+// Standard Includes
 #include <ctime>
 #include <iostream>
 #include <stdio.h>
@@ -88,7 +85,6 @@ bool IBWrapper::connect(void)
     pReader = new EReader(pClient, &Signal);
     pReader->start();
     pClient->reqMarketDataType(MarketDataType::DELAYED);
-    startListener();
   }
   else
   {
@@ -122,43 +118,9 @@ void IBWrapper::disconnect(void)
 {
   if (isConnected())
   {
-    stopListener();
     pClient->eDisconnect();
     printf("Disconnected from Client");
   }
-}
-
-/*
-  Function:     startListener
-  Inputs:       None (void)
-
-  Description:
-    Start a separate thread to handle processing all responses from the
-    Interactive Broker API. Thread will run continously until terminated
-*/
-void IBWrapper::startListener(void) {
-  if (listening)
-    return;
-
-  listening = true;
-  messages = new std::thread(std::bind(&IBWrapper::processMessages, this));
-}
-
-/*
-  Function:     stopListener
-  Inputs:       None (void)
-
-  Description:
-    Signal message processing thread to complete and terminate
-*/
-void IBWrapper::stopListener(void) {
-  if (!listening)
-    return;
-
-  listening = false;
-
-  if (messages)
-    delete messages;
 }
 
 /*
@@ -180,9 +142,9 @@ Stock IBWrapper::getCurrentPrice(std::string ticker) {
   data.reset();
   pClient->reqMktData(1, contract, "221", false, false, NULL);
   //pClient->reqTickByTickData(2, contract, "Last", 1, true);
-  while (!data.isComplete());
+  //while (!data.isComplete());
 
-  pClient->cancelMktData(1);
+  //pClient->cancelMktData(1);
   //pClient->cancelTickByTickData(2);
   return data;
 }

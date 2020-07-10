@@ -133,8 +133,6 @@ public:
   bool isConnected(void) const;
 
   virtual Stock getCurrentPrice(std::string ticker);
-  void startListener(void);
-  void stopListener(void);
 
 private:
   Stock data;

@@ -57,6 +57,7 @@ private:
   bool isConnected;
   std::vector<int> requests;
   std::thread* tProcess;
+  bool disconnectTrigger;
 };
 
 #endif /* INTERACTIVE_BROKER_H */

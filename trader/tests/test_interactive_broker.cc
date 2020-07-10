@@ -51,7 +51,7 @@ public:
   InteractiveBroker* ib;
 
   std::string host = "127.0.0.1";
-  std::string ticker = "XYZ";
+  std::string ticker = "MSFT";
 };
 
 /*
@@ -68,8 +68,7 @@ TEST_F(InteractiveBrokerTest, ConnectionManager) {
   EXPECT_CALL(*wrapper, connect()).Times(1).WillOnce(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   
-  Stock out;
-  EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1).WillOnce(::testing::Return(out));
+  EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
   ib->addMessage(1);
   ib->connectionManager();
