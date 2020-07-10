@@ -122,13 +122,13 @@ enum State {
 
 class IBWrapper : public EWrapper {
 public:
-  IBWrapper(void);
+  IBWrapper(std::string host, int port, int clientID);
   ~IBWrapper(void);
 
   // Required Interface Functions
-  void processMessages(void);
+  virtual void processMessages(void);
 
-  virtual bool connect(std::string host, int port, int clientId = 0);
+  virtual bool connect(void);
   virtual void disconnect(void);
   bool isConnected(void) const;
 
@@ -140,6 +140,9 @@ private:
   Stock data;
   bool listening;
   std::thread* messages;
+  std::string host;
+  int port, clientID;
+
 protected:
 
   //![socket_declare]

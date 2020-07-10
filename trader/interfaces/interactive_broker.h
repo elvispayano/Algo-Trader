@@ -25,6 +25,8 @@
 
 // Standard Includes
 #include <string>
+#include <thread>
+#include <vector>
 
 // Forward Declaration
 class IBWrapper;
@@ -32,7 +34,7 @@ class IBWrapper;
 class InteractiveBroker : public BrokerBase {
 public:
   // Constructor
-  InteractiveBroker(IBWrapper* wrapper, std::string host, int port, int clientID);
+  InteractiveBroker(IBWrapper* wrapper);
   
   // Destructor
   ~InteractiveBroker(void);
@@ -40,15 +42,21 @@ public:
   // Connection management
   bool connect(void) override;
   void disconnect(void) override;
+  void connectionManager(void);
 
   Stock updateTicker(std::string ticker) override;
+  void addMessage(int i) { requests.push_back(i); }
 
 private:
+  void sendRequest(int i);
+  void recvResponse(void);
+  void process(void);
+  
+
   IBWrapper* ib;
-  std::string host;
-  int port;
-  int clientID;
   bool isConnected;
+  std::vector<int> requests;
+  std::thread* tProcess;
 };
 
 #endif /* INTERACTIVE_BROKER_H */

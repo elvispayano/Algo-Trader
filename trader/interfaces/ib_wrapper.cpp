@@ -38,14 +38,17 @@
   Description:
     Initialize class with default configuration
 */
-IBWrapper::IBWrapper(void) :
+IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   Signal(2000),
   pClient(new EClientSocket(this, &Signal)),
   pReader(0),
   m_state(ST_CONNECT),
   m_sleepDeadline(0),
   m_orderId(0),
-  m_extraAuth(false)
+  m_extraAuth(false),
+  host(host),
+  port(port),
+  clientID(clientID)
 {
   listening = false;
 }
@@ -69,19 +72,19 @@ IBWrapper::~IBWrapper(void)
   Description:
     Connect to the TWS platform using the provided configuration
 */
-bool IBWrapper::connect(std::string host, int port, int clientId)
+bool IBWrapper::connect(void)
 {
   bool response = isConnected();
   if (response)
     return true;
 
   // Attempting Connection
-  printf("Attempting Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
-  response = pClient->eConnect(host.c_str(), port, clientId);
+  printf("Attempting Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientID);
+  response = pClient->eConnect(host.c_str(), port, clientID);
   
   if (response)
   {
-    printf("Connected to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
+    printf("Connected to %s:%d ClientId:%d\n", host.c_str(), port, clientID);
     pReader = new EReader(pClient, &Signal);
     pReader->start();
     pClient->reqMarketDataType(MarketDataType::DELAYED);
@@ -89,7 +92,7 @@ bool IBWrapper::connect(std::string host, int port, int clientId)
   }
   else
   {
-    printf("Failed Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientId);
+    printf("Failed Connection to %s:%d ClientId:%d\n", host.c_str(), port, clientID);
     printf("Reattempting Connection\n");
   }
   
@@ -193,228 +196,226 @@ Stock IBWrapper::getCurrentPrice(std::string ticker) {
 */
 void IBWrapper::processMessages(void)
 {
-  while (listening) {
-    time_t now = time(NULL);
+  time_t now = time(NULL);
 
-    // Below are few quick-to-test examples on the IB API functions 
-    // grouped by functionality. Uncomment the relevant methods. */
-    switch (m_state) {
-    case ST_PNLSINGLE:
-      pnlSingleOperation();
-      break;
-    case ST_PNLSINGLE_ACK:
-      break;
-    case ST_PNL:
-      pnlOperation();
-      break;
-    case ST_PNL_ACK:
-      break;
-    case ST_TICKDATAOPERATION:
-      tickDataOperation();
-      break;
-    case ST_TICKDATAOPERATION_ACK:
-      break;
-    case ST_TICKOPTIONCOMPUTATIONOPERATION:
-      tickOptionComputationOperation();
-      break;
-    case ST_TICKOPTIONCOMPUTATIONOPERATION_ACK:
-      break;
-    case ST_DELAYEDTICKDATAOPERATION:
-      delayedTickDataOperation();
-      break;
-    case ST_DELAYEDTICKDATAOPERATION_ACK:
-      break;
-    case ST_MARKETDEPTHOPERATION:
-      marketDepthOperations();
-      break;
-    case ST_MARKETDEPTHOPERATION_ACK:
-      break;
-    case ST_REALTIMEBARS:
-      realTimeBars();
-      break;
-    case ST_REALTIMEBARS_ACK:
-      break;
-    case ST_MARKETDATATYPE:
-      marketDataType();
-      break;
-    case ST_MARKETDATATYPE_ACK:
-      break;
-    case ST_HISTORICALDATAREQUESTS:
-      historicalDataRequests();
-      break;
-    case ST_HISTORICALDATAREQUESTS_ACK:
-      break;
-    case ST_OPTIONSOPERATIONS:
-      optionsOperations();
-      break;
-    case ST_OPTIONSOPERATIONS_ACK:
-      break;
-    case ST_CONTRACTOPERATION:
-      contractOperations();
-      break;
-    case ST_CONTRACTOPERATION_ACK:
-      break;
-    case ST_MARKETSCANNERS:
-      marketScanners();
-      break;
-    case ST_MARKETSCANNERS_ACK:
-      break;
-    case ST_FUNDAMENTALS:
-      fundamentals();
-      break;
-    case ST_FUNDAMENTALS_ACK:
-      break;
-    case ST_BULLETINS:
-      bulletins();
-      break;
-    case ST_BULLETINS_ACK:
-      break;
-    case ST_ACCOUNTOPERATIONS:
-      accountOperations();
-      break;
-    case ST_ACCOUNTOPERATIONS_ACK:
-      break;
-    case ST_ORDEROPERATIONS:
-      orderOperations();
-      break;
-    case ST_ORDEROPERATIONS_ACK:
-      break;
-    case ST_OCASAMPLES:
-      ocaSamples();
-      break;
-    case ST_OCASAMPLES_ACK:
-      break;
-    case ST_CONDITIONSAMPLES:
-      conditionSamples();
-      break;
-    case ST_CONDITIONSAMPLES_ACK:
-      break;
-    case ST_BRACKETSAMPLES:
-      bracketSample();
-      break;
-    case ST_BRACKETSAMPLES_ACK:
-      break;
-    case ST_HEDGESAMPLES:
-      hedgeSample();
-      break;
-    case ST_HEDGESAMPLES_ACK:
-      break;
-    case ST_TESTALGOSAMPLES:
-      testAlgoSamples();
-      break;
-    case ST_TESTALGOSAMPLES_ACK:
-      break;
-    case ST_FAORDERSAMPLES:
-      financialAdvisorOrderSamples();
-      break;
-    case ST_FAORDERSAMPLES_ACK:
-      break;
-    case ST_FAOPERATIONS:
-      financialAdvisorOperations();
-      break;
-    case ST_FAOPERATIONS_ACK:
-      break;
-    case ST_DISPLAYGROUPS:
-      testDisplayGroups();
-      break;
-    case ST_DISPLAYGROUPS_ACK:
-      break;
-    case ST_MISCELANEOUS:
-      miscelaneous();
-      break;
-    case ST_MISCELANEOUS_ACK:
-      break;
-    case ST_FAMILYCODES:
-      reqFamilyCodes();
-      break;
-    case ST_FAMILYCODES_ACK:
-      break;
-    case ST_SYMBOLSAMPLES:
-      reqMatchingSymbols();
-      break;
-    case ST_SYMBOLSAMPLES_ACK:
-      break;
-    case ST_REQMKTDEPTHEXCHANGES:
-      reqMktDepthExchanges();
-      break;
-    case ST_REQMKTDEPTHEXCHANGES_ACK:
-      break;
-    case ST_REQNEWSTICKS:
-      reqNewsTicks();
-      break;
-    case ST_REQNEWSTICKS_ACK:
-      break;
-    case ST_REQSMARTCOMPONENTS:
-      reqSmartComponents();
-      break;
-    case ST_REQSMARTCOMPONENTS_ACK:
-      break;
-    case ST_NEWSPROVIDERS:
-      reqNewsProviders();
-      break;
-    case ST_NEWSPROVIDERS_ACK:
-      break;
-    case ST_REQNEWSARTICLE:
-      reqNewsArticle();
-      break;
-    case ST_REQNEWSARTICLE_ACK:
-      break;
-    case ST_REQHISTORICALNEWS:
-      reqHistoricalNews();
-      break;
-    case ST_REQHISTORICALNEWS_ACK:
-      break;
-    case ST_REQHEADTIMESTAMP:
-      reqHeadTimestamp();
-      break;
-    case ST_REQHISTOGRAMDATA:
-      reqHistogramData();
-      break;
-    case ST_REROUTECFD:
-      rerouteCFDOperations();
-      break;
-    case ST_MARKETRULE:
-      marketRuleOperations();
-      break;
-    case ST_CONTFUT:
-      continuousFuturesOperations();
-      break;
-    case ST_REQHISTORICALTICKS:
-      reqHistoricalTicks();
-      break;
-    case ST_REQHISTORICALTICKS_ACK:
-      break;
-    case ST_REQTICKBYTICKDATA:
-      reqTickByTickData();
-      break;
-    case ST_REQTICKBYTICKDATA_ACK:
-      break;
-    case ST_WHATIFSAMPLES:
-      whatIfSamples();
-      break;
-    case ST_WHATIFSAMPLES_ACK:
-      break;
-    case ST_PING:
-      reqCurrentTime();
-      break;
-    case ST_PING_ACK:
-      if (m_sleepDeadline < now) {
-        disconnect();
-        return;
-      }
-      break;
-    case ST_IDLE:
-      if (m_sleepDeadline < now) {
-        m_state = ST_PING;
-        return;
-      }
-      break;
+  // Below are few quick-to-test examples on the IB API functions 
+  // grouped by functionality. Uncomment the relevant methods. */
+  switch (m_state) {
+  case ST_PNLSINGLE:
+    pnlSingleOperation();
+    break;
+  case ST_PNLSINGLE_ACK:
+    break;
+  case ST_PNL:
+    pnlOperation();
+    break;
+  case ST_PNL_ACK:
+    break;
+  case ST_TICKDATAOPERATION:
+    tickDataOperation();
+    break;
+  case ST_TICKDATAOPERATION_ACK:
+    break;
+  case ST_TICKOPTIONCOMPUTATIONOPERATION:
+    tickOptionComputationOperation();
+    break;
+  case ST_TICKOPTIONCOMPUTATIONOPERATION_ACK:
+    break;
+  case ST_DELAYEDTICKDATAOPERATION:
+    delayedTickDataOperation();
+    break;
+  case ST_DELAYEDTICKDATAOPERATION_ACK:
+    break;
+  case ST_MARKETDEPTHOPERATION:
+    marketDepthOperations();
+    break;
+  case ST_MARKETDEPTHOPERATION_ACK:
+    break;
+  case ST_REALTIMEBARS:
+    realTimeBars();
+    break;
+  case ST_REALTIMEBARS_ACK:
+    break;
+  case ST_MARKETDATATYPE:
+    marketDataType();
+    break;
+  case ST_MARKETDATATYPE_ACK:
+    break;
+  case ST_HISTORICALDATAREQUESTS:
+    historicalDataRequests();
+    break;
+  case ST_HISTORICALDATAREQUESTS_ACK:
+    break;
+  case ST_OPTIONSOPERATIONS:
+    optionsOperations();
+    break;
+  case ST_OPTIONSOPERATIONS_ACK:
+    break;
+  case ST_CONTRACTOPERATION:
+    contractOperations();
+    break;
+  case ST_CONTRACTOPERATION_ACK:
+    break;
+  case ST_MARKETSCANNERS:
+    marketScanners();
+    break;
+  case ST_MARKETSCANNERS_ACK:
+    break;
+  case ST_FUNDAMENTALS:
+    fundamentals();
+    break;
+  case ST_FUNDAMENTALS_ACK:
+    break;
+  case ST_BULLETINS:
+    bulletins();
+    break;
+  case ST_BULLETINS_ACK:
+    break;
+  case ST_ACCOUNTOPERATIONS:
+    accountOperations();
+    break;
+  case ST_ACCOUNTOPERATIONS_ACK:
+    break;
+  case ST_ORDEROPERATIONS:
+    orderOperations();
+    break;
+  case ST_ORDEROPERATIONS_ACK:
+    break;
+  case ST_OCASAMPLES:
+    ocaSamples();
+    break;
+  case ST_OCASAMPLES_ACK:
+    break;
+  case ST_CONDITIONSAMPLES:
+    conditionSamples();
+    break;
+  case ST_CONDITIONSAMPLES_ACK:
+    break;
+  case ST_BRACKETSAMPLES:
+    bracketSample();
+    break;
+  case ST_BRACKETSAMPLES_ACK:
+    break;
+  case ST_HEDGESAMPLES:
+    hedgeSample();
+    break;
+  case ST_HEDGESAMPLES_ACK:
+    break;
+  case ST_TESTALGOSAMPLES:
+    testAlgoSamples();
+    break;
+  case ST_TESTALGOSAMPLES_ACK:
+    break;
+  case ST_FAORDERSAMPLES:
+    financialAdvisorOrderSamples();
+    break;
+  case ST_FAORDERSAMPLES_ACK:
+    break;
+  case ST_FAOPERATIONS:
+    financialAdvisorOperations();
+    break;
+  case ST_FAOPERATIONS_ACK:
+    break;
+  case ST_DISPLAYGROUPS:
+    testDisplayGroups();
+    break;
+  case ST_DISPLAYGROUPS_ACK:
+    break;
+  case ST_MISCELANEOUS:
+    miscelaneous();
+    break;
+  case ST_MISCELANEOUS_ACK:
+    break;
+  case ST_FAMILYCODES:
+    reqFamilyCodes();
+    break;
+  case ST_FAMILYCODES_ACK:
+    break;
+  case ST_SYMBOLSAMPLES:
+    reqMatchingSymbols();
+    break;
+  case ST_SYMBOLSAMPLES_ACK:
+    break;
+  case ST_REQMKTDEPTHEXCHANGES:
+    reqMktDepthExchanges();
+    break;
+  case ST_REQMKTDEPTHEXCHANGES_ACK:
+    break;
+  case ST_REQNEWSTICKS:
+    reqNewsTicks();
+    break;
+  case ST_REQNEWSTICKS_ACK:
+    break;
+  case ST_REQSMARTCOMPONENTS:
+    reqSmartComponents();
+    break;
+  case ST_REQSMARTCOMPONENTS_ACK:
+    break;
+  case ST_NEWSPROVIDERS:
+    reqNewsProviders();
+    break;
+  case ST_NEWSPROVIDERS_ACK:
+    break;
+  case ST_REQNEWSARTICLE:
+    reqNewsArticle();
+    break;
+  case ST_REQNEWSARTICLE_ACK:
+    break;
+  case ST_REQHISTORICALNEWS:
+    reqHistoricalNews();
+    break;
+  case ST_REQHISTORICALNEWS_ACK:
+    break;
+  case ST_REQHEADTIMESTAMP:
+    reqHeadTimestamp();
+    break;
+  case ST_REQHISTOGRAMDATA:
+    reqHistogramData();
+    break;
+  case ST_REROUTECFD:
+    rerouteCFDOperations();
+    break;
+  case ST_MARKETRULE:
+    marketRuleOperations();
+    break;
+  case ST_CONTFUT:
+    continuousFuturesOperations();
+    break;
+  case ST_REQHISTORICALTICKS:
+    reqHistoricalTicks();
+    break;
+  case ST_REQHISTORICALTICKS_ACK:
+    break;
+  case ST_REQTICKBYTICKDATA:
+    reqTickByTickData();
+    break;
+  case ST_REQTICKBYTICKDATA_ACK:
+    break;
+  case ST_WHATIFSAMPLES:
+    whatIfSamples();
+    break;
+  case ST_WHATIFSAMPLES_ACK:
+    break;
+  case ST_PING:
+    reqCurrentTime();
+    break;
+  case ST_PING_ACK:
+    if (m_sleepDeadline < now) {
+      disconnect();
+      return;
     }
-
-    Signal.waitForSignal();
-    errno = 0;
-    pReader->processMsgs();
+    break;
+  case ST_IDLE:
+    if (m_sleepDeadline < now) {
+      m_state = ST_PING;
+      return;
+    }
+    break;
   }
+
+  Signal.waitForSignal();
+  errno = 0;
+  pReader->processMsgs();
 }
 
 //! [error]

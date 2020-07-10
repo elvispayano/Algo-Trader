@@ -25,9 +25,7 @@
   Description:
     Setup configuration for Interactive Broker connection
 */
-InteractiveBroker::InteractiveBroker(IBWrapper* wrapper, std::string host, int port, int clientID) : 
-  ib(wrapper), host(host), port(port), clientID(clientID)
-{
+InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
   isConnected = false;
 }
 
@@ -61,10 +59,9 @@ bool InteractiveBroker::connect(void) {
   
   while (!connected && counter < 3) {
     ++counter;
-    connected = ib->connect(host, port, clientID);
+    connected = ib->connect();
   }
   if (!connected) {
-    throw std::runtime_error("Connection Error: Could not connect to TWS Platform");
     return false;
   }
 
@@ -95,10 +92,30 @@ void InteractiveBroker::disconnect(void) {
     Request latest values for the provided ticker
 */
 Stock InteractiveBroker::updateTicker(std::string ticker) {
-  Stock output;
+  return ib->getCurrentPrice(ticker);
   if (!isConnected) {
     throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
-    return output;
   }
-   return ib->getCurrentPrice(ticker);
+}
+
+void InteractiveBroker::connectionManager(void) {
+  if (!connect())
+    throw std::runtime_error("Connection Error: Unable to connect to Interactive Broker API");
+  
+  process();
+
+  disconnect();
+}
+
+void InteractiveBroker::process(void) {
+  sendRequest(1);
+  recvResponse();
+}
+
+void InteractiveBroker::recvResponse(void) {
+  ib->processMessages();
+}
+
+void InteractiveBroker::sendRequest(int i) {
+  ib->getCurrentPrice("XYZ");
 }

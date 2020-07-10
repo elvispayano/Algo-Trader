@@ -39,15 +39,11 @@ int main(int argc, char **argv) {
 
   // Configure database connection
   database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
-  if (!database->connect())
-    return 1;
 
   // Configure broker connection
   IBWrapper* wrapper;
-  wrapper = new IBWrapper();
-  broker = new InteractiveBroker(wrapper, "127.0.0.1", 6550, 0);
-  if (!broker->connect())
-    return 1;
+  wrapper = new IBWrapper("127.0.0.1", 6550, 0);
+  broker = new InteractiveBroker(wrapper);
 
   
   for (size_t it = 1; it <= database->getNetworkCount(); ++it) {
