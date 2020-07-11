@@ -20,7 +20,6 @@
 #include "CommissionReport.h"
 #include "EClientSocket.h"
 #include "Execution.h"
-#include "Order.h"
 #include "OrderState.h"
 
 // Standard Includes
@@ -48,6 +47,14 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
 {
   listening = false;
   validID = 0;
+
+  contractRequest.exchange = "SMART";
+  contractRequest.secType = "STK";
+  contractRequest.currency = "USD";
+  contractRequest.primaryExchange = "ISLAND";
+  clearContract();
+  
+  clearOrder();
 }
 
 /*
@@ -383,18 +390,15 @@ void IBWrapper::processMessages(void)
     Open a market order within the TWS platform
 */
 void IBWrapper::orderMarket(std::string ticker, std::string action, double quantity) {
-  Contract contract;
-  contract.exchange = "SMART";
-  contract.symbol = ticker;
-  contract.secType = "STK";
-  contract.currency = "USD";
-  contract.primaryExchange = "ISLAND";
+  clearContract();
+  contractRequest.symbol = ticker;
 
-  Order order;
-  order.action = action;
-  order.orderType = "MKT";
-  order.totalQuantity = quantity;
-  pClient->placeOrder(validID++, contract, order);
+  clearOrder();
+  orderRequest.action = action;
+  orderRequest.orderType = "MKT";
+  orderRequest.totalQuantity = quantity;
+
+  pClient->placeOrder(validID++, contractRequest, orderRequest);
   printf("Placing Market Order\n");
 }
 
@@ -406,19 +410,16 @@ void IBWrapper::orderMarket(std::string ticker, std::string action, double quant
     Open a limit order within the TWS platform
 */
 void IBWrapper::orderLimit(std::string ticker, std::string action, double quantity, double price) {
-  Contract contract;
-  contract.exchange = "SMART";
-  contract.symbol = ticker;
-  contract.secType = "STK";
-  contract.currency = "USD";
-  contract.primaryExchange = "ISLAND";
+  clearContract();
+  contractRequest.symbol = ticker;
 
-  Order order;
-  order.action = action;
-  order.orderType = "LMT";
-  order.totalQuantity = quantity;
-  order.lmtPrice = price;
-  pClient->placeOrder(validID++, contract, order);
+  clearOrder();
+  orderRequest.action = action;
+  orderRequest.orderType = "LMT";
+  orderRequest.totalQuantity = quantity;
+  orderRequest.lmtPrice = price;
+  
+  pClient->placeOrder(validID++, contractRequest, orderRequest);
   printf("Placing Limit Order\n");
 }
 
@@ -430,20 +431,43 @@ void IBWrapper::orderLimit(std::string ticker, std::string action, double quanti
     Open a stop order within the TWS platform
 */
 void IBWrapper::orderStop(std::string ticker, std::string action, double quantity, double price) {
-  Contract contract;
-  contract.exchange = "SMART";
-  contract.symbol = ticker;
-  contract.secType = "STK";
-  contract.currency = "USD";
-  contract.primaryExchange = "ISLAND";
+  clearContract();
+  contractRequest.symbol = ticker;
 
-  Order order;
-  order.action = action;
-  order.orderType = "STP";
-  order.totalQuantity = quantity;
-  order.auxPrice = price;
-  pClient->placeOrder(validID++, contract, order);
+  clearOrder();
+  orderRequest.action = action;
+  orderRequest.orderType = "STP";
+  orderRequest.totalQuantity = quantity;
+  orderRequest.auxPrice = price;
+
+  pClient->placeOrder(validID++, contractRequest, orderRequest);
   printf("Placing Stop Order\n");
+}
+
+/*
+  Function:     clearOrder
+  Inputs:       None (void)
+  
+  Description:
+    Clear an order to prepare for new request
+*/
+void IBWrapper::clearOrder(void) {
+  orderRequest.action = "";
+  orderRequest.orderType = "";
+  orderRequest.totalQuantity = 0.0;
+  orderRequest.auxPrice = 0.0;
+  orderRequest.lmtPrice = 0.0;
+}
+
+/*
+  Function:     clearContract
+  Inputs:       None (void)
+
+  Description:
+    Clear a contract to prepare for new request
+*/
+void IBWrapper::clearContract(void) {
+  contractRequest.symbol = "";
 }
 
 //! [error]

@@ -25,6 +25,7 @@
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
 #include "EReader.h"
+#include "Order.h"
 
 class EClientSocket;
 
@@ -137,10 +138,16 @@ public:
   virtual void orderStop(std::string ticker, std::string action, double quantity, double price);
 
 private:
+  void clearOrder(void);
+  void clearContract(void);
+
   Stock data;
   bool listening;
   std::string host;
   int port, clientID, validID;
+
+  Contract contractRequest;
+  Order    orderRequest;
 
 protected:
 
