@@ -20,7 +20,6 @@
 
 // Standard Includes
 #include <string>
-#include <thread>
 
 // Interactive Broker Includes
 #include "EWrapper.h"
@@ -122,24 +121,24 @@ enum State {
 
 class IBWrapper : public EWrapper {
 public:
-  IBWrapper(void);
+  IBWrapper(std::string host, int port, int clientID);
   ~IBWrapper(void);
 
   // Required Interface Functions
-  void processMessages(void);
+  virtual void processMessages(void);
 
-  virtual bool connect(std::string host, int port, int clientId = 0);
+  virtual bool connect(void);
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  virtual Stock getCurrentPrice(std::string ticker);
-  void startListener(void);
-  void stopListener(void);
+  virtual void getCurrentPrice(std::string ticker);
 
 private:
   Stock data;
   bool listening;
-  std::thread* messages;
+  std::string host;
+  int port, clientID, validID;
+
 protected:
 
   //![socket_declare]
@@ -150,7 +149,6 @@ protected:
   State m_state;
   time_t m_sleepDeadline;
 
-  OrderId m_orderId;
   EReader* pReader;
   bool m_extraAuth;
   std::string m_bboExchange;

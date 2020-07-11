@@ -16,6 +16,13 @@
 #ifndef STOCK_H
 #define STOCK_H
 
+// Utility Includes
+#include "broker_types.h"
+
+// Standard Includes
+#include <string>
+#include <vector>
+
 class Stock {
 public:
   Stock(void);
@@ -41,12 +48,21 @@ public:
   void setHigh(float);
   float getHigh(void) { return high; }
 
+  void setAction(Requests action) { this->action = action; }
+  Requests getAction(void) { return action; }
+
+  void setTicker(std::string ticker) { this->ticker = ticker; }
+  std::string getTicker(void) { return ticker; }
+
 private:
   // Status trackers
   bool recBid, recAsk, recLow, recHigh;
 
   // Price trackers
   float bid, ask, low, high;
+
+  Requests action;
+  std::string ticker;
 };
 
 #endif /* STOCK_H */

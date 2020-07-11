@@ -17,9 +17,6 @@
 #ifndef BROKER_BASE_H
 #define BROKER_BASE_H
 
-// Utility Includes
-#include "stock.h"
-
 // Standard Includes
 #include <string>
 
@@ -32,7 +29,7 @@ public:
   virtual bool connect(void) = 0;
   virtual void disconnect(void) = 0;
 
-  virtual Stock updateTicker(std::string ticker) = 0;
+  virtual void updateTicker(std::string ticker) = 0;
 };
 
 #endif /* BROKER_BASE_H */

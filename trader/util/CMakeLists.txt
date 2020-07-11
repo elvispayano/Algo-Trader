@@ -11,6 +11,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 set(HEADERS
+  "broker_types.h"
   "matrix.h"
   "network_types.h"
   "stock.h"
