@@ -65,7 +65,7 @@ TEST_F(InteractiveBrokerTest, ConnectionManagerException) {
 }
 
 TEST_F(InteractiveBrokerTest, ConnectionManager) {
-  EXPECT_CALL(*wrapper, connect()).Times(1).WillOnce(::testing::Return(true));
+  EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   
   EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1);

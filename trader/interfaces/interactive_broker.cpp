@@ -121,6 +121,10 @@ void InteractiveBroker::process(void) {
     if (elapsed_seconds.count() < 0.05)
       continue;
     now = std::chrono::system_clock::now();
+
+    if (!ib->connect())
+      continue;
+
     recvResponse();
     sendRequest(1);
   }
