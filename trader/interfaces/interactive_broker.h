@@ -47,20 +47,20 @@ public:
   void connectionManager(void);
 
   void updateTicker(std::string ticker) override;
-  void addMessage(Stock message);
+  void addToQueue(Stock message);
 
 private:
   void sendRequest(void);
   void recvResponse(void);
   void process(void);
   
-
   IBWrapper* ib;
   bool isConnected;
-  std::vector<Stock> requests;
-  std::mutex reqMtx;
-  std::thread* tProcess;
   bool disconnectTrigger;
+  
+  std::vector<Stock> requests;
+  std::mutex         reqMtx;
+  std::thread*       tProcess;
 };
 
 #endif /* INTERACTIVE_BROKER_H */

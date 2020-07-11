@@ -117,6 +117,15 @@ void InteractiveBroker::connectionManager(void) {
   tProcess = new std::thread(std::bind(&InteractiveBroker::process, this));
 }
 
+/*
+  Function:     process
+  Inputs:       None (void)
+
+  Description:
+    Main segment of connection management that will loop and through and
+    continuously send requests, receive responses, and handle potential
+    connectivity issues
+*/
 void InteractiveBroker::process(void) {
   auto now = std::chrono::system_clock::now();
   
@@ -136,10 +145,25 @@ void InteractiveBroker::process(void) {
   ib->disconnect();
 }
 
+/*
+  Function:     recvResponse
+  Inputs:       None (void)
+
+  Description:
+    Handling responses from the Interactive Broker API.
+*/
 void InteractiveBroker::recvResponse(void) {
   ib->processMessages();
 }
 
+/*
+  Function:     sendRequest
+  Inputs:       None (void)
+
+  Description:
+    Handling requests made from the trader plaform using the standardize
+    format and converting to the appropriate Interactive Broker request
+*/
 void InteractiveBroker::sendRequest(void) {
   reqMtx.lock();
   if (requests.empty()) {
@@ -164,7 +188,15 @@ void InteractiveBroker::sendRequest(void) {
   reqMtx.unlock();
 }
 
-void InteractiveBroker::addMessage(Stock message) {
+/*
+  Function:     addToQueue
+  Inputs:       message (Stock)
+
+  Description:
+    Trading platforms interface to add message to queue. Messages
+    will be later read and acted upon by the connection manager
+*/
+void InteractiveBroker::addToQueue(Stock message) {
   reqMtx.lock();
   requests.push_back(message);
   reqMtx.unlock();

@@ -84,6 +84,6 @@ TEST_F(InteractiveBrokerTest, UpdateTicker) {
   
   request.setAction(Requests::UPDATE);
   ib->connectionManager();
-  ib->addMessage(request);
+  ib->addToQueue(request);
   Sleep(50);
 }
