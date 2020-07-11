@@ -25,6 +25,7 @@
 #include "stock.h"
 
 // Standard Includes
+#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -57,6 +58,7 @@ private:
   IBWrapper* ib;
   bool isConnected;
   std::vector<Stock> requests;
+  std::mutex reqMtx;
   std::thread* tProcess;
   bool disconnectTrigger;
 };

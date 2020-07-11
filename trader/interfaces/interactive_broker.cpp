@@ -141,8 +141,11 @@ void InteractiveBroker::recvResponse(void) {
 }
 
 void InteractiveBroker::sendRequest(void) {
-  if (requests.empty())
+  reqMtx.lock();
+  if (requests.empty()) {
+    reqMtx.unlock();
     return;
+  }
   Stock req = requests.back();
   switch (req.getAction()) {
   case Requests::UPDATE:
@@ -158,8 +161,11 @@ void InteractiveBroker::sendRequest(void) {
   }
   
   requests.pop_back();
+  reqMtx.unlock();
 }
 
 void InteractiveBroker::addMessage(Stock message) {
+  reqMtx.lock();
   requests.push_back(message);
+  reqMtx.unlock();
 }

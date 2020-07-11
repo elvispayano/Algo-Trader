@@ -39,7 +39,6 @@ protected:
     wrapper = new MockedWrapper(host, 6550, 0);
     ib = new InteractiveBroker(wrapper);
 
-    request.setAction(Requests::UPDATE);
     request.setTicker(ticker);
   }
 
@@ -60,23 +59,31 @@ public:
 };
 
 /*
-  Test:         Connection Management
+  Test:         Exception
   Description:
-    Ensure that the connection to the IB API is properly handled
+    Ensure that an exception is thrown if a connection can not be
+    established
 */
-TEST_F(InteractiveBrokerTest, ConnectionManagerException) {
+TEST_F(InteractiveBrokerTest, Exception) {
   EXPECT_CALL(*wrapper, connect()).Times(3).WillRepeatedly(::testing::Return(false));
   EXPECT_THROW(ib->connectionManager(), std::runtime_error);
 }
 
-TEST_F(InteractiveBrokerTest, ConnectionManager) {
+/*
+  Test:         Update Ticker
+  Description:
+    Ensure that connection manager requests a ticker update from IB
+    API
+*/
+TEST_F(InteractiveBrokerTest, UpdateTicker) {
   EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   
   EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
   
-  ib->addMessage(request);
+  request.setAction(Requests::UPDATE);
   ib->connectionManager();
-  Sleep(60);
+  ib->addMessage(request);
+  Sleep(50);
 }
