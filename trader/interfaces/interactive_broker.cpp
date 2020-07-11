@@ -166,30 +166,33 @@ void InteractiveBroker::recvResponse(void) {
 */
 void InteractiveBroker::sendRequest(void) {
   reqMtx.lock();
-  if (requests.empty()) {
+  if (messages.empty()) {
     reqMtx.unlock();
     return;
   }
-  Stock req = requests.back();
-  switch (req.getAction()) {
+
+  OrderConfig message = messages.back();
+  std::string action = (message.purchase)?"BUY":"SELL";
+
+  switch (message.request) {
   case Requests::UPDATE:
-    ib->getCurrentPrice(req.getTicker());
+    ib->getCurrentPrice(message.ticker);
     break;
 
   case Requests::MARKET:
-    ib->orderMarket(req.getTicker());
+    ib->orderMarket(message.ticker, action, message.quantity);
     break;
 
   case Requests::LIMIT:
-    ib->orderLimit(req.getTicker());
+    ib->orderLimit(message.ticker, action, message.quantity, message.price);
     break;
 
   case Requests::STOP:
-    ib->orderStop(req.getTicker());
+    ib->orderStop(message.ticker, action, message.quantity, message.price);
     break;
   }
   
-  requests.pop_back();
+  messages.pop_back();
   reqMtx.unlock();
 }
 
@@ -201,8 +204,8 @@ void InteractiveBroker::sendRequest(void) {
     Trading platforms interface to add message to queue. Messages
     will be later read and acted upon by the connection manager
 */
-void InteractiveBroker::addToQueue(Stock message) {
+void InteractiveBroker::addToQueue(OrderConfig message) {
   reqMtx.lock();
-  requests.push_back(message);
+  messages.push_back(message);
   reqMtx.unlock();
 }

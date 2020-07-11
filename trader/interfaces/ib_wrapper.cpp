@@ -375,6 +375,77 @@ void IBWrapper::processMessages(void)
   pReader->processMsgs();
 }
 
+/*
+  Function:     orderMarket
+  Inputs:       ticker (string)
+
+  Description:
+    Open a market order within the TWS platform
+*/
+void IBWrapper::orderMarket(std::string ticker, std::string action, double quantity) {
+  Contract contract;
+  contract.exchange = "SMART";
+  contract.symbol = ticker;
+  contract.secType = "STK";
+  contract.currency = "USD";
+  contract.primaryExchange = "ISLAND";
+
+  Order order;
+  order.action = action;
+  order.orderType = "MKT";
+  order.totalQuantity = quantity;
+  pClient->placeOrder(validID++, contract, order);
+  printf("Placing Market Order\n");
+}
+
+/*
+  Function:     orderLimit
+  Inputs:       ticker (string)
+
+  Description:
+    Open a limit order within the TWS platform
+*/
+void IBWrapper::orderLimit(std::string ticker, std::string action, double quantity, double price) {
+  Contract contract;
+  contract.exchange = "SMART";
+  contract.symbol = ticker;
+  contract.secType = "STK";
+  contract.currency = "USD";
+  contract.primaryExchange = "ISLAND";
+
+  Order order;
+  order.action = action;
+  order.orderType = "LMT";
+  order.totalQuantity = quantity;
+  order.lmtPrice = price;
+  pClient->placeOrder(validID++, contract, order);
+  printf("Placing Limit Order\n");
+}
+
+/*
+  Function:     orderStop
+  Inputs:       ticker (string)
+
+  Description:
+    Open a stop order within the TWS platform
+*/
+void IBWrapper::orderStop(std::string ticker, std::string action, double quantity, double price) {
+  Contract contract;
+  contract.exchange = "SMART";
+  contract.symbol = ticker;
+  contract.secType = "STK";
+  contract.currency = "USD";
+  contract.primaryExchange = "ISLAND";
+
+  Order order;
+  order.action = action;
+  order.orderType = "STP";
+  order.totalQuantity = quantity;
+  order.auxPrice = price;
+  pClient->placeOrder(validID++, contract, order);
+  printf("Placing Stop Order\n");
+}
+
 //! [error]
 void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 {

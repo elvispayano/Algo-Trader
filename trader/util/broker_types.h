@@ -14,6 +14,9 @@
 #ifndef BROKER_TYPES_H
 #define BROKER_TYPES_H
 
+// Standard Includes
+#include <string>
+
 /*
   Enum:         Requests
   Description:
@@ -24,6 +27,14 @@ enum class Requests {
   MARKET,
   LIMIT,
   STOP
+};
+
+struct OrderConfig {
+  std::string ticker;
+  Requests request;
+  bool purchase;
+  double quantity;
+  double price;
 };
 
 #endif /* BROKER_TYPES_H */

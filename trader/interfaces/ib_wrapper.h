@@ -132,9 +132,9 @@ public:
   bool isConnected(void) const;
 
   virtual void getCurrentPrice(std::string ticker);
-  virtual void orderMarket(std::string) {}
-  virtual void orderLimit(std::string) {}
-  virtual void orderStop(std::string) {}
+  virtual void orderMarket(std::string ticker, std::string action, double quantity);
+  virtual void orderLimit(std::string ticker, std::string action, double quantity, double price);
+  virtual void orderStop(std::string ticker, std::string action, double quantity, double price);
 
 private:
   Stock data;
