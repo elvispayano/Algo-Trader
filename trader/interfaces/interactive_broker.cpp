@@ -19,6 +19,7 @@
 #include "interactive_broker.h"
 
 // Standard Includes
+#include <chrono>
 #include <functional>
 
 /*
@@ -58,20 +59,14 @@ InteractiveBroker::~InteractiveBroker(void) {
 bool InteractiveBroker::connect(void) {
   bool connected = false;
   size_t counter = 0;
-
-  if (isConnected)
-    return true;
   
-  while (!connected && counter < 3) {
+  while (!isConnected && !connected && counter < 3) {
     ++counter;
     connected = ib->connect();
   }
-  if (!connected) {
-    return false;
-  }
 
-  isConnected = true;
-  return true;
+  isConnected = connected;
+  return isConnected;
 }
 
 /*
@@ -98,13 +93,23 @@ void InteractiveBroker::disconnect(void) {
   Description:
     Request latest values for the provided ticker
 */
-Stock InteractiveBroker::updateTicker(std::string ticker) {
-  return ib->getCurrentPrice(ticker);
+void InteractiveBroker::updateTicker(std::string ticker) {
+  ib->getCurrentPrice(ticker);
+  return;
   if (!isConnected) {
     throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
   }
 }
 
+/*
+  Function:     connectionManager
+  Inputs:       None (void)
+
+  Description:
+    Start the broker connecion manager. Once started, keep the connection
+    established until signaled to terminate. Running connection on a separate
+    thread to allow for continuous updates
+*/
 void InteractiveBroker::connectionManager(void) {
   if (!connect())
     throw std::runtime_error("Connection Error: Unable to connect to Interactive Broker API");
@@ -112,7 +117,6 @@ void InteractiveBroker::connectionManager(void) {
   tProcess = new std::thread(std::bind(&InteractiveBroker::process, this));
 }
 
-#include <chrono>
 void InteractiveBroker::process(void) {
   auto now = std::chrono::system_clock::now();
   
@@ -126,7 +130,7 @@ void InteractiveBroker::process(void) {
       continue;
 
     recvResponse();
-    sendRequest(1);
+    sendRequest();
   }
   
   ib->disconnect();
@@ -136,10 +140,26 @@ void InteractiveBroker::recvResponse(void) {
   ib->processMessages();
 }
 
-void InteractiveBroker::sendRequest(int i) {
+void InteractiveBroker::sendRequest(void) {
   if (requests.empty())
     return;
+  Stock req = requests.back();
+  switch (req.getAction()) {
+  case Requests::UPDATE:
+    ib->getCurrentPrice(req.getTicker());
+    break;
 
+  case Requests::SELL:
+    break;
+
+  case Requests::BUY:
+    break;
+
+  }
+  
   requests.pop_back();
-  ib->getCurrentPrice("MSFT");
+}
+
+void InteractiveBroker::addMessage(Stock message) {
+  requests.push_back(message);
 }

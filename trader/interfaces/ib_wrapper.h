@@ -20,7 +20,6 @@
 
 // Standard Includes
 #include <string>
-#include <thread>
 
 // Interactive Broker Includes
 #include "EWrapper.h"
@@ -132,14 +131,13 @@ public:
   virtual void disconnect(void);
   bool isConnected(void) const;
 
-  virtual Stock getCurrentPrice(std::string ticker);
+  virtual void getCurrentPrice(std::string ticker);
 
 private:
   Stock data;
   bool listening;
-  std::thread* messages;
   std::string host;
-  int port, clientID;
+  int port, clientID, validID;
 
 protected:
 
@@ -151,7 +149,6 @@ protected:
   State m_state;
   time_t m_sleepDeadline;
 
-  OrderId m_orderId;
   EReader* pReader;
   bool m_extraAuth;
   std::string m_bboExchange;

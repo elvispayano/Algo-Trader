@@ -21,6 +21,7 @@
 #include "broker_base.h"
 
 // Utility Includes
+#include "broker_types.h"
 #include "stock.h"
 
 // Standard Includes
@@ -44,18 +45,18 @@ public:
   void disconnect(void) override;
   void connectionManager(void);
 
-  Stock updateTicker(std::string ticker) override;
-  void addMessage(int i) { requests.push_back(i); }
+  void updateTicker(std::string ticker) override;
+  void addMessage(Stock message);
 
 private:
-  void sendRequest(int i);
+  void sendRequest(void);
   void recvResponse(void);
   void process(void);
   
 
   IBWrapper* ib;
   bool isConnected;
-  std::vector<int> requests;
+  std::vector<Stock> requests;
   std::thread* tProcess;
   bool disconnectTrigger;
 };

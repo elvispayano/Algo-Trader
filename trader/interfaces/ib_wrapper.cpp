@@ -41,13 +41,13 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   pReader(0),
   m_state(ST_CONNECT),
   m_sleepDeadline(0),
-  m_orderId(0),
   m_extraAuth(false),
   host(host),
   port(port),
   clientID(clientID)
 {
   listening = false;
+  validID = 0;
 }
 
 /*
@@ -131,7 +131,7 @@ void IBWrapper::disconnect(void)
     Request price updates for the provided ticker symbol. Implemented as
     a blocking function and will wait until a response is received
 */
-Stock IBWrapper::getCurrentPrice(std::string ticker) {
+void IBWrapper::getCurrentPrice(std::string ticker) {
   Contract contract;
   contract.exchange = "SMART";
   contract.symbol = ticker;
@@ -139,14 +139,9 @@ Stock IBWrapper::getCurrentPrice(std::string ticker) {
   contract.currency = "USD";
   contract.primaryExchange = "ISLAND";
 
-  data.reset();
-  pClient->reqMktData(1, contract, "221", false, false, NULL);
+  pClient->reqMktData(validID++, contract, "221", false, false, NULL);
   //pClient->reqTickByTickData(2, contract, "Last", 1, true);
-  //while (!data.isComplete());
-
-  //pClient->cancelMktData(1);
   //pClient->cancelTickByTickData(2);
-  return data;
 }
 
 /*
@@ -1107,52 +1102,7 @@ void IBWrapper::connectAck() {
 //! [nextvalidid]
 void IBWrapper::nextValidId(OrderId orderId)
 {
-
-  printf("Next Valid Id: %ld\n", orderId);
-  m_orderId = orderId;
-  //! [nextvalidid]
-
-  //m_state = ST_TICKOPTIONCOMPUTATIONOPERATION; 
-  //m_state = ST_TICKDATAOPERATION; 
-  //m_state = ST_REQTICKBYTICKDATA; 
-  //m_state = ST_REQHISTORICALTICKS; 
-  //m_state = ST_CONTFUT; 
-  //m_state = ST_PNLSINGLE; 
-  //m_state = ST_PNL; 
-  //m_state = ST_DELAYEDTICKDATAOPERATION; 
-  //m_state = ST_MARKETDEPTHOPERATION;
-  //m_state = ST_REALTIMEBARS;
-  //m_state = ST_MARKETDATATYPE;
-  //m_state = ST_HISTORICALDATAREQUESTS;
-  m_state = ST_CONTRACTOPERATION;
-  //m_state = ST_MARKETSCANNERS;
-  //m_state = ST_FUNDAMENTALS;
-  //m_state = ST_BULLETINS;
-  //m_state = ST_ACCOUNTOPERATIONS;
-  //m_state = ST_ORDEROPERATIONS;
-  //m_state = ST_OCASAMPLES;
-  //m_state = ST_CONDITIONSAMPLES;
-  //m_state = ST_BRACKETSAMPLES;
-  //m_state = ST_HEDGESAMPLES;
-  //m_state = ST_TESTALGOSAMPLES;
-  //m_state = ST_FAORDERSAMPLES;
-  //m_state = ST_FAOPERATIONS;
-  //m_state = ST_DISPLAYGROUPS;
-  //m_state = ST_MISCELANEOUS;
-  //m_state = ST_FAMILYCODES;
-  //m_state = ST_SYMBOLSAMPLES;
-  //m_state = ST_REQMKTDEPTHEXCHANGES;
-  //m_state = ST_REQNEWSTICKS;
-  //m_state = ST_REQSMARTCOMPONENTS;
-  //m_state = ST_NEWSPROVIDERS;
-  //m_state = ST_REQNEWSARTICLE;
-  //m_state = ST_REQHISTORICALNEWS;
-  //m_state = ST_REQHEADTIMESTAMP;
-  //m_state = ST_REQHISTOGRAMDATA;
-  //m_state = ST_REROUTECFD;
-  //m_state = ST_MARKETRULE;
-  //m_state = ST_PING;
-  //m_state = ST_WHATIFSAMPLES;
+  validID = orderId;
 }
 
 void IBWrapper::currentTime(long time)

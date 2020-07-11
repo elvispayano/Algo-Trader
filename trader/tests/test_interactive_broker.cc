@@ -15,6 +15,7 @@
 #include "interactive_broker.h"
 
 // Utility Includes
+#include "broker_types.h"
 #include "stock.h"
 
 // Google Test Includes
@@ -27,7 +28,7 @@ public:
   MockedWrapper(std::string host, int port, int clientID) : IBWrapper(host, port, clientID) {}
   MOCK_METHOD0(connect, bool(void));
   MOCK_METHOD0(disconnect, void(void));
-  MOCK_METHOD1(getCurrentPrice, Stock(std::string));
+  MOCK_METHOD1(getCurrentPrice, void(std::string));
   MOCK_METHOD0(processMessages, void(void));
 };
 
@@ -37,6 +38,9 @@ protected:
   void SetUp(void) override {
     wrapper = new MockedWrapper(host, 6550, 0);
     ib = new InteractiveBroker(wrapper);
+
+    request.setAction(Requests::UPDATE);
+    request.setTicker(ticker);
   }
 
   void TearDown(void) override {
@@ -49,9 +53,10 @@ protected:
 public:
   MockedWrapper* wrapper;
   InteractiveBroker* ib;
+  Stock request;
 
   std::string host = "127.0.0.1";
-  std::string ticker = "MSFT";
+  std::string ticker = "XYZ";
 };
 
 /*
@@ -70,6 +75,8 @@ TEST_F(InteractiveBrokerTest, ConnectionManager) {
   
   EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
-  ib->addMessage(1);
+  
+  ib->addMessage(request);
   ib->connectionManager();
+  Sleep(60);
 }
