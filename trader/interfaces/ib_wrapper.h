@@ -25,6 +25,7 @@
 #include "EWrapper.h"
 #include "EReaderOSSignal.h"
 #include "EReader.h"
+#include "Order.h"
 
 class EClientSocket;
 
@@ -132,12 +133,21 @@ public:
   bool isConnected(void) const;
 
   virtual void getCurrentPrice(std::string ticker);
+  virtual void orderMarket(std::string ticker, std::string action, double quantity);
+  virtual void orderLimit(std::string ticker, std::string action, double quantity, double price);
+  virtual void orderStop(std::string ticker, std::string action, double quantity, double price);
 
 private:
+  void clearOrder(void);
+  void clearContract(void);
+
   Stock data;
   bool listening;
   std::string host;
   int port, clientID, validID;
+
+  Contract contractRequest;
+  Order    orderRequest;
 
 protected:
 

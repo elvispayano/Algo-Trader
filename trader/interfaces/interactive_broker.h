@@ -47,7 +47,7 @@ public:
   void connectionManager(void);
 
   void updateTicker(std::string ticker) override;
-  void addToQueue(Stock message);
+  void addToQueue(OrderConfig message);
 
 private:
   void sendRequest(void);
@@ -58,9 +58,9 @@ private:
   bool isConnected;
   bool disconnectTrigger;
   
-  std::vector<Stock> requests;
-  std::mutex         reqMtx;
-  std::thread*       tProcess;
+  std::vector<OrderConfig> messages;
+  std::mutex               reqMtx;
+  std::thread*             tProcess;
 };
 
 #endif /* INTERACTIVE_BROKER_H */
