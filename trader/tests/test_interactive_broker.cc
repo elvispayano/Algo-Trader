@@ -29,6 +29,9 @@ public:
   MOCK_METHOD0(connect, bool(void));
   MOCK_METHOD0(disconnect, void(void));
   MOCK_METHOD1(getCurrentPrice, void(std::string));
+  MOCK_METHOD1(orderMarket, void(std::string));
+  MOCK_METHOD1(orderLimit, void(std::string));
+  MOCK_METHOD1(orderStop, void(std::string));
   MOCK_METHOD0(processMessages, void(void));
 };
 
@@ -83,6 +86,60 @@ TEST_F(InteractiveBrokerTest, UpdateTicker) {
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
   
   request.setAction(Requests::UPDATE);
+  ib->connectionManager();
+  ib->addToQueue(request);
+  Sleep(50);
+}
+
+/*
+  Test:         Market Order
+  Description:
+    Request a Market Order through the IB API
+*/
+TEST_F(InteractiveBrokerTest, MarketOrder) {
+  EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
+  EXPECT_CALL(*wrapper, processMessages()).Times(1);
+
+  request.setAction(Requests::MARKET);
+  EXPECT_CALL(*wrapper, orderMarket(ticker)).Times(1);
+
+  ib->connectionManager();
+  ib->addToQueue(request);
+  Sleep(50);
+}
+
+/*
+  Test:         Limit Order
+  Description:
+    Request a Limit Order through the IB API
+*/
+TEST_F(InteractiveBrokerTest, LimitOrder) {
+  EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
+  EXPECT_CALL(*wrapper, processMessages()).Times(1);
+
+  request.setAction(Requests::LIMIT);
+  EXPECT_CALL(*wrapper, orderLimit(ticker)).Times(1);
+
+  ib->connectionManager();
+  ib->addToQueue(request);
+  Sleep(50);
+}
+
+/*
+  Test:         Stop Order
+  Description:
+    Request a Stop Order through the IB API
+*/
+TEST_F(InteractiveBrokerTest, StopOrder) {
+  EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
+  EXPECT_CALL(*wrapper, processMessages()).Times(1);
+
+  request.setAction(Requests::STOP);
+  EXPECT_CALL(*wrapper, orderStop(ticker)).Times(1);
+
   ib->connectionManager();
   ib->addToQueue(request);
   Sleep(50);

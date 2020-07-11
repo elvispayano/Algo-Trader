@@ -21,8 +21,9 @@
 */
 enum class Requests {
   UPDATE,
-  BUY,
-  SELL
+  MARKET,
+  LIMIT,
+  STOP
 };
 
 #endif /* BROKER_TYPES_H */

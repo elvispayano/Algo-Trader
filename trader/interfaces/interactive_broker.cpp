@@ -176,12 +176,17 @@ void InteractiveBroker::sendRequest(void) {
     ib->getCurrentPrice(req.getTicker());
     break;
 
-  case Requests::SELL:
+  case Requests::MARKET:
+    ib->orderMarket(req.getTicker());
     break;
 
-  case Requests::BUY:
+  case Requests::LIMIT:
+    ib->orderLimit(req.getTicker());
     break;
 
+  case Requests::STOP:
+    ib->orderStop(req.getTicker());
+    break;
   }
   
   requests.pop_back();
