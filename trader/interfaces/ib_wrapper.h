@@ -19,6 +19,7 @@
 #include "stock.h"
 
 // Standard Includes
+#include <map>
 #include <string>
 
 // Interactive Broker Includes
@@ -148,6 +149,8 @@ private:
 
   Contract contractRequest;
   Order    orderRequest;
+  std::map<int, Stock> responseMap;
+  std::map<int, std::string> updateMap;
 
 protected:
 

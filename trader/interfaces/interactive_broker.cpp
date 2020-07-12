@@ -96,10 +96,6 @@ void InteractiveBroker::disconnect(void) {
 */
 void InteractiveBroker::updateTicker(std::string ticker) {
   ib->getCurrentPrice(ticker);
-  return;
-  if (!isConnected) {
-    throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
-  }
 }
 
 /*
