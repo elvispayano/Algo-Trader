@@ -32,6 +32,7 @@
 InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
   isConnected = false;
   disconnectTrigger = false;
+  frame50 = true;
   tProcess = 0;
 }
 
@@ -127,21 +128,37 @@ void InteractiveBroker::connectionManager(void) {
     connectivity issues
 */
 void InteractiveBroker::process(void) {
-  auto now = std::chrono::system_clock::now();
-  
-  while (!disconnectTrigger) {
-    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - now;
-    if (elapsed_seconds.count() < 0.05)
-      continue;
-    now = std::chrono::system_clock::now();
+  // Starting Timer
+  auto timePrev = std::chrono::system_clock::now();
 
+  // Process Loop
+  while (!disconnectTrigger) {
+    // Update Timer
+    std::chrono::duration<double> timeElapsed = std::chrono::system_clock::now() - timePrev;
+
+    // No processing at higher than allowed rate (100Hz)
+    if (timeElapsed.count() < 0.01)
+      continue;
+
+    // Update time trigger
+    timePrev = std::chrono::system_clock::now();
+
+    // Prevent message processing if no connection is present
     if (!ib->connect())
       continue;
 
+    // Receive broker responses every frame
     recvResponse();
-    sendRequest();
+
+    // Send broker requests at 50Hz (max allowed by API)
+    if (frame50)
+      sendRequest();
+
+    // Flip 50Hz frame trigger
+    frame50 ^= true;
   }
-  
+
+  // Terminate broker connection when processing is complete
   ib->disconnect();
 }
 

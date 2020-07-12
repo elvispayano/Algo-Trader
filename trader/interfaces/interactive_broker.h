@@ -57,6 +57,7 @@ private:
   IBWrapper* ib;
   bool isConnected;
   bool disconnectTrigger;
+  bool frame50;
   
   std::queue<OrderConfig> messages;
   std::mutex              reqMtx;
