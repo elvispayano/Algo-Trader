@@ -171,7 +171,7 @@ void InteractiveBroker::sendRequest(void) {
     return;
   }
 
-  OrderConfig message = messages.back();
+  OrderConfig message = messages.front();
   std::string action = (message.purchase)?"BUY":"SELL";
 
   switch (message.request) {
@@ -192,7 +192,7 @@ void InteractiveBroker::sendRequest(void) {
     break;
   }
   
-  messages.pop_back();
+  messages.pop();
   reqMtx.unlock();
 }
 
@@ -206,6 +206,6 @@ void InteractiveBroker::sendRequest(void) {
 */
 void InteractiveBroker::addToQueue(OrderConfig message) {
   reqMtx.lock();
-  messages.push_back(message);
+  messages.push(message);
   reqMtx.unlock();
 }
