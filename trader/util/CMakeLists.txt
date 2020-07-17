@@ -15,6 +15,7 @@ cmake_minimum_required(VERSION 3.8)
 # Configure Project Source/Header Files
 #----------------------------------------------------------------------
 
+# Library header files
 set(HEADERS
   "broker_types.h"
   "matrix.h"
@@ -23,6 +24,7 @@ set(HEADERS
   "utl_math.h"
   )
 
+# Library source files
 set(SRC
   "stock.cpp"
   "utl_math.cpp"
