@@ -23,13 +23,13 @@
 #include "main.h"
 
 // Debug configuration execution
-#ifdef DEBUG
+#ifdef TESTS
 #include "test_main.h"
 #endif
 
 int main(int argc, char **argv) {
 
-#ifdef DEBUG
+#ifdef TESTS
   // Run Google Test if in debug
   test_main(argc, argv);
   return 0;
