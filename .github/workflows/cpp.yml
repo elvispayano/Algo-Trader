@@ -9,7 +9,11 @@ name: C++ Development
 
 # Triggers
 # Run pipeline on all merges to master
+# Run pipeline on each master update
 on:
+  push:
+    branches:
+    - master
   pull_request:
     branches:
     - master
@@ -24,12 +28,12 @@ jobs:
     - uses: actions/checkout@v2
 
     # Run CMake
-    - name: Build Debug
+    - name: Debug Build
       working-directory: ./trader
       run: |
         cmake .
-        cmake --build .
-        
+        cmake --build . --config Debug
+
     # Execute
     - name: Run Debug
       working-directory: ./trader/Debug

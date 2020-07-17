@@ -91,11 +91,11 @@ endif()
 # Interactive Broker
 if(EXISTS ${IB_CPP_DIR})
   add_custom_command( TARGET interfaces PRE_BUILD
-    COMMAND "${CMAKE_COMMAND} ."
+    COMMAND ${CMAKE_COMMAND} ARGS "."
     WORKING_DIRECTORY ${IB_CPP_DIR}
   )
   add_custom_command( TARGET interfaces PRE_BUILD
-    COMMAND "${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}"
+    COMMAND ${CMAKE_COMMAND} ARGS "--build . --config ${CMAKE_BUILD_TYPE}"
     WORKING_DIRECTORY ${IB_CPP_DIR}
   )
   target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
