@@ -13,6 +13,10 @@
 # CMake requirements
 cmake_minimum_required(VERSION 3.8)
 
+#----------------------------------------------------------------------
+# External Project Integration
+#----------------------------------------------------------------------
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -45,6 +49,11 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
+
+#----------------------------------------------------------------------
+# Configure Project Source/Header Files
+#----------------------------------------------------------------------
+
 # Library header files
 set(HEADERS
   "test_main.h"
@@ -64,6 +73,10 @@ set(SRC
   "test_utl_math.cc"
 )
 
+#----------------------------------------------------------------------
+# Configure Project Interface Settings
+#----------------------------------------------------------------------
+
 # Define library requirements
 add_library(tests OBJECT ${HEADERS} ${SRC})
 
@@ -72,6 +85,13 @@ target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Configure library properties
 set_target_properties(tests PROPERTIES LINKER_LANGUAGE CXX)
+
+# Library definitions
+target_compile_definitions(tests INTERFACE TESTS)
+
+#----------------------------------------------------------------------
+# Link Libraries
+#----------------------------------------------------------------------
 
 # Link library dependencies
 target_link_libraries(tests PRIVATE gtest_main)

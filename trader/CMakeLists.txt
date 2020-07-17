@@ -34,6 +34,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE neuralnetwork)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
   target_link_libraries(${PROJECT_NAME} PRIVATE tests)
-  # Conditional definitions
-  add_compile_definitions("DEBUG")
 endif()

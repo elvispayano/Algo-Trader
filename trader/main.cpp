@@ -23,25 +23,24 @@
 #include "main.h"
 
 // Debug configuration execution
-#ifdef DEBUG
+#ifdef TESTS
 #include "test_main.h"
 #endif
 
 int main(int argc, char **argv) {
 
-#ifdef DEBUG
+#ifdef TESTS
   // Run Google Test if in debug
   test_main(argc, argv);
-  return 0;
 #endif
   database = 0;
   networks.clear();
 
   // Configure database connection
   database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
+  database->connect();
 
   // Configure broker connection
-  IBWrapper* wrapper;
   wrapper = new IBWrapper("127.0.0.1", 6550, 0);
   broker = new InteractiveBroker(wrapper);
 
