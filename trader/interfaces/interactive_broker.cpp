@@ -32,6 +32,7 @@
 InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
   isConnected = false;
   disconnectTrigger = false;
+  frame50 = true;
   tProcess = 0;
 }
 
@@ -95,10 +96,6 @@ void InteractiveBroker::disconnect(void) {
 */
 void InteractiveBroker::updateTicker(std::string ticker) {
   ib->getCurrentPrice(ticker);
-  return;
-  if (!isConnected) {
-    throw std::logic_error("Connect Error: Can not request from IB API without a valid connection");
-  }
 }
 
 /*
@@ -127,21 +124,37 @@ void InteractiveBroker::connectionManager(void) {
     connectivity issues
 */
 void InteractiveBroker::process(void) {
-  auto now = std::chrono::system_clock::now();
-  
-  while (!disconnectTrigger) {
-    std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - now;
-    if (elapsed_seconds.count() < 0.05)
-      continue;
-    now = std::chrono::system_clock::now();
+  // Starting Timer
+  auto timePrev = std::chrono::system_clock::now();
 
+  // Process Loop
+  while (!disconnectTrigger) {
+    // Update Timer
+    std::chrono::duration<double> timeElapsed = std::chrono::system_clock::now() - timePrev;
+
+    // No processing at higher than allowed rate (100Hz)
+    if (timeElapsed.count() < 0.01)
+      continue;
+
+    // Update time trigger
+    timePrev = std::chrono::system_clock::now();
+
+    // Prevent message processing if no connection is present
     if (!ib->connect())
       continue;
 
+    // Receive broker responses every frame
     recvResponse();
-    sendRequest();
+
+    // Send broker requests at 50Hz (max allowed by API)
+    if (frame50)
+      sendRequest();
+
+    // Flip 50Hz frame trigger
+    frame50 ^= true;
   }
-  
+
+  // Terminate broker connection when processing is complete
   ib->disconnect();
 }
 
@@ -154,6 +167,13 @@ void InteractiveBroker::process(void) {
 */
 void InteractiveBroker::recvResponse(void) {
   ib->processMessages();
+
+  if (!ib->responseReady())
+    return;
+
+  resMtx.lock();
+  response.push(ib->getResponse());
+  resMtx.unlock();
 }
 
 /*
@@ -171,7 +191,7 @@ void InteractiveBroker::sendRequest(void) {
     return;
   }
 
-  OrderConfig message = messages.back();
+  OrderConfig message = messages.front();
   std::string action = (message.purchase)?"BUY":"SELL";
 
   switch (message.request) {
@@ -192,7 +212,7 @@ void InteractiveBroker::sendRequest(void) {
     break;
   }
   
-  messages.pop_back();
+  messages.pop();
   reqMtx.unlock();
 }
 
@@ -206,6 +226,38 @@ void InteractiveBroker::sendRequest(void) {
 */
 void InteractiveBroker::addToQueue(OrderConfig message) {
   reqMtx.lock();
-  messages.push_back(message);
+  messages.push(message);
   reqMtx.unlock();
+}
+
+/*
+  Functions:    checkResponse
+  Inputs:       None (void)
+  Outputs:      messageReady (bool)
+
+  Description:
+    Check broker queue to see if any responses are ready to be read
+*/
+bool InteractiveBroker::responseReady(void) {
+  return response.empty();
+}
+
+/*
+  Functions:    getResponse
+  Inputs:       None (void)
+
+  Description:
+    Get the latest updated ticker values prepared by the Interactive
+    Broker wrapper
+*/
+void InteractiveBroker::getResponse(Stock& output) {
+  resMtx.lock();
+  if (response.empty()) {
+    resMtx.unlock();
+    return;
+  }
+  
+  output = response.front();
+  response.pop();
+  resMtx.unlock();
 }

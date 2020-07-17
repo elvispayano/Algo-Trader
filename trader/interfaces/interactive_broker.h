@@ -26,9 +26,9 @@
 
 // Standard Includes
 #include <mutex>
+#include <queue>
 #include <string>
 #include <thread>
-#include <vector>
 
 // Forward Declaration
 class IBWrapper;
@@ -46,6 +46,10 @@ public:
   void disconnect(void) override;
   void connectionManager(void);
 
+  // Read Response
+  bool responseReady(void);
+  void getResponse(Stock&);
+
   void updateTicker(std::string ticker) override;
   void addToQueue(OrderConfig message);
 
@@ -57,10 +61,13 @@ private:
   IBWrapper* ib;
   bool isConnected;
   bool disconnectTrigger;
+  bool frame50;
   
-  std::vector<OrderConfig> messages;
-  std::mutex               reqMtx;
-  std::thread*             tProcess;
+  std::queue<OrderConfig> messages;
+  std::queue<Stock>       response;
+  std::mutex              reqMtx;
+  std::mutex              resMtx;
+  std::thread*            tProcess;
 };
 
 #endif /* INTERACTIVE_BROKER_H */

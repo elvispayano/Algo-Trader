@@ -46,7 +46,7 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   clientID(clientID)
 {
   listening = false;
-  validID = 0;
+  validID = 1;
 
   contractRequest.exchange = "SMART";
   contractRequest.secType = "STK";
@@ -55,6 +55,10 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   clearContract();
   
   clearOrder();
+
+  updateMap.empty();
+
+  data.reset();
 }
 
 /*
@@ -126,7 +130,7 @@ void IBWrapper::disconnect(void)
   if (isConnected())
   {
     pClient->eDisconnect();
-    printf("Disconnected from Client");
+    printf("Disconnected from Client\n");
   }
 }
 
@@ -139,16 +143,11 @@ void IBWrapper::disconnect(void)
     a blocking function and will wait until a response is received
 */
 void IBWrapper::getCurrentPrice(std::string ticker) {
-  Contract contract;
-  contract.exchange = "SMART";
-  contract.symbol = ticker;
-  contract.secType = "STK";
-  contract.currency = "USD";
-  contract.primaryExchange = "ISLAND";
+  clearContract();
+  contractRequest.symbol = ticker;
 
-  pClient->reqMktData(validID++, contract, "221", false, false, NULL);
-  //pClient->reqTickByTickData(2, contract, "Last", 1, true);
-  //pClient->cancelTickByTickData(2);
+  updateMap[validID] = ticker;
+  pClient->reqMktData(validID++, contractRequest, "221", false, false, NULL);
 }
 
 /*
@@ -470,6 +469,19 @@ void IBWrapper::clearContract(void) {
   contractRequest.symbol = "";
 }
 
+/*
+  Function:     getResponse
+  Inputs:       None (void)
+
+  Description:
+    Capture and remove the first message recorded in the queue
+*/
+Stock IBWrapper::getResponse(void) {
+  Stock response = responseMessage.front();
+  responseMessage.pop();
+  return response;
+}
+
 //! [error]
 void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 {
@@ -479,42 +491,56 @@ void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 
 //! [tickprice]
 void IBWrapper::tickPrice(TickerId tickerId, TickType field, double price, const TickAttrib& attribs) {
+  // Check that Ticker ID is still in update queue
+  if (updateMap.find(tickerId) == updateMap.end())
+    return;
+
+  data.setTicker(updateMap[tickerId]);
 
   switch (field) {
   case DELAYED_HIGH:
     data.setHigh(price);
-    printf("Delayed High Price: %f\n", price);
+    printf("%s Delayed High Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_LOW:
     data.setLow(price);
-    printf("Delayed Low Price: %f\n", price);
+    printf("%s Delayed Low Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_OPEN:
-    printf("Delayed Open Price: %f\n", price);
+    printf("%s Delayed Open Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_CLOSE:
-    printf("Delayed Close Price: %f\n", price);
+    printf("%s Delayed Close Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_BID:
     data.setBid(price);
-    printf("Delayed Bid Price: %f\n", price);
+    printf("%s Delayed Bid Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_ASK:
     data.setAsk(price);
-    printf("Delayed Ask Price: %f\n", price);
+    printf("%s Delayed Ask Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_LAST:
-    printf("Delayed Last Price: %f\n", price);
+    printf("%s Delayed Last Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   default:
-    printf("Ticker Price: %f", price);
+    printf("%s Ticker Price: %f", updateMap[tickerId].c_str(), price);
+  }
+
+  // Update response queue and clear stock capture variable
+  if (data.isComplete()) {
+    responseMessage.push(data);
+    data.reset();
+
+    // Remove Ticker ID from update queue
+    updateMap.erase(updateMap.find(tickerId));
   }
 }
 //! [tickprice]

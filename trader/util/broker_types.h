@@ -29,12 +29,31 @@ enum class Requests {
   STOP
 };
 
+enum class ValueType {
+  HIGH,
+  LOW,
+  OPEN,
+  CLOSE,
+  BID,
+  ASK,
+  LAST,
+  VOLUME,
+  NONE
+};
+
 struct OrderConfig {
   std::string ticker;
   Requests request;
   bool purchase;
   double quantity;
   double price;
+  
+  OrderConfig() :
+    ticker(""),
+    request(Requests::UPDATE),
+    purchase(false),
+    quantity(0.0),
+    price(0.0) {}
 };
 
 #endif /* BROKER_TYPES_H */

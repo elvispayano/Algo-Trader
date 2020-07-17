@@ -33,6 +33,8 @@ public:
   MOCK_METHOD4(orderLimit, void(std::string, std::string, double, double));
   MOCK_METHOD4(orderStop, void(std::string, std::string, double, double));
   MOCK_METHOD0(processMessages, void(void));
+  MOCK_METHOD0(responseReady, bool(void));
+  MOCK_METHOD0(getResponse, Stock(void));
 };
 
 // Unit test framework setup
@@ -87,15 +89,14 @@ TEST_F(InteractiveBrokerTest, Exception) {
 TEST_F(InteractiveBrokerTest, UpdateTicker) {
   EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
-  
   EXPECT_CALL(*wrapper, getCurrentPrice(ticker)).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
-  
-  message.request = Requests::UPDATE;
+  EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(false));
 
-  ib->connectionManager();
+  message.request = Requests::UPDATE;
   ib->addToQueue(message);
-  Sleep(50);
+  ib->connectionManager();
+  Sleep(5);
 }
 
 /*
@@ -107,6 +108,7 @@ TEST_F(InteractiveBrokerTest, MarketOrder) {
   EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
+  EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(false));
 
   message.request = Requests::MARKET;
   EXPECT_CALL(*wrapper, orderMarket(message.ticker, buy, message.quantity)).Times(1);
@@ -114,7 +116,7 @@ TEST_F(InteractiveBrokerTest, MarketOrder) {
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(50);
+  Sleep(5);
 }
 
 /*
@@ -126,13 +128,14 @@ TEST_F(InteractiveBrokerTest, LimitOrder) {
   EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
+  EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(false));
 
   message.request = Requests::LIMIT;
   EXPECT_CALL(*wrapper, orderLimit(message.ticker, buy, message.quantity, message.price)).Times(1);
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(50);
+  Sleep(5);
 }
 
 /*
@@ -144,6 +147,7 @@ TEST_F(InteractiveBrokerTest, StopOrder) {
   EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
   EXPECT_CALL(*wrapper, disconnect()).Times(1);
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
+  EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(false));
 
   message.request = Requests::STOP;
   message.purchase = false;
@@ -151,5 +155,23 @@ TEST_F(InteractiveBrokerTest, StopOrder) {
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(50);
+  Sleep(5);
+}
+
+/*
+  Test:         Broker Response
+  Description:
+    Capture a formatted response from the Broker API
+*/
+TEST_F(InteractiveBrokerTest, BrokerResponse) {
+  EXPECT_CALL(*wrapper, connect()).Times(2).WillRepeatedly(::testing::Return(true));
+  EXPECT_CALL(*wrapper, disconnect()).Times(1);
+  EXPECT_CALL(*wrapper, processMessages()).Times(1);
+  EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(true));
+
+  Stock out;
+  EXPECT_CALL(*wrapper, getResponse()).Times(1).WillOnce(::testing::Return(out));
+
+  ib->connectionManager();
+  Sleep(5);
 }
