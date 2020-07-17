@@ -8,8 +8,11 @@
 name: C++ Development
 
 # Triggers
-# Run pipeline on all merges to master
+# Run pipeline on all merges & updates to master
 on:
+  push:
+    branches:
+    - master
   pull_request:
     branches:
     - master
@@ -28,7 +31,7 @@ jobs:
       working-directory: ./trader
       run: |
         cmake .
-        cmake --build .
+        cmake --build . --config Debug
         
     # Execute
     - name: Run Debug
