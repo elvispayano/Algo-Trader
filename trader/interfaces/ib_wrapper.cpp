@@ -469,6 +469,13 @@ void IBWrapper::clearContract(void) {
   contractRequest.symbol = "";
 }
 
+/*
+  Function:     getResponse
+  Inputs:       None (void)
+
+  Description:
+    Capture and remove the first message recorded in the queue
+*/
 Stock IBWrapper::getResponse(void) {
   Stock response = responseMessage.front();
   responseMessage.pop();
@@ -484,6 +491,7 @@ void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 
 //! [tickprice]
 void IBWrapper::tickPrice(TickerId tickerId, TickType field, double price, const TickAttrib& attribs) {
+  // Check that Ticker ID is still in update queue
   if (updateMap.find(tickerId) == updateMap.end())
     return;
 
@@ -526,9 +534,12 @@ void IBWrapper::tickPrice(TickerId tickerId, TickType field, double price, const
     printf("%s Ticker Price: %f", updateMap[tickerId].c_str(), price);
   }
 
+  // Update response queue and clear stock capture variable
   if (data.isComplete()) {
     responseMessage.push(data);
     data.reset();
+
+    // Remove Ticker ID from update queue
     updateMap.erase(updateMap.find(tickerId));
   }
 }

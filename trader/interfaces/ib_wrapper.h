@@ -152,8 +152,6 @@ private:
 
   Contract contractRequest;
   Order    orderRequest;
-
-  Stock placeholder;
   
   std::queue<Stock> responseMessage;
   std::map<int, std::string> updateMap;
