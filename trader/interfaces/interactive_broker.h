@@ -46,6 +46,10 @@ public:
   void disconnect(void) override;
   void connectionManager(void);
 
+  // Read Response
+  bool responseReady(void);
+  void getResponse(Stock&);
+
   void updateTicker(std::string ticker) override;
   void addToQueue(OrderConfig message);
 
@@ -60,7 +64,9 @@ private:
   bool frame50;
   
   std::queue<OrderConfig> messages;
+  std::queue<Stock>       response;
   std::mutex              reqMtx;
+  std::mutex              resMtx;
   std::thread*            tProcess;
 };
 

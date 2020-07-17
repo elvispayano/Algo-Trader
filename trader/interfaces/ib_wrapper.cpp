@@ -46,7 +46,7 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   clientID(clientID)
 {
   listening = false;
-  validID = 0;
+  validID = 1;
 
   contractRequest.exchange = "SMART";
   contractRequest.secType = "STK";
@@ -56,8 +56,9 @@ IBWrapper::IBWrapper(std::string host, int port, int clientID) :
   
   clearOrder();
 
-  responseMap.empty();
   updateMap.empty();
+
+  data.reset();
 }
 
 /*
@@ -147,8 +148,6 @@ void IBWrapper::getCurrentPrice(std::string ticker) {
 
   updateMap[validID] = ticker;
   pClient->reqMktData(validID++, contractRequest, "221", false, false, NULL);
-  //pClient->reqTickByTickData(2, contract, "Last", 1, true);
-  //pClient->cancelTickByTickData(2);
 }
 
 /*
@@ -470,6 +469,12 @@ void IBWrapper::clearContract(void) {
   contractRequest.symbol = "";
 }
 
+Stock IBWrapper::getResponse(void) {
+  Stock response = responseMessage.front();
+  responseMessage.pop();
+  return response;
+}
+
 //! [error]
 void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 {
@@ -479,42 +484,52 @@ void IBWrapper::error(int id, int errorCode, const std::string& errorString)
 
 //! [tickprice]
 void IBWrapper::tickPrice(TickerId tickerId, TickType field, double price, const TickAttrib& attribs) {
+  if (updateMap.find(tickerId) == updateMap.end())
+    return;
+
+  data.setTicker(updateMap[tickerId]);
 
   switch (field) {
   case DELAYED_HIGH:
     data.setHigh(price);
-    printf("%s Delayed High Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed High Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_LOW:
     data.setLow(price);
-    printf("%s Delayed Low Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Low Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_OPEN:
-    printf("%s Delayed Open Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Open Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_CLOSE:
-    printf("%s Delayed Close Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Close Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_BID:
     data.setBid(price);
-    printf("%s Delayed Bid Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Bid Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_ASK:
     data.setAsk(price);
-    printf("%s Delayed Ask Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Ask Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   case DELAYED_LAST:
-    printf("%s Delayed Last Price: %f\n", updateMap[tickerId],price);
+    printf("%s Delayed Last Price: %f\n", updateMap[tickerId].c_str(), price);
     break;
 
   default:
-    printf("%s Ticker Price: %f", updateMap[tickerId],price);
+    printf("%s Ticker Price: %f", updateMap[tickerId].c_str(), price);
+  }
+
+  if (data.isComplete()) {
+    responseMessage.push(data);
+    data.reset();
+    updateMap.erase(updateMap.find(tickerId));
   }
 }
 //! [tickprice]

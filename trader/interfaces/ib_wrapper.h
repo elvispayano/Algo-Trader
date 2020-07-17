@@ -20,6 +20,7 @@
 
 // Standard Includes
 #include <map>
+#include <queue>
 #include <string>
 
 // Interactive Broker Includes
@@ -132,6 +133,8 @@ public:
   virtual bool connect(void);
   virtual void disconnect(void);
   bool isConnected(void) const;
+  virtual bool responseReady(void) { return !responseMessage.empty(); }
+  virtual Stock getResponse(void);
 
   virtual void getCurrentPrice(std::string ticker);
   virtual void orderMarket(std::string ticker, std::string action, double quantity);
@@ -149,7 +152,10 @@ private:
 
   Contract contractRequest;
   Order    orderRequest;
-  std::map<int, Stock> responseMap;
+
+  Stock placeholder;
+  
+  std::queue<Stock> responseMessage;
   std::map<int, std::string> updateMap;
 
 protected:

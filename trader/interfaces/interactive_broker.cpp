@@ -167,6 +167,13 @@ void InteractiveBroker::process(void) {
 */
 void InteractiveBroker::recvResponse(void) {
   ib->processMessages();
+
+  if (!ib->responseReady())
+    return;
+
+  resMtx.lock();
+  response.push(ib->getResponse());
+  resMtx.unlock();
 }
 
 /*
@@ -221,4 +228,36 @@ void InteractiveBroker::addToQueue(OrderConfig message) {
   reqMtx.lock();
   messages.push(message);
   reqMtx.unlock();
+}
+
+/*
+  Functions:    checkResponse
+  Inputs:       None (void)
+  Outputs:      messageReady (bool)
+
+  Description:
+    Check broker queue to see if any responses are ready to be read
+*/
+bool InteractiveBroker::responseReady(void) {
+  return response.empty();
+}
+
+/*
+  Functions:    getResponse
+  Inputs:       None (void)
+
+  Description:
+    Get the latest updated ticker values prepared by the Interactive
+    Broker wrapper
+*/
+void InteractiveBroker::getResponse(Stock& output) {
+  resMtx.lock();
+  if (response.empty()) {
+    resMtx.unlock();
+    return;
+  }
+  
+  output = response.front();
+  response.pop();
+  resMtx.unlock();
 }
