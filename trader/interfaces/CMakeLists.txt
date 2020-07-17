@@ -29,9 +29,14 @@ set(SRC
   "database_base.cpp"
 )
 
+# Required Packages
+set(DATABASE_FOUND FALSE)
+set(BROKER_FOUND FALSE)
+
 # Postgres Definition
 find_package (PostgreSQL REQUIRED)
 if(${PostgreSQL_FOUND})
+  set(DATABASE_FOUND TRUE)
   set(HEADERS ${HEADERS} "postgres.h")
   set(SRC ${SRC} "postgres.cpp")
 endif()
@@ -39,6 +44,7 @@ endif()
 # Interactive Broker Definitions
 set(IB_CPP_DIR "C:\\TWS API\\source\\CppClient")
 if(EXISTS ${IB_CPP_DIR})
+  set(BROKER_FOUND TRUE)
   set(HEADERS ${HEADERS} "ib_wrapper.h" "interactive_broker.h")
   set(SRC ${SRC} "ib_wrapper.cpp" "interactive_broker.cpp")
   set(IB_INCLUDE_DIR "C:\\TWS API\\source\\CppClient\\client")
@@ -68,6 +74,14 @@ set_target_properties(interfaces PROPERTIES LINKER_LANGUAGE CXX)
 # Link library dependencies
 target_link_libraries(interfaces PRIVATE utilities)
 
+# Library Check
+if(NOT DATABASE_FOUND)
+  message(FATAL_ERROR "Error: Database library not found")
+endif()
+if(NOT BROKER_FOUND)
+  message(FATAL_ERROR "Error: Broker library not found")
+endif()
+
 # PostgreSQL
 if(${PostgreSQL_FOUND})
   target_include_directories(interfaces PUBLIC "${PostgreSQL_INCLUDE_DIR}")
@@ -76,6 +90,14 @@ endif()
 
 # Interactive Broker
 if(EXISTS ${IB_CPP_DIR})
+  add_custom_command( TARGET interfaces PRE_BUILD
+    COMMAND "${CMAKE_COMMAND} ."
+    WORKING_DIRECTORY ${IB_CPP_DIR}
+  )
+  add_custom_command( TARGET interfaces PRE_BUILD
+    COMMAND "${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}"
+    WORKING_DIRECTORY ${IB_CPP_DIR}
+  )
   target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
   target_link_libraries(interfaces PRIVATE "${IB_LIB}")
 endif()
