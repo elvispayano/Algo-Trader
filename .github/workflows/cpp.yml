@@ -8,8 +8,12 @@
 name: C++ Development
 
 # Triggers
-# Run pipeline on all merges to master
+# Run pipeline on all merges & updates to master
 on:
+  push:
+    branches:
+    - feature/build-update #TODO: Delete
+    - master
   pull_request:
     branches:
     - master
