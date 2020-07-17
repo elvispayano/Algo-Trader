@@ -63,7 +63,6 @@ add_library(interfaces ${HEADERS} ${SRC})
 
 # Provide dependents with header include directory
 target_include_directories(interfaces PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
 
 # Configure library properties
 set_target_properties(interfaces PROPERTIES LINKER_LANGUAGE CXX)
@@ -93,5 +92,3 @@ if(EXISTS ${IB_CPP_DIR})
   target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
   target_link_libraries(interfaces PRIVATE "${IB_LIB}")
 endif()
-
-target_link_libraries(interfaces PRIVATE "${IB_LIB}")
