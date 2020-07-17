@@ -88,17 +88,6 @@ void InteractiveBroker::disconnect(void) {
 }
 
 /*
-  Function:     updateTicker
-  Inputs:       ticker (string)
-
-  Description:
-    Request latest values for the provided ticker
-*/
-void InteractiveBroker::updateTicker(std::string ticker) {
-  ib->getCurrentPrice(ticker);
-}
-
-/*
   Function:     connectionManager
   Inputs:       None (void)
 

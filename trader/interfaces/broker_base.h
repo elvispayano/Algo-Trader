@@ -17,6 +17,9 @@
 #ifndef BROKER_BASE_H
 #define BROKER_BASE_H
 
+// Utility Includes
+#include "broker_types.h"
+
 // Standard Includes
 #include <string>
 
@@ -26,10 +29,14 @@ public:
   ~BrokerBase(void) {}; // Destructor
 
   // Connection management
-  virtual bool connect(void) = 0;
-  virtual void disconnect(void) = 0;
+  virtual void connectionManager(void) = 0;
 
-  virtual void updateTicker(std::string ticker) = 0;
+  // Request Interface
+  virtual void addToQueue(OrderConfig message) = 0;
+
+  // Response Interface
+  virtual bool responseReady(void) = 0;
+  virtual void getResponse(Stock&) = 0;
 };
 
 #endif /* BROKER_BASE_H */

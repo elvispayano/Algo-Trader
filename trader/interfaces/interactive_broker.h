@@ -42,18 +42,21 @@ public:
   ~InteractiveBroker(void);
 
   // Connection management
-  bool connect(void) override;
-  void disconnect(void) override;
-  void connectionManager(void);
+  void connectionManager(void) override;
 
-  // Read Response
-  bool responseReady(void);
-  void getResponse(Stock&);
+  // Response Interface
+  bool responseReady(void) override;
+  void getResponse(Stock&) override;
 
-  void updateTicker(std::string ticker) override;
-  void addToQueue(OrderConfig message);
+  // Request Interface
+  void addToQueue(OrderConfig message) override;
 
 private:
+  // Connection Management
+  bool connect(void);
+  void disconnect(void);
+
+  // Response/Request Interface
   void sendRequest(void);
   void recvResponse(void);
   void process(void);
