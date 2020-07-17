@@ -6,50 +6,76 @@
 #
 # Library Dependencies:
 # - Utilities
+# - PostgreSQL
+# - Interactive Broker (TWS API)
 #
 # Author: Elvis Payano
 
 # CMake requirements
 cmake_minimum_required(VERSION 3.8)
 
-find_package (PostgreSQL REQUIRED)
-
-# TWS API Definitions
-set(IB_INCLUDE_DIR "C:\\TWS API\\source\\CppClient\\client")
-set(IB_LIB
-  "C:\\TWS API\\source\\CppClient\\lib\\TwsSocketClient.lib"
-  "C:\\TWS API\\source\\CppClient\\Debug\\IB.lib"
-)
+#----------------------------------------------------------------------
+# Configure Project Source/Header Files
+#----------------------------------------------------------------------
 
 # Library header files
 set(HEADERS
   "broker_base.h"
   "database_base.h"
-  "ib_wrapper.h"
-  "interactive_broker.h"
-  "postgres.h"
 )
 
 # Library source files
 set(SRC
   "database_base.cpp"
-  "ib_wrapper.cpp"
-  "interactive_broker.cpp"
-  "postgres.cpp"
 )
+
+# Postgres Definition
+find_package (PostgreSQL REQUIRED)
+if(${PostgreSQL_FOUND})
+  set(HEADERS ${HEADERS} "postgres.h")
+  set(SRC ${SRC} "postgres.cpp")
+endif()
+
+# Interactive Broker Definitions
+set(IB_CPP_DIR "C:\\TWS API\\source\\CppClient")
+if(EXISTS ${IB_CPP_DIR})
+  set(HEADERS ${HEADERS} "ib_wrapper.h" "interactive_broker.h")
+  set(SRC ${SRC} "ib_wrapper.cpp" "interactive_broker.cpp")
+  set(IB_INCLUDE_DIR "C:\\TWS API\\source\\CppClient\\client")
+  set(IB_LIB
+    "C:\\TWS API\\source\\CppClient\\lib\\TwsSocketClient.lib"
+    "C:\\TWS API\\source\\CppClient\\${CMAKE_BUILD_TYPE}\\IB.lib"
+  )
+endif()
+
+#----------------------------------------------------------------------
+# Configure Project Interface Settings
+#----------------------------------------------------------------------
 
 # Define library requirements
 add_library(interfaces ${HEADERS} ${SRC})
 
 # Provide dependents with header include directory
 target_include_directories(interfaces PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(interfaces PUBLIC "${PostgreSQL_INCLUDE_DIR}")
-target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
 
 # Configure library properties
 set_target_properties(interfaces PROPERTIES LINKER_LANGUAGE CXX)
 
+#----------------------------------------------------------------------
+# Link Libraries
+#----------------------------------------------------------------------
+
 # Link library dependencies
 target_link_libraries(interfaces PRIVATE utilities)
-target_link_libraries(interfaces PRIVATE "${PostgreSQL_LIBRARY}")
-target_link_libraries(interfaces PRIVATE "${IB_LIB}")
+
+# PostgreSQL
+if(${PostgreSQL_FOUND})
+  target_include_directories(interfaces PUBLIC "${PostgreSQL_INCLUDE_DIR}")
+  target_link_libraries(interfaces PRIVATE "${PostgreSQL_LIBRARY}")
+endif()
+
+# Interactive Broker
+if(EXISTS ${IB_CPP_DIR})
+  target_include_directories(interfaces PUBLIC "${IB_INCLUDE_DIR}")
+  target_link_libraries(interfaces PRIVATE "${IB_LIB}")
+endif()
