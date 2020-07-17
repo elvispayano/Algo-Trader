@@ -12,7 +12,6 @@ name: C++ Development
 on:
   push:
     branches:
-    - feature/build-update #TODO: Delete
     - master
   pull_request:
     branches:
@@ -32,7 +31,7 @@ jobs:
       working-directory: ./trader
       run: |
         cmake .
-        cmake --build .
+        cmake --build . --config Debug
         
     # Execute
     - name: Run Debug
