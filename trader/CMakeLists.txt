@@ -30,6 +30,3 @@ target_link_libraries(${PROJECT_NAME} PRIVATE main)
 target_link_libraries(${PROJECT_NAME} PRIVATE interfaces)
 target_link_libraries(${PROJECT_NAME} PRIVATE neuralnetwork)
 target_link_libraries(${PROJECT_NAME} PRIVATE tests)
-
-# Conditional definitions
-add_compile_definitions("DEBUG")
