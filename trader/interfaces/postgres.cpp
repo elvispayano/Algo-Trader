@@ -59,7 +59,7 @@ bool Postgres::connect(void) {
   int counter = 0;
   while (counter < 3) {
     // Attemp connection
-    connection = PQsetdbLogin(host.c_str(), port.c_str(), "", "", "dbname = postgres", "postgres", "password");
+    connection = PQsetdbLogin(host.c_str(), port.c_str(), opt.c_str(), tty.c_str(), db.c_str(), user.c_str(), pass.c_str());
 
     // Check connection status
     if (PQstatus(connection) == ConnStatusType::CONNECTION_OK)
@@ -252,6 +252,36 @@ int Postgres::getIndex(std::string ticker, int layerNum) {
 }
 
 /*
+  Function:     getActivation
+  Inputs:       ticker (String), layerNum (int)
+
+  Description:
+  SQL request for specific layer activation function type
+*/
+ActivationTypes Postgres::getActivation(std::string ticker, int layerNum) {
+  std::string valueStr = execFunc("layer_activation", ticker.c_str(), layerNum);
+  int value = toInt(valueStr);
+  if (value >= static_cast<int>(ActivationTypes::UNKNOWN) || valueStr.empty())
+    return ActivationTypes::UNKNOWN;
+  return static_cast<ActivationTypes>(value);
+}
+
+/*
+  Function:     getLayerType
+  Inputs:       ticker (String), layerNum (int)
+
+  Description:
+  SQL request for specific layer type
+*/
+LayerTypes Postgres::getLayerType(std::string ticker, int layerNum) {
+  std::string valueStr = execFunc("layer_type", ticker.c_str(), layerNum);
+  int value = toInt(valueStr);
+  if (value >= static_cast<int>(LayerTypes::UNKNOWN) || valueStr.empty())
+    return LayerTypes::UNKNOWN;
+  return static_cast<LayerTypes>(value);
+}
+
+/*
   Function:     getLayer
   Inputs:       ticker (string), layerNum (int)
 
@@ -261,7 +291,12 @@ int Postgres::getIndex(std::string ticker, int layerNum) {
 */
 LayerConfiguration Postgres::getLayer(std::string ticker, unsigned int layerNum) {
   LayerConfiguration layer;
-
-
+  layer.Activation = getActivation(ticker, layerNum);
+  layer.Layer = getLayerType(ticker, layerNum);
+  
+  layer.layerHeight = getNodes(ticker, layerNum);
+  layer.layerWidth  = getInputs(ticker, layerNum);
+  layer.weight.resize(layer.layerHeight, layer.layerWidth, 0.0);
+  layer.bias.resize(layer.layerHeight, 1, 0.0);
   return layer;
 }

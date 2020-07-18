@@ -46,6 +46,9 @@ InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
 */
 InteractiveBroker::~InteractiveBroker(void) {
   disconnect();
+  tProcess->join();
+  if (tProcess)
+    delete tProcess;
 }
 
 /*
@@ -83,8 +86,6 @@ void InteractiveBroker::disconnect(void) {
     disconnectTrigger = true;
     isConnected = false;
   }
-  if (tProcess)
-    tProcess->join();
 }
 
 /*
