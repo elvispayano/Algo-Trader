@@ -247,16 +247,16 @@ int Postgres::getNodes(std::string ticker, int layerNum) {
     weight and bias values within the database
 */
 int Postgres::getIndex(std::string ticker, int layerNum) {
-  std::string valueStr = execFunc("layer_index", ticker.c_str(), layerNum);
+  std::string valueStr = execFunc("layer_ind", ticker.c_str(), layerNum);
   return toInt(valueStr);
 }
 
 /*
   Function:     getActivation
-  Inputs:       ticker (String), layerNum (int)
+  Inputs:       ticker (string), layerNum (int)
 
   Description:
-  SQL request for specific layer activation function type
+    SQL request for specific layer activation function type
 */
 ActivationTypes Postgres::getActivation(std::string ticker, int layerNum) {
   std::string valueStr = execFunc("layer_activation", ticker.c_str(), layerNum);
@@ -268,10 +268,10 @@ ActivationTypes Postgres::getActivation(std::string ticker, int layerNum) {
 
 /*
   Function:     getLayerType
-  Inputs:       ticker (String), layerNum (int)
+  Inputs:       ticker (string), layerNum (int)
 
   Description:
-  SQL request for specific layer type
+    SQL request for specific layer type
 */
 LayerTypes Postgres::getLayerType(std::string ticker, int layerNum) {
   std::string valueStr = execFunc("layer_type", ticker.c_str(), layerNum);
@@ -279,6 +279,18 @@ LayerTypes Postgres::getLayerType(std::string ticker, int layerNum) {
   if (value >= static_cast<int>(LayerTypes::UNKNOWN) || valueStr.empty())
     return LayerTypes::UNKNOWN;
   return static_cast<LayerTypes>(value);
+}
+
+/*
+  Function:     getWeightBias
+  Inputs:       ticker (string), index (int)
+
+  Description:
+    SQL request for weight and bias values
+*/
+double Postgres::getWeightBias(std::string ticker, int index) {
+  std::string valueStr = execFunc("get_wb", ticker.c_str(), index);
+  return toFloat(valueStr);
 }
 
 /*
@@ -298,5 +310,15 @@ LayerConfiguration Postgres::getLayer(std::string ticker, unsigned int layerNum)
   layer.layerWidth  = getInputs(ticker, layerNum);
   layer.weight.resize(layer.layerHeight, layer.layerWidth, 0.0);
   layer.bias.resize(layer.layerHeight, 1, 0.0);
+
+  int index = getIndex(ticker, layerNum);
+  for (size_t col = 0; col < layer.layerWidth; ++col) {
+    for (size_t row = 0; row < layer.layerHeight; ++row) {
+      layer.weight(row, col) = getWeightBias(ticker, index++);
+    }
+  }
+  for (size_t row = 0; row < layer.layerHeight; ++row)
+    layer.bias(row, 0) = getWeightBias(ticker, index++);
+
   return layer;
 }
