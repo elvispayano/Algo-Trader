@@ -16,10 +16,15 @@
 
 // Forward Declaration
 class BrokerBase;
+class IBWrapper;
 class DatabaseBase;
 class NeuralNetwork;
 
 // Object Creation
 DatabaseBase* database;
-BrokerBase* broker;
+BrokerBase*   broker;
+IBWrapper*    wrapper;
 std::vector<NeuralNetwork*> networks;
+
+void Initialize(void);
+void Finalize(void);
