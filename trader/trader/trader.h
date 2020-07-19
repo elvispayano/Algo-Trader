@@ -22,13 +22,14 @@
 #include <vector>
 
 // Forward Declarations
-class NeuralNetwork;
+class BrokerBase;
 class DatabaseBase;
+class NeuralNetwork;
 
 class Trader {
 public:
   // Constructor
-  Trader(DatabaseBase* dbIn);
+  Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*> netIn);
 
   // Destructor
   ~Trader(void);
@@ -42,6 +43,7 @@ public:
   std::vector<NeuralNetwork*> getNetworks(void) { return networks; }
 
 private:
+  BrokerBase*   broker;
   DatabaseBase* database;
   std::vector<NeuralNetwork*> networks;
 };

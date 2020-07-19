@@ -19,6 +19,7 @@
 
 // Utility Includes
 #include "broker_types.h"
+#include "stock.h"
 
 // Standard Includes
 #include <string>

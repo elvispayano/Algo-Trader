@@ -43,40 +43,40 @@ private:
 };
 
 // Unit Test Framework Setup
-class TraderTest : public ::testing::Test {
-protected:
-  // Ensure each test has a properly mocked database connection
-  void SetUp(void) override {
-    db = new MockTraderDB;
-    trader = new Trader(db);
-  }
-
-  // Memory Cleanup
-  void TearDown(void) override {
-    if (trader)
-      delete trader;
-
-    if (db)
-      delete db;
-  }
-
-public:
-  MockTraderDB* db;
-  Trader* trader;
-};
-
-/*
-  Test:         Network Count
-  Description:
-    Ensure all networks are created
-*/
-TEST_F(TraderTest, NetworkCount) {
-  EXPECT_CALL(*db, getNetworkCount()).Times(2).WillRepeatedly(::testing::Return(1));
-  EXPECT_CALL(*db, getNetwork(1)).Times(1).WillOnce(::testing::Return("XYZ"));
-  EXPECT_CALL(*db, getLayerCount("XYZ")).Times(1).WillOnce(::testing::Return(0));
-  
-  trader->setup();
-  std::vector<NeuralNetwork*> net = trader->getNetworks();
-  
-  EXPECT_EQ(1, net.size());
-}
+//class TraderTest : public ::testing::Test {
+//protected:
+//  // Ensure each test has a properly mocked database connection
+//  void SetUp(void) override {
+//    db = new MockTraderDB;
+//    trader = new Trader(db);
+//  }
+//
+//  // Memory Cleanup
+//  void TearDown(void) override {
+//    if (trader)
+//      delete trader;
+//
+//    if (db)
+//      delete db;
+//  }
+//
+//public:
+//  MockTraderDB* db;
+//  Trader* trader;
+//};
+//
+///*
+//  Test:         Network Count
+//  Description:
+//    Ensure all networks are created
+//*/
+//TEST_F(TraderTest, NetworkCount) {
+//  EXPECT_CALL(*db, getNetworkCount()).Times(2).WillRepeatedly(::testing::Return(1));
+//  EXPECT_CALL(*db, getNetwork(1)).Times(1).WillOnce(::testing::Return("XYZ"));
+//  EXPECT_CALL(*db, getLayerCount("XYZ")).Times(1).WillOnce(::testing::Return(0));
+//  
+//  trader->setup();
+//  std::vector<NeuralNetwork*> net = trader->getNetworks();
+//  
+//  EXPECT_EQ(1, net.size());
+//}

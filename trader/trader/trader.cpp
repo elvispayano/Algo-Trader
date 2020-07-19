@@ -19,6 +19,7 @@
 #include "trader.h"
 
 // Interface Includes
+#include "broker_base.h"
 #include "database_base.h"
 
 // Neural Network Includes
@@ -31,8 +32,11 @@
   Description:
     Initialize the trader and PG objects
 */
-Trader::Trader(DatabaseBase* dbIn): database(dbIn) {
+Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*> netIn) :
+  broker(brokerIn), database(dbIn)
+{
   networks.clear();
+  networks = netIn;
 }
 
 /*

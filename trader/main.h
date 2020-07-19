@@ -19,12 +19,14 @@ class BrokerBase;
 class IBWrapper;
 class DatabaseBase;
 class NeuralNetwork;
+class Trader;
 
 // Object Creation
 DatabaseBase* database;
 BrokerBase*   broker;
 IBWrapper*    wrapper;
 std::vector<NeuralNetwork*> networks;
+Trader*       trader;
 
 void Initialize(void);
 void Finalize(void);
