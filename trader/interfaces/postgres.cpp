@@ -59,7 +59,7 @@ bool Postgres::connect(void) {
   int counter = 0;
   while (counter < 3) {
     // Attemp connection
-    connection = PQsetdbLogin(host.c_str(), port.c_str(), "", "", "dbname = postgres", "postgres", "password");
+    connection = PQsetdbLogin(host.c_str(), port.c_str(), opt.c_str(), tty.c_str(), db.c_str(), user.c_str(), pass.c_str());
 
     // Check connection status
     if (PQstatus(connection) == ConnStatusType::CONNECTION_OK)
@@ -247,8 +247,50 @@ int Postgres::getNodes(std::string ticker, int layerNum) {
     weight and bias values within the database
 */
 int Postgres::getIndex(std::string ticker, int layerNum) {
-  std::string valueStr = execFunc("layer_index", ticker.c_str(), layerNum);
+  std::string valueStr = execFunc("layer_ind", ticker.c_str(), layerNum);
   return toInt(valueStr);
+}
+
+/*
+  Function:     getActivation
+  Inputs:       ticker (string), layerNum (int)
+
+  Description:
+    SQL request for specific layer activation function type
+*/
+ActivationTypes Postgres::getActivation(std::string ticker, int layerNum) {
+  std::string valueStr = execFunc("layer_activation", ticker.c_str(), layerNum);
+  int value = toInt(valueStr);
+  if (value >= static_cast<int>(ActivationTypes::UNKNOWN) || valueStr.empty())
+    return ActivationTypes::UNKNOWN;
+  return static_cast<ActivationTypes>(value);
+}
+
+/*
+  Function:     getLayerType
+  Inputs:       ticker (string), layerNum (int)
+
+  Description:
+    SQL request for specific layer type
+*/
+LayerTypes Postgres::getLayerType(std::string ticker, int layerNum) {
+  std::string valueStr = execFunc("layer_type", ticker.c_str(), layerNum);
+  int value = toInt(valueStr);
+  if (value >= static_cast<int>(LayerTypes::UNKNOWN) || valueStr.empty())
+    return LayerTypes::UNKNOWN;
+  return static_cast<LayerTypes>(value);
+}
+
+/*
+  Function:     getWeightBias
+  Inputs:       ticker (string), index (int)
+
+  Description:
+    SQL request for weight and bias values
+*/
+double Postgres::getWeightBias(std::string ticker, int index) {
+  std::string valueStr = execFunc("get_wb", ticker.c_str(), index);
+  return toFloat(valueStr);
 }
 
 /*
@@ -261,7 +303,22 @@ int Postgres::getIndex(std::string ticker, int layerNum) {
 */
 LayerConfiguration Postgres::getLayer(std::string ticker, unsigned int layerNum) {
   LayerConfiguration layer;
+  layer.Activation = getActivation(ticker, layerNum);
+  layer.Layer = getLayerType(ticker, layerNum);
+  
+  layer.layerHeight = getNodes(ticker, layerNum);
+  layer.layerWidth  = getInputs(ticker, layerNum);
+  layer.weight.resize(layer.layerHeight, layer.layerWidth, 0.0);
+  layer.bias.resize(layer.layerHeight, 1, 0.0);
 
+  int index = getIndex(ticker, layerNum);
+  for (size_t col = 0; col < layer.layerWidth; ++col) {
+    for (size_t row = 0; row < layer.layerHeight; ++row) {
+      layer.weight(row, col) = getWeightBias(ticker, index++);
+    }
+  }
+  for (size_t row = 0; row < layer.layerHeight; ++row)
+    layer.bias(row, 0) = getWeightBias(ticker, index++);
 
   return layer;
 }

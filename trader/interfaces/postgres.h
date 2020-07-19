@@ -45,6 +45,9 @@ private:
   int getInputs(std::string ticker, int layerNum);
   int getNodes(std::string ticker, int layerNum);
   int getIndex(std::string ticker, int layerNum);
+  double getWeightBias(std::string ticker, int index);
+  ActivationTypes getActivation(std::string ticker, int layerNum);
+  LayerTypes getLayerType(std::string ticker, int layerNum);
 
   void clearQuery(void);
 

@@ -60,9 +60,10 @@ NeuralNetwork::~NeuralNetwork(void) {
     the implemented activation, and the size of the layer.
 */
 void NeuralNetwork::addLayer(LayerConfiguration configuration) {
+  LayerBase* newLayer;
   switch (configuration.Layer) {
   case LayerTypes::FULLYCONNECTED:
-    layers.push_back(new FullyConnectedLayer);
+    newLayer = new FullyConnectedLayer();
     break;
 
   default: 
@@ -74,16 +75,22 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
   }
   
   // Layer configuration
-  layers.back()->setTF(configuration.Activation);
-  layers.back()->setInputCount(configuration.layerHeight);
-  layers.back()->setNodeCount(configuration.layerWidth);
+  newLayer->setTF(configuration.Activation);
+  newLayer->setInputCount(configuration.layerWidth);
+  newLayer->setNodeCount(configuration.layerHeight);
 
   // Process new configuration
-  layers.back()->reconfigure();
+  newLayer->reconfigure();
 
   // Apply weights & biases
-  layers.back()->setWeight(configuration.weight);
-  layers.back()->setBias(configuration.bias);
+  newLayer->setWeight(configuration.weight);
+  newLayer->setBias(configuration.bias);
+
+  if (!layers.empty())
+    if (layers.back()->getNodeCount() != newLayer->getInputCount())
+      return;
+
+  layers.push_back(newLayer);
 }
 
 /*

@@ -32,18 +32,12 @@ int main(int argc, char **argv) {
 #ifdef TESTS
   // Run Google Test if in debug
   test_main(argc, argv);
+
   return 0;
 #endif
-  
+
   Initialize();
-  
-  //for (size_t it = 1; it <= database->getNetworkCount(); ++it) {
-  //  std::string ticker = database->getNetwork(it);
-  //  NeuralNetwork* x = new NeuralNetwork(ticker);
-  //  for (size_t tt = 1; tt <= database->getLayerCount(ticker); ++tt)
-  //    x->addLayer(database->getLayer(ticker, tt));
-  //}
-  
+
   Finalize();
 
   return 0;
@@ -70,6 +64,20 @@ void Initialize(void) {
   wrapper = new IBWrapper("127.0.0.1", 6550, 0);
   broker = new InteractiveBroker(wrapper);
   broker->connectionManager();
+
+  // Configure Neural Networks
+  for (size_t networkCounter = 1; networkCounter <= database->getNetworkCount(); ++networkCounter) {
+    // Get ticker for current network
+    std::string ticker = database->getNetwork(networkCounter);
+
+    // Create and configure network
+    NeuralNetwork* createdNetwork = new NeuralNetwork(ticker);
+    for (size_t layerCounter = 1; layerCounter <= database->getLayerCount(ticker); ++layerCounter)
+      createdNetwork->addLayer(database->getLayer(ticker, layerCounter));
+
+    // Add network to list
+    networks.push_back(createdNetwork);
+  }
 }
 
 /*
