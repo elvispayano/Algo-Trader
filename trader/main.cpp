@@ -19,6 +19,9 @@
 // Neural Network Includes
 #include "neural_network.h"
 
+// Trader Includes
+#include "trader.h"
+
 // Main Include
 #include "main.h"
 
@@ -78,6 +81,10 @@ void Initialize(void) {
     // Add network to list
     networks.push_back(createdNetwork);
   }
+
+  // Configure Trader
+  trader = new Trader(broker, database, networks);
+
 }
 
 /*
@@ -88,6 +95,10 @@ void Initialize(void) {
     Memory cleanup for all allocated memory
 */
 void Finalize(void) {
+
+  if (trader)
+    delete trader;
+
   if (database)
     delete database;
 
