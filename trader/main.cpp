@@ -69,8 +69,7 @@ void Initialize(void) {
     throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
     
   // Configure broker connection
-  wrapper = new IBWrapper("127.0.0.1", 6550, 0);
-  broker = new InteractiveBroker(wrapper);
+  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
   broker->connectionManager();
 
   // Configure Neural Networks
@@ -111,14 +110,15 @@ void Update(void) {
     Memory cleanup for all allocated memory
 */
 void Finalize(void) {
-  if (database)
+  if (database) {
+    database->disconnect();
     delete database;
+  }
 
-  if (broker)
+  if (broker) {
+    broker->terminateConnection();
     delete broker;
-
-  if (wrapper)
-    delete wrapper;
+  }
 
   if (trader)
     delete trader;

@@ -36,8 +36,6 @@ protected:
   void TearDown(void) override {
     if (ib)
       delete ib;
-    if (wrapper)
-      delete wrapper;
   }
 
 public:

@@ -31,6 +31,7 @@ public:
 
   // Connection management
   virtual void connectionManager(void) = 0;
+  virtual void terminateConnection(void) = 0;
 
   // Request Interface
   virtual void addToQueue(OrderConfig message) = 0;

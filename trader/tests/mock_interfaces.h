@@ -29,6 +29,7 @@ class MockDatabaseBase : public  DatabaseBase {
 // Mocked Broker Base
 class MockBrokerBase : public BrokerBase {
   MOCK_METHOD0(connectionManager, void(void));
+  MOCK_METHOD0(terminateConnection, void(void));
   MOCK_METHOD0(responseReady, bool(void));
   MOCK_METHOD1(getResponse, void(Stock&));
   MOCK_METHOD1(addToQueue, void(OrderConfig));

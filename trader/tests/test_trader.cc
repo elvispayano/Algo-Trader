@@ -35,7 +35,7 @@ protected:
 
     db = new MockDatabaseBase();
     broker = new MockBrokerBase();
-    nn = new NeuralNetwork(ticker);
+    nn = new MockNeuralNetwork(ticker);
 
     trader = new Trader(broker, db, &networks);
   }
