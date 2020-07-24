@@ -100,12 +100,11 @@ TEST_F(TraderTest, Response) {
 
   Stock response;
   response.setTicker(ticker);
-  response.setBid(0);
-  response.setAsk(0);
-  response.setLow(0);
-  response.setHigh(0);
+  response.setBid(1);
+  response.setAsk(1);
+  response.setLow(1);
+  response.setHigh(1);
   EXPECT_CALL(*broker, getResponse(ticker)).Times(1).WillOnce(::testing::Return(response));
   
-  //EXPECT_CALL(*nn, process())
   trader->perform();
 }

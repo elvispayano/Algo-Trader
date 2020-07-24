@@ -79,7 +79,7 @@ void Trader::perform(void) {
     input(3, 0) = response.getHigh();
 
     // Run inputs through network
-    dMatrix output = networks[ind]->process(input);
+    //dMatrix output = networks[ind]->process(input);
 
     // Convert inputs to broker actions
 
