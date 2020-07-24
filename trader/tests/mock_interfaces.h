@@ -1,3 +1,15 @@
+/*
+  Title:
+    Interfaces Mock Classes
+
+  Description:
+    This header contains a collection of the various mocks of classes
+    within the Interfaces library for use throughout tests
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef MOCK_INTERFACES_H
 #define MOCK_INTERFACES_H
 

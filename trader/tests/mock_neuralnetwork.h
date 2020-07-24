@@ -1,3 +1,15 @@
+/*
+  Title:
+    Neural Network Mock Classes
+
+  Description:
+    This header contains a collection of the various mocks of classes
+    within the Neural Network library for use throughout tests
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef MOCK_NEURAL_NETWORK_H
 #define MOCK_NEURAL_NETWORK_H
 

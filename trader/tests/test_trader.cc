@@ -43,18 +43,27 @@ protected:
 
   // Memory Cleanup
   void TearDown(void) override {
-    if (broker)
+    if (broker) {
       delete broker;
+      broker = 0;
+    }
 
-    if (db)
+    if (db) {
       delete db;
+      db = 0;
+    }
 
-    if (trader)
+    if (trader) {
       delete trader;
+      trader = 0;
+    }
 
-    for (size_t it = 0; it < networks.size(); ++it)
-      if (networks[it])
-        delete networks[it];
+    if (nn) {
+      delete nn;
+      nn = 0;
+    }
+
+    networks.clear();
   }
 
 public:
