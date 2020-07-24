@@ -36,10 +36,11 @@ int main(int argc, char **argv) {
   // Run Google Test if in debug
   test_main(argc, argv);
 
-  return 0;
 #endif
 
   Initialize();
+
+  Update();
 
   Finalize();
 
@@ -55,11 +56,15 @@ int main(int argc, char **argv) {
     settings
 */
 void Initialize(void) {
+  // Initial Variable Setup
+  broker   = 0;
   database = 0;
+  trader   = 0;
+
   networks.clear();
 
   // Configure database connection
-  database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
+  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
   if (!database->connect())
     throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
     
@@ -83,22 +88,29 @@ void Initialize(void) {
   }
 
   // Configure Trader
-  trader = new Trader(broker, database, networks);
+  trader = new Trader(broker, database, &networks);
 
 }
 
 /*
+  Functions:    Update
+  Inputs:       None (void)
+  
+  Description:
+    Update trader and take desired actions
+*/
+void Update(void) {
+  trader->perform();
+}
+
+/*
   Function:     Finalize
-  Inputs        None (void)
+  Inputs:       None (void)
 
   Description:
     Memory cleanup for all allocated memory
 */
 void Finalize(void) {
-
-  if (trader)
-    delete trader;
-
   if (database)
     delete database;
 
@@ -107,6 +119,9 @@ void Finalize(void) {
 
   if (wrapper)
     delete wrapper;
+
+  if (trader)
+    delete trader;
 
   for (size_t it = 0; it < networks.size(); ++it)
     if (networks[it])

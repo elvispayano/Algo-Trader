@@ -13,7 +13,11 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Project description 
-project(trader)
+project(trader VERSION 0.20.07)
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
+endif()
 
 # Project build directories
 add_subdirectory(util)

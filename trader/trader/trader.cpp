@@ -32,11 +32,10 @@
   Description:
     Initialize the trader and PG objects
 */
-Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*> netIn) :
-  broker(brokerIn), database(dbIn)
+Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*>* netIn) :
+  broker(brokerIn), database(dbIn), networks(*netIn)
 {
-  networks.clear();
-  networks = netIn;
+  
 }
 
 /*
@@ -47,33 +46,7 @@ Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwo
     Ensure proper memory cleanup
 */
 Trader::~Trader(void) {
-  for (size_t i = 0; i < networks.size(); ++i)
-    if (networks[i]) delete networks[i];
-  networks.clear();
-}
-
-/*
-  Function:     setup
-  Inputs:       None (void)
-
-  Description:
-    Configure the trader with all the requisite neural networks
-*/
-void Trader::setup(void) {
-
-  for (size_t i = 1; i <= database->getNetworkCount(); ++i) {
-    // Create a new network
-    std::string ticker = database->getNetwork(i);
-    NeuralNetwork* net = new NeuralNetwork(ticker);
-
-    // Configure network
-    for (size_t layerNum = 1; layerNum <= database->getLayerCount(ticker); ++layerNum) {
-      net->addLayer(database->getLayer(ticker, layerNum));
-      }
-    
-    // Add network to vector
-    networks.push_back(net);
-  }
+ 
 }
 
 /*

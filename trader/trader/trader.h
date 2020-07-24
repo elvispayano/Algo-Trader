@@ -29,18 +29,13 @@ class NeuralNetwork;
 class Trader {
 public:
   // Constructor
-  Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*> netIn);
+  Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*>* netIn);
 
   // Destructor
   ~Trader(void);
 
-  // Configuration
-  void setup(void);
-
   // Trader Interface
   void perform(void);
-
-  std::vector<NeuralNetwork*> getNetworks(void) { return networks; }
 
 private:
   BrokerBase*   broker;

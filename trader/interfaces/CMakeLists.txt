@@ -50,7 +50,7 @@ if(EXISTS ${IB_CPP_DIR})
   set(IB_INCLUDE_DIR "${IB_CPP_DIR}\\client")
   set(IB_LIB
     "${IB_CPP_DIR}\\lib\\TwsSocketClient.lib"
-    "${IB_CPP_DIR}\\Debug\\IB.lib"
+    "${IB_CPP_DIR}\\${CMAKE_BUILD_TYPE}\\IB.lib"
   )
 endif()
 
