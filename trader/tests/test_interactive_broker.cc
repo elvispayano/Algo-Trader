@@ -150,9 +150,32 @@ TEST_F(InteractiveBrokerTest, BrokerResponse) {
   EXPECT_CALL(*wrapper, processMessages()).Times(1);
   EXPECT_CALL(*wrapper, responseReady()).Times(1).WillOnce(::testing::Return(true));
 
-  Stock out;
-  EXPECT_CALL(*wrapper, getResponse()).Times(1).WillOnce(::testing::Return(out));
+  Stock output1;
+  output1.setTicker(ticker);
+  output1.setBid(1);
+  output1.setAsk(1);
+  output1.setLow(1);
+  output1.setHigh(1);
 
+  EXPECT_CALL(*wrapper, getResponse()).Times(1).WillOnce(::testing::Return(output1));
   ib->connectionManager();
   Sleep(5);
+
+  EXPECT_TRUE(ib->responseReady(ticker));
+
+  Stock capture = ib->getResponse(ticker);
+  //EXPECT_STREQ(output1.getTicker(), capture.getTicker());
+  EXPECT_DOUBLE_EQ(output1.getBid(), capture.getBid());
+  EXPECT_DOUBLE_EQ(output1.getAsk(), capture.getAsk());
+  EXPECT_DOUBLE_EQ(output1.getLow(), capture.getLow());
+  EXPECT_DOUBLE_EQ(output1.getHigh(), capture.getHigh());
+
+  EXPECT_FALSE(ib->responseReady(ticker));
+
+  output1.reset();
+  capture = ib->getResponse(ticker);
+  EXPECT_DOUBLE_EQ(output1.getBid(), capture.getBid());
+  EXPECT_DOUBLE_EQ(output1.getAsk(), capture.getAsk());
+  EXPECT_DOUBLE_EQ(output1.getLow(), capture.getLow());
+  EXPECT_DOUBLE_EQ(output1.getHigh(), capture.getHigh());
 }

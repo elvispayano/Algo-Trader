@@ -37,8 +37,8 @@ public:
   virtual void addToQueue(OrderConfig message) = 0;
 
   // Response Interface
-  virtual bool responseReady(void) = 0;
-  virtual void getResponse(Stock&) = 0;
+  virtual bool responseReady(std::string) = 0;
+  virtual Stock getResponse(std::string) = 0;
 };
 
 #endif /* BROKER_BASE_H */

@@ -18,6 +18,7 @@
 
 // Mocked Database Base
 class MockDatabaseBase : public  DatabaseBase {
+public:
   MOCK_METHOD0(connect, bool(void));
   MOCK_METHOD0(disconnect, void(void));
   MOCK_METHOD0(getNetworkCount, int(void));
@@ -28,10 +29,11 @@ class MockDatabaseBase : public  DatabaseBase {
 
 // Mocked Broker Base
 class MockBrokerBase : public BrokerBase {
+public:
   MOCK_METHOD0(connectionManager, void(void));
   MOCK_METHOD0(terminateConnection, void(void));
-  MOCK_METHOD0(responseReady, bool(void));
-  MOCK_METHOD1(getResponse, void(Stock&));
+  MOCK_METHOD1(responseReady, bool(std::string));
+  MOCK_METHOD1(getResponse, Stock(std::string));
   MOCK_METHOD1(addToQueue, void(OrderConfig));
 };
 

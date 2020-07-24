@@ -60,12 +60,20 @@ void Trader::perform(void) {
 
   for (size_t ind = 0; ind < networks.size(); ++ind) {
     // Request Update
+    OrderConfig order;
+    order.request = Requests::UPDATE;
+    order.ticker = networks[ind]->getTicker();
 
+    broker->addToQueue(order);
+
+    if (!broker->responseReady(order.ticker))
+      continue;
+    
 
     // Capture Inputs (TBD)
-    dMatrix input;
+    //dMatrix input;
 
     // Run inputs through network
-    networks[ind]->process(input);
+    //networks[ind]->process(input);
   }
 }

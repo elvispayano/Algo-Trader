@@ -25,6 +25,7 @@
 #include "stock.h"
 
 // Standard Includes
+#include <map>
 #include <mutex>
 #include <queue>
 #include <string>
@@ -46,8 +47,8 @@ public:
   void terminateConnection(void) override;
 
   // Response Interface
-  bool responseReady(void) override;
-  void getResponse(Stock&) override;
+  bool responseReady(std::string) override;
+  Stock getResponse(std::string) override;
 
   // Request Interface
   void addToQueue(OrderConfig message) override;
@@ -66,10 +67,15 @@ private:
   bool disconnectTrigger;
   bool frame50;
   
-  std::queue<OrderConfig> messages;
-  std::queue<Stock>       response;
+  // Requests
   std::mutex              reqMtx;
-  std::mutex              resMtx;
+  std::queue<OrderConfig> messages;
+
+  // Responses
+  std::mutex                   resMtx;
+  std::map<std::string, Stock> response;
+
+  // Threads
   std::thread*            tProcess;
 };
 

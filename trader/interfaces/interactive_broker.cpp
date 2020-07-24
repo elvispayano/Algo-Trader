@@ -34,6 +34,8 @@ InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
   disconnectTrigger = false;
   frame50 = true;
   tProcess = 0;
+
+  messages.empty();
 }
 
 /*
@@ -168,7 +170,8 @@ void InteractiveBroker::recvResponse(void) {
     return;
 
   resMtx.lock();
-  response.push(ib->getResponse());
+  Stock output = ib->getResponse();
+  response[output.getTicker()] = output;
   resMtx.unlock();
 }
 
@@ -234,8 +237,14 @@ void InteractiveBroker::addToQueue(OrderConfig message) {
   Description:
     Check broker queue to see if any responses are ready to be read
 */
-bool InteractiveBroker::responseReady(void) {
-  return response.empty();
+bool InteractiveBroker::responseReady(std::string ticker) {
+  bool isReady = false;
+  
+  resMtx.lock();
+  isReady = response[ticker].isComplete();
+  resMtx.unlock();
+  
+  return isReady;
 }
 
 /*
@@ -246,14 +255,22 @@ bool InteractiveBroker::responseReady(void) {
     Get the latest updated ticker values prepared by the Interactive
     Broker wrapper
 */
-void InteractiveBroker::getResponse(Stock& output) {
+Stock InteractiveBroker::getResponse(std::string ticker) {
+  // Initialize & lock shared variables
+  Stock output;
   resMtx.lock();
-  if (response.empty()) {
-    resMtx.unlock();
-    return;
-  }
   
-  output = response.front();
-  response.pop();
+  // Return if no response is ready
+  if (!response[ticker].isComplete()) {
+    resMtx.unlock();
+    return output;
+  }
+
+  // Capture response & reset stored data
+  output = response[ticker];
+  response[ticker].reset();
+  
+  // Unlock shared variables
   resMtx.unlock();
+  return output;
 }

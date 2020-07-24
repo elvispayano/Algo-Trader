@@ -41,7 +41,7 @@ public:
   size_t getLayerCount(void) { return layers.size(); }
 
   // Network Identification
-  char* getTicker(void) { return (char*)ticker.c_str(); }
+  virtual std::string getTicker(void) { return ticker; }
 
   // Process Network Inputs
   virtual dMatrix process(dMatrix data);
