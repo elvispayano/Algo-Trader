@@ -11,30 +11,16 @@
 */
 
 // Interface Includes
-#include "database_base.h"
+#include "mock_interfaces.h"
 
 // Google Test Includes
 #include <gtest/gtest.h>
 
-// Creating concrete class to test abstract database base class
-class MockDatabase : public DatabaseBase {
-public:
-  bool connect(void) { return false; }
-  void disconnect(void) {}
-
-  LayerConfiguration getLayer(std::string ticker, unsigned int layerNum) override { return temp; }
-  int getNetworkCount(void) override { return 1; }
-  std::string getNetwork(size_t id) override { return "XYZ"; }
-  int getLayerCount(std::string ticker) override { return 1; }
-
-private:
-  LayerConfiguration temp;
-};
-
+// Unit test framework setup
 class DatabaseTest : public ::testing::Test {
 protected:
   void SetUp(void) override {
-    mDB = new MockDatabase();
+    mDB = new MockDatabaseBase();
   }
 
   void TearDown(void) override {
@@ -43,7 +29,7 @@ protected:
   }
 
 public:
-  MockDatabase* mDB;
+  DatabaseBase* mDB;
 };
 
 /*

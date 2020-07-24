@@ -13,70 +13,56 @@
 // Trader Includes
 #include "trader.h"
 
-// Interface Includes
-#include "database_base.h"
-
-// Google Test Includes
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+// Test Includes
+#include "mock_interfaces.h"
+#include "mock_neuralnetwork.h"
 
 // Standard Includes
 #include <vector>
-#include <string>
 
-// Forward Declaration
-struct LayerConfiguration;
-
-// Google Test Mocked Classes
-class MockTraderDB : public DatabaseBase {
-public:
-  MOCK_METHOD0(getNetworkCount, int());
-  MOCK_METHOD1(getNetwork, std::string(size_t));
-  MOCK_METHOD1(getLayerCount, int(std::string));
-
-  bool connect(void) override { return false; }
-  void disconnect(void) override {}
-  LayerConfiguration getLayer(std::string ticker, unsigned int layerNum) { return temp; }
-
-private:
-  LayerConfiguration temp;
-};
+// Google Test Includes
+#include <gtest/gtest.h>
 
 // Unit Test Framework Setup
-//class TraderTest : public ::testing::Test {
-//protected:
-//  // Ensure each test has a properly mocked database connection
-//  void SetUp(void) override {
-//    db = new MockTraderDB;
-//    trader = new Trader(db);
-//  }
-//
-//  // Memory Cleanup
-//  void TearDown(void) override {
-//    if (trader)
-//      delete trader;
-//
-//    if (db)
-//      delete db;
-//  }
-//
-//public:
-//  MockTraderDB* db;
-//  Trader* trader;
-//};
-//
-///*
-//  Test:         Network Count
-//  Description:
-//    Ensure all networks are created
-//*/
-//TEST_F(TraderTest, NetworkCount) {
-//  EXPECT_CALL(*db, getNetworkCount()).Times(2).WillRepeatedly(::testing::Return(1));
-//  EXPECT_CALL(*db, getNetwork(1)).Times(1).WillOnce(::testing::Return("XYZ"));
-//  EXPECT_CALL(*db, getLayerCount("XYZ")).Times(1).WillOnce(::testing::Return(0));
-//  
-//  trader->setup();
-//  std::vector<NeuralNetwork*> net = trader->getNetworks();
-//  
-//  EXPECT_EQ(1, net.size());
-//}
+class TraderTest : public ::testing::Test {
+protected:
+  // Ensure each test has a properly mocked database connection
+  void SetUp(void) override {
+    db     = 0;
+    broker = 0;
+    trader = 0;
+    nn     = 0;
+
+    db = new MockDatabaseBase();
+    broker = new MockBrokerBase();
+    nn = new MockNeuralNetwork(ticker);
+
+    trader = new Trader(broker, db, &networks);
+  }
+
+  // Memory Cleanup
+  void TearDown(void) override {
+    if (trader)
+      delete trader;
+
+    if (db)
+      delete db;
+
+    if (trader)
+      delete trader;
+
+    if (nn)
+      delete nn;
+  }
+
+public:
+  DatabaseBase* db;
+  BrokerBase* broker;
+  Trader* trader;
+  NeuralNetwork* nn;
+
+  std::vector<NeuralNetwork*> networks;
+
+  std::string ticker = "XYZ";
+};
+

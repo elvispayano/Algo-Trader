@@ -44,7 +44,7 @@ public:
   char* getTicker(void) { return (char*)ticker.c_str(); }
 
   // Process Network Inputs
-  dMatrix process(dMatrix data);
+  virtual dMatrix process(dMatrix data);
 
 private:
   // Layer Elements

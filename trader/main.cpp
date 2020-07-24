@@ -36,10 +36,11 @@ int main(int argc, char **argv) {
   // Run Google Test if in debug
   test_main(argc, argv);
 
-  return 0;
 #endif
 
   Initialize();
+
+  Update();
 
   Finalize();
 
@@ -55,17 +56,20 @@ int main(int argc, char **argv) {
     settings
 */
 void Initialize(void) {
+  // Initial Variable Setup
+  broker   = 0;
   database = 0;
+  trader   = 0;
+
   networks.clear();
 
   // Configure database connection
-  database = new Postgres("localhost", "5432", "", "", "dbname = postgres", "postgres", "password");
+  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
   if (!database->connect())
     throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
     
   // Configure broker connection
-  wrapper = new IBWrapper("127.0.0.1", 6550, 0);
-  broker = new InteractiveBroker(wrapper);
+  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
   broker->connectionManager();
 
   // Configure Neural Networks
@@ -83,30 +87,41 @@ void Initialize(void) {
   }
 
   // Configure Trader
-  trader = new Trader(broker, database, networks);
+  trader = new Trader(broker, database, &networks);
 
 }
 
 /*
+  Functions:    Update
+  Inputs:       None (void)
+  
+  Description:
+    Update trader and take desired actions
+*/
+void Update(void) {
+  trader->perform();
+}
+
+/*
   Function:     Finalize
-  Inputs        None (void)
+  Inputs:       None (void)
 
   Description:
     Memory cleanup for all allocated memory
 */
 void Finalize(void) {
+  if (database) {
+    database->disconnect();
+    delete database;
+  }
+
+  if (broker) {
+    broker->terminateConnection();
+    delete broker;
+  }
 
   if (trader)
     delete trader;
-
-  if (database)
-    delete database;
-
-  if (broker)
-    delete broker;
-
-  if (wrapper)
-    delete wrapper;
 
   for (size_t it = 0; it < networks.size(); ++it)
     if (networks[it])

@@ -43,6 +43,7 @@ public:
 
   // Connection management
   void connectionManager(void) override;
+  void terminateConnection(void) override;
 
   // Response Interface
   bool responseReady(void) override;
@@ -54,7 +55,6 @@ public:
 private:
   // Connection Management
   bool connect(void);
-  void disconnect(void);
 
   // Response/Request Interface
   void sendRequest(void);

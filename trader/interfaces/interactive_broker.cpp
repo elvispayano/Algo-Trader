@@ -45,11 +45,7 @@ InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
     destruction
 */
 InteractiveBroker::~InteractiveBroker(void) {
-  disconnect();
-  if (tProcess) {
-    tProcess->join();
-    delete tProcess;
-  }
+  terminateConnection();
 }
 
 /*
@@ -75,21 +71,6 @@ bool InteractiveBroker::connect(void) {
 }
 
 /*
-  Function:     disconnect
-  Inputs:       None (void)
-  
-  Description:
-    Expected procedure for safe termination of a connection to the Interactive
-    Broker API.
-*/
-void InteractiveBroker::disconnect(void) {
-  if (isConnected) {
-    disconnectTrigger = true;
-    isConnected = false;
-  }
-}
-
-/*
   Function:     connectionManager
   Inputs:       None (void)
 
@@ -103,6 +84,30 @@ void InteractiveBroker::connectionManager(void) {
     throw std::runtime_error("Connection Error: Unable to connect to Interactive Broker API");
   
   tProcess = new std::thread(std::bind(&InteractiveBroker::process, this));
+}
+
+/*
+  Function:     terminateConnection
+  Inputs:       None (void)
+
+  Description:
+    Signal connection termination
+*/
+void InteractiveBroker::terminateConnection(void) {
+  if (isConnected) {
+    disconnectTrigger = true;
+    isConnected = false;
+  }
+
+  if (tProcess) {
+    tProcess->join();
+    delete tProcess;
+  }
+
+  if (ib) {
+    delete ib;
+    ib = 0;
+  }
 }
 
 /*
