@@ -68,6 +68,27 @@ public:
   std::string ticker = "XYZ";
 };
 
+/*
+  Test:         No Response
+  Description:
+    Expected functionality when no ticker update is present
+*/
+TEST_F(TraderTest, NoResponse) {
+  EXPECT_CALL(*nn, getTicker()).Times(1).WillOnce(::testing::Return(ticker));
+
+  OrderConfig order;
+  order.request = Requests::UPDATE;
+  order.ticker = ticker;
+  EXPECT_CALL(*broker, addToQueue(::testing::Field(&OrderConfig::ticker, ticker))).Times(1);
+  EXPECT_CALL(*broker, responseReady(ticker)).Times(1).WillOnce(::testing::Return(false));
+  trader->perform();
+}
+
+/*
+  Test:         Response
+  Description:
+    Expected functionality when a ticker update is present
+*/
 TEST_F(TraderTest, Response) {
   EXPECT_CALL(*nn, getTicker()).Times(1).WillOnce(::testing::Return(ticker));
 
@@ -78,17 +99,13 @@ TEST_F(TraderTest, Response) {
   EXPECT_CALL(*broker, responseReady(ticker)).Times(1).WillOnce(::testing::Return(true));
 
   Stock response;
-  //EXPECT_CALL(*broker, getResponse(::testing::Field(&Stock::getTicker(), ticker))).Times(1);
-  trader->perform();
-}
-
-TEST_F(TraderTest, NoResponse) {
-  EXPECT_CALL(*nn, getTicker()).Times(1).WillOnce(::testing::Return(ticker));
-
-  OrderConfig order;
-  order.request = Requests::UPDATE;
-  order.ticker = ticker;
-  EXPECT_CALL(*broker, addToQueue(::testing::Field(&OrderConfig::ticker, ticker))).Times(1);
-  EXPECT_CALL(*broker, responseReady(ticker)).Times(1).WillOnce(::testing::Return(false));
+  response.setTicker(ticker);
+  response.setBid(0);
+  response.setAsk(0);
+  response.setLow(0);
+  response.setHigh(0);
+  EXPECT_CALL(*broker, getResponse(ticker)).Times(1).WillOnce(::testing::Return(response));
+  
+  //EXPECT_CALL(*nn, process())
   trader->perform();
 }

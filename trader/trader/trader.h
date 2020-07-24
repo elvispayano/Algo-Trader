@@ -18,7 +18,12 @@
 #ifndef TRADER_H
 #define TRADER_H
 
+// Utility Includes
+#include "broker_types.h"
+#include "matrix.h"
+
 // Standard Includes
+#include <string>
 #include <vector>
 
 // Forward Declarations
