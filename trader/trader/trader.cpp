@@ -57,7 +57,11 @@ Trader::~Trader(void) {
     Process neural network inputs
 */
 void Trader::perform(void) {
+
   for (size_t ind = 0; ind < networks.size(); ++ind) {
+    // Request Update
+
+
     // Capture Inputs (TBD)
     dMatrix input;
 
