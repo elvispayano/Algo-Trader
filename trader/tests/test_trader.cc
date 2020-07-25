@@ -37,32 +37,83 @@ protected:
     broker = new MockBrokerBase();
     nn = new MockNeuralNetwork(ticker);
 
+    networks.push_back(nn);
     trader = new Trader(broker, db, &networks);
   }
 
   // Memory Cleanup
   void TearDown(void) override {
-    if (trader)
-      delete trader;
+    if (broker) {
+      delete broker;
+      broker = 0;
+    }
 
-    if (db)
+    if (db) {
       delete db;
+      db = 0;
+    }
 
-    if (trader)
+    if (trader) {
       delete trader;
+      trader = 0;
+    }
 
-    if (nn)
+    if (nn) {
       delete nn;
+      nn = 0;
+    }
+
+    networks.clear();
   }
 
 public:
-  DatabaseBase* db;
-  BrokerBase* broker;
+  MockDatabaseBase* db;
+  MockBrokerBase* broker;
   Trader* trader;
-  NeuralNetwork* nn;
+  MockNeuralNetwork* nn;
 
   std::vector<NeuralNetwork*> networks;
 
   std::string ticker = "XYZ";
 };
 
+/*
+  Test:         No Response
+  Description:
+    Expected functionality when no ticker update is present
+*/
+TEST_F(TraderTest, NoResponse) {
+  EXPECT_CALL(*nn, getTicker()).Times(1).WillOnce(::testing::Return(ticker));
+
+  OrderConfig order;
+  order.request = Requests::UPDATE;
+  order.ticker = ticker;
+  EXPECT_CALL(*broker, addToQueue(::testing::Field(&OrderConfig::ticker, ticker))).Times(1);
+  EXPECT_CALL(*broker, responseReady(ticker)).Times(1).WillOnce(::testing::Return(false));
+  trader->perform();
+}
+
+/*
+  Test:         Response
+  Description:
+    Expected functionality when a ticker update is present
+*/
+TEST_F(TraderTest, Response) {
+  EXPECT_CALL(*nn, getTicker()).Times(1).WillOnce(::testing::Return(ticker));
+
+  OrderConfig order;
+  order.request = Requests::UPDATE;
+  order.ticker = ticker;
+  EXPECT_CALL(*broker, addToQueue(::testing::Field(&OrderConfig::ticker, ticker))).Times(1);
+  EXPECT_CALL(*broker, responseReady(ticker)).Times(1).WillOnce(::testing::Return(true));
+
+  Stock response;
+  response.setTicker(ticker);
+  response.setBid(1);
+  response.setAsk(1);
+  response.setLow(1);
+  response.setHigh(1);
+  EXPECT_CALL(*broker, getResponse(ticker)).Times(1).WillOnce(::testing::Return(response));
+  
+  trader->perform();
+}

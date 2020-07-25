@@ -1,3 +1,15 @@
+/*
+  Title:
+    Interfaces Mock Classes
+
+  Description:
+    This header contains a collection of the various mocks of classes
+    within the Interfaces library for use throughout tests
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef MOCK_INTERFACES_H
 #define MOCK_INTERFACES_H
 
@@ -18,6 +30,7 @@
 
 // Mocked Database Base
 class MockDatabaseBase : public  DatabaseBase {
+public:
   MOCK_METHOD0(connect, bool(void));
   MOCK_METHOD0(disconnect, void(void));
   MOCK_METHOD0(getNetworkCount, int(void));
@@ -28,10 +41,11 @@ class MockDatabaseBase : public  DatabaseBase {
 
 // Mocked Broker Base
 class MockBrokerBase : public BrokerBase {
+public:
   MOCK_METHOD0(connectionManager, void(void));
   MOCK_METHOD0(terminateConnection, void(void));
-  MOCK_METHOD0(responseReady, bool(void));
-  MOCK_METHOD1(getResponse, void(Stock&));
+  MOCK_METHOD1(responseReady, bool(std::string));
+  MOCK_METHOD1(getResponse, Stock(std::string));
   MOCK_METHOD1(addToQueue, void(OrderConfig));
 };
 

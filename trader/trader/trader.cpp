@@ -60,12 +60,30 @@ void Trader::perform(void) {
 
   for (size_t ind = 0; ind < networks.size(); ++ind) {
     // Request Update
+    OrderConfig order;
+    order.request = Requests::UPDATE;
+    order.ticker = networks[ind]->getTicker();
 
+    broker->addToQueue(order);
 
-    // Capture Inputs (TBD)
-    dMatrix input;
+    // Continue processing if ticker is updated
+    if (!broker->responseReady(order.ticker))
+      continue;
+    
+    // Capture broker response in Neural Network input format
+    Stock response = broker->getResponse(order.ticker);
+    dMatrix input(4, 1, 0.0);
+    input(0, 0) = response.getAsk();
+    input(1, 0) = response.getBid();
+    input(2, 0) = response.getLow();
+    input(3, 0) = response.getHigh();
 
     // Run inputs through network
-    networks[ind]->process(input);
+    //dMatrix output = networks[ind]->process(input);
+
+    // Convert inputs to broker actions
+
+    // Queue broker action
+
   }
 }
