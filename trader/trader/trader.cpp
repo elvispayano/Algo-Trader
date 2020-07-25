@@ -81,7 +81,6 @@ void Trader::perform(void) {
     // Run inputs through network
     dMatrix output(3, 1, 0.0);
     output = networks[ind]->process(input);
-
     // Convert inputs to broker actions
     order.request = Requests::MARKET;
     order.quantity = 1;
