@@ -79,11 +79,21 @@ void Trader::perform(void) {
     input(3, 0) = response.getHigh();
 
     // Run inputs through network
-    //dMatrix output = networks[ind]->process(input);
-
+    dMatrix output(3, 1, 0.0);
+    output = networks[ind]->process(input);
     // Convert inputs to broker actions
+    order.request = Requests::MARKET;
+    order.quantity = 1;
+    double threshold = 1 / 3;
+    if (output(0, 0) > threshold) {
+      order.purchase = true;
+    }
+    else if(output(2, 0) > threshold) {
+      order.purchase = false;
+    }
 
     // Queue broker action
-
+    if (output(1, 0) <= threshold)
+      broker->addToQueue(order);
   }
 }

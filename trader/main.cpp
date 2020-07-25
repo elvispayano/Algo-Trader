@@ -35,7 +35,6 @@ int main(int argc, char **argv) {
 #ifdef TESTS
   // Run Google Test if in debug
   test_main(argc, argv);
-
 #endif
 
   Initialize();

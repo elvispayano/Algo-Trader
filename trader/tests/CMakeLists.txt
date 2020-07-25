@@ -52,6 +52,7 @@ endif()
 # Library header files
 set(HEADERS
   "mock_interfaces.h"
+  "mock_matchers.h"
   "mock_neuralnetwork.h"
   "test_main.h"
 )
