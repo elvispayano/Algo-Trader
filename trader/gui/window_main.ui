@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WindowMain</class>
+ <widget class="QMainWindow" name="WindowMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>368</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WindowMain</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushRunButton">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>280</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>620</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Run</string>
+    </property>
+    <addaction name="actionUnitTests"/>
+   </widget>
+   <widget class="QMenu" name="menuConnections">
+    <property name="title">
+     <string>Connections</string>
+    </property>
+    <widget class="QMenu" name="menuDatabase">
+     <property name="title">
+      <string>Database</string>
+     </property>
+     <addaction name="actionConnectPostgreSQL"/>
+     <addaction name="separator"/>
+     <addaction name="actionDatabaseDisconnect"/>
+    </widget>
+    <widget class="QMenu" name="menuBroker">
+     <property name="title">
+      <string>Broker</string>
+     </property>
+     <addaction name="actionConnectInteractiveBroker"/>
+     <addaction name="separator"/>
+     <addaction name="actionBrokerDisconnect"/>
+    </widget>
+    <addaction name="menuDatabase"/>
+    <addaction name="menuBroker"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuConnections"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionUnitTests">
+   <property name="text">
+    <string>Unit Tests</string>
+   </property>
+  </action>
+  <action name="actionConnectPostgreSQL">
+   <property name="text">
+    <string>PostgreSQL</string>
+   </property>
+  </action>
+  <action name="actionConnectInteractiveBroker">
+   <property name="text">
+    <string>Interactive Broker</string>
+   </property>
+  </action>
+  <action name="actionDatabaseDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionBrokerDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

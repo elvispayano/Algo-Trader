@@ -25,25 +25,28 @@
 // Main Include
 #include "main.h"
 
-// Debug configuration execution
-#ifdef TESTS
+// Pipeline Automation
+#ifdef CI
 #include "test_main.h"
 #endif
 
+#include <qapplication.h>
+#include "window_main.h"
 int main(int argc, char **argv) {
 
-#ifdef TESTS
+#ifdef CI
   // Run Google Test if in debug
   test_main(argc, argv);
-#endif
-
-  Initialize();
-
-  Update();
-
-  Finalize();
 
   return 0;
+#endif
+
+  QApplication app(argc, argv);
+  
+  WindowMain mainWindow;
+  mainWindow.show();
+
+  return app.exec();
 }
 
 /*
