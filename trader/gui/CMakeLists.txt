@@ -26,13 +26,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Library header files
 set(HEADERS
-  #"dialog_postgres.h"
+  "dialog_postgres.h"
   "window_main.h"
  )
 
 # Library source files
 set(SRC
-  #"dialog_postgres.cpp"
+  "dialog_postgres.cpp"
   "window_main.cpp"
   "window_main_connections.cpp"
   "window_main_run.cpp"
@@ -40,7 +40,7 @@ set(SRC
 
 # Library UI files
 set(UI
-  #"dialog_postgres.ui"
+  "dialog_postgres.ui"
   "window_main.ui"
 )
 

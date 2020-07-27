@@ -7,14 +7,24 @@
 #include "postgres.h"
 
 // QT Includes
+#include "dialog_postgres.h"
 #include "window_main.h"
 #include "ui_window_main.h"
 
 void WindowMain::onPostgreSQLActionTriggered(void) {
   onDatabaseDisconnectTriggered();
 
-  printf("Configuring PostgreSQL Connection\n");
-  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
+  ui->statusbar->showMessage("Connecting to PostgreSQL Database...");
+  DialogPostgres dialog;
+  dialog.show();
+  dialog.exec();
+  
+  if (dialog.isConnected()) {
+    ui->statusbar->showMessage("Could not establish connection to PostgreSQL Database");
+    return;
+  }
+  database = dialog.getDatabase();
+  ui->statusbar->showMessage("PostgreSQL Connection Established");
 }
 
 void WindowMain::onInteractiveBrokerActionTriggered(void) {
@@ -37,7 +47,6 @@ void WindowMain::onBrokerDisconnectTriggered(void) {
   if (!broker)
     return;
 
-  ui->statusbar->showMessage("Broker Disconnecting");
   broker->terminateConnection();
   delete broker;
   broker = 0;
