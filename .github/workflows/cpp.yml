@@ -30,7 +30,7 @@ jobs:
     - name: Build Debug
       working-directory: ./trader
       run: |
-        cmake .
+        cmake . -DCI=1
         cmake --build . --config Debug
         
     # Execute

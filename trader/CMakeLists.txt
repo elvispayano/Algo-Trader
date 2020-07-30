@@ -36,3 +36,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE interfaces)
 target_link_libraries(${PROJECT_NAME} PRIVATE neuralnetwork)
 target_link_libraries(${PROJECT_NAME} PRIVATE tests)
 target_link_libraries(${PROJECT_NAME} PRIVATE gui)
+
+# For pipeline execution
+if(CI)
+  add_compile_definitions(CI)
+endif()

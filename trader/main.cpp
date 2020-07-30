@@ -28,10 +28,11 @@
 // Pipeline Automation
 #ifdef CI
 #include "test_main.h"
-#endif
-
+#else
 #include <qapplication.h>
 #include "window_main.h"
+#endif
+
 int main(int argc, char **argv) {
 
 #ifdef CI
@@ -39,7 +40,7 @@ int main(int argc, char **argv) {
   test_main(argc, argv);
 
   return 0;
-#endif
+#else
 
   QApplication app(argc, argv);
   
@@ -47,6 +48,7 @@ int main(int argc, char **argv) {
   mainWindow.show();
 
   return app.exec();
+#endif
 }
 
 /*
