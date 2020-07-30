@@ -6,6 +6,7 @@
 
 // Forward Declaration
 class Postgres;
+class QPlainTextEdit;
 
 namespace Ui {
   class DialogPostgres;
@@ -35,6 +36,8 @@ public slots:
   void updatePassword(void);
   
 private:
+
+  void highlight(QPlainTextEdit* obj, Qt::GlobalColor);
 
   Ui::DialogPostgres *ui;
 
