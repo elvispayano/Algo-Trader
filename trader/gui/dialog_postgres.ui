@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogPostgres</class>
+ <widget class="QDialog" name="DialogPostgres">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>354</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="pushConnect">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>250</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ok</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushCancel">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>250</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textHost">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhLowercaseOnly</set>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string>localhost</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textPort">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>50</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhDigitsOnly</set>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string>5432</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textOptions">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>80</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textTTY">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>110</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textDatabase">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>140</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string>dbname = trader</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textUsername">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>170</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="placeholderText">
+    <string>postgres</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="textPassword">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>200</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhHiddenText|Qt::ImhSensitiveData</set>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="tabChangesFocus">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string/>
+   </property>
+   <property name="overwriteMode">
+    <bool>true</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::TextEditable</set>
+   </property>
+   <property name="placeholderText">
+    <string>password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelHost">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Host:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Port:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Options:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>TTY:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>140</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Database:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>170</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Username:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>200</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Password:</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

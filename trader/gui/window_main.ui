@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WindowMain</class>
+ <widget class="QMainWindow" name="WindowMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>538</width>
+    <height>325</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>WindowMain</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushRunButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>230</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Deploy</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushRunButton_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>190</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Load</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushRunButton_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>150</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Create</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>261</width>
+      <height>81</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QOpenGLWidget" name="openGLWidget">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>221</width>
+      <height>111</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>130</y>
+      <width>351</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>351</width>
+        <height>131</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>538</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Run</string>
+    </property>
+    <addaction name="actionUnitTests"/>
+   </widget>
+   <widget class="QMenu" name="menuConnections">
+    <property name="title">
+     <string>Connections</string>
+    </property>
+    <widget class="QMenu" name="menuDatabase">
+     <property name="title">
+      <string>Database</string>
+     </property>
+     <addaction name="actionConnectPostgreSQL"/>
+     <addaction name="separator"/>
+     <addaction name="actionDatabaseDisconnect"/>
+    </widget>
+    <widget class="QMenu" name="menuBroker">
+     <property name="title">
+      <string>Broker</string>
+     </property>
+     <addaction name="actionConnectInteractiveBroker"/>
+     <addaction name="separator"/>
+     <addaction name="actionBrokerDisconnect"/>
+    </widget>
+    <addaction name="menuDatabase"/>
+    <addaction name="menuBroker"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuConnections"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionUnitTests">
+   <property name="text">
+    <string>Unit Tests</string>
+   </property>
+  </action>
+  <action name="actionConnectPostgreSQL">
+   <property name="text">
+    <string>PostgreSQL</string>
+   </property>
+  </action>
+  <action name="actionConnectInteractiveBroker">
+   <property name="text">
+    <string>Interactive Broker</string>
+   </property>
+  </action>
+  <action name="actionDatabaseDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionBrokerDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
