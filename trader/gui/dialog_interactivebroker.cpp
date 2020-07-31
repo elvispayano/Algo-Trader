@@ -1,6 +1,20 @@
+/*
+  Title:
+    Dialog Interactive Broker
+
+  Description:
+    The dialog functionality and configuration specifications for defining the
+    Interactive Broker connection
+
+  Author:
+    Elvis Payano
+*/
+
+// Interface Includes
 #include "interactive_broker.h"
 #include "ib_wrapper.h"
 
+// QT Includes
 #include "dialog_interactivebroker.h"
 #include "ui_dialog_interactivebroker.h"
 
