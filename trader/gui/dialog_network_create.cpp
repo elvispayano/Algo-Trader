@@ -9,6 +9,8 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
 
   QObject::connect(ui->pushAdd, SIGNAL(released()), this, SLOT(onAddReleased()));
   QObject::connect(ui->pushRemove, SIGNAL(released()), this, SLOT(onRemoveReleased()));
+  QObject::connect(ui->pushUp, SIGNAL(released()), this, SLOT(onUpReleased()));
+  QObject::connect(ui->pushDown, SIGNAL(released()), this, SLOT(onDownReleased()));
 
   ui->tableNetwork->clearContents();
 
@@ -35,4 +37,36 @@ void DialogNetworkCreate::onRemoveReleased(void) {
   // Interact with the Widget
   ui->tableNetwork->removeRow(row);
   ui->tableNetwork->setCurrentCell(rowCount - 1, 0);
+}
+
+void DialogNetworkCreate::onUpReleased(void) {
+  int curRow = ui->tableNetwork->currentRow();
+  QList<QTableWidgetItem*> curList;
+
+  getRow(curList, curRow);
+  setRow(curList, curRow-1);
+}
+
+void DialogNetworkCreate::onDownReleased(void) {
+  int curRow = ui->tableNetwork->currentRow();
+  QList<QTableWidgetItem*> curList;
+
+  getRow(curList, curRow);
+  setRow(curList, curRow + 1);
+}
+
+void DialogNetworkCreate::getRow(QList<QTableWidgetItem*>& list, int row) {
+  list.clear();
+
+  for (int i = 0; i < ui->tableNetwork->columnCount(); ++i)
+    list.push_back(ui->tableNetwork->takeItem(row, i));
+
+  ui->tableNetwork->removeRow(row);
+}
+
+void DialogNetworkCreate::setRow(QList<QTableWidgetItem*>& list, int row) {
+  ui->tableNetwork->insertRow(row);
+
+  for (int i = 0; i < ui->tableNetwork->columnCount(); ++i)
+    ui->tableNetwork->setItem(row, i, list[i]);
 }
