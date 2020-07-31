@@ -15,6 +15,10 @@ public:
   explicit DialogNetworkCreate(QWidget *parent = nullptr);
   ~DialogNetworkCreate();
 
+public slots:
+  void onAddReleased(void);
+  void onRemoveReleased(void);
+
 private:
   Ui::DialogNetworkCreate *ui;
 };
