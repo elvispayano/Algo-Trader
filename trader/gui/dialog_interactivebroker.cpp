@@ -23,6 +23,11 @@ DialogInteractiveBroker::DialogInteractiveBroker(QWidget *parent) :
   QObject::connect(ui->textHost, SIGNAL(textChanged()), this, SLOT(updateHost()));
   QObject::connect(ui->textPort, SIGNAL(textChanged()), this, SLOT(updatePort()));
   QObject::connect(ui->textClientID, SIGNAL(textChanged()), this, SLOT(updateClientID()));
+
+  // Clear Fields
+  ui->textHost->clear();
+  ui->textPort->clear();
+  ui->textClientID->clear();
 }
 
 DialogInteractiveBroker::~DialogInteractiveBroker()
