@@ -1,3 +1,15 @@
+/*
+  Title:
+    Dialog Postgres
+
+  Description:
+    The dialog functionality and configuration specifications for defining the
+    Postgres connection
+
+  Author:
+    Elvis Payano
+*/
+
 #ifndef DIALOG_POSTGRES_H
 #define DIALOG_POSTGRES_H
 

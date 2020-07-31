@@ -1,3 +1,16 @@
+/*
+  Title:
+    Dialog Postgres
+
+  Description:
+    The dialog functionality and configuration specifications for defining the
+    Postgres connection
+
+  Author:
+    Elvis Payano
+*/
+
+// Interface Includes
 #include "postgres.h"
 
 // QT Includes

@@ -1,3 +1,14 @@
+/*
+  Title:
+    Main Window
+
+  Description:
+    The main window functionality and configuration specifications for
+    the trader user interface
+
+  Author:
+    Elvis Payano
+*/
 
 // Interface Includes
 #include "broker_base.h"
