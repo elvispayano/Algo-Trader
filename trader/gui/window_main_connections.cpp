@@ -18,6 +18,7 @@
 #include "postgres.h"
 
 // QT Includes
+#include "dialog_interactivebroker.h"
 #include "dialog_postgres.h"
 #include "window_main.h"
 #include "ui_window_main.h"
@@ -42,7 +43,17 @@ void WindowMain::onInteractiveBrokerActionTriggered(void) {
   onBrokerDisconnectTriggered();
   
   ui->statusbar->showMessage("Connecting to Interactive Broker...");
-  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
+
+  DialogInteractiveBroker dialog;
+  dialog.show();
+  dialog.exec();
+
+  if (dialog.isConnected()) {
+    ui->statusbar->showMessage("Could not establish connection to Interactive Broker");
+    return;
+  }
+  broker = dialog.getBroker();
+  ui->statusbar->showMessage("Interactive Broker Connection Established");
 }
 
 void WindowMain::onDatabaseDisconnectTriggered(void) {
