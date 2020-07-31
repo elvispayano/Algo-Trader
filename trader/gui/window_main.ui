@@ -14,7 +14,7 @@
    <string>WindowMain</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushRunButton">
+   <widget class="QPushButton" name="pushDeploy">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -27,7 +27,7 @@
      <string>Deploy</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushRunButton_2">
+   <widget class="QPushButton" name="pushLoad">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -40,7 +40,7 @@
      <string>Load</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushRunButton_3">
+   <widget class="QPushButton" name="pushCreate">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -83,11 +83,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Active</string>
      </attribute>
      <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
@@ -102,7 +102,12 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Trained</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Created</string>
      </attribute>
     </widget>
    </widget>
@@ -113,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>538</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

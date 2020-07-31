@@ -15,8 +15,9 @@
 #include "database_base.h"
 
 // GUI Includes
-#include "window_main.h"
+#include "dialog_network_create.h"
 #include "ui_window_main.h"
+#include "window_main.h"
 
 WindowMain::WindowMain(QWidget *parent) :
   QMainWindow(parent),
@@ -38,7 +39,7 @@ WindowMain::WindowMain(QWidget *parent) :
   QObject::connect(ui->actionBrokerDisconnect, SIGNAL(triggered()), this, SLOT(onBrokerDisconnectTriggered()));
 
   // Button mapping
-  QObject::connect(ui->pushRunButton, SIGNAL(released()), this, SLOT(run()));
+  QObject::connect(ui->pushCreate, SIGNAL(released()), this, SLOT(create()));
 
   database = 0;
   broker = 0;
@@ -65,4 +66,17 @@ void WindowMain::run(void) {
 
   database->connect();
   broker->connectionManager();
+}
+
+void WindowMain::create(void) {
+  // Require a an active database connection
+  if (!database) {
+    ui->statusbar->showMessage("Error: Requires Database Connection");
+    return;
+  }
+
+  // Run and update loaded networks
+  DialogNetworkCreate dialog;
+  dialog.show();
+  dialog.exec();
 }

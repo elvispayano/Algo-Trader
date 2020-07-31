@@ -42,6 +42,7 @@ public slots:
 
   // Button settings
   void run(void);
+  void create(void);
 
 private:
     Ui::WindowMain *ui;
