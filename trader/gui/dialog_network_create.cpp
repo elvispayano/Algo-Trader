@@ -1,3 +1,6 @@
+#include <qcombobox.h>
+#include <qspinbox.h>
+
 #include "dialog_network_create.h"
 #include "ui_dialog_network_create.h"
 
@@ -13,7 +16,16 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
   QObject::connect(ui->pushDown, SIGNAL(released()), this, SLOT(onDownReleased()));
 
   ui->tableNetwork->clearContents();
-
+  
+  // Build Layer Types List
+  layerTypeList.push_back("Fully Connected");
+  
+  // Build Activation Types List
+  activationTypeList.push_back("Linear");
+  activationTypeList.push_back("Binary");
+  activationTypeList.push_back("ReLu");
+  activationTypeList.push_back("HTan");
+  activationTypeList.push_back("Sigmoid");
 }
 
 DialogNetworkCreate::~DialogNetworkCreate()
@@ -22,10 +34,19 @@ DialogNetworkCreate::~DialogNetworkCreate()
 }
 
 void DialogNetworkCreate::onAddReleased(void) {
-  QTableWidgetItem* item = new QTableWidgetItem(1);
   int row = ui->tableNetwork->rowCount();
   ui->tableNetwork->insertRow(row);
-  ui->tableNetwork->setItem(row, 0, item);
+
+  QComboBox* layerCombo = new QComboBox();
+  layerCombo->addItems(layerTypeList);
+  ui->tableNetwork->setCellWidget(row, 0, layerCombo);
+
+  QComboBox* activationCombo = new QComboBox();
+  activationCombo->addItems(activationTypeList);
+  ui->tableNetwork->setCellWidget(row, 1, activationCombo);
+
+  QSpinBox* nodeBox = new QSpinBox();
+  ui->tableNetwork->setCellWidget(row, 2, nodeBox);
 }
 
 void DialogNetworkCreate::onRemoveReleased(void) {
@@ -41,32 +62,35 @@ void DialogNetworkCreate::onRemoveReleased(void) {
 
 void DialogNetworkCreate::onUpReleased(void) {
   int curRow = ui->tableNetwork->currentRow();
-  QList<QTableWidgetItem*> curList;
-
-  getRow(curList, curRow);
-  setRow(curList, curRow-1);
+  swapRow(curRow, curRow - 1);
 }
 
 void DialogNetworkCreate::onDownReleased(void) {
   int curRow = ui->tableNetwork->currentRow();
-  QList<QTableWidgetItem*> curList;
-
-  getRow(curList, curRow);
-  setRow(curList, curRow + 1);
+  swapRow(curRow, curRow + 1);
 }
 
-void DialogNetworkCreate::getRow(QList<QTableWidgetItem*>& list, int row) {
-  list.clear();
+void DialogNetworkCreate::swapRow(int x, int y) {
+  for (int i = 0; i < ui->tableNetwork->columnCount(); ++i) {
+    if (i == 2) {
+      QSpinBox* box1 = static_cast<QSpinBox*>(ui->tableNetwork->cellWidget(x, i));
+      QSpinBox* box2 = static_cast<QSpinBox*>(ui->tableNetwork->cellWidget(y, i));
 
-  for (int i = 0; i < ui->tableNetwork->columnCount(); ++i)
-    list.push_back(ui->tableNetwork->takeItem(row, i));
+      int val1 = box1->value();
+      int val2 = box2->value();
 
-  ui->tableNetwork->removeRow(row);
-}
+      box1->setValue(val2);
+      box2->setValue(val1);
+    }
+    else {
+      QComboBox* box1 = static_cast<QComboBox*>(ui->tableNetwork->cellWidget(x, i));
+      QComboBox* box2 = static_cast<QComboBox*>(ui->tableNetwork->cellWidget(y, i));
 
-void DialogNetworkCreate::setRow(QList<QTableWidgetItem*>& list, int row) {
-  ui->tableNetwork->insertRow(row);
+      QString val1 = box1->currentText();
+      QString val2 = box2->currentText();
 
-  for (int i = 0; i < ui->tableNetwork->columnCount(); ++i)
-    ui->tableNetwork->setItem(row, i, list[i]);
+      box1->setCurrentText(val2);
+      box2->setCurrentText(val1);
+    }
+  }
 }

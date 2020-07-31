@@ -7,8 +7,6 @@ namespace Ui {
   class DialogNetworkCreate;
 }
 
-class QTableWidgetItem;
-
 class DialogNetworkCreate : public QDialog
 {
   Q_OBJECT
@@ -26,8 +24,10 @@ public slots:
 private:
   Ui::DialogNetworkCreate *ui;
 
-  void getRow(QList<QTableWidgetItem*> &list, int row);
-  void setRow(QList<QTableWidgetItem*>& list, int row);
+  void swapRow(int x, int y);
+
+  QStringList layerTypeList;
+  QStringList activationTypeList;
 };
 
 #endif // DIALOG_NETWORK_CREATE_H
