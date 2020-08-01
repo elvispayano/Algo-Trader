@@ -94,7 +94,7 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
 }
 
 /*
-  Functions:    Process
+  Function:     Process
   Inputs:       Data (dMatrix)
   Outputs:      Action (dMatrix)
 
@@ -105,4 +105,21 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
 dMatrix NeuralNetwork::process(dMatrix data) {
   dMatrix action;
   return action;
+}
+
+/*
+  Function:     getTotalNodes
+  Input:        None (void)
+  Output:       Node Count (unsigned int)
+
+  Description:
+    Total nodes used within the network. Is used to determine approximate
+    complexity
+*/
+unsigned int NeuralNetwork::getTotalNodes(void) {
+  unsigned int nodeCount = 0;
+  for (unsigned int ind = 0; ind < layers.size(); ++ind) {
+    nodeCount += layers[ind]->getNodeCount();
+  }
+  return nodeCount;
 }

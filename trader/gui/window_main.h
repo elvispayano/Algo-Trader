@@ -13,22 +13,30 @@
 #ifndef WINDOW_MAIN_H
 #define WINDOW_MAIN_H
 
+// QT Includes
 #include <QMainWindow>
+
+// Standard Includes
+#include <vector>
+
+// Forward Declaration
+class QPlainTextEdit;
 
 namespace Ui {
 class WindowMain;
 }
 
-class DatabaseBase;
 class BrokerBase;
+class DatabaseBase;
+class NeuralNetwork;
 
 class WindowMain : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit WindowMain(QWidget *parent = nullptr);
-    ~WindowMain();
+  explicit WindowMain(QWidget *parent = nullptr);
+  ~WindowMain();
 
 public slots:
   // Run options
@@ -42,12 +50,22 @@ public slots:
 
   // Button settings
   void run(void);
+  void create(void);
+  void destroy(void);
 
 private:
-    Ui::WindowMain *ui;
+  void updateNetworkTables(void);
+  void updateCreatedNetworks(void);
 
-    DatabaseBase* database;
-    BrokerBase* broker;
+  QPlainTextEdit* newTextBox(std::string input);
+
+  Ui::WindowMain *ui;
+
+  BrokerBase* broker;
+  DatabaseBase* database;
+  std::vector<NeuralNetwork*> createdNetworks;
+  std::vector<NeuralNetwork*> trainedNetworks;
+  std::vector<NeuralNetwork*> activeNetworks;
 };
 
 #endif // WINDOW_MAIN_H

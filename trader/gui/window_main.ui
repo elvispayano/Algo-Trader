@@ -6,59 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>325</height>
+    <width>501</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>WindowMain</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushRunButton">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>230</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Deploy</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushRunButton_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>190</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Load</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushRunButton_3">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>150</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Create</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="tableWidget_2">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
-      <width>261</width>
+      <y>100</y>
+      <width>221</width>
       <height>81</height>
      </rect>
     </property>
@@ -66,44 +27,123 @@
    <widget class="QOpenGLWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>10</y>
+      <x>260</x>
+      <y>20</y>
       <width>221</width>
-      <height>111</height>
+      <height>161</height>
      </rect>
     </property>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>130</y>
-      <width>351</width>
-      <height>151</height>
+      <x>20</x>
+      <y>200</y>
+      <width>461</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Active</string>
      </attribute>
      <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>351</width>
-        <height>131</height>
+        <width>231</width>
+        <height>181</height>
        </rect>
       </property>
+      <column>
+       <property name="text">
+        <string>Network</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Performance</string>
+       </property>
+      </column>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Trained</string>
      </attribute>
+     <widget class="QPushButton" name="pushDeploy">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>30</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Deploy</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Created</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableCreatedNetworks">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>321</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Network</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Layer Count</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Total Nodes</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QPushButton" name="pushCreate">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>50</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Create</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushDelete">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>90</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -112,8 +152,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>538</width>
-     <height>21</height>
+     <width>501</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
