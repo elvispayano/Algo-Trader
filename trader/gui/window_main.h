@@ -13,22 +13,27 @@
 #ifndef WINDOW_MAIN_H
 #define WINDOW_MAIN_H
 
+// QT Includes
 #include <QMainWindow>
+
+// Standard Includes
+#include <vector>
 
 namespace Ui {
 class WindowMain;
 }
 
-class DatabaseBase;
 class BrokerBase;
+class DatabaseBase;
+class NeuralNetwork;
 
 class WindowMain : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit WindowMain(QWidget *parent = nullptr);
-    ~WindowMain();
+  explicit WindowMain(QWidget *parent = nullptr);
+  ~WindowMain();
 
 public slots:
   // Run options
@@ -45,10 +50,13 @@ public slots:
   void create(void);
 
 private:
-    Ui::WindowMain *ui;
+  Ui::WindowMain *ui;
 
-    DatabaseBase* database;
-    BrokerBase* broker;
+  BrokerBase* broker;
+  DatabaseBase* database;
+  std::vector<NeuralNetwork*> createdNetworks;
+  std::vector<NeuralNetwork*> trainedNetworks;
+  std::vector<NeuralNetwork*> activeNetworks;
 };
 
 #endif // WINDOW_MAIN_H

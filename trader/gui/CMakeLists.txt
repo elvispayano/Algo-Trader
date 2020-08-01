@@ -77,4 +77,5 @@ target_link_libraries(gui PUBLIC Qt5::Widgets)
 
 target_link_libraries(gui PUBLIC tests)
 target_link_libraries(gui PUBLIC interfaces)
+target_link_libraries(gui PUBLIC neuralnetwork)
 target_link_libraries(gui PUBLIC utilities)

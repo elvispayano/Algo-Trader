@@ -14,6 +14,9 @@
 #include "broker_base.h"
 #include "database_base.h"
 
+// Neural Networks
+#include "neural_network.h"
+
 // GUI Includes
 #include "dialog_network_create.h"
 #include "ui_window_main.h"
@@ -43,6 +46,10 @@ WindowMain::WindowMain(QWidget *parent) :
 
   database = 0;
   broker = 0;
+
+  createdNetworks.clear();
+  trainedNetworks.clear();
+  activeNetworks.clear();
 }
 
 WindowMain::~WindowMain()
@@ -51,6 +58,12 @@ WindowMain::~WindowMain()
 
   onDatabaseDisconnectTriggered();
   onBrokerDisconnectTriggered();
+
+  for (int ind = 0; ind < createdNetworks.size(); ++ind) {
+    if (createdNetworks[ind])
+      delete createdNetworks[ind];
+  }
+  createdNetworks.clear();
 }
 
 void WindowMain::run(void) {
@@ -79,4 +92,6 @@ void WindowMain::create(void) {
   DialogNetworkCreate dialog;
   dialog.show();
   dialog.exec();
+
+  createdNetworks.push_back(dialog.getNetwork());
 }

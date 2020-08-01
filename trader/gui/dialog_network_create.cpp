@@ -1,6 +1,12 @@
+// Neural Network Includes
+#include "neural_network.h"
+
+// Utility Includes
+#include "network_types.h"
+
+// QT Includes
 #include <qcombobox.h>
 #include <qspinbox.h>
-
 #include "dialog_network_create.h"
 #include "ui_dialog_network_create.h"
 
@@ -10,12 +16,17 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
 {
   ui->setupUi(this);
 
+  // Layer count modification
   QObject::connect(ui->pushAdd, SIGNAL(released()), this, SLOT(onAddReleased()));
   QObject::connect(ui->pushRemove, SIGNAL(released()), this, SLOT(onRemoveReleased()));
+
+  // Layer order modification
   QObject::connect(ui->pushUp, SIGNAL(released()), this, SLOT(onUpReleased()));
   QObject::connect(ui->pushDown, SIGNAL(released()), this, SLOT(onDownReleased()));
 
-  ui->tableNetwork->clearContents();
+  // Accept/Reject
+  QObject::connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(networkAccepted()));
+  QObject::connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(networkRejected()));
   
   // Build Layer Types List
   layerTypeList.push_back("Fully Connected");
@@ -26,6 +37,20 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
   activationTypeList.push_back("ReLu");
   activationTypeList.push_back("HTan");
   activationTypeList.push_back("Sigmoid");
+
+  ui->tableNetwork->clearContents();
+  network = 0;
+
+  // Layer Map Creation
+  layerMap["Fully Connected"] = LayerTypes::FULLYCONNECTED;
+
+  // Activation Map Creation
+  activationMap["Linear"] = ActivationTypes::LINEAR;
+  activationMap["Binary"] = ActivationTypes::BINARY;
+  activationMap["ReLu"] = ActivationTypes::RELU;
+  activationMap["HTan"] = ActivationTypes::TANH;
+  activationMap["Sigmoid"] = ActivationTypes::SIGMOID;
+
 }
 
 DialogNetworkCreate::~DialogNetworkCreate()
@@ -93,4 +118,60 @@ void DialogNetworkCreate::swapRow(int x, int y) {
       box2->setCurrentText(val1);
     }
   }
+}
+
+void DialogNetworkCreate::networkAccepted(void) {
+  // Initialization
+  LayerConfiguration config;
+  const int totalLayerCount = ui->tableNetwork->rowCount();
+  std::string ticker = ui->textTicker->toPlainText().toStdString();
+
+  // Configuration Checking
+  if ((totalLayerCount == 0) || ticker.empty()) {
+    return;
+  }
+
+  network = new NeuralNetwork("MSFT");
+  for (int layerInd = 0; layerInd < totalLayerCount; ++layerInd) {
+    // Layer Type
+    QString layer = static_cast<QComboBox*>(ui->tableNetwork->cellWidget(layerInd, 0))->currentText();
+    if (layerMap.find(layer) != layerMap.end())
+      config.Layer = layerMap[layer];
+    else
+      config.Layer = LayerTypes::UNKNOWN;
+    
+    // Activation Type
+    QString activation = static_cast<QComboBox*>(ui->tableNetwork->cellWidget(layerInd, 1))->currentText();
+    if (activationMap.find(activation) != activationMap.end())
+      config.Activation = activationMap[activation];
+    else
+      config.Activation = ActivationTypes::UNKNOWN;
+
+    // Inputs
+    if (layerInd == 0)
+      config.layerWidth = 4;
+    else
+      config.layerWidth = config.layerHeight;
+
+    // Nodes
+    if (layerInd == totalLayerCount)
+      config.layerHeight = 3;
+    else
+      config.layerHeight = static_cast<QSpinBox*>(ui->tableNetwork->cellWidget(layerInd, 2))->value();
+
+    network->addLayer(config);
+  }
+
+  this->close();
+}
+
+void DialogNetworkCreate::networkRejected(void) {
+  if (network) {
+    delete network;
+    network = 0;
+  }
+
+  ui->tableNetwork->clearContents();
+
+  this->close();
 }

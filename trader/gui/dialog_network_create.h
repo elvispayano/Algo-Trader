@@ -1,7 +1,17 @@
 #ifndef DIALOG_NETWORK_CREATE_H
 #define DIALOG_NETWORK_CREATE_H
 
+// Utility Includes
+#include "network_types.h"
+
+// QT Includes
 #include <QDialog>
+
+// Standard Includes
+#include <map>
+
+// Forward Declaration
+class NeuralNetwork;
 
 namespace Ui {
   class DialogNetworkCreate;
@@ -15,11 +25,17 @@ public:
   explicit DialogNetworkCreate(QWidget *parent = nullptr);
   ~DialogNetworkCreate();
 
+  NeuralNetwork* getNetwork(void) { return network; }
+
 public slots:
   void onAddReleased(void);
   void onRemoveReleased(void);
+
   void onUpReleased(void);
   void onDownReleased(void);
+
+  void networkAccepted(void);
+  void networkRejected(void);
 
 private:
   Ui::DialogNetworkCreate *ui;
@@ -28,6 +44,11 @@ private:
 
   QStringList layerTypeList;
   QStringList activationTypeList;
+
+  NeuralNetwork* network;
+
+  std::map<QString, ActivationTypes> activationMap;
+  std::map<QString, LayerTypes> layerMap;
 };
 
 #endif // DIALOG_NETWORK_CREATE_H
