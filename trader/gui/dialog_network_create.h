@@ -26,6 +26,7 @@ public:
   ~DialogNetworkCreate();
 
   NeuralNetwork* getNetwork(void) { return network; }
+  bool networkReady(void) { return newNetwork; }
 
 public slots:
   void onAddReleased(void);
@@ -49,6 +50,8 @@ private:
 
   std::map<QString, ActivationTypes> activationMap;
   std::map<QString, LayerTypes> layerMap;
+
+  bool newNetwork;
 };
 
 #endif // DIALOG_NETWORK_CREATE_H

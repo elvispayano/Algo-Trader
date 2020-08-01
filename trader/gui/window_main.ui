@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
+    <width>507</width>
     <height>325</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="pushDeploy">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>230</y>
       <width>101</width>
       <height>31</height>
@@ -30,7 +30,7 @@
    <widget class="QPushButton" name="pushLoad">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>190</y>
       <width>101</width>
       <height>31</height>
@@ -43,7 +43,7 @@
    <widget class="QPushButton" name="pushCreate">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>150</y>
       <width>101</width>
       <height>31</height>
@@ -58,7 +58,7 @@
      <rect>
       <x>20</x>
       <y>30</y>
-      <width>261</width>
+      <width>221</width>
       <height>81</height>
      </rect>
     </property>
@@ -66,7 +66,7 @@
    <widget class="QOpenGLWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>260</x>
       <y>10</y>
       <width>221</width>
       <height>111</height>
@@ -76,14 +76,14 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>220</x>
       <y>130</y>
-      <width>351</width>
+      <width>261</width>
       <height>151</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -98,6 +98,16 @@
         <height>131</height>
        </rect>
       </property>
+      <column>
+       <property name="text">
+        <string>Network</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Performance</string>
+       </property>
+      </column>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -109,6 +119,21 @@
      <attribute name="title">
       <string>Created</string>
      </attribute>
+     <widget class="QTableWidget" name="tableCreatedNetworks">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>351</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Network</string>
+       </property>
+      </column>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -117,7 +142,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>538</width>
+     <width>507</width>
      <height>20</height>
     </rect>
    </property>

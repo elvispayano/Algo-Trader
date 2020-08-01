@@ -18,6 +18,7 @@
 #include "neural_network.h"
 
 // GUI Includes
+#include <QtWidgets/QPlainTextEdit>
 #include "dialog_network_create.h"
 #include "ui_window_main.h"
 #include "window_main.h"
@@ -93,5 +94,29 @@ void WindowMain::create(void) {
   dialog.show();
   dialog.exec();
 
+  if (!dialog.networkReady())
+    return;
+
   createdNetworks.push_back(dialog.getNetwork());
+  updateNetworkTables();
+}
+
+void WindowMain::updateNetworkTables(void) {
+  // Update created networks table
+  updateCreatedNetworks();
+}
+
+void WindowMain::updateCreatedNetworks(void) {
+  ui->tableCreatedNetworks->clear();
+
+  int rows = createdNetworks.size();
+  for (int ind = 0; ind < rows; ++ind) {
+    ui->tableCreatedNetworks->insertRow(ind);
+
+    QPlainTextEdit* item = new QPlainTextEdit();
+    item->setReadOnly(true);
+    QString Qticker(createdNetworks[ind]->getTicker().c_str());
+    item->setPlainText(Qticker);
+    ui->tableCreatedNetworks->setCellWidget(ind, 0, item);
+  }
 }

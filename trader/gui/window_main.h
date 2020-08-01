@@ -50,6 +50,9 @@ public slots:
   void create(void);
 
 private:
+  void updateNetworkTables(void);
+  void updateCreatedNetworks(void);
+
   Ui::WindowMain *ui;
 
   BrokerBase* broker;

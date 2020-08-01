@@ -15,6 +15,7 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
   ui(new Ui::DialogNetworkCreate)
 {
   ui->setupUi(this);
+  ui->textTicker->clear();
 
   // Layer count modification
   QObject::connect(ui->pushAdd, SIGNAL(released()), this, SLOT(onAddReleased()));
@@ -51,6 +52,7 @@ DialogNetworkCreate::DialogNetworkCreate(QWidget *parent) :
   activationMap["HTan"] = ActivationTypes::TANH;
   activationMap["Sigmoid"] = ActivationTypes::SIGMOID;
 
+  newNetwork = false;
 }
 
 DialogNetworkCreate::~DialogNetworkCreate()
@@ -162,6 +164,7 @@ void DialogNetworkCreate::networkAccepted(void) {
     network->addLayer(config);
   }
 
+  newNetwork = true;
   this->close();
 }
 

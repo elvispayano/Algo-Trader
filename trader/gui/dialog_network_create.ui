@@ -146,7 +146,7 @@
     <bool>true</bool>
    </property>
    <property name="placeholderText">
-    <string>localhost</string>
+    <string>XYZ</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
