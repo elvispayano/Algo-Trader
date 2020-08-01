@@ -23,6 +23,9 @@
 #include "ui_window_main.h"
 #include "window_main.h"
 
+// Standard Includes
+#include <string>
+
 WindowMain::WindowMain(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::WindowMain)
@@ -44,6 +47,7 @@ WindowMain::WindowMain(QWidget *parent) :
 
   // Button mapping
   QObject::connect(ui->pushCreate, SIGNAL(released()), this, SLOT(create()));
+  QObject::connect(ui->pushDelete, SIGNAL(released()), this, SLOT(destroy()));
 
   database = 0;
   broker = 0;
@@ -101,22 +105,54 @@ void WindowMain::create(void) {
   updateNetworkTables();
 }
 
+void WindowMain::destroy(void) {
+  std::vector<NeuralNetwork*>::iterator it = createdNetworks.begin() + ui->tableCreatedNetworks->currentRow();;
+  createdNetworks.erase(it);
+
+  updateCreatedNetworks();
+}
+
 void WindowMain::updateNetworkTables(void) {
   // Update created networks table
   updateCreatedNetworks();
 }
 
 void WindowMain::updateCreatedNetworks(void) {
-  ui->tableCreatedNetworks->clear();
+  // Download any existing networks from database
+
+
+  // Upload network to database
+
+
+  // Update Gui Table
+  ui->tableCreatedNetworks->clearContents();
 
   int rows = createdNetworks.size();
   for (int ind = 0; ind < rows; ++ind) {
     ui->tableCreatedNetworks->insertRow(ind);
 
-    QPlainTextEdit* item = new QPlainTextEdit();
-    item->setReadOnly(true);
-    QString Qticker(createdNetworks[ind]->getTicker().c_str());
-    item->setPlainText(Qticker);
-    ui->tableCreatedNetworks->setCellWidget(ind, 0, item);
+    QPlainTextEdit* symbol = newTextBox(createdNetworks[ind]->getTicker());
+    ui->tableCreatedNetworks->setCellWidget(ind, 0, symbol);
+
+    QPlainTextEdit* layers = newTextBox(std::to_string(createdNetworks[ind]->getLayerCount()));
+    ui->tableCreatedNetworks->setCellWidget(ind, 1, layers);
+
+    QPlainTextEdit* nodes = newTextBox(std::to_string(createdNetworks[ind]->getTotalNodes()));
+    ui->tableCreatedNetworks->setCellWidget(ind, 2, nodes);
   }
+
+  for (int ind = 0; ind < ui->tableCreatedNetworks->rowCount(); ++ind)
+    if (ind >= createdNetworks.size())
+      ui->tableCreatedNetworks->removeRow(ind);
+
+}
+
+QPlainTextEdit* WindowMain::newTextBox(std::string input) {
+  QString inputText(input.c_str());
+  
+  QPlainTextEdit* textbox = new QPlainTextEdit();
+  textbox->setReadOnly(true);
+  textbox->setPlainText(inputText);
+
+  return textbox;
 }

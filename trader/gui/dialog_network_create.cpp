@@ -133,7 +133,7 @@ void DialogNetworkCreate::networkAccepted(void) {
     return;
   }
 
-  network = new NeuralNetwork("MSFT");
+  network = new NeuralNetwork(ticker);
   for (int layerInd = 0; layerInd < totalLayerCount; ++layerInd) {
     // Layer Type
     QString layer = static_cast<QComboBox*>(ui->tableNetwork->cellWidget(layerInd, 0))->currentText();

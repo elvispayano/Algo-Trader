@@ -19,6 +19,9 @@
 // Standard Includes
 #include <vector>
 
+// Forward Declaration
+class QPlainTextEdit;
+
 namespace Ui {
 class WindowMain;
 }
@@ -48,10 +51,13 @@ public slots:
   // Button settings
   void run(void);
   void create(void);
+  void destroy(void);
 
 private:
   void updateNetworkTables(void);
   void updateCreatedNetworks(void);
+
+  QPlainTextEdit* newTextBox(std::string input);
 
   Ui::WindowMain *ui;
 

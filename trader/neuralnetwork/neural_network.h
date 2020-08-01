@@ -39,6 +39,7 @@ public:
   // Layer Configuration
   void addLayer(LayerConfiguration configuration);
   size_t getLayerCount(void) { return layers.size(); }
+  unsigned int getTotalNodes(void) { return 0; }
 
   // Network Identification
   virtual std::string getTicker(void) { return ticker; }
