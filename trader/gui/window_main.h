@@ -17,6 +17,7 @@
 #include <QMainWindow>
 
 // Standard Includes
+#include <map>
 #include <vector>
 
 // Forward Declaration
@@ -63,7 +64,7 @@ private:
 
   BrokerBase* broker;
   DatabaseBase* database;
-  std::vector<NeuralNetwork*> createdNetworks;
+  std::map<std::string, NeuralNetwork*> networkCreated;
   std::vector<NeuralNetwork*> trainedNetworks;
   std::vector<NeuralNetwork*> activeNetworks;
 };
