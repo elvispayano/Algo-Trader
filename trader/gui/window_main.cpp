@@ -52,7 +52,7 @@ WindowMain::WindowMain(QWidget *parent) :
   database = 0;
   broker = 0;
 
-  createdNetworks.clear();
+  networkCreated.clear();
   trainedNetworks.clear();
   activeNetworks.clear();
 }
@@ -64,11 +64,10 @@ WindowMain::~WindowMain()
   onDatabaseDisconnectTriggered();
   onBrokerDisconnectTriggered();
 
-  for (int ind = 0; ind < createdNetworks.size(); ++ind) {
-    if (createdNetworks[ind])
-      delete createdNetworks[ind];
+  for (std::map<std::string, NeuralNetwork*>::iterator it = networkCreated.begin(); it != networkCreated.end(); ++it) {
+    delete it->second;
+    networkCreated.erase(it->first);
   }
-  createdNetworks.clear();
 }
 
 void WindowMain::run(void) {
@@ -101,13 +100,28 @@ void WindowMain::create(void) {
   if (!dialog.networkReady())
     return;
 
-  createdNetworks.push_back(dialog.getNetwork());
+  NeuralNetwork* network = dialog.getNetwork();
+  std::string ticker = network->getTicker();
+  if (networkCreated.find(ticker) != networkCreated.end()) {
+    delete networkCreated[ticker];
+    networkCreated.erase(ticker);
+  }
+  networkCreated[network->getTicker()] = dialog.getNetwork();
+
   updateNetworkTables();
 }
 
 void WindowMain::destroy(void) {
-  std::vector<NeuralNetwork*>::iterator it = createdNetworks.begin() + ui->tableCreatedNetworks->currentRow();;
-  createdNetworks.erase(it);
+  int row = ui->tableCreatedNetworks->currentRow();
+  if (row >= networkCreated.size())
+    return;
+
+  std::string ticker = static_cast<QPlainTextEdit*>(ui->tableCreatedNetworks->cellWidget(row, 0))->toPlainText().toStdString();
+ 
+  if (networkCreated.find(ticker) != networkCreated.end()) {
+    delete networkCreated[ticker];
+    networkCreated.erase(ticker);
+  }
 
   updateCreatedNetworks();
 }
@@ -118,32 +132,29 @@ void WindowMain::updateNetworkTables(void) {
 }
 
 void WindowMain::updateCreatedNetworks(void) {
-  // Download any existing networks from database
-
-
-  // Upload network to database
-
-
   // Update Gui Table
   ui->tableCreatedNetworks->clearContents();
 
-  int rows = createdNetworks.size();
-  for (int ind = 0; ind < rows; ++ind) {
-    ui->tableCreatedNetworks->insertRow(ind);
+  int row = 0;
+  for (std::map<std::string, NeuralNetwork*>::iterator it = networkCreated.begin(); it != networkCreated.end(); ++it) {
+    ui->tableCreatedNetworks->insertRow(row);
+    std::string ticker = it->second->getTicker();
 
-    QPlainTextEdit* symbol = newTextBox(createdNetworks[ind]->getTicker());
-    ui->tableCreatedNetworks->setCellWidget(ind, 0, symbol);
+    // Ticker
+    ui->tableCreatedNetworks->setCellWidget(row, 0, newTextBox(ticker));
 
-    QPlainTextEdit* layers = newTextBox(std::to_string(createdNetworks[ind]->getLayerCount()));
-    ui->tableCreatedNetworks->setCellWidget(ind, 1, layers);
+    // Layer Count
+    ui->tableCreatedNetworks->setCellWidget(row, 1, newTextBox(std::to_string(it->second->getLayerCount())));
 
-    QPlainTextEdit* nodes = newTextBox(std::to_string(createdNetworks[ind]->getTotalNodes()));
-    ui->tableCreatedNetworks->setCellWidget(ind, 2, nodes);
+    // Total Nodes
+    ui->tableCreatedNetworks->setCellWidget(row, 1, newTextBox(std::to_string(it->second->getTotalNodes())));
+
+    // Increment Row
+    ++row;
   }
 
-  for (int ind = 0; ind < ui->tableCreatedNetworks->rowCount(); ++ind)
-    if (ind >= createdNetworks.size())
-      ui->tableCreatedNetworks->removeRow(ind);
+  for (row; row < ui->tableCreatedNetworks->rowCount(); ++row)
+    ui->tableCreatedNetworks->removeRow(row);
 
 }
 
