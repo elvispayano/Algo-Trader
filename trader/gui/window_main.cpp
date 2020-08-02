@@ -64,10 +64,11 @@ WindowMain::~WindowMain()
   onDatabaseDisconnectTriggered();
   onBrokerDisconnectTriggered();
 
-  for (std::map<std::string, NeuralNetwork*>::iterator it = networkCreated.begin(); it != networkCreated.end(); ++it) {
+  // Created Networks memory cleanup
+  for (std::map<std::string, NeuralNetwork*>::iterator it = networkCreated.begin(); it != networkCreated.end(); ++it)
     delete it->second;
-    networkCreated.erase(it->first);
-  }
+
+  networkCreated.clear();
 }
 
 void WindowMain::run(void) {
@@ -86,26 +87,26 @@ void WindowMain::run(void) {
 }
 
 void WindowMain::create(void) {
-  // Require a an active database connection
-  if (!database) {
-    ui->statusbar->showMessage("Error: Requires Database Connection");
-    return;
-  }
-
   // Run and update loaded networks
   DialogNetworkCreate dialog;
   dialog.show();
   dialog.exec();
 
+  // Check if network was created
   if (!dialog.networkReady())
     return;
 
+  // Gather network data
   NeuralNetwork* network = dialog.getNetwork();
   std::string ticker = network->getTicker();
+
+  // Ensure no duplicate networks are in the map
   if (networkCreated.find(ticker) != networkCreated.end()) {
     delete networkCreated[ticker];
     networkCreated.erase(ticker);
   }
+
+  // Add created network to map
   networkCreated[network->getTicker()] = dialog.getNetwork();
 
   updateNetworkTables();
@@ -147,7 +148,7 @@ void WindowMain::updateCreatedNetworks(void) {
     ui->tableCreatedNetworks->setCellWidget(row, 1, newTextBox(std::to_string(it->second->getLayerCount())));
 
     // Total Nodes
-    ui->tableCreatedNetworks->setCellWidget(row, 1, newTextBox(std::to_string(it->second->getTotalNodes())));
+    ui->tableCreatedNetworks->setCellWidget(row, 2, newTextBox(std::to_string(it->second->getTotalNodes())));
 
     // Increment Row
     ++row;
