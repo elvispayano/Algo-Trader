@@ -144,7 +144,7 @@
        <string>Delete</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushCreate_2">
+     <widget class="QPushButton" name="pushTrain">
       <property name="geometry">
        <rect>
         <x>340</x>

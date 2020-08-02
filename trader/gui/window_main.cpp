@@ -19,7 +19,6 @@
 
 // GUI Includes
 #include <QtWidgets/QPlainTextEdit>
-#include "dialog_network_create.h"
 #include "ui_window_main.h"
 #include "window_main.h"
 
@@ -45,9 +44,10 @@ WindowMain::WindowMain(QWidget *parent) :
   QObject::connect(ui->actionConnectInteractiveBroker, SIGNAL(triggered()), this, SLOT(onInteractiveBrokerActionTriggered()));
   QObject::connect(ui->actionBrokerDisconnect, SIGNAL(triggered()), this, SLOT(onBrokerDisconnectTriggered()));
 
-  // Button mapping
-  QObject::connect(ui->pushCreate, SIGNAL(released()), this, SLOT(create()));
-  QObject::connect(ui->pushDelete, SIGNAL(released()), this, SLOT(destroy()));
+  // Created button mapping
+  QObject::connect(ui->pushCreate, SIGNAL(released()), this, SLOT(onCreateReleased()));
+  QObject::connect(ui->pushDelete, SIGNAL(released()), this, SLOT(onDeleteReleased()));
+  QObject::connect(ui->pushTrain,  SIGNAL(released()), this, SLOT(onTrainReleased()));
 
   database = 0;
   broker = 0;
@@ -71,92 +71,9 @@ WindowMain::~WindowMain()
   networkCreated.clear();
 }
 
-void WindowMain::run(void) {
-  if (!database) {
-    ui->statusbar->showMessage("Error: No Database Connection");
-    return;
-  }
-
-  if (!broker) {
-    ui->statusbar->showMessage("Error: No Broker Connection");
-    return;
-  }
-
-  database->connect();
-  broker->connectionManager();
-}
-
-void WindowMain::create(void) {
-  // Run and update loaded networks
-  DialogNetworkCreate dialog;
-  dialog.show();
-  dialog.exec();
-
-  // Check if network was created
-  if (!dialog.networkReady())
-    return;
-
-  // Gather network data
-  NeuralNetwork* network = dialog.getNetwork();
-  std::string ticker = network->getTicker();
-
-  // Ensure no duplicate networks are in the map
-  if (networkCreated.find(ticker) != networkCreated.end()) {
-    delete networkCreated[ticker];
-    networkCreated.erase(ticker);
-  }
-
-  // Add created network to map
-  networkCreated[network->getTicker()] = dialog.getNetwork();
-
-  updateNetworkTables();
-}
-
-void WindowMain::destroy(void) {
-  int row = ui->tableCreatedNetworks->currentRow();
-  if (row >= networkCreated.size())
-    return;
-
-  std::string ticker = static_cast<QPlainTextEdit*>(ui->tableCreatedNetworks->cellWidget(row, 0))->toPlainText().toStdString();
- 
-  if (networkCreated.find(ticker) != networkCreated.end()) {
-    delete networkCreated[ticker];
-    networkCreated.erase(ticker);
-  }
-
-  updateCreatedNetworks();
-}
-
 void WindowMain::updateNetworkTables(void) {
   // Update created networks table
   updateCreatedNetworks();
-}
-
-void WindowMain::updateCreatedNetworks(void) {
-  // Update Gui Table
-  ui->tableCreatedNetworks->clearContents();
-
-  int row = 0;
-  for (std::map<std::string, NeuralNetwork*>::iterator it = networkCreated.begin(); it != networkCreated.end(); ++it) {
-    ui->tableCreatedNetworks->insertRow(row);
-    std::string ticker = it->second->getTicker();
-
-    // Ticker
-    ui->tableCreatedNetworks->setCellWidget(row, 0, newTextBox(ticker));
-
-    // Layer Count
-    ui->tableCreatedNetworks->setCellWidget(row, 1, newTextBox(std::to_string(it->second->getLayerCount())));
-
-    // Total Nodes
-    ui->tableCreatedNetworks->setCellWidget(row, 2, newTextBox(std::to_string(it->second->getTotalNodes())));
-
-    // Increment Row
-    ++row;
-  }
-
-  for (row; row < ui->tableCreatedNetworks->rowCount(); ++row)
-    ui->tableCreatedNetworks->removeRow(row);
-
 }
 
 QPlainTextEdit* WindowMain::newTextBox(std::string input) {

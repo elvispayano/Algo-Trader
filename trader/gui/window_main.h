@@ -49,10 +49,10 @@ public slots:
   void onDatabaseDisconnectTriggered(void);
   void onBrokerDisconnectTriggered(void);
 
-  // Button settings
-  void run(void);
-  void create(void);
-  void destroy(void);
+  // Created network button slots
+  void onCreateReleased(void);
+  void onDeleteReleased(void);
+  void onTrainReleased(void);
 
 private:
   void updateNetworkTables(void);

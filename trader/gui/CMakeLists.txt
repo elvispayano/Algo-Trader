@@ -39,6 +39,7 @@ set(SRC
   "dialog_postgres.cpp"
   "window_main.cpp"
   "window_main_connections.cpp"
+  "window_main_created.cpp"
   "window_main_run.cpp"
 )
 
