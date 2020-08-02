@@ -61,8 +61,9 @@ private:
 
   QPlainTextEdit* newTextBox(std::string input);
 
-  // Created Functionality
+  // Created support functionality
   std::string getCreatedCurrentTicker(int row);
+  bool isCreatedWithinTable(void);
 
   Ui::WindowMain *ui;
 

@@ -59,10 +59,10 @@ void WindowMain::onCreateReleased(void) {
     Removal of the selected Neural Network
 */
 void WindowMain::onDeleteReleased(void) {
-  int row = ui->tableCreatedNetworks->currentRow();
-  if (row >= networkCreated.size())
+  if (isCreatedWithinTable())
     return;
 
+  int row = ui->tableCreatedNetworks->currentRow();
   std::string ticker = getCreatedCurrentTicker(row);
 
   if (networkCreated.find(ticker) != networkCreated.end()) {
@@ -80,7 +80,16 @@ void WindowMain::onDeleteReleased(void) {
     to the trained network list
 */
 void WindowMain::onTrainReleased(void) {
+  if (isCreatedWithinTable())
+    return;
 
+  int row = ui->tableCreatedNetworks->currentRow();
+  std::string ticker = getCreatedCurrentTicker(row);
+
+  // Get Training Parameters
+  NetworkTrainingParams params;
+  networkCreated[ticker]->setTrainParams(params);
+  networkCreated[ticker]->train();
 }
 
 /*
@@ -90,10 +99,10 @@ void WindowMain::onTrainReleased(void) {
     network already exists
 */
 void WindowMain::onPromoteReleased(void) {
-  int row = ui->tableCreatedNetworks->currentRow();
-  if (row >= networkCreated.size())
+  if (isCreatedWithinTable())
     return;
 
+  int row = ui->tableCreatedNetworks->currentRow();
   std::string ticker = getCreatedCurrentTicker(row);
 
   if (networkTrained.find(ticker) != networkTrained.end()) {
@@ -142,6 +151,24 @@ void WindowMain::updateCreatedNetworks(void) {
     ui->tableCreatedNetworks->removeRow(row);
 }
 
+/*
+  Function:     getCreatedCurrentTicker
+  Input:        row (int)
+  Output:       ticker (string)
+  Description:
+    For any given row in the created network table, get the contents of
+    the first cell which contains the ticker symbol
+*/
 std::string WindowMain::getCreatedCurrentTicker(int row) {
   return static_cast<QPlainTextEdit*>(ui->tableCreatedNetworks->cellWidget(row, 0))->toPlainText().toStdString();
+}
+
+/*
+  Function:     isCreatedWithinTable
+  Output:       isWithin (bool)
+  Description:
+    Check that the currently selected row is within the expected table elements
+*/
+bool WindowMain::isCreatedWithinTable(void) {
+  return ui->tableCreatedNetworks->currentRow() >= networkCreated.size();
 }

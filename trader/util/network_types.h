@@ -64,4 +64,11 @@ struct LayerConfiguration {
     layerWidth(0) {}
 };
 
+struct NetworkTrainingParams {
+  int temp;
+
+  NetworkTrainingParams() :
+    temp(0) {}
+};
+
 #endif /* NETOWRK_TYPES_H */
