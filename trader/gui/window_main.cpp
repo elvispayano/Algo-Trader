@@ -48,13 +48,14 @@ WindowMain::WindowMain(QWidget *parent) :
   QObject::connect(ui->pushCreate, SIGNAL(released()), this, SLOT(onCreateReleased()));
   QObject::connect(ui->pushDelete, SIGNAL(released()), this, SLOT(onDeleteReleased()));
   QObject::connect(ui->pushTrain,  SIGNAL(released()), this, SLOT(onTrainReleased()));
+  QObject::connect(ui->pushPromote,SIGNAL(released()), this, SLOT(onPromoteReleased()));
 
   database = 0;
   broker = 0;
 
   networkCreated.clear();
-  trainedNetworks.clear();
-  activeNetworks.clear();
+  networkTrained.clear();
+  networkActive.clear();
 }
 
 WindowMain::~WindowMain()

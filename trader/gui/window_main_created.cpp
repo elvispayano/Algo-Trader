@@ -63,7 +63,7 @@ void WindowMain::onDeleteReleased(void) {
   if (row >= networkCreated.size())
     return;
 
-  std::string ticker = static_cast<QPlainTextEdit*>(ui->tableCreatedNetworks->cellWidget(row, 0))->toPlainText().toStdString();
+  std::string ticker = getCreatedCurrentTicker(row);
 
   if (networkCreated.find(ticker) != networkCreated.end()) {
     delete networkCreated[ticker];
@@ -81,6 +81,30 @@ void WindowMain::onDeleteReleased(void) {
 */
 void WindowMain::onTrainReleased(void) {
 
+}
+
+/*
+  Function:     onPromoteReleased
+  Description:
+    Promote selected network into trained network and replace if an existing
+    network already exists
+*/
+void WindowMain::onPromoteReleased(void) {
+  int row = ui->tableCreatedNetworks->currentRow();
+  if (row >= networkCreated.size())
+    return;
+
+  std::string ticker = getCreatedCurrentTicker(row);
+
+  if (networkTrained.find(ticker) != networkTrained.end()) {
+    delete networkTrained[ticker];
+    networkTrained.erase(ticker);
+  }
+
+  networkTrained[ticker] = networkCreated[ticker];
+  networkCreated.erase(ticker);
+
+  updateNetworkTables();
 }
 
 /*
@@ -107,10 +131,17 @@ void WindowMain::updateCreatedNetworks(void) {
     // Total Nodes
     ui->tableCreatedNetworks->setCellWidget(row, 2, newTextBox(std::to_string(it->second->getTotalNodes())));
 
+    // Performance
+    ui->tableCreatedNetworks->setCellWidget(row, 3, newTextBox(std::to_string(0)));
+
     // Increment Row
     ++row;
   }
 
   for (row; row < ui->tableCreatedNetworks->rowCount(); ++row)
     ui->tableCreatedNetworks->removeRow(row);
+}
+
+std::string WindowMain::getCreatedCurrentTicker(int row) {
+  return static_cast<QPlainTextEdit*>(ui->tableCreatedNetworks->cellWidget(row, 0))->toPlainText().toStdString();
 }

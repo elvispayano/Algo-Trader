@@ -53,6 +53,7 @@ public slots:
   void onCreateReleased(void);
   void onDeleteReleased(void);
   void onTrainReleased(void);
+  void onPromoteReleased(void);
 
 private:
   void updateNetworkTables(void);
@@ -60,13 +61,18 @@ private:
 
   QPlainTextEdit* newTextBox(std::string input);
 
+  // Created Functionality
+  std::string getCreatedCurrentTicker(int row);
+
   Ui::WindowMain *ui;
 
   BrokerBase* broker;
   DatabaseBase* database;
-  std::map<std::string, NeuralNetwork*> networkCreated;
-  std::vector<NeuralNetwork*> trainedNetworks;
-  std::vector<NeuralNetwork*> activeNetworks;
+
+  typedef std::map<std::string, NeuralNetwork*> NetworkMap;
+  NetworkMap networkCreated;
+  NetworkMap networkTrained;
+  NetworkMap networkActive;
 };
 
 #endif // WINDOW_MAIN_H
