@@ -13,6 +13,7 @@ on:
   push:
     branches:
     - master
+    - feature/*
   pull_request:
     branches:
     - master
@@ -20,11 +21,17 @@ on:
 jobs:
   Build:
     # Ensure Ubuntu runner
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     # Checkout source
     - uses: actions/checkout@v2
+    
+    # Download Required Files
+    - name: Downloading Tools
+      run: |
+        sudo apt upgrade cmake
+        sudo apt install libpq-dev postgresql-server-dev-all
 
     # Run CMake
     - name: Build Debug
