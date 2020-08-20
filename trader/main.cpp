@@ -17,7 +17,7 @@
 #include "postgres.h"
 
 // Neural Network Includes
-//#include "neural_network.h"
+#include "neural_network.h"
 
 // Trader Includes
 //#include "trader.h"
