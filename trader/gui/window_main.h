@@ -31,42 +31,41 @@ class BrokerBase;
 class DatabaseBase;
 class NeuralNetwork;
 
-class WindowMain : public QMainWindow
-{
+class WindowMain : public QMainWindow {
   Q_OBJECT
 
 public:
-  explicit WindowMain(QWidget *parent = nullptr);
+  explicit WindowMain( QWidget* parent = nullptr );
   ~WindowMain();
 
 public slots:
   // Run options
-  void onUnitTestsActionTiggered(void);
+  void onUnitTestsActionTiggered( void );
 
   // Connection settings
-  void onPostgreSQLActionTriggered(void);
-  void onInteractiveBrokerActionTriggered(void);
-  void onDatabaseDisconnectTriggered(void);
-  void onBrokerDisconnectTriggered(void);
+  void onPostgreSQLActionTriggered( void );
+  void onInteractiveBrokerActionTriggered( void );
+  void onDatabaseDisconnectTriggered( void );
+  void onBrokerDisconnectTriggered( void );
 
   // Button settings
-  void run(void);
-  void create(void);
-  void destroy(void);
+  void run( void );
+  void create( void );
+  void destroy( void );
 
 private:
-  void updateNetworkTables(void);
-  void updateCreatedNetworks(void);
+  void updateNetworkTables( void );
+  void updateCreatedNetworks( void );
 
-  QPlainTextEdit* newTextBox(std::string input);
+  QPlainTextEdit* newTextBox( std::string input );
 
-  Ui::WindowMain *ui;
+  Ui::WindowMain* ui;
 
-  BrokerBase* broker;
-  DatabaseBase* database;
-  std::map<std::string, NeuralNetwork*> networkCreated;
-  std::vector<NeuralNetwork*> trainedNetworks;
-  std::vector<NeuralNetwork*> activeNetworks;
+  BrokerBase*                             broker;
+  DatabaseBase*                           database;
+  std::map< std::string, NeuralNetwork* > networkCreated;
+  std::vector< NeuralNetwork* >           trainedNetworks;
+  std::vector< NeuralNetwork* >           activeNetworks;
 };
 
-#endif // WINDOW_MAIN_H
+#endif  // WINDOW_MAIN_H

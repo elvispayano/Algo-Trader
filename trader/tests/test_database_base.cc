@@ -19,12 +19,10 @@
 // Unit test framework setup
 class DatabaseTest : public ::testing::Test {
 protected:
-  void SetUp(void) override {
-    mDB = new MockDatabaseBase();
-  }
+  void SetUp( void ) override { mDB = new MockDatabaseBase(); }
 
-  void TearDown(void) override {
-    if (mDB)
+  void TearDown( void ) override {
+    if ( mDB )
       delete mDB;
   }
 
@@ -37,8 +35,8 @@ public:
   Description:
     Ensure input string can be converted into an integer
 */
-TEST_F(DatabaseTest, IntConversion) {
-  EXPECT_EQ(5, mDB->toInt("5"));
+TEST_F( DatabaseTest, IntConversion ) {
+  EXPECT_EQ( 5, mDB->toInt( "5" ) );
 }
 
 /*
@@ -46,6 +44,6 @@ TEST_F(DatabaseTest, IntConversion) {
   Description:
     Ensure input string can be converted into a float
 */
-TEST_F(DatabaseTest, FloatConversion) {
-  EXPECT_FLOAT_EQ(5.5f, mDB->toFloat("5.5"));
+TEST_F( DatabaseTest, FloatConversion ) {
+  EXPECT_FLOAT_EQ( 5.5f, mDB->toFloat( "5.5" ) );
 }

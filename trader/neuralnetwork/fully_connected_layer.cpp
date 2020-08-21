@@ -25,8 +25,8 @@
     Initialize the fully connected layer with the provided activation
     function settings
 */
-FullyConnectedLayer::FullyConnectedLayer(ActivationTypes selectTF) {
-  setTF(selectTF);
+FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF ) {
+  setTF( selectTF );
 }
 
 /*
@@ -36,9 +36,7 @@ FullyConnectedLayer::FullyConnectedLayer(ActivationTypes selectTF) {
   Description:
     Clear any dynamically allocated memory
 */
-FullyConnectedLayer::~FullyConnectedLayer(void) {
-
-}
+FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 
 /*
   Function:     processLayer
@@ -50,7 +48,7 @@ FullyConnectedLayer::~FullyConnectedLayer(void) {
     where f(x) is a matrix and tf is the configure transfer
     function
 */
-dMatrix FullyConnectedLayer::processLayer(dMatrix input) {
-  dMatrix output = performTF(weight * input + bias);
+dMatrix FullyConnectedLayer::processLayer( dMatrix input ) {
+  dMatrix output = performTF( weight * input + bias );
   return output;
 }

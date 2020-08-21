@@ -11,7 +11,6 @@
     Elvis Payano
 */
 
-
 // Utility Includes
 #include "utl_math.h"
 
@@ -23,13 +22,13 @@
   Description:
     Hyperbolic Tangent Transfer Function
 */
-TEST(MathTest, HyperbolicTangent) {
+TEST( MathTest, HyperbolicTangent ) {
   // Double
-  EXPECT_GT(htan( 10.0),-0.999);
-  EXPECT_LT(htan(-10.0), 0.999);
+  EXPECT_GT( htan( 10.0 ), -0.999 );
+  EXPECT_LT( htan( -10.0 ), 0.999 );
 
   // Integer
-  EXPECT_EQ(0, htan(0));
+  EXPECT_EQ( 0, htan( 0 ) );
 };
 
 /*
@@ -37,11 +36,11 @@ TEST(MathTest, HyperbolicTangent) {
   Description:
     Sigmoid Transfer Function
 */
-TEST(MathTest, Sigmoid) {
+TEST( MathTest, Sigmoid ) {
   // Double
-  EXPECT_GT(sigmoid( 10.0), 0.999);
-  EXPECT_LT(sigmoid(-10.0), 0.001);
-  EXPECT_DOUBLE_EQ(0.5, sigmoid(0.0));
+  EXPECT_GT( sigmoid( 10.0 ), 0.999 );
+  EXPECT_LT( sigmoid( -10.0 ), 0.001 );
+  EXPECT_DOUBLE_EQ( 0.5, sigmoid( 0.0 ) );
 };
 
 /*
@@ -49,13 +48,13 @@ TEST(MathTest, Sigmoid) {
   Description:
     Rectified Linear Unit Transfer Function
 */
-TEST(MathTest, ReLu) {
+TEST( MathTest, ReLu ) {
   // Double
-  EXPECT_DOUBLE_EQ(10.0, relu( 10.0));
-  EXPECT_DOUBLE_EQ( 0.0, relu(-10.0));
+  EXPECT_DOUBLE_EQ( 10.0, relu( 10.0 ) );
+  EXPECT_DOUBLE_EQ( 0.0, relu( -10.0 ) );
 
   // Integer
-  EXPECT_EQ(0, relu(0));
+  EXPECT_EQ( 0, relu( 0 ) );
 };
 
 /*
@@ -63,13 +62,13 @@ TEST(MathTest, ReLu) {
   Description:
     Binary Transfer Function
 */
-TEST(MathTest, Binary) {
+TEST( MathTest, Binary ) {
   // Double
-  EXPECT_DOUBLE_EQ(1.0, binary( 10.0));
-  EXPECT_DOUBLE_EQ(0.0, binary(-10.0));
+  EXPECT_DOUBLE_EQ( 1.0, binary( 10.0 ) );
+  EXPECT_DOUBLE_EQ( 0.0, binary( -10.0 ) );
 
   // Integer
-  EXPECT_EQ(1, binary(0));
+  EXPECT_EQ( 1, binary( 0 ) );
 };
 
 /*
@@ -77,11 +76,11 @@ TEST(MathTest, Binary) {
   Description:
     Linear Transfer Function
 */
-TEST(MathTest, Linear) {
+TEST( MathTest, Linear ) {
   // Double
-  EXPECT_DOUBLE_EQ( 10.0, linear( 10.0));
-  EXPECT_DOUBLE_EQ(-10.0, linear(-10.0));
+  EXPECT_DOUBLE_EQ( 10.0, linear( 10.0 ) );
+  EXPECT_DOUBLE_EQ( -10.0, linear( -10.0 ) );
 
   // Integer
-  EXPECT_EQ(0, linear(0));
+  EXPECT_EQ( 0, linear( 0 ) );
 };

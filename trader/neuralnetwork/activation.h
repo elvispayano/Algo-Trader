@@ -25,23 +25,23 @@
 class Activation {
 public:
   // Constructors
-  Activation(void);
-  Activation(ActivationTypes select);
+  Activation( void );
+  Activation( ActivationTypes select );
 
   // Destructors
-  ~Activation(void);
+  ~Activation( void );
 
   // Activation Configuration
-  void setTF(ActivationTypes select);
-  
+  void setTF( ActivationTypes select );
+
 protected:
   // Process layer values through configured activation function
-  dMatrix performTF(dMatrix);
+  dMatrix         performTF( dMatrix );
   ActivationTypes tfType;
 
 private:
   // Transfer function selection trigger
-  double(*transferFunction)(double);
+  double ( *transferFunction )( double );
 };
 
 #endif /*ACTIVATION_H*/

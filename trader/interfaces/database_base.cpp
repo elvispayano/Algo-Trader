@@ -3,9 +3,9 @@
     Database Base
 
   Description:
-    This class is the template configuration for managing connections to external
-    Databases. This base implementation will allow for the selected solution to be
-    independent of how the project is designed.
+    This class is the template configuration for managing connections to
+    external Databases. This base implementation will allow for the selected
+    solution to be independent of how the project is designed.
 
   Test:
     test_database_base.cc
@@ -25,11 +25,11 @@
   Description:
     Convert input string into an integer value
 */
-int DatabaseBase::toInt(std::string in) {
-  if (in.empty())
+int DatabaseBase::toInt( std::string in ) {
+  if ( in.empty() )
     return 0;
 
-  return atoi(in.c_str());
+  return atoi( in.c_str() );
 }
 
 /*
@@ -40,9 +40,9 @@ int DatabaseBase::toInt(std::string in) {
   Description:
     Convert input string into a float value
 */
-float DatabaseBase::toFloat(std::string in) {
-  if (in.empty())
+float DatabaseBase::toFloat( std::string in ) {
+  if ( in.empty() )
     return 0.0f;
 
-  return atof(in.c_str());
+  return atof( in.c_str() );
 }

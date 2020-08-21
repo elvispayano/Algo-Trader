@@ -13,51 +13,53 @@
 // Interface Includes
 #include "broker_base.h"
 #include "database_base.h"
-#include "interactive_broker.h"
 #include "ib_wrapper.h"
+#include "interactive_broker.h"
 #include "postgres.h"
 
 // QT Includes
 #include "dialog_interactivebroker.h"
 #include "dialog_postgres.h"
-#include "window_main.h"
 #include "ui_window_main.h"
+#include "window_main.h"
 
-void WindowMain::onPostgreSQLActionTriggered(void) {
+void WindowMain::onPostgreSQLActionTriggered( void ) {
   onDatabaseDisconnectTriggered();
 
-  ui->statusbar->showMessage("Connecting to PostgreSQL Database...");
+  ui->statusbar->showMessage( "Connecting to PostgreSQL Database..." );
   DialogPostgres dialog;
   dialog.show();
   dialog.exec();
-  
-  if (dialog.isConnected()) {
-    ui->statusbar->showMessage("Could not establish connection to PostgreSQL Database");
+
+  if ( dialog.isConnected() ) {
+    ui->statusbar->showMessage(
+        "Could not establish connection to PostgreSQL Database" );
     return;
   }
   database = dialog.getDatabase();
-  ui->statusbar->showMessage("PostgreSQL Connection Established");
+  ui->statusbar->showMessage( "PostgreSQL Connection Established" );
 }
 
-void WindowMain::onInteractiveBrokerActionTriggered(void) {
+void WindowMain::onInteractiveBrokerActionTriggered( void ) {
   onBrokerDisconnectTriggered();
-  
-  ui->statusbar->showMessage("Connecting to Interactive Broker...");
+
+  ui->statusbar->showMessage( "Connecting to Interactive Broker..." );
 
   DialogInteractiveBroker dialog;
   dialog.show();
   dialog.exec();
 
-  if (dialog.isConnected()) {
-    ui->statusbar->showMessage("Could not establish connection to Interactive Broker");
+  if ( dialog.isConnected() ) {
+    ui->statusbar->showMessage(
+        "Could not establish connection to Interactive Broker" );
     return;
   }
   broker = dialog.getBroker();
-  ui->statusbar->showMessage("Interactive Broker Connection Established");
+  ui->statusbar->showMessage( "Interactive Broker Connection Established" );
 }
 
-void WindowMain::onDatabaseDisconnectTriggered(void) {
-  if (!database)
+void WindowMain::onDatabaseDisconnectTriggered( void ) {
+  if ( !database )
     return;
 
   database->disconnect();
@@ -65,8 +67,8 @@ void WindowMain::onDatabaseDisconnectTriggered(void) {
   database = 0;
 }
 
-void WindowMain::onBrokerDisconnectTriggered(void) {
-  if (!broker)
+void WindowMain::onBrokerDisconnectTriggered( void ) {
+  if ( !broker )
     return;
 
   broker->terminateConnection();

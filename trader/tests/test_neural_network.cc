@@ -12,8 +12,8 @@
 
 // Utility Includes
 #include "matrix.h"
-#include "neural_network.h"
 #include "network_types.h"
+#include "neural_network.h"
 
 // Google Test Includes
 #include "gtest/gtest.h"
@@ -21,22 +21,22 @@
 // Unit test framework setup
 class NeuralNetworkTest : public ::testing::Test {
 protected:
-  void SetUp(void) override {
+  void SetUp( void ) override {
     config.Activation  = ActivationTypes::SIGMOID;
     config.Layer       = LayerTypes::FULLYCONNECTED;
     config.layerHeight = 3;
     config.layerWidth  = 2;
 
-    network = new NeuralNetwork("XYZ");
+    network = new NeuralNetwork( "XYZ" );
   }
 
-  void TearDown(void) override {
-    if (network)
+  void TearDown( void ) override {
+    if ( network )
       delete network;
   }
 
 public:
-  NeuralNetwork* network;
+  NeuralNetwork*     network;
   LayerConfiguration config;
 };
 
@@ -45,9 +45,9 @@ public:
   Description:
     Create a Neural Network object and test default settings
 */
-TEST_F(NeuralNetworkTest, ConstructorDefault) {
+TEST_F( NeuralNetworkTest, ConstructorDefault ) {
   // Neural Network should be created with no layers
-  EXPECT_EQ(0, network->getLayerCount());
+  EXPECT_EQ( 0, network->getLayerCount() );
 }
 
 /*
@@ -55,10 +55,10 @@ TEST_F(NeuralNetworkTest, ConstructorDefault) {
   Description:
     Add a known layer to the neural network
 */
-TEST_F(NeuralNetworkTest, AddLayersKnown) {
+TEST_F( NeuralNetworkTest, AddLayersKnown ) {
   // Add a known layer type
-  network->addLayer(config);
-  EXPECT_EQ(1, network->getLayerCount());
+  network->addLayer( config );
+  EXPECT_EQ( 1, network->getLayerCount() );
 }
 
 /*
@@ -66,9 +66,9 @@ TEST_F(NeuralNetworkTest, AddLayersKnown) {
   Description:
     Add a unknown layer to the neural network
 */
-TEST_F(NeuralNetworkTest, AddLayersUnknown) {
+TEST_F( NeuralNetworkTest, AddLayersUnknown ) {
   // Reject an unknown layer type
   config.Layer = LayerTypes::UNKNOWN;
-  network->addLayer(config);
-  EXPECT_EQ(0, network->getLayerCount());
+  network->addLayer( config );
+  EXPECT_EQ( 0, network->getLayerCount() );
 }

@@ -24,13 +24,13 @@
 /*
   Constructor:  Activation
   Inputs:       None (void)
-  
+
   Description:
     Configure the activation transfer function to  default
     settings
-*/ 
-Activation::Activation(void) {
-  setTF(ActivationTypes::LINEAR);
+*/
+Activation::Activation( void ) {
+  setTF( ActivationTypes::LINEAR );
 }
 
 /*
@@ -41,8 +41,8 @@ Activation::Activation(void) {
     Configure the activation transfer function with provided
     parameters
 */
-Activation::Activation(ActivationTypes tfSelect) {
-  setTF(tfSelect);
+Activation::Activation( ActivationTypes tfSelect ) {
+  setTF( tfSelect );
 }
 
 /*
@@ -52,9 +52,7 @@ Activation::Activation(ActivationTypes tfSelect) {
   Description:
     Clear any dynamically allocated memory
 */
-Activation::~Activation(void) {
-
-}
+Activation::~Activation( void ) {}
 
 /*
   Function:     setTF
@@ -64,9 +62,9 @@ Activation::~Activation(void) {
     Configure activation transfer function to be used
     by layers
 */
-void Activation::setTF(ActivationTypes selector) {
+void Activation::setTF( ActivationTypes selector ) {
   tfType = selector;
-  switch (tfType) {
+  switch ( tfType ) {
   case ActivationTypes::SIGMOID:
     transferFunction = sigmoid;
     break;
@@ -83,10 +81,9 @@ void Activation::setTF(ActivationTypes selector) {
     transferFunction = relu;
     break;
 
-  default: // ActivationTypes::LINEAR
+  default:  // ActivationTypes::LINEAR
     transferFunction = linear;
     break;
-
   }
 }
 
@@ -100,7 +97,7 @@ void Activation::setTF(ActivationTypes selector) {
     function. The input is an m-by-n matrix and the output
     will be of the same size
 */
-dMatrix Activation::performTF(dMatrix input) {
-  input.forEach(transferFunction);
+dMatrix Activation::performTF( dMatrix input ) {
+  input.forEach( transferFunction );
   return input;
 }

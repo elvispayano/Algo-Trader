@@ -32,11 +32,12 @@
   Description:
     Initialize the trader and PG objects
 */
-Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*>* netIn) :
-  broker(brokerIn), database(dbIn), networks(*netIn)
-{
-  
-}
+Trader::Trader( BrokerBase*                    brokerIn,
+                DatabaseBase*                  dbIn,
+                std::vector< NeuralNetwork* >* netIn )
+    : broker( brokerIn )
+    , database( dbIn )
+    , networks( *netIn ) {}
 
 /*
   Destructor:     ~Trader
@@ -45,9 +46,7 @@ Trader::Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwo
   Description:
     Ensure proper memory cleanup
 */
-Trader::~Trader(void) {
- 
-}
+Trader::~Trader( void ) {}
 
 /*
   Function:     perform
@@ -56,44 +55,43 @@ Trader::~Trader(void) {
   Description:
     Process neural network inputs
 */
-void Trader::perform(void) {
+void Trader::perform( void ) {
 
-  for (size_t ind = 0; ind < networks.size(); ++ind) {
+  for ( size_t ind = 0; ind < networks.size(); ++ind ) {
     // Request Update
     OrderConfig order;
     order.request = Requests::UPDATE;
-    order.ticker = networks[ind]->getTicker();
+    order.ticker  = networks[ind]->getTicker();
 
-    broker->addToQueue(order);
+    broker->addToQueue( order );
 
     // Continue processing if ticker is updated
-    if (!broker->responseReady(order.ticker))
+    if ( !broker->responseReady( order.ticker ) )
       continue;
-    
+
     // Capture broker response in Neural Network input format
-    Stock response = broker->getResponse(order.ticker);
-    dMatrix input(4, 1, 0.0);
-    input(0, 0) = response.getAsk();
-    input(1, 0) = response.getBid();
-    input(2, 0) = response.getLow();
-    input(3, 0) = response.getHigh();
+    Stock   response = broker->getResponse( order.ticker );
+    dMatrix input( 4, 1, 0.0 );
+    input( 0, 0 ) = response.getAsk();
+    input( 1, 0 ) = response.getBid();
+    input( 2, 0 ) = response.getLow();
+    input( 3, 0 ) = response.getHigh();
 
     // Run inputs through network
-    dMatrix output(3, 1, 0.0);
-    output = networks[ind]->process(input);
+    dMatrix output( 3, 1, 0.0 );
+    output = networks[ind]->process( input );
     // Convert inputs to broker actions
-    order.request = Requests::MARKET;
-    order.quantity = 1;
+    order.request    = Requests::MARKET;
+    order.quantity   = 1;
     double threshold = 1 / 3;
-    if (output(0, 0) > threshold) {
+    if ( output( 0, 0 ) > threshold ) {
       order.purchase = true;
-    }
-    else if(output(2, 0) > threshold) {
+    } else if ( output( 2, 0 ) > threshold ) {
       order.purchase = false;
     }
 
     // Queue broker action
-    if (output(1, 0) <= threshold)
-      broker->addToQueue(order);
+    if ( output( 1, 0 ) <= threshold )
+      broker->addToQueue( order );
   }
 }

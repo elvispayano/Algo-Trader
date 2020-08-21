@@ -31,8 +31,8 @@
   Transfer Function Equation:
     f(x) = 1/(1+e^(-x))
 */
-double sigmoid(double x) {
-  return 1 / (1 + exp(-x));
+double sigmoid( double x ) {
+  return 1 / ( 1 + exp( -x ) );
 }
 
 /*
@@ -47,8 +47,8 @@ double sigmoid(double x) {
   Transfer Function Equation:
     f(x) = (e^x - e^(-x))/(e^x + e^(-x))
 */
-double htan(double x) {
-  return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
+double htan( double x ) {
+  return ( exp( x ) - exp( -x ) ) / ( exp( x ) + exp( -x ) );
 }
 
 /*
@@ -63,9 +63,8 @@ double htan(double x) {
     f(x) = 1  | x >= 0
     f(x) = 0  | x <  0
 */
-double binary(double x) {
-  if (x >= 0) return 1;
-  return 0;
+double binary( double x ) {
+  return ( x >= 0 );
 }
 
 /*
@@ -81,9 +80,8 @@ double binary(double x) {
     f(x) = x  | x >  0
     f(x) = 0  | x <= 0
 */
-double relu(double x) {
-  if (x > 0) return x;
-  return 0;
+double relu( double x ) {
+  return ( x > 0 ) ? x : 0;
 }
 
 /*
@@ -98,6 +96,6 @@ double relu(double x) {
   Transfer Function Equation:
     f(x) = x
 */
-double linear(double x) {
+double linear( double x ) {
   return x;
 }

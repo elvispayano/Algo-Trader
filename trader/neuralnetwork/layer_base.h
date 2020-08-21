@@ -23,29 +23,29 @@
 class LayerBase : public Activation {
 public:
   // Constructors
-  LayerBase(void);
-  LayerBase(ActivationTypes selectTF);
+  LayerBase( void );
+  LayerBase( ActivationTypes selectTF );
 
   // Destructors
-  ~LayerBase(void);
+  ~LayerBase( void );
 
-  // Process layer inputs 
-  virtual dMatrix processLayer(dMatrix input) = 0;
+  // Process layer inputs
+  virtual dMatrix processLayer( dMatrix input ) = 0;
 
   // Configure Layer
-  void reconfigure(void);
+  void reconfigure( void );
 
   // Layer Setters
-  void setInputCount(size_t count) { inputCount = count; }
-  void setNodeCount(size_t  count) { nodeCount  = count; }
-  void setWeight(dMatrix input)    { weight     = input; }
-  void setBias(dMatrix input)      { bias       = input; }
+  void setInputCount( size_t count ) { inputCount = count; }
+  void setNodeCount( size_t count ) { nodeCount = count; }
+  void setWeight( dMatrix input ) { weight = input; }
+  void setBias( dMatrix input ) { bias = input; }
 
   // Layer Getters
-  size_t  getInputCount(void) { return inputCount; }
-  size_t  getNodeCount(void)  { return nodeCount;  }
-  dMatrix getWeight(void)     { return weight;     }
-  dMatrix getBias(void)       { return bias;       }
+  size_t  getInputCount( void ) { return inputCount; }
+  size_t  getNodeCount( void ) { return nodeCount; }
+  dMatrix getWeight( void ) { return weight; }
+  dMatrix getBias( void ) { return bias; }
 
 protected:
   dMatrix weight;
