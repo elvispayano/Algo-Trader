@@ -17,6 +17,9 @@
 // Postgres (External) Includes
 #include <libpq-fe.h>
 
+// Standard Includes
+#include <cstring>
+
 /*
   Constructor:  Postgres
   Inputs:       host, port, opt, tty, database, username, password (all char*)
@@ -122,7 +125,7 @@ char* Postgres::exec(std::string query) {
 */
 char* Postgres::execFunc(std::string func) {
   clearQuery();
-  sprintf_s(queryBuffer, "SELECT * FROM %s()", func.c_str());
+  sprintf(queryBuffer, "SELECT * FROM %s()", func.c_str());
   return exec(queryBuffer);
 }
 
@@ -138,7 +141,7 @@ char* Postgres::execFunc(std::string func) {
 */
 char* Postgres::execFunc(std::string func, int id) {
   clearQuery();
-  sprintf_s(queryBuffer, "SELECT * FROM %s(%d)", func.c_str(), id);
+  sprintf(queryBuffer, "SELECT * FROM %s(%d)", func.c_str(), id);
   return exec(queryBuffer);
 }
 
@@ -154,7 +157,7 @@ char* Postgres::execFunc(std::string func, int id) {
 */
 char* Postgres::execFunc(std::string func, std::string ticker) {
   clearQuery();
-  sprintf_s(queryBuffer, "SELECT * FROM %s('%s')", func.c_str(), ticker.c_str());
+  sprintf(queryBuffer, "SELECT * FROM %s('%s')", func.c_str(), ticker.c_str());
   return exec(queryBuffer);
 }
 
@@ -170,7 +173,7 @@ char* Postgres::execFunc(std::string func, std::string ticker) {
 */
 char* Postgres::execFunc(std::string func, std::string ticker, int num) {
   clearQuery();
-  sprintf_s(queryBuffer, "SELECT * FROM %s('%s', %d)", func.c_str(), ticker.c_str(), num);
+  sprintf(queryBuffer, "SELECT * FROM %s('%s', %d)", func.c_str(), ticker.c_str(), num);
   return exec(queryBuffer);
 }
 
