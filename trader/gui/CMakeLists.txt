@@ -15,9 +15,13 @@ cmake_minimum_required(VERSION 3.8)
 # Configure Project Source/Header Files
 #----------------------------------------------------------------------
 
-if(NOT Qt5_DIR)
-  message(STATUS "Default Setting for Qt5")
-  set(Qt5_DIR "C:\\Qt\\5.15.0\\msvc2019_64\\lib\\cmake\\Qt5")
+message(STATUS "Default Setting for Qt5")
+if(WIN32)
+  if(NOT Qt5_DIR)
+    set(Qt5_DIR "C:\\Qt\\5.15.0\\msvc2019_64\\lib\\cmake\\Qt5")
+  endif()
+else()
+  set(QT_UIC_EXECUTABLE "/usr/bin/uic-qt5")
 endif()
 
 find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets)
@@ -50,8 +54,8 @@ set(UI
   "window_main.ui"
 )
 
-qt_wrap_ui(UI_WRAPPED ${UI})
-qt_wrap_cpp(MOC_WRAPPED ${HEADERS})
+qt5_wrap_ui(UI_WRAPPED ${UI})
+qt5_wrap_cpp(MOC_WRAPPED ${HEADERS})
 
 #----------------------------------------------------------------------
 # Configure Project Interface Settings

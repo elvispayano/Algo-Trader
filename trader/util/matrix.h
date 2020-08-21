@@ -23,16 +23,16 @@ class Matrix {
 public:
   // Constructors
   Matrix(void);
-  Matrix(size_t r, size_t c, T val = 0.0);
+  Matrix(size_t r, size_t c, T val);
 
   // Destructor
   ~Matrix(void);
 
   // Reset all element in matrix
-  void clear(T initVal = 0.0);
+  void clear(T initVal);
 
   // Reshape and reset matrix
-  void resize(size_t r, size_t c, T initVal = 0.0);
+  void resize(size_t r, size_t c, T initVal);
 
   // Get matrix size info
   size_t rows(void) { return mr; }
@@ -109,7 +109,7 @@ Matrix<T>::Matrix(void) {
 }
 
 template<typename T>
-Matrix<T>::Matrix(size_t r, size_t c, T val = 0) {
+Matrix<T>::Matrix(size_t r, size_t c, T val) {
   mat.clear();
   resize(r, c, val);
 }
@@ -135,7 +135,7 @@ Matrix<T>::~Matrix(void) {
     initial value.
 */
 template<typename T>
-void Matrix<T>::clear(T initVal = 0) {
+void Matrix<T>::clear(T initVal) {
   auto lambda = [](T x, T y)->T { return y; };
   forEach(lambda, initVal);
 }
@@ -512,7 +512,7 @@ template<typename T>
 void Matrix<T>::operator*=(Matrix<T> inp) {
   if (mc != inp.rows()) return;
   Matrix<T> out(this->operator*(inp));
-  resize(out.rows(), out.cols());
+  resize(out.rows(), out.cols(), 0.0);
   for (size_t r = 0; r < mr; ++r) {
     for (size_t c = 0; c < mc; ++c) {
       this->operator()(r, c) = out(r, c);

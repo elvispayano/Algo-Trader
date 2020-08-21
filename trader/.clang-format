@@ -1,0 +1,8 @@
+﻿---
+Language: Cpp
+BreakInheritanceList: BeforeComma
+IncludeBlocks: Regroup
+IndentWidth: '2'
+KeepEmptyLinesAtTheStartOfBlocks: 'true'
+SortIncludes: true
+...

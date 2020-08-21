@@ -20,7 +20,7 @@
 #include "neural_network.h"
 
 // Trader Includes
-#include "trader.h"
+//#include "trader.h"
 
 // Main Include
 #include "main.h"
@@ -59,75 +59,75 @@ int main(int argc, char **argv) {
     Create and configure the trader platform with the required
     settings
 */
-void Initialize(void) {
-  // Initial Variable Setup
-  broker   = 0;
-  database = 0;
-  trader   = 0;
-
-  networks.clear();
-
-  // Configure database connection
-  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
-  if (!database->connect())
-    throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
-    
-  // Configure broker connection
-  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
-  broker->connectionManager();
-
-  // Configure Neural Networks
-  for (size_t networkCounter = 1; networkCounter <= database->getNetworkCount(); ++networkCounter) {
-    // Get ticker for current network
-    std::string ticker = database->getNetwork(networkCounter);
-
-    // Create and configure network
-    NeuralNetwork* createdNetwork = new NeuralNetwork(ticker);
-    for (size_t layerCounter = 1; layerCounter <= database->getLayerCount(ticker); ++layerCounter)
-      createdNetwork->addLayer(database->getLayer(ticker, layerCounter));
-
-    // Add network to list
-    networks.push_back(createdNetwork);
-  }
-
-  // Configure Trader
-  trader = new Trader(broker, database, &networks);
-
-}
-
-/*
-  Functions:    Update
-  Inputs:       None (void)
-  
-  Description:
-    Update trader and take desired actions
-*/
-void Update(void) {
-  trader->perform();
-}
-
-/*
-  Function:     Finalize
-  Inputs:       None (void)
-
-  Description:
-    Memory cleanup for all allocated memory
-*/
-void Finalize(void) {
-  if (database) {
-    database->disconnect();
-    delete database;
-  }
-
-  if (broker) {
-    broker->terminateConnection();
-    delete broker;
-  }
-
-  if (trader)
-    delete trader;
-
-  for (size_t it = 0; it < networks.size(); ++it)
-    if (networks[it])
-      delete networks[it];
-}
+//void Initialize(void) {
+//  // Initial Variable Setup
+//  broker   = 0;
+//  database = 0;
+//  trader   = 0;
+//
+//  networks.clear();
+//
+//  // Configure database connection
+//  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
+//  if (!database->connect())
+//    throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
+//    
+//  // Configure broker connection
+//  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
+//  broker->connectionManager();
+//
+//  // Configure Neural Networks
+//  for (size_t networkCounter = 1; networkCounter <= database->getNetworkCount(); ++networkCounter) {
+//    // Get ticker for current network
+//    std::string ticker = database->getNetwork(networkCounter);
+//
+//    // Create and configure network
+//    NeuralNetwork* createdNetwork = new NeuralNetwork(ticker);
+//    for (size_t layerCounter = 1; layerCounter <= database->getLayerCount(ticker); ++layerCounter)
+//      createdNetwork->addLayer(database->getLayer(ticker, layerCounter));
+//
+//    // Add network to list
+//    networks.push_back(createdNetwork);
+//  }
+//
+//  // Configure Trader
+//  trader = new Trader(broker, database, &networks);
+//
+//}
+//
+///*
+//  Functions:    Update
+//  Inputs:       None (void)
+//  
+//  Description:
+//    Update trader and take desired actions
+//*/
+//void Update(void) {
+//  trader->perform();
+//}
+//
+///*
+//  Function:     Finalize
+//  Inputs:       None (void)
+//
+//  Description:
+//    Memory cleanup for all allocated memory
+//*/
+//void Finalize(void) {
+//  if (database) {
+//    database->disconnect();
+//    delete database;
+//  }
+//
+//  if (broker) {
+//    broker->terminateConnection();
+//    delete broker;
+//  }
+//
+//  if (trader)
+//    delete trader;
+//
+//  for (size_t it = 0; it < networks.size(); ++it)
+//    if (networks[it])
+//      delete networks[it];
+//}

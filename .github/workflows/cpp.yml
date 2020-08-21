@@ -13,6 +13,7 @@ on:
   push:
     branches:
     - master
+    - feature/*
   pull_request:
     branches:
     - master
@@ -20,11 +21,18 @@ on:
 jobs:
   Build:
     # Ensure Ubuntu runner
-    runs-on: self-hosted
-
+    runs-on: ubuntu-latest
+    container: kitware/cmake:ci-fedora31-x86_64-2020-08-18
     steps:
     # Checkout source
     - uses: actions/checkout@v2
+    
+    # Download Required Files
+    - name: Downloading Tools
+      run: |
+        dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/F-31-x86_64/pgdg-fedora-repo-latest.noarch.rpm
+        dnf install -y libpq-devel postgresql11-server
+        dnf install -y qt5 qt5-devel qt-creator
 
     # Run CMake
     - name: Build Debug
@@ -35,6 +43,6 @@ jobs:
         
     # Execute
     - name: Run Debug
-      working-directory: ./trader/Debug
+      working-directory: ./trader/
       run: |
-        ./trader.exe --gtest_output=xml
+        ./algo-trader --gtest_output=xml
