@@ -17,10 +17,18 @@
 #ifndef UTL_MATH_H
 #define UTL_MATH_H
 
-double binary( double );   // Transfer Function: Binary
-double htan( double );     // Transfer Function: Hyperbolic Tangent
-double linear( double );   // Transfer Function: Linear
-double relu( double );     // Transfer Function: Rectified Linear Unit
-double sigmoid( double );  // Transfer Function: Sigmoid
+// Transfer functions
+double binary( double x );   // Transfer Function: Binary
+double htan( double x );     // Transfer Function: Hyperbolic Tangent
+double linear( double x );   // Transfer Function: Linear
+double relu( double x );     // Transfer Function: Rectified Linear Unit
+double sigmoid( double x );  // Transfer Function: Sigmoid
+
+// Transfer function derivatives
+double binary_d( double x );   // Transfer Function Derivative: Binary
+double htan_d( double x );     // Transfer Function Derivative: HTan
+double linear_d( double x );   // Transfer Function Derivative: Linear
+double relu_d( double x );     // Transfer Function Derivative: ReLu
+double sigmoid_d( double x );  // Transfer Function Derivative: Sigmoid
 
 #endif /* UTL_MATH_H */
