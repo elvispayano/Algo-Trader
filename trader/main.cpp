@@ -26,7 +26,6 @@
 #include "main.h"
 
 // Pipeline Automation
-#define CI
 #ifdef CI
 //#include "test_main.h"
 #else

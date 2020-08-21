@@ -13,7 +13,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Project description 
-project(trader VERSION 0.20.07)
+project(algo-trader VERSION 0.20.08)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
@@ -31,7 +31,7 @@ add_subdirectory(neuralnetwork)
 add_executable (${PROJECT_NAME} "main.cpp" "main.h")
 
 # Link libraries
-#target_link_libraries(${PROJECT_NAME} PRIVATE main)
+target_link_libraries(${PROJECT_NAME} PRIVATE main)
 target_link_libraries(${PROJECT_NAME} PRIVATE interfaces)
 target_link_libraries(${PROJECT_NAME} PRIVATE neuralnetwork)
 #target_link_libraries(${PROJECT_NAME} PRIVATE tests)
