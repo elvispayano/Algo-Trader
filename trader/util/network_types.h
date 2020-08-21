@@ -23,14 +23,7 @@
     Enumerated definition type that is used to configure layers
     to use the selected transfer function
 */
-enum class ActivationTypes {
-  LINEAR,
-  BINARY,
-  RELU,
-  TANH,
-  SIGMOID,
-  UNKNOWN
-};
+enum class ActivationTypes { LINEAR, BINARY, RELU, TANH, SIGMOID, UNKNOWN };
 
 /*
   Enum:         Layer Types
@@ -38,10 +31,7 @@ enum class ActivationTypes {
     Enumerated definition type that is used to select what type
     of layer to create.
 */
-enum class LayerTypes {
-  FULLYCONNECTED,
-  UNKNOWN
-};
+enum class LayerTypes { FULLYCONNECTED, UNKNOWN };
 
 /*
   Struct:       Layer Configuration
@@ -50,18 +40,18 @@ enum class LayerTypes {
     data needed for creation and configuration
 */
 struct LayerConfiguration {
-  LayerTypes Layer;
+  LayerTypes      Layer;
   ActivationTypes Activation;
-  size_t layerHeight;
-  size_t layerWidth;
-  dMatrix weight;
-  dMatrix bias;
+  size_t          layerHeight;
+  size_t          layerWidth;
+  dMatrix         weight;
+  dMatrix         bias;
 
-  LayerConfiguration() :
-    Layer(LayerTypes::UNKNOWN),
-    Activation(ActivationTypes::LINEAR),
-    layerHeight(0),
-    layerWidth(0) {}
+  LayerConfiguration()
+      : Layer( LayerTypes::UNKNOWN )
+      , Activation( ActivationTypes::LINEAR )
+      , layerHeight( 0 )
+      , layerWidth( 0 ) {}
 };
 
 #endif /* NETOWRK_TYPES_H */

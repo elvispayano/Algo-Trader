@@ -27,9 +27,10 @@
 
 class MockNeuralNetwork : public NeuralNetwork {
 public:
-  MockNeuralNetwork(std::string ticker) : NeuralNetwork(ticker) {}
-  MOCK_METHOD1(process, dMatrix(dMatrix));
-  MOCK_METHOD0(getTicker, std::string(void));
+  MockNeuralNetwork( std::string ticker )
+      : NeuralNetwork( ticker ) {}
+  MOCK_METHOD1( process, dMatrix( dMatrix ) );
+  MOCK_METHOD0( getTicker, std::string( void ) );
 };
 
 #endif /* MOCK_NEURAL_NETWORK_H */

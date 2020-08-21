@@ -20,37 +20,36 @@ class BrokerBase;
 class QPlainTextEdit;
 
 namespace Ui {
-  class DialogInteractiveBroker;
+class DialogInteractiveBroker;
 }
 
-class DialogInteractiveBroker : public QDialog
-{
+class DialogInteractiveBroker : public QDialog {
   Q_OBJECT
 
 public:
-  explicit DialogInteractiveBroker(QWidget *parent = nullptr);
+  explicit DialogInteractiveBroker( QWidget* parent = nullptr );
   ~DialogInteractiveBroker();
 
-  bool isConnected(void) { return false; }
-  BrokerBase* getBroker(void) { return NULL; }
+  bool        isConnected( void ) { return false; }
+  BrokerBase* getBroker( void ) { return NULL; }
 
 public slots:
-  void connectReleased(void);
-  void cancelReleased(void);
+  void connectReleased( void );
+  void cancelReleased( void );
 
-  void updateHost(void);
-  void updatePort(void);
-  void updateClientID(void);
+  void updateHost( void );
+  void updatePort( void );
+  void updateClientID( void );
 
 private:
-  void highlight(QPlainTextEdit* obj, Qt::GlobalColor);
+  void highlight( QPlainTextEdit* obj, Qt::GlobalColor );
 
-  Ui::DialogInteractiveBroker *ui;
-  BrokerBase* broker;
+  Ui::DialogInteractiveBroker* ui;
+  BrokerBase*                  broker;
 
   std::string host;
-  int port;
-  int clientID;
+  int         port;
+  int         clientID;
 };
 
-#endif // DIALOG_INTERACTIVEBROKER_H
+#endif  // DIALOG_INTERACTIVEBROKER_H

@@ -29,21 +29,21 @@
 #ifdef CI
 #include "test_main.h"
 #else
-#include <qapplication.h>
 #include "window_main.h"
+#include <qapplication.h>
 #endif
 
-int main(int argc, char **argv) {
+int main( int argc, char** argv ) {
 
 #ifdef CI
   // Run Google Test if in debug
-  test_main(argc, argv);
+  test_main( argc, argv );
 
   return 0;
 #else
 
-  QApplication app(argc, argv);
-  
+  QApplication app( argc, argv );
+
   WindowMain mainWindow;
   mainWindow.show();
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     Create and configure the trader platform with the required
     settings
 */
-//void Initialize(void) {
+// void Initialize(void) {
 //  // Initial Variable Setup
 //  broker   = 0;
 //  database = 0;
@@ -68,22 +68,24 @@ int main(int argc, char **argv) {
 //  networks.clear();
 //
 //  // Configure database connection
-//  database = new Postgres("localhost", "5432", "", "", "dbname = trader", "postgres", "password");
-//  if (!database->connect())
+//  database = new Postgres("localhost", "5432", "", "", "dbname = trader",
+//  "postgres", "password"); if (!database->connect())
 //    throw(std::runtime_error("Unable to connect to PostgreSQL Database"));
-//    
+//
 //  // Configure broker connection
 //  broker = new InteractiveBroker(new IBWrapper("127.0.0.1", 6550, 0));
 //  broker->connectionManager();
 //
 //  // Configure Neural Networks
-//  for (size_t networkCounter = 1; networkCounter <= database->getNetworkCount(); ++networkCounter) {
+//  for (size_t networkCounter = 1; networkCounter <=
+//  database->getNetworkCount(); ++networkCounter) {
 //    // Get ticker for current network
 //    std::string ticker = database->getNetwork(networkCounter);
 //
 //    // Create and configure network
 //    NeuralNetwork* createdNetwork = new NeuralNetwork(ticker);
-//    for (size_t layerCounter = 1; layerCounter <= database->getLayerCount(ticker); ++layerCounter)
+//    for (size_t layerCounter = 1; layerCounter <=
+//    database->getLayerCount(ticker); ++layerCounter)
 //      createdNetwork->addLayer(database->getLayer(ticker, layerCounter));
 //
 //    // Add network to list
@@ -98,11 +100,11 @@ int main(int argc, char **argv) {
 ///*
 //  Functions:    Update
 //  Inputs:       None (void)
-//  
+//
 //  Description:
 //    Update trader and take desired actions
 //*/
-//void Update(void) {
+// void Update(void) {
 //  trader->perform();
 //}
 //
@@ -113,7 +115,7 @@ int main(int argc, char **argv) {
 //  Description:
 //    Memory cleanup for all allocated memory
 //*/
-//void Finalize(void) {
+// void Finalize(void) {
 //  if (database) {
 //    database->disconnect();
 //    delete database;

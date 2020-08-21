@@ -14,44 +14,43 @@
 class NeuralNetwork;
 
 namespace Ui {
-  class DialogNetworkCreate;
+class DialogNetworkCreate;
 }
 
-class DialogNetworkCreate : public QDialog
-{
+class DialogNetworkCreate : public QDialog {
   Q_OBJECT
 
 public:
-  explicit DialogNetworkCreate(QWidget *parent = nullptr);
+  explicit DialogNetworkCreate( QWidget* parent = nullptr );
   ~DialogNetworkCreate();
 
-  NeuralNetwork* getNetwork(void) { return network; }
-  bool networkReady(void) { return newNetwork; }
+  NeuralNetwork* getNetwork( void ) { return network; }
+  bool           networkReady( void ) { return newNetwork; }
 
 public slots:
-  void onAddReleased(void);
-  void onRemoveReleased(void);
+  void onAddReleased( void );
+  void onRemoveReleased( void );
 
-  void onUpReleased(void);
-  void onDownReleased(void);
+  void onUpReleased( void );
+  void onDownReleased( void );
 
-  void networkAccepted(void);
-  void networkRejected(void);
+  void networkAccepted( void );
+  void networkRejected( void );
 
 private:
-  Ui::DialogNetworkCreate *ui;
+  Ui::DialogNetworkCreate* ui;
 
-  void swapRow(int x, int y);
+  void swapRow( int x, int y );
 
   QStringList layerTypeList;
   QStringList activationTypeList;
 
   NeuralNetwork* network;
 
-  std::map<QString, ActivationTypes> activationMap;
-  std::map<QString, LayerTypes> layerMap;
+  std::map< QString, ActivationTypes > activationMap;
+  std::map< QString, LayerTypes >      layerMap;
 
   bool newNetwork;
 };
 
-#endif // DIALOG_NETWORK_CREATE_H
+#endif  // DIALOG_NETWORK_CREATE_H

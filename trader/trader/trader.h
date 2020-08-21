@@ -34,18 +34,20 @@ class NeuralNetwork;
 class Trader {
 public:
   // Constructor
-  Trader(BrokerBase* brokerIn, DatabaseBase* dbIn, std::vector<NeuralNetwork*>* netIn);
+  Trader( BrokerBase*                    brokerIn,
+          DatabaseBase*                  dbIn,
+          std::vector< NeuralNetwork* >* netIn );
 
   // Destructor
-  ~Trader(void);
+  ~Trader( void );
 
   // Trader Interface
-  void perform(void);
+  void perform( void );
 
 private:
-  BrokerBase*   broker;
-  DatabaseBase* database;
-  std::vector<NeuralNetwork*> networks;
+  BrokerBase*                   broker;
+  DatabaseBase*                 database;
+  std::vector< NeuralNetwork* > networks;
 };
 
 #endif /* TRADER_H */

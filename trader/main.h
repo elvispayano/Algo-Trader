@@ -22,11 +22,11 @@ class NeuralNetwork;
 class Trader;
 
 // Object Creation
-DatabaseBase* database;
-BrokerBase*   broker;
-std::vector<NeuralNetwork*> networks;
-Trader*       trader;
+DatabaseBase*                 database;
+BrokerBase*                   broker;
+std::vector< NeuralNetwork* > networks;
+Trader*                       trader;
 
-//void Initialize(void);
-//void Update(void);
-//void Finalize(void);
+// void Initialize(void);
+// void Update(void);
+// void Finalize(void);

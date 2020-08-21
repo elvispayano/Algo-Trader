@@ -23,49 +23,48 @@
   Description:
     Setup default configuration for a given stock dataset
 */
-Stock::Stock(void) {
+Stock::Stock( void ) {
   reset();
 }
 
-void Stock::reset(void) {
+void Stock::reset( void ) {
   // Bid
   recBid = false;
-  bid = 0.0f;
+  bid    = 0.0f;
 
   // Ask
   recAsk = false;
-  ask = 0.0f;
+  ask    = 0.0f;
 
   // Low
   recLow = false;
-  low = 0.0f;
+  low    = 0.0f;
 
   // High
   recHigh = false;
-  high = 0.0f;
+  high    = 0.0f;
 }
 
-bool Stock::isComplete(void) {
+bool Stock::isComplete( void ) {
   return recBid && recAsk && recLow && recHigh;
 }
 
-
-void Stock::setBid(float bid) {
+void Stock::setBid( float bid ) {
   this->bid = bid;
-  recBid = true;
+  recBid    = true;
 }
 
-void Stock::setAsk(float ask) {
+void Stock::setAsk( float ask ) {
   this->ask = ask;
-  recAsk = true;
+  recAsk    = true;
 }
 
-void Stock::setLow(float low) {
+void Stock::setLow( float low ) {
   this->low = low;
-  recLow = true;
+  recLow    = true;
 }
 
-void Stock::setHigh(float high) {
+void Stock::setHigh( float high ) {
   this->high = high;
-  recHigh = true;
+  recHigh    = true;
 }

@@ -15,8 +15,8 @@
 */
 
 // Interface Includes
-#include "ib_wrapper.h"
 #include "interactive_broker.h"
+#include "ib_wrapper.h"
 
 // Standard Includes
 #include <chrono>
@@ -29,11 +29,12 @@
   Description:
     Setup configuration for Interactive Broker connection
 */
-InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
-  isConnected = false;
+InteractiveBroker::InteractiveBroker( IBWrapper* wrapper )
+    : ib( wrapper ) {
+  isConnected       = false;
   disconnectTrigger = false;
-  frame50 = true;
-  tProcess = 0;
+  frame50           = true;
+  tProcess          = 0;
 
   messages.empty();
 }
@@ -46,7 +47,7 @@ InteractiveBroker::InteractiveBroker(IBWrapper* wrapper) : ib(wrapper) {
     Ensure Interactive Broker connection is safely terminated during object
     destruction
 */
-InteractiveBroker::~InteractiveBroker(void) {
+InteractiveBroker::~InteractiveBroker( void ) {
   terminateConnection();
 }
 
@@ -59,11 +60,11 @@ InteractiveBroker::~InteractiveBroker(void) {
     Attempt to establish a connection to an Interactive Broker API using the
     configured parameters
 */
-bool InteractiveBroker::connect(void) {
-  bool connected = false;
-  size_t counter = 0;
-  
-  while (!isConnected && !connected && counter < 3) {
+bool InteractiveBroker::connect( void ) {
+  bool   connected = false;
+  size_t counter   = 0;
+
+  while ( !isConnected && !connected && counter < 3 ) {
     ++counter;
     connected = ib->connect();
   }
@@ -81,11 +82,12 @@ bool InteractiveBroker::connect(void) {
     established until signaled to terminate. Running connection on a separate
     thread to allow for continuous updates
 */
-void InteractiveBroker::connectionManager(void) {
-  if (!connect())
-    throw std::runtime_error("Connection Error: Unable to connect to Interactive Broker API");
-  
-  tProcess = new std::thread(std::bind(&InteractiveBroker::process, this));
+void InteractiveBroker::connectionManager( void ) {
+  if ( !connect() )
+    throw std::runtime_error(
+        "Connection Error: Unable to connect to Interactive Broker API" );
+
+  tProcess = new std::thread( std::bind( &InteractiveBroker::process, this ) );
 }
 
 /*
@@ -95,18 +97,18 @@ void InteractiveBroker::connectionManager(void) {
   Description:
     Signal connection termination
 */
-void InteractiveBroker::terminateConnection(void) {
-  if (isConnected) {
+void InteractiveBroker::terminateConnection( void ) {
+  if ( isConnected ) {
     disconnectTrigger = true;
-    isConnected = false;
+    isConnected       = false;
   }
 
-  if (tProcess) {
+  if ( tProcess ) {
     tProcess->join();
     delete tProcess;
   }
 
-  if (ib) {
+  if ( ib ) {
     delete ib;
     ib = 0;
   }
@@ -121,31 +123,32 @@ void InteractiveBroker::terminateConnection(void) {
     continuously send requests, receive responses, and handle potential
     connectivity issues
 */
-void InteractiveBroker::process(void) {
+void InteractiveBroker::process( void ) {
   // Starting Timer
   auto timePrev = std::chrono::system_clock::now();
 
   // Process Loop
-  while (!disconnectTrigger) {
+  while ( !disconnectTrigger ) {
     // Update Timer
-    std::chrono::duration<double> timeElapsed = std::chrono::system_clock::now() - timePrev;
+    std::chrono::duration< double > timeElapsed =
+        std::chrono::system_clock::now() - timePrev;
 
     // No processing at higher than allowed rate (100Hz)
-    if (timeElapsed.count() < 0.01)
+    if ( timeElapsed.count() < 0.01 )
       continue;
 
     // Update time trigger
     timePrev = std::chrono::system_clock::now();
 
     // Prevent message processing if no connection is present
-    if (!ib->connect())
+    if ( !ib->connect() )
       continue;
 
     // Receive broker responses every frame
     recvResponse();
 
     // Send broker requests at 50Hz (max allowed by API)
-    if (frame50)
+    if ( frame50 )
       sendRequest();
 
     // Flip 50Hz frame trigger
@@ -163,14 +166,14 @@ void InteractiveBroker::process(void) {
   Description:
     Handling responses from the Interactive Broker API.
 */
-void InteractiveBroker::recvResponse(void) {
+void InteractiveBroker::recvResponse( void ) {
   ib->processMessages();
 
-  if (!ib->responseReady())
+  if ( !ib->responseReady() )
     return;
 
   resMtx.lock();
-  Stock output = ib->getResponse();
+  Stock output                 = ib->getResponse();
   response[output.getTicker()] = output;
   resMtx.unlock();
 }
@@ -183,34 +186,34 @@ void InteractiveBroker::recvResponse(void) {
     Handling requests made from the trader plaform using the standardize
     format and converting to the appropriate Interactive Broker request
 */
-void InteractiveBroker::sendRequest(void) {
+void InteractiveBroker::sendRequest( void ) {
   reqMtx.lock();
-  if (messages.empty()) {
+  if ( messages.empty() ) {
     reqMtx.unlock();
     return;
   }
 
   OrderConfig message = messages.front();
-  std::string action = (message.purchase)?"BUY":"SELL";
+  std::string action  = ( message.purchase ) ? "BUY" : "SELL";
 
-  switch (message.request) {
+  switch ( message.request ) {
   case Requests::UPDATE:
-    ib->getCurrentPrice(message.ticker);
+    ib->getCurrentPrice( message.ticker );
     break;
 
   case Requests::MARKET:
-    ib->orderMarket(message.ticker, action, message.quantity);
+    ib->orderMarket( message.ticker, action, message.quantity );
     break;
 
   case Requests::LIMIT:
-    ib->orderLimit(message.ticker, action, message.quantity, message.price);
+    ib->orderLimit( message.ticker, action, message.quantity, message.price );
     break;
 
   case Requests::STOP:
-    ib->orderStop(message.ticker, action, message.quantity, message.price);
+    ib->orderStop( message.ticker, action, message.quantity, message.price );
     break;
   }
-  
+
   messages.pop();
   reqMtx.unlock();
 }
@@ -223,9 +226,9 @@ void InteractiveBroker::sendRequest(void) {
     Trading platforms interface to add message to queue. Messages
     will be later read and acted upon by the connection manager
 */
-void InteractiveBroker::addToQueue(OrderConfig message) {
+void InteractiveBroker::addToQueue( OrderConfig message ) {
   reqMtx.lock();
-  messages.push(message);
+  messages.push( message );
   reqMtx.unlock();
 }
 
@@ -237,13 +240,13 @@ void InteractiveBroker::addToQueue(OrderConfig message) {
   Description:
     Check broker queue to see if any responses are ready to be read
 */
-bool InteractiveBroker::responseReady(std::string ticker) {
+bool InteractiveBroker::responseReady( std::string ticker ) {
   bool isReady = false;
-  
+
   resMtx.lock();
   isReady = response[ticker].isComplete();
   resMtx.unlock();
-  
+
   return isReady;
 }
 
@@ -255,13 +258,13 @@ bool InteractiveBroker::responseReady(std::string ticker) {
     Get the latest updated ticker values prepared by the Interactive
     Broker wrapper
 */
-Stock InteractiveBroker::getResponse(std::string ticker) {
+Stock InteractiveBroker::getResponse( std::string ticker ) {
   // Initialize & lock shared variables
   Stock output;
   resMtx.lock();
-  
+
   // Return if no response is ready
-  if (!response[ticker].isComplete()) {
+  if ( !response[ticker].isComplete() ) {
     resMtx.unlock();
     return output;
   }
@@ -269,7 +272,7 @@ Stock InteractiveBroker::getResponse(std::string ticker) {
   // Capture response & reset stored data
   output = response[ticker];
   response[ticker].reset();
-  
+
   // Unlock shared variables
   resMtx.unlock();
   return output;

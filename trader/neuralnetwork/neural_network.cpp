@@ -18,8 +18,8 @@
 #include "neural_network.h"
 
 // Layer Forward Declaration
-#include "layer_base.h"
 #include "fully_connected_layer.h"
+#include "layer_base.h"
 
 /*
   Constructor:    Neural Network
@@ -29,7 +29,7 @@
     Initialize a neural network and initialize layer workspace
     that will be later configured.
 */
-NeuralNetwork::NeuralNetwork(std::string ticker) {
+NeuralNetwork::NeuralNetwork( std::string ticker ) {
   this->ticker = ticker;
   layers.clear();
 }
@@ -40,11 +40,11 @@ NeuralNetwork::NeuralNetwork(std::string ticker) {
 
   Description:
     Neural Network is composed of various layer pointers that are
-    created. Upon destruction of the Neural Network class, the 
+    created. Upon destruction of the Neural Network class, the
     created pointers must be deleated to prevent a memory leak.
 */
-NeuralNetwork::~NeuralNetwork(void) {
-  for (size_t i = 0; i < layers.size(); ++i) {
+NeuralNetwork::~NeuralNetwork( void ) {
+  for ( size_t i = 0; i < layers.size(); ++i ) {
     delete layers[i];
   }
   layers.clear();
@@ -59,38 +59,38 @@ NeuralNetwork::~NeuralNetwork(void) {
     contains all the required elements to select the type of layer,
     the implemented activation, and the size of the layer.
 */
-void NeuralNetwork::addLayer(LayerConfiguration configuration) {
+void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
   LayerBase* newLayer;
-  switch (configuration.Layer) {
+  switch ( configuration.Layer ) {
   case LayerTypes::FULLYCONNECTED:
     newLayer = new FullyConnectedLayer();
     break;
 
-  default: 
+  default:
     // LayerTypes::UNKNOWN
     // Unknown layer types are not added to the stack and the return
     // keyword ensures function breaks out and no configuration is
     // attempted
     return;
   }
-  
+
   // Layer configuration
-  newLayer->setTF(configuration.Activation);
-  newLayer->setInputCount(configuration.layerWidth);
-  newLayer->setNodeCount(configuration.layerHeight);
+  newLayer->setTF( configuration.Activation );
+  newLayer->setInputCount( configuration.layerWidth );
+  newLayer->setNodeCount( configuration.layerHeight );
 
   // Process new configuration
   newLayer->reconfigure();
 
   // Apply weights & biases
-  newLayer->setWeight(configuration.weight);
-  newLayer->setBias(configuration.bias);
+  newLayer->setWeight( configuration.weight );
+  newLayer->setBias( configuration.bias );
 
-  if (!layers.empty())
-    if (layers.back()->getNodeCount() != newLayer->getInputCount())
+  if ( !layers.empty() )
+    if ( layers.back()->getNodeCount() != newLayer->getInputCount() )
       return;
 
-  layers.push_back(newLayer);
+  layers.push_back( newLayer );
 }
 
 /*
@@ -102,7 +102,7 @@ void NeuralNetwork::addLayer(LayerConfiguration configuration) {
     Process input data through each layer and return a processed
     matrix containing the desired action to be performed
 */
-dMatrix NeuralNetwork::process(dMatrix data) {
+dMatrix NeuralNetwork::process( dMatrix data ) {
   dMatrix action;
   return action;
 }
@@ -116,9 +116,9 @@ dMatrix NeuralNetwork::process(dMatrix data) {
     Total nodes used within the network. Is used to determine approximate
     complexity
 */
-unsigned int NeuralNetwork::getTotalNodes(void) {
+unsigned int NeuralNetwork::getTotalNodes( void ) {
   unsigned int nodeCount = 0;
-  for (unsigned int ind = 0; ind < layers.size(); ++ind) {
+  for ( unsigned int ind = 0; ind < layers.size(); ++ind ) {
     nodeCount += layers[ind]->getNodeCount();
   }
   return nodeCount;

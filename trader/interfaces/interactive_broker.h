@@ -37,46 +37,46 @@ class IBWrapper;
 class InteractiveBroker : public BrokerBase {
 public:
   // Constructor
-  InteractiveBroker(IBWrapper* wrapper);
-  
+  InteractiveBroker( IBWrapper* wrapper );
+
   // Destructor
-  ~InteractiveBroker(void);
+  ~InteractiveBroker( void );
 
   // Connection management
-  void connectionManager(void) override;
-  void terminateConnection(void) override;
+  void connectionManager( void ) override;
+  void terminateConnection( void ) override;
 
   // Response Interface
-  bool responseReady(std::string) override;
-  Stock getResponse(std::string) override;
+  bool  responseReady( std::string ) override;
+  Stock getResponse( std::string ) override;
 
   // Request Interface
-  void addToQueue(OrderConfig message) override;
+  void addToQueue( OrderConfig message ) override;
 
 private:
   // Connection Management
-  bool connect(void);
+  bool connect( void );
 
   // Response/Request Interface
-  void sendRequest(void);
-  void recvResponse(void);
-  void process(void);
-  
+  void sendRequest( void );
+  void recvResponse( void );
+  void process( void );
+
   IBWrapper* ib;
-  bool isConnected;
-  bool disconnectTrigger;
-  bool frame50;
-  
+  bool       isConnected;
+  bool       disconnectTrigger;
+  bool       frame50;
+
   // Requests
-  std::mutex              reqMtx;
-  std::queue<OrderConfig> messages;
+  std::mutex                reqMtx;
+  std::queue< OrderConfig > messages;
 
   // Responses
-  std::mutex                   resMtx;
-  std::map<std::string, Stock> response;
+  std::mutex                     resMtx;
+  std::map< std::string, Stock > response;
 
   // Threads
-  std::thread*            tProcess;
+  std::thread* tProcess;
 };
 
 #endif /* INTERACTIVE_BROKER_H */
