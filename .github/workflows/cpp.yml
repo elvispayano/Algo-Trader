@@ -32,6 +32,7 @@ jobs:
       run: |
         dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/F-31-x86_64/pgdg-fedora-repo-latest.noarch.rpm
         dnf install -y libpq-devel postgresql11-server
+        dnf install -y qt5 qt5-devel qt-creator
 
     # Run CMake
     - name: Build Debug

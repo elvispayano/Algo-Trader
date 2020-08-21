@@ -25,7 +25,7 @@ add_subdirectory(interfaces)
 add_subdirectory(trader)
 add_subdirectory(neuralnetwork)
 add_subdirectory(tests)
-#add_subdirectory(gui)
+add_subdirectory(gui)
 
 # Executable definition
 add_executable (${PROJECT_NAME} "main.cpp" "main.h")
@@ -35,7 +35,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE main)
 target_link_libraries(${PROJECT_NAME} PRIVATE interfaces)
 target_link_libraries(${PROJECT_NAME} PRIVATE neuralnetwork)
 target_link_libraries(${PROJECT_NAME} PRIVATE tests)
-#target_link_libraries(${PROJECT_NAME} PRIVATE gui)
+target_link_libraries(${PROJECT_NAME} PRIVATE gui)
 target_link_libraries(${PROJECT_NAME} PRIVATE utilities)
 
 # For pipeline execution
