@@ -512,7 +512,7 @@ template<typename T>
 void Matrix<T>::operator*=(Matrix<T> inp) {
   if (mc != inp.rows()) return;
   Matrix<T> out(this->operator*(inp));
-  resize(out.rows(), out.cols());
+  resize(out.rows(), out.cols(), 0.0);
   for (size_t r = 0; r < mr; ++r) {
     for (size_t c = 0; c < mc; ++c) {
       this->operator()(r, c) = out(r, c);

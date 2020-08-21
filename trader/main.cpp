@@ -27,7 +27,7 @@
 
 // Pipeline Automation
 #ifdef CI
-//#include "test_main.h"
+#include "test_main.h"
 #else
 #include <qapplication.h>
 #include "window_main.h"
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
 #ifdef CI
   // Run Google Test if in debug
-  //test_main(argc, argv);
+  test_main(argc, argv);
 
   return 0;
 #else

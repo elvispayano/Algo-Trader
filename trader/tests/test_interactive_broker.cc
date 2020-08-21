@@ -20,6 +20,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+// Standard Includes
+#include <chrono>
+#include <thread>
+
 // Unit test framework setup
 class InteractiveBrokerTest : public ::testing::Test {
 protected:
@@ -77,7 +81,8 @@ TEST_F(InteractiveBrokerTest, UpdateTicker) {
   message.request = Requests::UPDATE;
   ib->addToQueue(message);
   ib->connectionManager();
-  Sleep(5);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
 /*
@@ -97,7 +102,7 @@ TEST_F(InteractiveBrokerTest, MarketOrder) {
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(5);
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
 /*
@@ -116,7 +121,7 @@ TEST_F(InteractiveBrokerTest, LimitOrder) {
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(5);
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
 /*
@@ -136,7 +141,7 @@ TEST_F(InteractiveBrokerTest, StopOrder) {
 
   ib->connectionManager();
   ib->addToQueue(message);
-  Sleep(5);
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
 /*
@@ -159,7 +164,7 @@ TEST_F(InteractiveBrokerTest, BrokerResponse) {
 
   EXPECT_CALL(*wrapper, getResponse()).Times(1).WillOnce(::testing::Return(output1));
   ib->connectionManager();
-  Sleep(5);
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
   EXPECT_TRUE(ib->responseReady(ticker));
 

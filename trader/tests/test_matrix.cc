@@ -48,7 +48,7 @@ TEST_F(MatrixTest, ConstructorDefault) {
     no defined initial value
 */
 TEST_F(MatrixTest, ConstructorSize) {
-  dMatrix mat(2, 4);
+  dMatrix mat(2, 4, 0.0);
   EXPECT_EQ(2, mat.rows());
   EXPECT_EQ(4, mat.cols());
 }
@@ -75,7 +75,7 @@ TEST_F(MatrixTest, ClearDefault) {
   dMatrix mat(2, 2, 2.0);
   EXPECT_DOUBLE_EQ(2.0, mat(0, 0));
 
-  mat.clear();
+  mat.clear(0.0);
   EXPECT_DOUBLE_EQ(0.0, mat(0, 0));
 }
 
@@ -103,7 +103,7 @@ TEST_F(MatrixTest, ResizeDefault) {
   EXPECT_EQ(2, mat.rows());
   EXPECT_EQ(2, mat.cols());
 
-  mat.resize(4, 3);
+  mat.resize(4, 3, 0.0);
   EXPECT_EQ(4, mat.rows());
   EXPECT_EQ(3, mat.cols());
   EXPECT_DOUBLE_EQ(0.0, mat(0, 0));

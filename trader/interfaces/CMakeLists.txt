@@ -22,24 +22,24 @@ cmake_minimum_required(VERSION 3.8)
 set(HEADERS
   "broker_base.h"
   "database_base.h"
+  "ib_wrapper.h"
+  "interactive_broker.h"
+  "postgres.h"
 )
 
 # Library source files
 set(SRC
   "database_base.cpp"
+  "ib_wrapper.cpp"
+  "interactive_broker.cpp"
+  "postgres.cpp"
 )
 
 # Required Packages
-set(DATABASE_FOUND FALSE)
 set(BROKER_FOUND FALSE)
 
 # PostgreSQL Package
 find_package (PostgreSQL REQUIRED)
-if(${PostgreSQL_FOUND})
-  set(DATABASE_FOUND TRUE)
-  set(HEADERS ${HEADERS} "postgres.h")
-  set(SRC ${SRC} "postgres.cpp")
-endif()
 
 # Interactive Broker Definitions
 include(FetchContent)
@@ -77,11 +77,6 @@ set_target_properties(interfaces PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link library dependencies
 target_link_libraries(interfaces PRIVATE utilities)
-
-# Library Check
-if(NOT DATABASE_FOUND)
-  message(FATAL_ERROR "Error: Database library not found")
-endif()
 
 # PostgreSQL Library
 if(${PostgreSQL_FOUND})

@@ -694,7 +694,7 @@ void IBWrapper::printContractDetailsMsg(const ContractDetails& contractDetails) 
   printf("\tMarketRuleIds: %s\n", contractDetails.marketRuleIds.c_str());
   printf("\tRealExpirationDate: %s\n", contractDetails.realExpirationDate.c_str());
   printf("\tLastTradeTime: %s\n", contractDetails.lastTradeTime.c_str());
-  printf("\tStockType: %s\n", contractDetails.stockType.c_str());
+  //printf("\tStockType: %s\n", contractDetails.stockType.c_str());
   printContractDetailsSecIdList(contractDetails.secIdList);
 }
 
