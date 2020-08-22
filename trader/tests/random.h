@@ -21,7 +21,9 @@ public:
   double Uniform( void );
   double Positive( void );
   double Negative( void );
-  static ActivationTypes Activation( void );
+  ActivationTypes activation( void );
+  double          random( double a = 0.0, double b = 100.0);
+
 };
 
 double random_u( void );

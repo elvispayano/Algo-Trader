@@ -47,7 +47,7 @@ TEST_F( ActivationTestOld, Configuration ) {
 
 class ActivationTest : public ::testing::Test {
 protected:
-  // Ensure each tests has the inputs configured
+  // Ensure each test has the inputs configured
   void SetUp( void ) override {
     activation = new Activation();
     rng        = new RandomNumber();
@@ -67,7 +67,7 @@ public:
 };
 
 TEST_F( ActivationTest, Configuration ) {
-  ActivationTypes value = rng->Activation();
+  ActivationTypes value = rng->activation();
   activation->setTF( value );
   EXPECT_EQ( value, activation->getTF() );
 }

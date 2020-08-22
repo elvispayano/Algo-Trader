@@ -18,22 +18,37 @@
 #include "random.h"
 #include <gtest/gtest.h>
 
+class MathTest : public ::testing::Test {
+protected:
+  // Ensure each test has the inputs configured
+  void SetUp( void ) override { rng = new RandomNumber(); }
+
+  void TearDown( void ) override {
+    if ( rng )
+      delete rng;
+  }
+
+public:
+  RandomNumber* rng;
+};
+
 /*
   Test:         htan
   Description:
     Hyperbolic Tangent Transfer Function
 */
-TEST( MathTest, HyperbolicTangent ) {
-  EXPECT_GT( htan( random_p() ), 0.0 );
-  EXPECT_LE( htan( random_p() ), 1.0 );
+TEST_F( MathTest, HyperbolicTangent ) {
+  double temp = rng->random();
+  EXPECT_GT( htan( rng->random( 0, 10 ) ), 0.0 );
+  EXPECT_LE( htan( rng->random( 0, 10 ) ), 1.0 );
 
-  EXPECT_LT( htan( random_n() ), 0.0 );
-  EXPECT_GE( htan( random_n() ), -1.0 );
+  EXPECT_LT( htan( rng->random(-10, 0) ), 0.0 );
+  EXPECT_GE( htan( rng->random(-10, 0) ), -1.0 );
 };
 
-TEST( MathTest, HyperbolicTangentDerivative ) {
-  EXPECT_GE( htan_d( random_u() ), 0.0 );
-  EXPECT_LT( htan_d( random_u() ), 1.0 );
+TEST_F( MathTest, HyperbolicTangentDerivative ) {
+  EXPECT_GE( htan_d( rng->random(-10, 10) ), 0.0 );
+  EXPECT_LT( htan_d( rng->random(-10, 10) ), 1.0 );
 }
 
 /*
@@ -41,17 +56,17 @@ TEST( MathTest, HyperbolicTangentDerivative ) {
   Description:
     Sigmoid Transfer Function
 */
-TEST( MathTest, Sigmoid ) {
-  EXPECT_GT( sigmoid( random_p() ), 0.5 );
-  EXPECT_LE( sigmoid( random_p() ), 1.0 );
+TEST_F( MathTest, Sigmoid ) {
+  EXPECT_GT( sigmoid( rng->random(0, 10) ), 0.5 );
+  EXPECT_LE( sigmoid( rng->random(0, 10) ), 1.0 );
 
-  EXPECT_LT( sigmoid( random_n() ), 0.5 );
-  EXPECT_GE( sigmoid( random_n() ), 0.0 );
+  EXPECT_LT( sigmoid( rng->random(-10, 0) ), 0.5 );
+  EXPECT_GE( sigmoid( rng->random(-10, 0) ), 0.0 );
 };
 
-TEST( MathTest, SigmoidDerivative ) {
-  EXPECT_GE( sigmoid_d( random_u() ), 0.0 );
-  EXPECT_LT( sigmoid_d( random_u() ), 1.0 );
+TEST_F( MathTest, SigmoidDerivative ) {
+  EXPECT_GE( sigmoid_d( rng->random(-10, 10) ), 0.0 );
+  EXPECT_LT( sigmoid_d( rng->random(-10, 10) ), 1.0 );
 }
 
 /*
@@ -59,15 +74,15 @@ TEST( MathTest, SigmoidDerivative ) {
   Description:
     Rectified Linear Unit Transfer Function
 */
-TEST( MathTest, ReLu ) {
-  double input = random_p();
+TEST_F( MathTest, ReLu ) {
+  double input = rng->random(0, 10);
   EXPECT_DOUBLE_EQ( input, relu( input ) );
-  EXPECT_DOUBLE_EQ( 0.0, relu( random_n() ) );
+  EXPECT_DOUBLE_EQ( 0.0, relu( rng->random(-10, 0) ) );
 };
 
-TEST( MathTest, ReLuDerivative ) {
-  EXPECT_DOUBLE_EQ( 0.0, relu_d( random_n() ) );
-  EXPECT_DOUBLE_EQ( 1.0, relu_d( random_p() ) );
+TEST_F( MathTest, ReLuDerivative ) {
+  EXPECT_DOUBLE_EQ( 0.0, relu_d( rng->random(-10, 0) ) );
+  EXPECT_DOUBLE_EQ( 1.0, relu_d( rng->random(0, 10) ) );
 }
 
 /*
@@ -75,13 +90,13 @@ TEST( MathTest, ReLuDerivative ) {
   Description:
     Binary Transfer Function
 */
-TEST( MathTest, Binary ) {
-  EXPECT_DOUBLE_EQ( 1.0, binary( random_p() ) );
-  EXPECT_DOUBLE_EQ( 0.0, binary( random_n() ) );
+TEST_F( MathTest, Binary ) {
+  EXPECT_DOUBLE_EQ( 1.0, binary( rng->random(0, 10) ) );
+  EXPECT_DOUBLE_EQ( 0.0, binary( rng->random(-10, 0) ) );
 };
 
-TEST( MathTest, BinaryDerivative ) {
-  EXPECT_DOUBLE_EQ( 0.0, binary_d( random_u() ) );
+TEST_F( MathTest, BinaryDerivative ) {
+  EXPECT_DOUBLE_EQ( 0.0, binary_d( rng->random(-10, 10) ) );
   EXPECT_DOUBLE_EQ( 1.0, binary_d( 0.0 ) );
 }
 
@@ -90,11 +105,11 @@ TEST( MathTest, BinaryDerivative ) {
   Description:
     Linear Transfer Function
 */
-TEST( MathTest, Linear ) {
-  double input = random_u();
+TEST_F( MathTest, Linear ) {
+  double input = rng->random(-10, 10);
   EXPECT_DOUBLE_EQ( input, linear( input ) );
 };
 
-TEST( MathTest, LinearDerivative ) {
-  EXPECT_DOUBLE_EQ( 1, linear_d( random_u() ) );
+TEST_F( MathTest, LinearDerivative ) {
+  EXPECT_DOUBLE_EQ( 1, linear_d( rng->random(-10, 10) ) );
 }
