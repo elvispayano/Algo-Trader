@@ -32,8 +32,8 @@ TEST( MathTest, HyperbolicTangent ) {
 };
 
 TEST( MathTest, HyperbolicTangentDerivative ) {
-  EXPECT_GE( htan_d( random() ), 0.0 );
-  EXPECT_LT( htan_d( random() ), 1.0 );
+  EXPECT_GE( htan_d( random_u() ), 0.0 );
+  EXPECT_LT( htan_d( random_u() ), 1.0 );
 }
 
 /*
@@ -50,8 +50,8 @@ TEST( MathTest, Sigmoid ) {
 };
 
 TEST( MathTest, SigmoidDerivative ) {
-  EXPECT_GE( sigmoid_d( random() ), 0.0 );
-  EXPECT_LT( sigmoid_d( random() ), 1.0 );
+  EXPECT_GE( sigmoid_d( random_u() ), 0.0 );
+  EXPECT_LT( sigmoid_d( random_u() ), 1.0 );
 }
 
 /*
@@ -81,7 +81,7 @@ TEST( MathTest, Binary ) {
 };
 
 TEST( MathTest, BinaryDerivative ) {
-  EXPECT_DOUBLE_EQ( 0.0, binary_d( random() ) );
+  EXPECT_DOUBLE_EQ( 0.0, binary_d( random_u() ) );
   EXPECT_DOUBLE_EQ( 1.0, binary_d( 0.0 ) );
 }
 
@@ -91,10 +91,10 @@ TEST( MathTest, BinaryDerivative ) {
     Linear Transfer Function
 */
 TEST( MathTest, Linear ) {
-  double input = random();
+  double input = random_u();
   EXPECT_DOUBLE_EQ( input, linear( input ) );
 };
 
 TEST( MathTest, LinearDerivative ) {
-  EXPECT_DOUBLE_EQ( 1, linear_d( random() ) );
+  EXPECT_DOUBLE_EQ( 1, linear_d( random_u() ) );
 }

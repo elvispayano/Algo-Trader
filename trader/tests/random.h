@@ -9,6 +9,6 @@
     Elvis Payano
 */
 
-double random( void );
+double random_u( void );
 double random_p( void );
 double random_n( void );

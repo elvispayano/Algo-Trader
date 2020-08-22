@@ -16,13 +16,13 @@
 #include <stdlib.h>
 
 /*
-  Function:   random
+  Function:   random_u
   Input:      None (void)
   Output:     (double)
   Description:
     Generate a random positive or negative number
 */
-double random( void ) {
+double random_u( void ) {
   return (double)rand() * RAND_MAX / 2 - RAND_MAX;
 }
 
