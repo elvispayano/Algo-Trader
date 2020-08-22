@@ -33,6 +33,7 @@ public:
 
   // Activation Configuration
   void setTF( ActivationTypes select );
+  ActivationTypes getTF( void ) { return tfType; }
 
 protected:
   // Process layer values through configured activation function

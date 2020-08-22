@@ -47,3 +47,37 @@ double random_p( void ) {
 double random_n( void ) {
   return -(double)rand() * RAND_MAX;
 }
+
+ActivationTypes random_activation( void ) {
+  const int max = static_cast<int>( ActivationTypes::UNKNOWN );
+  return static_cast<ActivationTypes>( rand() * max );
+}
+
+#include <time.h>
+
+RandomNumber::RandomNumber( void ) {
+  srand( time( NULL ) );
+}
+
+RandomNumber::RandomNumber( unsigned int SEED ) {
+  srand( SEED );
+}
+
+RandomNumber::~RandomNumber( void ) {}
+
+double RandomNumber::Uniform(void) {
+  return (double)rand() * RAND_MAX / 2 - RAND_MAX;
+}
+
+double RandomNumber::Positive(void) {
+  return (double)rand() * RAND_MAX;
+}
+
+double RandomNumber::Negative( void ) {
+  return -(double)rand() * RAND_MAX;
+}
+
+ActivationTypes RandomNumber::Activation(void) {
+  const int max = static_cast<int>( ActivationTypes::UNKNOWN );
+  return static_cast<ActivationTypes>( rand() % max );
+}

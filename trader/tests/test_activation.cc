@@ -19,7 +19,7 @@
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup
-class ActivationTest
+class ActivationTestOld
     : public ::testing::Test
     , public Activation {
 protected:
@@ -35,6 +35,39 @@ public:
   Description:
     Set layer configuration and check its value
 */
-TEST_F( ActivationTest, Configuration ) {
+TEST_F( ActivationTestOld, Configuration ) {
   EXPECT_EQ( ActivationTypes::LINEAR, tfType );
+}
+
+// Utility Includes
+#include "network_types.h"
+
+// Test Includes
+#include "random.h"
+
+class ActivationTest : public ::testing::Test {
+protected:
+  // Ensure each tests has the inputs configured
+  void SetUp( void ) override {
+    activation = new Activation();
+    rng        = new RandomNumber();
+  }
+
+  void TearDown( void ) override {
+    if ( activation )
+      delete activation;
+
+    if ( rng )
+      delete rng;
+  }
+
+public:
+  Activation*   activation;
+  RandomNumber* rng;
+};
+
+TEST_F( ActivationTest, Configuration ) {
+  ActivationTypes value = rng->Activation();
+  activation->setTF( value );
+  EXPECT_EQ( value, activation->getTF() );
 }
