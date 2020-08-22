@@ -31,6 +31,11 @@ TEST( MathTest, HyperbolicTangent ) {
   EXPECT_GE( htan( random_n() ), -1.0 );
 };
 
+TEST( MathTest, HyperbolicTangentDerivative ) {
+  EXPECT_GE( htan_d( random() ), 0.0 );
+  EXPECT_LT( htan_d( random() ), 1.0 );
+}
+
 /*
   Test:         sigmoid
   Description:
@@ -43,6 +48,11 @@ TEST( MathTest, Sigmoid ) {
   EXPECT_LT( sigmoid( random_n() ), 0.5 );
   EXPECT_GE( sigmoid( random_n() ), 0.0 );
 };
+
+TEST( MathTest, SigmoidDerivative ) {
+  EXPECT_GE( sigmoid_d( random() ), 0.0 );
+  EXPECT_LT( sigmoid_d( random() ), 1.0 );
+}
 
 /*
   Test:         relu & relu derivative
