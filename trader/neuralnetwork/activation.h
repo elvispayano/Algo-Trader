@@ -37,7 +37,7 @@ public:
 protected:
   // Process layer values through configured activation function
   dMatrix         performTF( dMatrix );
-  dMatrix         backprop( dMatrix ) {}
+  dMatrix         performBP( dMatrix );
   ActivationTypes tfType;
 
 private:

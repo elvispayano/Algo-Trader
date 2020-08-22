@@ -106,3 +106,16 @@ dMatrix Activation::performTF( dMatrix input ) {
   input.forEach( transferFunction );
   return input;
 }
+
+/*
+  Function:    performBP
+  Inputs:      input (dMatrix)
+  Output:      output (dMatrix)
+
+  Description:
+    Apply the back propagation function to the input
+*/
+dMatrix Activation::performBP( dMatrix input ) {
+  input.forEach( backpropFunction );
+  return input;
+}
