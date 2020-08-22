@@ -15,35 +15,9 @@
 // Neural Network Includes
 #include "activation.h"
 
-// Google Test Includes
-#include <gtest/gtest.h>
-
-// Unit Test Framework Setup
-class ActivationTestOld
-    : public ::testing::Test
-    , public Activation {
-protected:
-  // Ensure each tests has the inputs configured with the
-  // expected inputs size and values
-  void SetUp( void ) override { setTF( ActivationTypes::LINEAR ); }
-
-public:
-};
-
-/*
-  Test:         Configuration
-  Description:
-    Set layer configuration and check its value
-*/
-TEST_F( ActivationTestOld, Configuration ) {
-  EXPECT_EQ( ActivationTypes::LINEAR, tfType );
-}
-
-// Utility Includes
-#include "network_types.h"
-
 // Test Includes
 #include "random.h"
+#include <gtest/gtest.h>
 
 class ActivationTest : public ::testing::Test {
 protected:
@@ -51,6 +25,8 @@ protected:
   void SetUp( void ) override {
     activation = new Activation();
     rng        = new RandomNumber();
+
+    input.resize( 2, 3, 0 );
   }
 
   void TearDown( void ) override {
@@ -64,10 +40,28 @@ protected:
 public:
   Activation*   activation;
   RandomNumber* rng;
+
+  dMatrix input;
 };
 
 TEST_F( ActivationTest, Configuration ) {
   ActivationTypes value = rng->activation();
   activation->setTF( value );
   EXPECT_EQ( value, activation->getTF() );
+}
+
+TEST_F( ActivationTest, TransferFunction ) {
+  activation->setTF( rng->activation() );
+  dMatrix output = activation->performTF( input );
+
+  EXPECT_EQ( output.rows(), input.rows() );
+  EXPECT_EQ( output.cols(), input.cols() );
+}
+
+TEST_F( ActivationTest, Backpropagation ) {
+  activation->setTF( rng->activation() );
+  dMatrix output = activation->performBP( input );
+
+  EXPECT_EQ( output.rows(), input.rows() );
+  EXPECT_EQ( output.cols(), input.cols() );
 }

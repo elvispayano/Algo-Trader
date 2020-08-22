@@ -32,19 +32,19 @@ public:
   ~Activation( void );
 
   // Activation Configuration
-  void setTF( ActivationTypes select );
+  void            setTF( ActivationTypes select );
   ActivationTypes getTF( void ) { return tfType; }
 
-protected:
-  // Process layer values through configured activation function
-  dMatrix         performTF( dMatrix );
-  dMatrix         performBP( dMatrix );
-  ActivationTypes tfType;
+  dMatrix performTF( dMatrix );
+  dMatrix performBP( dMatrix );
 
 private:
   // Transfer function selection trigger
   double ( *transferFunction )( double );
   double ( *backpropFunction )( double );
+
+  // Process layer values through configured activation function
+  ActivationTypes tfType;
 };
 
 #endif /*ACTIVATION_H*/
