@@ -67,22 +67,27 @@ void Activation::setTF( ActivationTypes selector ) {
   switch ( tfType ) {
   case ActivationTypes::SIGMOID:
     transferFunction = sigmoid;
+    backpropFunction = sigmoid_d;
     break;
 
   case ActivationTypes::TANH:
     transferFunction = htan;
+    backpropFunction = htan_d;
     break;
 
   case ActivationTypes::BINARY:
     transferFunction = binary;
+    backpropFunction = binary_d;
     break;
 
   case ActivationTypes::RELU:
     transferFunction = relu;
+    backpropFunction = relu_d;
     break;
 
   default:  // ActivationTypes::LINEAR
     transferFunction = linear;
+    backpropFunction = linear_d;
     break;
   }
 }

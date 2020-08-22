@@ -37,11 +37,13 @@ public:
 protected:
   // Process layer values through configured activation function
   dMatrix         performTF( dMatrix );
+  dMatrix         backprop( dMatrix ) {}
   ActivationTypes tfType;
 
 private:
   // Transfer function selection trigger
   double ( *transferFunction )( double );
+  double ( *backpropFunction )( double );
 };
 
 #endif /*ACTIVATION_H*/
