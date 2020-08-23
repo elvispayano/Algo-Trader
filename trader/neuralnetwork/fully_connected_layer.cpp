@@ -16,6 +16,7 @@
 
 // Neural Network Includes
 #include "fully_connected_layer.h"
+#include "activation.h"
 
 /*
   Constructor:  Fully Connected Layer
@@ -26,7 +27,7 @@
     function settings
 */
 FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF ) {
-  setTF( selectTF );
+  pActivation->setTF( selectTF );
 }
 
 /*
@@ -49,6 +50,6 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
     function
 */
 dMatrix FullyConnectedLayer::processLayer( dMatrix input ) {
-  dMatrix output = performTF( weight * input + bias );
+  dMatrix output = pActivation->performTF( weight * input + bias );
   return output;
 }

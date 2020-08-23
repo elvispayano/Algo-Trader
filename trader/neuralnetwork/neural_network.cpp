@@ -75,16 +75,16 @@ void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
   }
 
   // Layer configuration
-  newLayer->setTF( configuration.Activation );
-  newLayer->setInputCount( configuration.layerWidth );
-  newLayer->setNodeCount( configuration.layerHeight );
-
-  // Process new configuration
-  newLayer->reconfigure();
-
-  // Apply weights & biases
-  newLayer->setWeight( configuration.weight );
-  newLayer->setBias( configuration.bias );
+  //newLayer->setTF( configuration.Activation );
+  //newLayer->setInputCount( configuration.layerWidth );
+  //newLayer->setNodeCount( configuration.layerHeight );
+  //
+  //// Process new configuration
+  //newLayer->reconfigure();
+  //
+  //// Apply weights & biases
+  //newLayer->setWeight( configuration.weight );
+  //newLayer->setBias( configuration.bias );
 
   if ( !layers.empty() )
     if ( layers.back()->getNodeCount() != newLayer->getInputCount() )

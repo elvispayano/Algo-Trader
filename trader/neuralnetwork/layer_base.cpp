@@ -1,12 +1,11 @@
 /*
   Title:
-    Activation
+    Layer Base
 
   Description:
-    This Activation class is responsible for processing the
-    layers output through a desired transfer function. This
-    class contains a subset of the functionality that is
-    required for the data flow through any given layer.
+    The Layer Base class is an abstract class that will be the
+    model in which will define main functionality that must be
+    present in order to work with the network controller.
 
   Author:
     Elvis Payano
@@ -14,6 +13,7 @@
 
 // Neural Network Includes
 #include "layer_base.h"
+#include "activation.h"
 
 /*
   Constructor:  Layer Base
@@ -23,10 +23,11 @@
     Initialize the weights and bias with zeros and
     default activation function (None)
 */
-LayerBase::LayerBase( void ) {
+LayerBase::LayerBase( void )
+    : pActivation( new Activation() ) {
+
   weight.clear( 0.0 );
   bias.clear( 0.0 );
-  setTF( ActivationTypes::LINEAR );
 
   inputCount = 0;
   nodeCount  = 0;
@@ -40,10 +41,11 @@ LayerBase::LayerBase( void ) {
     Initialize the weights and bias with zeros and
     the selected activation function
 */
-LayerBase::LayerBase( ActivationTypes selectTF ) {
+LayerBase::LayerBase( ActivationTypes selectTF )
+    : pActivation( new Activation( selectTF ) ) {
+
   weight.clear( 0.0 );
   bias.clear( 0.0 );
-  setTF( selectTF );
 
   inputCount = 0;
   nodeCount  = 0;
@@ -56,7 +58,10 @@ LayerBase::LayerBase( ActivationTypes selectTF ) {
   Description:
     Clear any dynamically allocated memory
 */
-LayerBase::~LayerBase( void ) {}
+LayerBase::~LayerBase( void ) {
+  if ( pActivation )
+    delete pActivation;
+}
 
 /*
   Function:     reconfigure
@@ -67,7 +72,16 @@ LayerBase::~LayerBase( void ) {}
     to set the appropriate size for the layer weights and
     biases.
 */
-void LayerBase::reconfigure( void ) {
-  weight.resize( nodeCount, inputCount, 0.0 );
-  bias.resize( nodeCount, 1, 0.0 );
+void LayerBase::reconfigure( size_t  nodes,
+                             size_t  inputs,
+                             dMatrix weight,
+                             dMatrix bias ) {
+  this->weight.resize( nodes, inputs, 0.0 );
+  this->weight = weight;
+
+  this->bias.resize( nodes, 1, 0.0 );
+  this->bias = bias;
+
+  nodeCount  = nodes;
+  inputCount = inputs;
 }
