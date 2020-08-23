@@ -62,32 +62,33 @@ Activation::~Activation( void ) {}
     Configure activation transfer function to be used
     by layers
 */
+#include <functional>
 void Activation::setTF( ActivationTypes selector ) {
   tfType = selector;
   switch ( tfType ) {
   case ActivationTypes::SIGMOID:
-    transferFunction = sigmoid;
-    backpropFunction = sigmoid_d;
+    transferFunction = Math::sigmoid;
+    backpropFunction = Math::sigmoid_d;
     break;
 
   case ActivationTypes::TANH:
-    transferFunction = htan;
-    backpropFunction = htan_d;
+    transferFunction = Math::htan;
+    backpropFunction = Math::htan_d;
     break;
 
   case ActivationTypes::BINARY:
-    transferFunction = binary;
-    backpropFunction = binary_d;
+    transferFunction = Math::binary;
+    backpropFunction = Math::binary_d;
     break;
 
   case ActivationTypes::RELU:
-    transferFunction = relu;
-    backpropFunction = relu_d;
+    transferFunction = Math::relu;
+    backpropFunction = Math::relu_d;
     break;
 
   default:  // ActivationTypes::LINEAR
-    transferFunction = linear;
-    backpropFunction = linear_d;
+    transferFunction = Math::linear;
+    backpropFunction = Math::linear_d;
     break;
   }
 }
