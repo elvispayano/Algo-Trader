@@ -21,18 +21,19 @@
 #include <cmath>
 
 /*
-  Function:     sig
+  Function:     sig / sig_d
   Inputs:       x (double)
   Output:       y (double)
 
-  Description:
-    Process input through Sigmoid transfer function.
-
   Transfer Function Equation:
     f(x) = 1/(1+e^(-x))
+    f'(x)= f(x)*(1-f(x))
 */
-double sigmoid( double x ) {
+double Math::sigmoid( double x ) {
   return 1 / ( 1 + exp( -x ) );
+}
+double Math::sigmoid_d( double x ) {
+  return sigmoid( x ) * ( 1 - sigmoid( x ) );
 }
 
 /*
@@ -40,31 +41,33 @@ double sigmoid( double x ) {
   Inputs:       x (double)
   Output:       y (double)
 
-  Description:
-    Process input through Hyperbolic Tangent transfer
-    function.
-
   Transfer Function Equation:
     f(x) = (e^x - e^(-x))/(e^x + e^(-x))
+    f'(x)= 1 - f(x)^2
 */
-double htan( double x ) {
-  return ( exp( x ) - exp( -x ) ) / ( exp( x ) + exp( -x ) );
+double Math::htan( double x ) {
+  return tanh( x );
+}
+double Math::htan_d( double x ) {
+  return 1 - htan( x ) * htan( x );
 }
 
 /*
-  Function:     binary
+  Function:     binary / binary_d
   Inputs:       x (double)
   Output:       y (double)
-
-  Description:
-    Process input through Binary transfer function.
 
   Transfer Function Equation:
     f(x) = 1  | x >= 0
     f(x) = 0  | x <  0
+    f'(X) = 1 | x == 0
+    f'(x) = 0 | x != 0
 */
-double binary( double x ) {
+double Math::binary( double x ) {
   return ( x >= 0 );
+}
+double Math::binary_d( double x ) {
+  return ( x == 0.0 ) ? 1.0 : 0.0;
 }
 
 /*
@@ -72,30 +75,29 @@ double binary( double x ) {
   Inputs:       x (double)
   Output:       y (double)
 
-  Description:
-    Process input through Recitified Linear Unit
-    transfer function.
-
   Transfer Function Equation:
     f(x) = x  | x >  0
     f(x) = 0  | x <= 0
 */
-double relu( double x ) {
-  return ( x > 0 ) ? x : 0;
+double Math::relu( double x ) {
+  return ( x > 0 ) ? x : 0.0;
+}
+double Math::relu_d( double x ) {
+  return ( x > 0 ) ? 1.0 : 0.0;
 }
 
 /*
-  Function:     lin
+  Function:     linear
   Inputs:       x (double)
   Output:       y (double)
 
-  Description:
-    No processing of inputs through a transfer
-    function.
-
   Transfer Function Equation:
     f(x) = x
+    f'(x)= 1
 */
-double linear( double x ) {
+double Math::linear( double x ) {
   return x;
+}
+double Math::linear_d( double x ) {
+  return 1.0;
 }

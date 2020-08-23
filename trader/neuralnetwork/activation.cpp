@@ -62,27 +62,33 @@ Activation::~Activation( void ) {}
     Configure activation transfer function to be used
     by layers
 */
+#include <functional>
 void Activation::setTF( ActivationTypes selector ) {
   tfType = selector;
   switch ( tfType ) {
   case ActivationTypes::SIGMOID:
-    transferFunction = sigmoid;
+    transferFunction = Math::sigmoid;
+    backpropFunction = Math::sigmoid_d;
     break;
 
   case ActivationTypes::TANH:
-    transferFunction = htan;
+    transferFunction = Math::htan;
+    backpropFunction = Math::htan_d;
     break;
 
   case ActivationTypes::BINARY:
-    transferFunction = binary;
+    transferFunction = Math::binary;
+    backpropFunction = Math::binary_d;
     break;
 
   case ActivationTypes::RELU:
-    transferFunction = relu;
+    transferFunction = Math::relu;
+    backpropFunction = Math::relu_d;
     break;
 
   default:  // ActivationTypes::LINEAR
-    transferFunction = linear;
+    transferFunction = Math::linear;
+    backpropFunction = Math::linear_d;
     break;
   }
 }
@@ -99,5 +105,18 @@ void Activation::setTF( ActivationTypes selector ) {
 */
 dMatrix Activation::performTF( dMatrix input ) {
   input.forEach( transferFunction );
+  return input;
+}
+
+/*
+  Function:    performBP
+  Inputs:      input (dMatrix)
+  Output:      output (dMatrix)
+
+  Description:
+    Apply the back propagation function to the input
+*/
+dMatrix Activation::performBP( dMatrix input ) {
+  input.forEach( backpropFunction );
   return input;
 }
