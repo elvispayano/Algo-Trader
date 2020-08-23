@@ -26,7 +26,7 @@
 class FullyConnectedLayer : public LayerBase {
 public:
   // Constructor
-  FullyConnectedLayer( void ){};
+  FullyConnectedLayer( void );
   FullyConnectedLayer( ActivationTypes );
 
   // Destructor

@@ -31,6 +31,8 @@ LayerBase::LayerBase( void )
 
   inputCount = 0;
   nodeCount  = 0;
+
+  output.clear( 0.0 );
 }
 
 /*
@@ -49,6 +51,8 @@ LayerBase::LayerBase( ActivationTypes selectTF )
 
   inputCount = 0;
   nodeCount  = 0;
+
+  output.clear( 0.0 );
 }
 
 /*
@@ -84,4 +88,6 @@ void LayerBase::reconfigure( size_t  nodes,
 
   nodeCount  = nodes;
   inputCount = inputs;
+
+  output.resize( nodes, 1, 0.0 );
 }

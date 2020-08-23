@@ -20,15 +20,24 @@
 
 /*
   Constructor:  Fully Connected Layer
+  Inputs:       None (void)
+
+  Description:
+    Initialize the fully connected layer with a default activation function
+*/
+FullyConnectedLayer::FullyConnectedLayer( void )
+    : LayerBase( ActivationTypes::LINEAR ) {}
+
+/*
+  Constructor:  Fully Connected Layer
   Inputs:       selectTF (Activation Types [enum])
 
   Description:
     Initialize the fully connected layer with the provided activation
     function settings
 */
-FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF ) {
-  pActivation->setTF( selectTF );
-}
+FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
+    : LayerBase( selectTF ) {}
 
 /*
   Destructor:   ~Fully Connected Layer
@@ -50,6 +59,6 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
     function
 */
 dMatrix FullyConnectedLayer::processLayer( dMatrix input ) {
-  dMatrix output = pActivation->performTF( weight * input + bias );
+  output = pActivation->performTF( weight * input + bias );
   return output;
 }

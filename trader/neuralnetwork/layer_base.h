@@ -49,6 +49,8 @@ protected:
 
   size_t inputCount;
   size_t nodeCount;
+
+  dMatrix output;
 };
 
 #endif /* LAYER_BASE_H */
