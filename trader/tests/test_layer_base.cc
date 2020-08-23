@@ -14,37 +14,31 @@
 #include "layer_base.h"
 
 // Google Test Includes
+#include "mock_neuralnetwork.h"
+#include "mock_matchers.h"
+#include "random.h"
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup
-class LayerBaseTest
-    : public ::testing::Test
-    , public LayerBase {
+class LayerBaseTest : public ::testing::Test {
 protected:
-  dMatrix processLayer( dMatrix input ) override {
-    dMatrix output;
-    return output;
-  };
+  void SetUp( void ) override {
+    mLayer = new MockLayerBase();
+    rng    = new RandomNumber();
+  }
+
+  void TearDown( void ) override {
+    if ( mLayer )
+      delete mLayer;
+
+    if ( rng )
+      delete rng;
+  }
+
+public:
+  MockLayerBase* mLayer;
+  RandomNumber*  rng;
 };
-
-/*
-  Test:         Constructor
-  Description:
-    Ensure layer base constructor configures layer with default
-    values
-*/
-TEST_F( LayerBaseTest, Contructor ) {
-  dMatrix weight = getWeight();
-  EXPECT_EQ( 1, weight.cols() );
-  EXPECT_EQ( 1, weight.rows() );
-
-  dMatrix bias = getBias();
-  EXPECT_EQ( 1, bias.cols() );
-  EXPECT_EQ( 1, bias.rows() );
-
-  EXPECT_EQ( 0, getInputCount() );
-  EXPECT_EQ( 0, getNodeCount() );
-}
 
 /*
   Test:         Reconfigure
@@ -52,16 +46,20 @@ TEST_F( LayerBaseTest, Contructor ) {
     Ensure layer is properly reconfigured as expected
 */
 TEST_F( LayerBaseTest, Reconfigure ) {
-  setInputCount( 3 );
-  setNodeCount( 2 );
-  reconfigure();
+  int nodes  = (int)rng->random( 1, 5 );
+  int inputs = (int)rng->random( 1, 5 );
 
-  EXPECT_EQ( 3, getInputCount() );
-  EXPECT_EQ( 2, getNodeCount() );
+  dMatrix weight( nodes, inputs, 0.0 );
+  dMatrix bias( nodes, 1, 0.0 );
 
-  EXPECT_EQ( 2, weight.rows() );
-  EXPECT_EQ( 3, weight.cols() );
+  weight.randomize();
+  bias.randomize();
 
-  EXPECT_EQ( 2, bias.rows() );
-  EXPECT_EQ( 1, bias.cols() );
+  mLayer->reconfigure( nodes, inputs, weight, bias );
+
+  EXPECT_EQ( nodes, mLayer->getNodeCount() );
+  EXPECT_EQ( inputs, mLayer->getInputCount() );
+
+  EXPECT_THAT( weight, EqMatrix( mLayer->getWeight() ) );
+  EXPECT_THAT( bias, EqMatrix( mLayer->getBias() ) );
 }

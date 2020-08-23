@@ -14,6 +14,7 @@
 #define MOCK_NEURAL_NETWORK_H
 
 // Neural Network Includes
+#include "layer_base.h"
 #include "neural_network.h"
 
 // Utility Includes
@@ -31,6 +32,12 @@ public:
       : NeuralNetwork( ticker ) {}
   MOCK_METHOD1( process, dMatrix( dMatrix ) );
   MOCK_METHOD0( getTicker, std::string( void ) );
+};
+
+class MockLayerBase : public LayerBase {
+public:
+  MockLayerBase( void ) {}
+  MOCK_METHOD1( processLayer, dMatrix( dMatrix ) );
 };
 
 #endif /* MOCK_NEURAL_NETWORK_H */

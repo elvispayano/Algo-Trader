@@ -14,13 +14,13 @@
 #ifndef LAYER_BASE_H
 #define LAYER_BASE_H
 
-// Neural Network Includes
-#include "activation.h"
-
 // Utilities Inclues
 #include "matrix.h"
+#include "network_types.h"
 
-class LayerBase : public Activation {
+class Activation;
+
+class LayerBase {
 public:
   // Constructors
   LayerBase( void );
@@ -33,13 +33,7 @@ public:
   virtual dMatrix processLayer( dMatrix input ) = 0;
 
   // Configure Layer
-  void reconfigure( void );
-
-  // Layer Setters
-  void setInputCount( size_t count ) { inputCount = count; }
-  void setNodeCount( size_t count ) { nodeCount = count; }
-  void setWeight( dMatrix input ) { weight = input; }
-  void setBias( dMatrix input ) { bias = input; }
+  void reconfigure( size_t nodes, size_t inputs, dMatrix weight, dMatrix bias );
 
   // Layer Getters
   size_t  getInputCount( void ) { return inputCount; }
@@ -48,6 +42,8 @@ public:
   dMatrix getBias( void ) { return bias; }
 
 protected:
+  Activation* pActivation;
+
   dMatrix weight;
   dMatrix bias;
 
