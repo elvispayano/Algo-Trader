@@ -16,7 +16,7 @@
 // Google Test Includes
 #include "mock_neuralnetwork.h"
 #include "mock_matchers.h"
-#include "random.h"
+#include "random_number.h"
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup

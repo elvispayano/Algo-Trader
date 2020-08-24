@@ -16,7 +16,7 @@
 #include "activation.h"
 
 // Test Includes
-#include "random.h"
+#include "random_number.h"
 #include <gtest/gtest.h>
 
 class ActivationTest : public ::testing::Test {

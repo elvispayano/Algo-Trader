@@ -54,13 +54,13 @@ set(HEADERS
   "mock_interfaces.h"
   "mock_matchers.h"
   "mock_neuralnetwork.h"
-  "random.h"
+  "random_number.h"
   "test_main.h"
 )
 
 # Library source files
 set(SRC
-  "random.cpp"
+  "random_number.cpp"
   "test_main.cpp"
   "test_activation.cc"
   "test_database_base.cc"
