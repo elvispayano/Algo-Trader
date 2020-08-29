@@ -65,6 +65,14 @@ dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
   return outputs;
 }
 
+/*
+  Function:     train
+  Inputs:       learnRatae (double), gradient (dMatrix)
+
+  Description:
+    Update the layers hyperparameters using the computed performance gradient
+    along with the layers leard rate
+*/
 void FullyConnectedLayer::train( double learnRate, dMatrix gradient ) {
   // Generate FC Layers
   dIntdIn  = inputs;

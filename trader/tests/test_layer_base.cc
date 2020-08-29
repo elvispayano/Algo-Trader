@@ -14,8 +14,8 @@
 #include "layer_base.h"
 
 // Google Test Includes
-#include "mock_neuralnetwork.h"
 #include "mock_matchers.h"
+#include "mock_neuralnetwork.h"
 #include "random_number.h"
 #include <gtest/gtest.h>
 

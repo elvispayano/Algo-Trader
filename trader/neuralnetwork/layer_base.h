@@ -36,7 +36,7 @@ public:
   virtual void train( double learnRate, dMatrix gradient ) = 0;
 
   // Configure Layer
-  void reconfigure( size_t nodes, size_t inputs, dMatrix weight, dMatrix bias );
+  void reconfigure( size_t num_nodes, size_t num_inputs, dMatrix weight, dMatrix bias );
 
   // Layer Getters
   size_t  getInputCount( void ) { return inputCount; }
