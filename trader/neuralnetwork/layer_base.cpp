@@ -31,6 +31,10 @@ LayerBase::LayerBase( void )
 
   inputCount = 0;
   nodeCount  = 0;
+
+  outputs.clear( 0.0 );
+  intermediate.clear( 0.0 );
+  inputs.clear( 0.0 );
 }
 
 /*
@@ -49,6 +53,10 @@ LayerBase::LayerBase( ActivationTypes selectTF )
 
   inputCount = 0;
   nodeCount  = 0;
+
+  outputs.clear( 0.0 );
+  intermediate.clear( 0.0 );
+  inputs.clear( 0.0 );
 }
 
 /*
@@ -65,23 +73,28 @@ LayerBase::~LayerBase( void ) {
 
 /*
   Function:     reconfigure
-  Inputs:       None (void)
+  Inputs:       numNodes (size_t), numInputs (size_t)
+                weight (dMatrix), bias (dMatrix)
 
   Description:
     Use the configured settings of nodeCount & inputCount
     to set the appropriate size for the layer weights and
     biases.
 */
-void LayerBase::reconfigure( size_t  nodes,
-                             size_t  inputs,
+void LayerBase::reconfigure( size_t  numNodes,
+                             size_t  numInputs,
                              dMatrix weight,
                              dMatrix bias ) {
-  this->weight.resize( nodes, inputs, 0.0 );
+  this->weight.resize( numNodes, numInputs, 0.0 );
   this->weight = weight;
 
-  this->bias.resize( nodes, 1, 0.0 );
+  this->bias.resize( numNodes, 1, 0.0 );
   this->bias = bias;
 
-  nodeCount  = nodes;
-  inputCount = inputs;
+  nodeCount  = numNodes;
+  inputCount = numInputs;
+
+  outputs.resize( numNodes, 1, 0.0 );
+  intermediate.resize( numInputs, 1, 0.0 );
+  inputs.resize( numInputs, 1, 0.0 );
 }

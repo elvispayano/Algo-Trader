@@ -15,7 +15,7 @@
 #include "utl_math.h"
 
 // Google Test Includes
-#include "random.h"
+#include "random_number.h"
 #include <gtest/gtest.h>
 
 class MathTest : public ::testing::Test {

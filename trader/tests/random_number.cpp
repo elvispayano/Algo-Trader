@@ -10,7 +10,7 @@
 */
 
 // Test Includes
-#include "random.h"
+#include "random_number.h"
 
 // Standard Includes
 #include <stdlib.h>

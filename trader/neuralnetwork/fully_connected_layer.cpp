@@ -20,15 +20,24 @@
 
 /*
   Constructor:  Fully Connected Layer
+  Inputs:       None (void)
+
+  Description:
+    Initialize the fully connected layer with a default activation function
+*/
+FullyConnectedLayer::FullyConnectedLayer( void )
+    : LayerBase( ActivationTypes::LINEAR ) {}
+
+/*
+  Constructor:  Fully Connected Layer
   Inputs:       selectTF (Activation Types [enum])
 
   Description:
     Initialize the fully connected layer with the provided activation
     function settings
 */
-FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF ) {
-  pActivation->setTF( selectTF );
-}
+FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
+    : LayerBase( selectTF ) {}
 
 /*
   Destructor:   ~Fully Connected Layer
@@ -40,7 +49,7 @@ FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF ) {
 FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 
 /*
-  Function:     processLayer
+  Function:     process
   Inputs:       input (dMatrix)
 
   Description:
@@ -49,7 +58,25 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
     where f(x) is a matrix and tf is the configure transfer
     function
 */
-dMatrix FullyConnectedLayer::processLayer( dMatrix input ) {
-  dMatrix output = pActivation->performTF( weight * input + bias );
-  return output;
+dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
+  this->inputs = inputs;
+  intermediate = weight * inputs + bias;
+  outputs      = pActivation->performTF( intermediate );
+  return outputs;
+}
+
+/*
+  Function:     train
+  Inputs:       learnRatae (double), gradient (dMatrix)
+
+  Description:
+    Update the layers hyperparameters using the computed performance gradient
+    along with the layers leard rate
+*/
+void FullyConnectedLayer::train( double learnRate, dMatrix gradient ) {
+  // Generate FC Layers
+  dIntdIn  = inputs;
+  dOutdInt = pActivation->performBP( intermediate );
+
+  weight -= gradient * learnRate;
 }
