@@ -32,8 +32,17 @@ public:
   // Destructor
   ~FullyConnectedLayer( void );
 
-  // Layer update
-  dMatrix processLayer( dMatrix input );
+  // Forward propagation functions
+  dMatrix process( dMatrix input ) override;
+
+  // Backpropagation functions
+  void train( double learnRate, dMatrix gradient ) override;
+  dMatrix getIntermediateRate( void ) { return dIntdIn; }
+  dMatrix getOutputRate( void ) { return dOutdInt; }
+
+private:
+  dMatrix dIntdIn;
+  dMatrix dOutdInt;
 };
 
 #endif /* FULLY_CONNECTED_LAYER_H */

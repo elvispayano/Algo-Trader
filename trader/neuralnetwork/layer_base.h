@@ -29,8 +29,11 @@ public:
   // Destructors
   ~LayerBase( void );
 
-  // Process layer inputs
-  virtual dMatrix processLayer( dMatrix input ) = 0;
+  // Forward propagation functions
+  virtual dMatrix process( dMatrix input ) = 0;
+
+  // Backpropagation functions
+  virtual void train( double learnRate, dMatrix gradient ) = 0;
 
   // Configure Layer
   void reconfigure( size_t nodes, size_t inputs, dMatrix weight, dMatrix bias );
@@ -46,11 +49,15 @@ protected:
 
   dMatrix weight;
   dMatrix bias;
+  size_t  inputCount;
+  size_t  nodeCount;
 
-  size_t inputCount;
-  size_t nodeCount;
+  dMatrix inputs;
+  dMatrix outputs;
+  dMatrix intermediate;
 
-  dMatrix output;
+  dMatrix updateRate;
+  dMatrix outputRate;
 };
 
 #endif /* LAYER_BASE_H */

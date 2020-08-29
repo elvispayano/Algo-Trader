@@ -49,7 +49,7 @@ FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
 FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 
 /*
-  Function:     processLayer
+  Function:     process
   Inputs:       input (dMatrix)
 
   Description:
@@ -58,7 +58,17 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
     where f(x) is a matrix and tf is the configure transfer
     function
 */
-dMatrix FullyConnectedLayer::processLayer( dMatrix input ) {
-  output = pActivation->performTF( weight * input + bias );
-  return output;
+dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
+  this->inputs = inputs;
+  intermediate = weight * inputs + bias;
+  outputs      = pActivation->performTF( intermediate );
+  return outputs;
+}
+
+void FullyConnectedLayer::train( double learnRate, dMatrix gradient ) {
+  // Generate FC Layers
+  dIntdIn  = inputs;
+  dOutdInt = pActivation->performBP( intermediate );
+
+  weight -= gradient * learnRate;
 }

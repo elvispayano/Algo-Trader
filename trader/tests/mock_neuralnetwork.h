@@ -14,6 +14,7 @@
 #define MOCK_NEURAL_NETWORK_H
 
 // Neural Network Includes
+#include "activation.h"
 #include "layer_base.h"
 #include "neural_network.h"
 
@@ -37,7 +38,9 @@ public:
 class MockLayerBase : public LayerBase {
 public:
   MockLayerBase( void ) {}
-  MOCK_METHOD1( processLayer, dMatrix( dMatrix ) );
+  MOCK_METHOD1( process, dMatrix( dMatrix ) );
+  MOCK_METHOD2( train, void( double, dMatrix ) );
+  MOCK_METHOD0( getBP, void( void ) );
 };
 
 #endif /* MOCK_NEURAL_NETWORK_H */
