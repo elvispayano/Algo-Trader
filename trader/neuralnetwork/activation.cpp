@@ -1,19 +1,12 @@
-/*
-  Title:
-    Activation
-
-  Description:
-    This Activation class is responsible for processing the
-    layers output through a desired transfer function. This
-    class contains a subset of the functionality that is
-    required for the data flow through any given layer.
-
-  Tests:
-    test_activation.cc
-
-  Author:
-    Elvis Payano
-*/
+//! Activation
+//!
+//! The Activation class is responsible for processing the layers output
+//! thorugh a desired transfer function. This class contains a subset of the
+//! functionality that is required for the data flow through any given layer
+//!
+//! \author   Elvis Payano
+//! \date     30/08/2020
+//! \version  0.0.1
 
 // Neural Network Includes
 #include "activation.h"
@@ -21,48 +14,26 @@
 // Utility Includes
 #include "utl_math.h"
 
-/*
-  Constructor:  Activation
-  Inputs:       None (void)
-
-  Description:
-    Configure the activation transfer function to  default
-    settings
-*/
+//! @fn     Activation( void )
+//! @brief  An empty constructor assigned the activation class to have a
+//!         default (Linear) selection.
 Activation::Activation( void ) {
   setTF( ActivationTypes::LINEAR );
 }
 
-/*
-  Constructor:  Activation
-  Inputs:       tfSelect (ActivationTypes [enum])
-
-  Description:
-    Configure the activation transfer function with provided
-    parameters
-*/
+//! @fn     Activation( ActivationTypes select )
+//! @brief  Set the activation type as the type provided.
 Activation::Activation( ActivationTypes tfSelect ) {
   setTF( tfSelect );
 }
 
-/*
-  Destructor:   ~Activation
-  Inputs:       None (void)
-
-  Description:
-    Clear any dynamically allocated memory
-*/
+//! @fn     ~Activation( void )
+//! @brief  Clear any allocated memory.
 Activation::~Activation( void ) {}
 
-/*
-  Function:     setTF
-  Inputs:       selector
-
-  Description:
-    Configure activation transfer function to be used
-    by layers
-*/
-#include <functional>
+//! @fn     setTF( ActivationTypes select )
+//! @brief  Change the activation functions used to the forward and backward
+//!         propagation.
 void Activation::setTF( ActivationTypes selector ) {
   tfType = selector;
   switch ( tfType ) {
@@ -93,29 +64,17 @@ void Activation::setTF( ActivationTypes selector ) {
   }
 }
 
-/*
-  Function:     performTF
-  Inputs:       input (dMatrix)
-  Output:       output (dMatrix)
-
-  Description:
-    Process layers inputs through the selected transfer
-    function. The input is an m-by-n matrix and the output
-    will be of the same size
-*/
+//! @fn     performTF( dMatrix )
+//! @param  input   Matrix used to apply transfer function
+//! @brief  Apply the configured transfer function to the provided matrix.
 dMatrix Activation::performTF( dMatrix input ) {
   input.forEach( transferFunction );
   return input;
 }
 
-/*
-  Function:    performBP
-  Inputs:      input (dMatrix)
-  Output:      output (dMatrix)
-
-  Description:
-    Apply the back propagation function to the input
-*/
+//! @fn     performBP( dMatrix )
+//! @param  input   Matrix used to apply backpropagation
+//! @brief  Calculate the transfer function derivative of the provided matrix.
 dMatrix Activation::performBP( dMatrix input ) {
   input.forEach( backpropFunction );
   return input;
