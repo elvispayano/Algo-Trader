@@ -1,28 +1,21 @@
-/*
-  Title:
-    Layer Base
-
-  Description:
-    The Layer Base class is an abstract class that will be the
-    model in which will define main functionality that must be
-    present in order to work with the network controller.
-
-  Author:
-    Elvis Payano
-*/
+//! Layer Base
+//!
+//! The base layer implementation that will be the model which will
+//! define the main functionality that must be present in order to
+//! function with the neural network controller
+//!
+//! \author   Elvis Payano
+//! \date     29/08/2020
+//! \version  0.0.1
 
 // Neural Network Includes
 #include "layer_base.h"
 #include "activation.h"
 
-/*
-  Constructor:  Layer Base
-  Inputs:       None (void)
-
-  Description:
-    Initialize the weights and bias with zeros and
-    default activation function (None)
-*/
+//! @fn     LayerBase( void )
+//! @brief  An empty constructor that creates the layer with a predefine
+//!         (Linear) activation type. If activation type is not set at
+//!         initialization it can be set later using the setTF function.
 LayerBase::LayerBase( void )
     : pActivation( new Activation() ) {
 
@@ -37,14 +30,10 @@ LayerBase::LayerBase( void )
   inputs.clear( 0.0 );
 }
 
-/*
-  Constructor:  Layer Base
-  Inputs:       selectTF (Activation Types)
-
-  Description:
-    Initialize the weights and bias with zeros and
-    the selected activation function
-*/
+//! @fn     LayerBase( ActivationTypes )
+//! @param  selectTF    ActivationTypes to be utilized in the layer
+//! @brief  Create the layer with the provided activation type. selectTF
+//!         can be reset at anytime using the setTF function.
 LayerBase::LayerBase( ActivationTypes selectTF )
     : pActivation( new Activation( selectTF ) ) {
 
@@ -59,28 +48,25 @@ LayerBase::LayerBase( ActivationTypes selectTF )
   inputs.clear( 0.0 );
 }
 
-/*
-  Destructor:   ~Layer Base
-  Inputs:       None (void)
-
-  Description:
-    Clear any dynamically allocated memory
-*/
+//! @fn     ~LayerBase( void )
+//! @brief  Clear any memory allocated in this layer.
 LayerBase::~LayerBase( void ) {
   if ( pActivation )
     delete pActivation;
 }
 
-/*
-  Function:     reconfigure
-  Inputs:       numNodes (size_t), numInputs (size_t)
-                weight (dMatrix), bias (dMatrix)
-
-  Description:
-    Use the configured settings of nodeCount & inputCount
-    to set the appropriate size for the layer weights and
-    biases.
-*/
+//! @fn     void reconfigure( size_t numNodes,
+//!                           size_t numInputs,
+//!                           dMatrix weight,
+//!                           dMatrix bias )
+//! @param  numNodes    Number of nodes present in the layer
+//! @param  numInputs   Number of inputs that will be provided to the layer
+//! @param  weight      Matrix defining the weights that will be assigned to the
+//!                     layer
+//! @param  bias        Matrix defining the biases that will be assigned to the
+//!                     layer
+//! @brief  Update the layer with the provided hyperparameters that define the
+//!         required parameters for the layer
 void LayerBase::reconfigure( size_t  numNodes,
                              size_t  numInputs,
                              dMatrix weight,
