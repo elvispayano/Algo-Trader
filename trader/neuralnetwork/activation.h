@@ -1,19 +1,12 @@
-/*
-  Title:
-    Activation
-
-  Description:
-    This Activation class is responsible for processing the
-    layers output through a desired transfer function. This
-    class contains a subset of the functionality that is
-    required for the data flow through any given layer.
-
-  Tests:
-    test_activation.cc
-
-  Author:
-    Elvis Payano
-*/
+//! Activation
+//!
+//! The Activation class is responsible for processing the layers output
+//! thorugh a desired transfer function. This class contains a subset of the
+//! functionality that is required for the data flow through any given layer
+//!
+//! \author   Elvis Payano
+//! \date     30/08/2020
+//! \version  0.0.1
 
 #ifndef ACTIVATION_H
 #define ACTIVATION_H
@@ -24,19 +17,37 @@
 
 class Activation {
 public:
-  // Constructors
+  //! @fn     Activation( void )
+  //! @brief  An empty constructor assigned the activation class to have a
+  //!         default (Linear) selection.
   Activation( void );
+
+  //! @fn     Activation( ActivationTypes select )
+  //! @brief  Set the activation type as the type provided.
   Activation( ActivationTypes select );
 
-  // Destructors
+  //! @fn     ~Activation( void )
+  //! @brief  Clear any allocated memory.
   ~Activation( void );
 
-  // Activation Configuration
-  void            setTF( ActivationTypes select );
+  //! @fn     setTF( ActivationTypes select )
+  //! @brief  Change the activation functions used to the forward and backward
+  //!         propagation.
+  void setTF( ActivationTypes select );
+
+  //! @fn     getTF( void )
+  //! @brief  Return the current configured activation type.
   ActivationTypes getTF( void ) { return tfType; }
 
-  dMatrix performTF( dMatrix );
-  dMatrix performBP( dMatrix );
+  //! @fn     performTF( dMatrix )
+  //! @param  input   Matrix used to apply transfer function
+  //! @brief  Apply the configured transfer function to the provided matrix.
+  dMatrix performTF( dMatrix input );
+
+  //! @fn     performBP( dMatrix )
+  //! @param  input   Matrix used to apply backpropagation
+  //! @brief  Calculate the transfer function derivative of the provided matrix.
+  dMatrix performBP( dMatrix input );
 
 private:
   // Transfer function selection trigger

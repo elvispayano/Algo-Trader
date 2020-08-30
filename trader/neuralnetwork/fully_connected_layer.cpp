@@ -1,63 +1,42 @@
-/*
-  Title:
-    Fully Connected Layer
-
-  Description:
-    A fully connected layer is a layer type in which the each node is
-    interconnected, and effects the output based on the configured
-    weights and biases.
-
-  Tests:
-    test_fully_connected_layer.cc
-
-  Author:
-    Elvis Payano
-*/
+//! Fully Connected Layer
+//!
+//! A layer type in which each node is connected to the previous and
+//! next layer. The effects of the output are based on the configured
+//! weights and biases.
+//!
+//! \author   Elvis Payano
+//! \date     29/08/2020
+//! \version  0.0.1
 
 // Neural Network Includes
 #include "fully_connected_layer.h"
 #include "activation.h"
 
-/*
-  Constructor:  Fully Connected Layer
-  Inputs:       None (void)
-
-  Description:
-    Initialize the fully connected layer with a default activation function
-*/
+//! @fn     FullyConnectedLayer( void )
+//! @brief  An empty constructor that creates the layer with a predefined
+//! (Linear)
+//!         activation type. If activation type is not set at initialization it
+//!         can be set later using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( void )
     : LayerBase( ActivationTypes::LINEAR ) {}
 
-/*
-  Constructor:  Fully Connected Layer
-  Inputs:       selectTF (Activation Types [enum])
-
-  Description:
-    Initialize the fully connected layer with the provided activation
-    function settings
-*/
+//! @fn     FullyConnectedLayer( ActivationTypes )
+//! @param  selectTF    ActivationTypes to be utilized in the layer
+//! @brief  Create the layer with the provided activation type. selectTF can
+//!         be reset at anytime using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
     : LayerBase( selectTF ) {}
 
-/*
-  Destructor:   ~Fully Connected Layer
-  Inputs:       None (void)
-
-  Description:
-    Clear any dynamically allocated memory
-*/
+//! @fn     ~FullyConnectedLayer( void )
+//! @brief  Clear any memory allocated in this layer.
 FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 
-/*
-  Function:     process
-  Inputs:       input (dMatrix)
-
-  Description:
-    Process inputs into layer using the following function:
-      f(x) =  tf([weight]*[input] + bias)
-    where f(x) is a matrix and tf is the configure transfer
-    function
-*/
+//! @fn     dMatrix process( dMatrix input)
+//!         Perform the forward propagation functionality through the layer and
+//!         generate an output that can be fed to the preceding layer. Applying
+//!         the following function:
+//!           f(x) =  tf([weight]*[input] + bias)
+//!         where f(x) is a matrix and tf is the configured transfer function.
 dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
   this->inputs = inputs;
   intermediate = weight * inputs + bias;
@@ -65,14 +44,15 @@ dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
   return outputs;
 }
 
-/*
-  Function:     train
-  Inputs:       learnRatae (double), gradient (dMatrix)
-
-  Description:
-    Update the layers hyperparameters using the computed performance gradient
-    along with the layers leard rate
-*/
+//! @fn     void train( double learnRate, dMatrix gradient)
+//! @param  learnRate   Measurement of how much to adjust hyperparameters in
+//! response to gradient
+//! @param  gradient    Description of how to modify hyperparameters in response
+//! to training error
+//! @brief  Run the training algorithm on this layer using the backpropagation
+//!         gradient calculated from all preceding layers. Applying the
+//!         following function:
+//!           weight = weight - learnRate * gradient
 void FullyConnectedLayer::train( double learnRate, dMatrix gradient ) {
   // Generate FC Layers
   dIntdIn  = inputs;
