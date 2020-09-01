@@ -2,7 +2,7 @@
 //!
 //! A collection of various types that will be used by the trader platform to
 //! communicate with the broker API. These custom types allow for the trader
-//! platforms to be agnostic of the APIT being utilized.
+//! platforms to be agnostic of the API being utilized.
 //!
 //! \author   Elvis Payano
 //! \date     30/08/2020

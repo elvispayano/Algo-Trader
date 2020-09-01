@@ -1,15 +1,13 @@
-/*
-  Title:
-    Network Types
-
-  Description:
-    This is a collection of the various enum and struct types
-    that are to be used for configuring the neural network and
-    will be referenced by various libraries.
-
-  Author:
-    Elvis Payano
-*/
+//! Network Types
+//!
+//! A collection of various types that will be used the trader platform to
+//! communicated with the Neural Network library. These custom types allow for
+//! the trader platform to format requests to the Neural Network in a format
+//! that can be consumed.
+//!
+//! \author   Elvis Payano
+//! \date     31/08/2020
+//! \version  0.0.1
 
 #ifndef NETWORK_TYPES_H
 #define NETWORK_TYPES_H
@@ -17,35 +15,25 @@
 // Utility Includes
 #include "matrix.h"
 
-/*
-  Enum:         Activation Types
-  Description:
-    Enumerated definition type that is used to configure layers
-    to use the selected transfer function
-*/
+//! ActivationTypes
+//! Collection of potential activation types that can be implemented within a
+//! layer in the neural network.
 enum class ActivationTypes { LINEAR, BINARY, RELU, TANH, SIGMOID, UNKNOWN };
 
-/*
-  Enum:         Layer Types
-  Description:
-    Enumerated definition type that is used to select what type
-    of layer to create.
-*/
+//! LayerTypes
+//! Types of layers that can be created within the neural network
 enum class LayerTypes { FULLYCONNECTED, UNKNOWN };
 
-/*
-  Struct:       Layer Configuration
-  Description:
-    Combination field that can be used to pass all possible layer
-    data needed for creation and configuration
-*/
+//! LayerConfiguration
+//! Message structure holding the desired layer configuration that can be
+//! created by the neural network.
 struct LayerConfiguration {
-  LayerTypes      Layer;
-  ActivationTypes Activation;
-  size_t          layerHeight;
-  size_t          layerWidth;
-  dMatrix         weight;
-  dMatrix         bias;
+  LayerTypes      Layer;        //! Type of layer to create
+  ActivationTypes Activation;   //! Activation function to assign within layer
+  size_t          layerHeight;  //! Number of nodes present in layer
+  size_t          layerWidth;   //! Number of layer inputs
+  dMatrix         weight;       //! Layers weight hyperparameters
+  dMatrix         bias;         //! Layers bias hyperparameters
 
   LayerConfiguration()
       : Layer( LayerTypes::UNKNOWN )
