@@ -49,10 +49,5 @@ jobs:
       with:
         name: test-exe
 
-    - name: Temp
-      run: ls
-
     - name: Run Test
-      working-directory: ./Algo-trader/trader
-      run: |
-        ./algo-trader
+      run: ./algo-trader
