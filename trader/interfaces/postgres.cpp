@@ -333,22 +333,22 @@ double Postgres::getWeightBias( std::string ticker, int index ) {
 LayerConfiguration Postgres::getLayer( std::string  ticker,
                                        unsigned int layerNum ) {
   LayerConfiguration layer;
-  layer.Activation = getActivation( ticker, layerNum );
-  layer.Layer      = getLayerType( ticker, layerNum );
+  layer.activation = getActivation( ticker, layerNum );
+  layer.layer      = getLayerType( ticker, layerNum );
 
-  layer.layerHeight = getNodes( ticker, layerNum );
-  layer.layerWidth  = getInputs( ticker, layerNum );
-  layer.weight.resize( layer.layerHeight, layer.layerWidth, 0.0 );
-  layer.bias.resize( layer.layerHeight, 1, 0.0 );
+  layer.nodes = getNodes( ticker, layerNum );
+  //layer.inputs  = getInputs( ticker, layerNum );
+  //layer.weight.resize( layer.nodes, layer.inputs, 0.0 );
+  //layer.bias.resize( layer.nodes, 1, 0.0 );
 
   int index = getIndex( ticker, layerNum );
-  for ( size_t col = 0; col < layer.layerWidth; ++col ) {
-    for ( size_t row = 0; row < layer.layerHeight; ++row ) {
-      layer.weight( row, col ) = getWeightBias( ticker, index++ );
-    }
-  }
-  for ( size_t row = 0; row < layer.layerHeight; ++row )
-    layer.bias( row, 0 ) = getWeightBias( ticker, index++ );
+  //for ( size_t col = 0; col < layer.inputs; ++col ) {
+  //  for ( size_t row = 0; row < layer.nodes; ++row ) {
+  //    layer.weight( row, col ) = getWeightBias( ticker, index++ );
+  //  }
+  //}
+  //for ( size_t row = 0; row < layer.nodes; ++row )
+    //layer.bias( row, 0 ) = getWeightBias( ticker, index++ );
 
   return layer;
 }

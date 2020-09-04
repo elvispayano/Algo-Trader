@@ -28,18 +28,16 @@ enum class LayerTypes { FULLYCONNECTED, UNKNOWN };
 //! Message structure holding the desired layer configuration that can be
 //! created by the neural network.
 struct LayerConfiguration {
-  LayerTypes      Layer;        //! Type of layer to create
-  ActivationTypes Activation;   //! Activation function to assign within layer
-  size_t          layerHeight;  //! Number of nodes present in layer
-  size_t          layerWidth;   //! Number of layer inputs
-  dMatrix         weight;       //! Layers weight hyperparameters
-  dMatrix         bias;         //! Layers bias hyperparameters
+  LayerTypes      layer;        //! Type of layer to create
+  ActivationTypes activation;   //! Activation function to assign within layer
+  size_t          nodes;        //! Number of nodes present in layer
+  dMatrix         hyperparams;  //! Layers weight hyperparameters
 
   LayerConfiguration()
-      : Layer( LayerTypes::UNKNOWN )
-      , Activation( ActivationTypes::LINEAR )
-      , layerHeight( 0 )
-      , layerWidth( 0 ) {}
+      : layer( LayerTypes::UNKNOWN )
+      , activation( ActivationTypes::LINEAR )
+      , nodes( 1 )
+      , hyperparams( 1, 1, 0.0 ) {}
 };
 
 #endif /* NETOWRK_TYPES_H */

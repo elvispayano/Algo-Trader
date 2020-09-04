@@ -27,4 +27,8 @@ public:
   //! @fn     layerConfig( void )
   //! @brief  Generate a random layer configuration
   LayerConfiguration layerConfig( void );
+
+  //! @fn     layer( void )
+  //! @brief  Generate a random layer type
+  LayerTypes layer( void );
 };

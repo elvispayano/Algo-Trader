@@ -31,12 +31,19 @@ ActivationTypes RandomNumber::activation( void ) {
   return static_cast<ActivationTypes>( rand() % max );
 }
 
+LayerTypes RandomNumber::layer( void ) {
+  const int max = static_cast<int>( LayerTypes::UNKNOWN );
+  return static_cast<LayerTypes>( rand() % max );
+}
+
 double RandomNumber::random( double a, double b ) {
   return ( (double)rand() / RAND_MAX ) * ( b - a ) + a;
 }
 
-LayerConfiguration RandomNumber::layerConfig(void) {
+LayerConfiguration RandomNumber::layerConfig( void ) {
   LayerConfiguration output;
-  output.Activation = activation();
+  output.activation = activation();
+  output.layer      = layer();
+  output.nodes      = (int)random( 1, 10 );
   return output;
 }

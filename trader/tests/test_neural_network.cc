@@ -38,8 +38,7 @@ public:
 //! Ensure configured layers are added to the network
 TEST_F( NeuralNetworkTest, AddLayer ) {
   LayerConfiguration config = rng.layerConfig();
-  unsigned int       nodes  = config.layerHeight;
-
+  unsigned int       nodes  = config.nodes;
   network->addLayer( config );
 
   EXPECT_EQ( 1, network->getLayerCount() );

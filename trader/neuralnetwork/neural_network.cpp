@@ -40,7 +40,7 @@ NeuralNetwork::~NeuralNetwork( void ) {
 //!         activation, and the size of the layer.
 void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
   LayerBase* newLayer;
-  switch ( configuration.Layer ) {
+  switch ( configuration.layer ) {
   case LayerTypes::FULLYCONNECTED:
     newLayer = new FullyConnectedLayer();
     break;
