@@ -12,7 +12,8 @@ name: C++ Testing
 on:
   push:
     paths:
-    - trader/**
+    - **.cpp
+    - **.h
   pull_request:
     branches:
     - master

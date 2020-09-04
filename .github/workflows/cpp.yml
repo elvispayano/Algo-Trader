@@ -12,7 +12,8 @@ name: C++ Development
 on:
   push:
     paths:
-    - trader/**
+    - **.cpp
+    - **.h
   pull_request:
     branches:
     - master
