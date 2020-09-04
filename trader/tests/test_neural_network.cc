@@ -37,10 +37,15 @@ public:
 //! @test     Add Layer
 //! Ensure configured layers are added to the network
 TEST_F( NeuralNetworkTest, AddLayer ) {
-  LayerConfiguration config = rng.layerConfig();
-  unsigned int       nodes  = config.nodes;
-  network->addLayer( config );
+  unsigned int nodes = 0;
+  unsigned int totalLayer = rng.random( 3, 7 );
 
-  EXPECT_EQ( 1, network->getLayerCount() );
+  for ( size_t iter = 0; iter < totalLayer; ++iter ) {
+    LayerConfiguration config = rng.layerConfig();
+    nodes += config.nodes;
+    network->addLayer( config );
+  }
+
+  EXPECT_EQ( totalLayer, network->getLayerCount() );
   EXPECT_EQ( nodes, network->getTotalNodes() );
 }
