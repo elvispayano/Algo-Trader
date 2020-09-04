@@ -1,0 +1,28 @@
+# Documentation Pipeline
+#
+# Pipeline configuration that define the steps required to automatically
+# generate, capture, and deploy program documentation
+#
+# Author: Elvis Payano
+
+name: Automated Documentation Generation
+
+# Triggers
+# Run pipeline on all merges & updates to master
+on:
+  push:
+    paths:
+    - trader/**
+
+jobs:
+  c++:
+    runs-on: ubuntu-latest
+    container: elvispayano/documentation
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v2
+
+    # Run Doxygen
+    - name: Generate Documentation
+      working-directory: ./trader
+      run: doxygen ./.doxygen-format
