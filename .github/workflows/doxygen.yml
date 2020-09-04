@@ -8,11 +8,11 @@
 name: Automated Documentation Generation
 
 # Triggers
-# Run pipeline on all merges & updates to master
+# Update documentation only on master branch
 on:
   push:
-    paths:
-    - trader/**
+    branches:
+    - 'master'
 
 jobs:
   trader:

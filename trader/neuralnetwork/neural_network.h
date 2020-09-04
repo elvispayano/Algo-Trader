@@ -47,6 +47,10 @@ public:
   // Process Network Inputs
   virtual dMatrix process( dMatrix data );
 
+  //! @fn     train(void)
+  //! @brief  Train the neural network with the provided parameters
+  void train( void );
+
 private:
   // Layer Elements
   std::vector< LayerBase* > layers;

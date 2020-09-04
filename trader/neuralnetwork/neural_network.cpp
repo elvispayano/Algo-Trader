@@ -123,3 +123,7 @@ unsigned int NeuralNetwork::getTotalNodes( void ) {
   }
   return nodeCount;
 }
+
+void NeuralNetwork::train(void) {
+
+}

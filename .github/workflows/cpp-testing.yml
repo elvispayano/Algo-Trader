@@ -42,7 +42,7 @@ jobs:
 
   run-tests:
     runs-on: ubuntu-latest
-    container: alpine:3.12
+    container: elvispayano/algo-trader-build:2.0
     needs: build-tests
     steps:
     - name: Download Test Executable
@@ -52,5 +52,5 @@ jobs:
 
     - name: Run Test
       run: |
-      chmod u+x ./algo-trader
-      ./algo-trader
+        chmod u+x ./algo-trader
+        ./algo-trader
