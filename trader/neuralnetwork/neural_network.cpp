@@ -38,9 +38,9 @@ NeuralNetwork::~NeuralNetwork( void ) {
 //! @brief  Add a new layer to the network. The configuration type contains all
 //!         the required elements to select the type of layer, implemented
 //!         activation, and the size of the layer.
-void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
+void NeuralNetwork::addLayer( LayerConfiguration config) {
   LayerBase* newLayer;
-  switch ( configuration.layer ) {
+  switch ( config.layer ) {
   case LayerTypes::FULLYCONNECTED:
     newLayer = new FullyConnectedLayer();
     break;
@@ -54,6 +54,7 @@ void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
   }
 
   // Layer configuration
+  newLayer->reconfigure( config.nodes, 0, config.hyperparams );
   // newLayer->setTF( configuration.Activation );
   // newLayer->setInputCount( configuration.layerWidth );
   // newLayer->setNodeCount( configuration.layerHeight );

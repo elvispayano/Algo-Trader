@@ -32,7 +32,7 @@ protected:
     weight.randomize();
     bias.randomize();
 
-    fc->reconfigure( nodes, inputs, weight, bias );
+    fc->reconfigure( nodes, inputs, weight );
   }
 
   void TearDown( void ) override {
