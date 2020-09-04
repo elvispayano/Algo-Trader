@@ -1,18 +1,12 @@
-/*
-  Title:
-    Neural Network
-
-  Description:
-    This Neural Network class is responsible for generating
-    and configuring all neural network layers. This class will
-    be the main interface for outside implementations.
-
-  Tests:
-    test_neural_network.cc
-
-  Author:
-    Elvis Payano
-*/
+//! Neural Network
+//!
+//! This class is responsible for generating and configuring all the neural
+//! network layers. This class is also the main interface for the outside
+//! implementation.
+//!
+//! \author   Elvis Payano
+//! \date     04/09/2020
+//! \version  0.0.1
 
 #ifndef NEURAL_NETWORK_H
 #define NEURAL_NETWORK_H
@@ -38,7 +32,7 @@ public:
 
   // Layer Configuration
   void         addLayer( LayerConfiguration configuration );
-  size_t       getLayerCount( void ) { return layers.size(); }
+  size_t       getLayerCount( void ) { return layerList.size(); }
   unsigned int getTotalNodes( void );
 
   // Network Identification
@@ -53,8 +47,8 @@ public:
 
 private:
   // Layer Elements
-  std::vector< LayerBase* > layers;
-  std::string               ticker;
+  std::vector<LayerBase*> layerList;
+  std::string             ticker;
 };
 
 #endif /* NEURAL_NETWORK_H */

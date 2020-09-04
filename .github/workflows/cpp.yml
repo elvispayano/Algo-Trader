@@ -16,6 +16,9 @@ on:
     - '**.h'
     branches:
     - master
+  push:
+    branches:
+    - master
 
 jobs:
   build-debug:
