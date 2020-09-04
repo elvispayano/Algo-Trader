@@ -15,7 +15,7 @@ on:
     - trader/**
 
 jobs:
-  c++:
+  trader:
     runs-on: ubuntu-latest
     container: elvispayano/documentation
     steps:
