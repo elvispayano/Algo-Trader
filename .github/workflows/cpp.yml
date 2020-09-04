@@ -18,7 +18,7 @@ on:
     - master
 
 jobs:
-  build:
+  build-debug:
     # Ensure Ubuntu runner
     runs-on: ubuntu-latest
     container: elvispayano/algo-trader-build:2.0
@@ -27,14 +27,38 @@ jobs:
     - uses: actions/checkout@v2
     
     # Run CMake
-    - name: Build Debug
+    - name: Build
+      working-directory: ./trader
+      run: |
+        cmake .
+        cmake --build . --config Debug
+
+  build-release:
+    # Ensure Ubuntu runner
+    runs-on: ubuntu-latest
+    container: elvispayano/algo-trader-build:2.0
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v2
+    
+    # Run CMake
+    - name: Build
+      working-directory: ./trader
+      run: |
+        cmake .
+        cmake --build . --config Release
+
+  build-tests:
+    # Ensure Ubuntu runner
+    runs-on: ubuntu-latest
+    container: elvispayano/algo-trader-build:2.0
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v2
+    
+    # Run CMake
+    - name: Build
       working-directory: ./trader
       run: |
         cmake . -DCI=1
-        cmake --build . --config Debug
-        
-    # Execute
-    - name: Run Debug
-      working-directory: ./trader/
-      run: |
-        ./algo-trader --gtest_output=xml
+        cmake --build .

@@ -1,0 +1,58 @@
+# C++ Pipeline
+#
+# Pipeline configuration that defines the stages and steps required for
+# building and testing pythong tools within the project
+#
+# Author: Elvis Payano
+
+name: C++ Testing
+
+# Triggers
+# Run pipeline on all merges & updates to master
+on:
+  push:
+    paths:
+    - trader/**
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build-tests:
+    # Ensure Ubuntu runner
+    runs-on: ubuntu-latest
+    container: elvispayano/algo-trader-build:2.0
+    steps:
+    # Checkout source
+    - uses: actions/checkout@v2
+    
+    # Run CMake
+    - name: Build
+      working-directory: ./trader
+      run: |
+        cmake . -DCI=1
+        cmake --build .
+
+    - name: Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-exe
+        path: ./trader/algo-trader
+
+  run-tests:
+    runs-on: ubuntu-latest
+    container: alpine:3.12
+    needs: build-tests
+    steps:
+    - name: Download Test Executable
+      uses: actions/download-artifact@v2
+      with:
+        name: test-exe
+
+    - name: Temp
+      run: ls
+
+    - name: Run Test
+      working-directory: ./Algo-trader/trader
+      run: |
+        ./algo-trader
