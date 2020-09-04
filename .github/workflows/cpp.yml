@@ -47,18 +47,3 @@ jobs:
       run: |
         cmake .
         cmake --build . --config Release
-
-  build-tests:
-    # Ensure Ubuntu runner
-    runs-on: ubuntu-latest
-    container: elvispayano/algo-trader-build:2.0
-    steps:
-    # Checkout source
-    - uses: actions/checkout@v2
-    
-    # Run CMake
-    - name: Build
-      working-directory: ./trader
-      run: |
-        cmake . -DCI=1
-        cmake --build .
