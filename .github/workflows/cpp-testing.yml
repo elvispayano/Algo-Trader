@@ -5,7 +5,7 @@
 #
 # Author: Elvis Payano
 
-name: C++ Development
+name: C++ Testing
 
 # Triggers
 # Run pipeline on all merges & updates to master
@@ -19,7 +19,7 @@ on:
     - master
 
 jobs:
-  build-debug:
+  build-tests:
     # Ensure Ubuntu runner
     runs-on: ubuntu-latest
     container: elvispayano/algo-trader-build:2.0
@@ -31,20 +31,26 @@ jobs:
     - name: Build
       working-directory: ./trader
       run: |
-        cmake .
-        cmake --build . --config Debug
+        cmake . -DCI=1
+        cmake --build .
 
-  build-release:
-    # Ensure Ubuntu runner
+    - name: Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-exe
+        path: ./trader/algo-trader
+
+  run-tests:
     runs-on: ubuntu-latest
-    container: elvispayano/algo-trader-build:2.0
+    container: alpine:3.12
+    needs: build-tests
     steps:
-    # Checkout source
-    - uses: actions/checkout@v2
-    
-    # Run CMake
-    - name: Build
-      working-directory: ./trader
+    - name: Download Test Executable
+      uses: actions/download-artifact@v2
+      with:
+        name: test-exe
+
+    - name: Run Test
       run: |
-        cmake .
-        cmake --build . --config Release
+      chmod u+x ./algo-trader
+      ./algo-trader
