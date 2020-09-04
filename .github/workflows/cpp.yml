@@ -11,9 +11,8 @@ name: C++ Development
 # Run pipeline on all merges & updates to master
 on:
   push:
-    branches:
-    - master
-    - feature/*
+    paths:
+    - trader/**
   pull_request:
     branches:
     - master
