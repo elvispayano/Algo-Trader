@@ -26,3 +26,14 @@ jobs:
     - name: Generate Documentation
       working-directory: ./trader
       run: doxygen ./.doxygen-format
+
+    # Tar Files For upload
+    - name: Compress Files
+      working-directory: ./trader/docs
+      run: tar -zcvf docs.tar.gz ./html
+
+    - name: Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: html-docs
+        path: ./trader/docs/docs.tar.gz

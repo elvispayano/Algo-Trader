@@ -51,4 +51,6 @@ jobs:
         name: test-exe
 
     - name: Run Test
-      run: ./algo-trader
+      run: |
+      chmod u+x ./algo-trader
+      ./algo-trader

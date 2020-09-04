@@ -1,4 +1,4 @@
-# Trader C++
+# Algo-Trader
 Created an initial C++ environment that provides a modular design and unit testing. The modular design will allow each unique section of code to be isolated into independent libraries. The unit testing is conducted through a separate executable to reduce the overall future size of the project binary.
 
 # Libraries
