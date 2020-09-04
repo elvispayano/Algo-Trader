@@ -34,3 +34,9 @@ ActivationTypes RandomNumber::activation( void ) {
 double RandomNumber::random( double a, double b ) {
   return ( (double)rand() / RAND_MAX ) * ( b - a ) + a;
 }
+
+LayerConfiguration RandomNumber::layerConfig(void) {
+  LayerConfiguration output;
+  output.Activation = activation();
+  return output;
+}

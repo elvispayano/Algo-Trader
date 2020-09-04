@@ -25,7 +25,8 @@ class LayerBase;
 class NeuralNetwork {
 public:
   // Constructor
-  NeuralNetwork( std::string ticker );
+  NeuralNetwork( void ) {}
+  NeuralNetwork( std::string name );
 
   // Destructor
   ~NeuralNetwork( void );

@@ -24,10 +24,7 @@ public:
   ActivationTypes activation( void );
   double          random( double a = 0.0, double b = 100.0);
 
+  //! @fn     layerConfig( void )
+  //! @brief  Generate a random layer configuration
+  LayerConfiguration layerConfig( void );
 };
-
-double random_u( void );
-double random_p( void );
-double random_n( void );
-
-ActivationTypes random_activation( void );

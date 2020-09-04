@@ -15,10 +15,10 @@
 #include "fully_connected_layer.h"
 #include "layer_base.h"
 
-//! @fn     NeuralNetwork( string ticker )
+//! @fn     NeuralNetwork( string name )
 //! @brief  Initializa a neural network and layer workspace that will later be
 //!         configured
-NeuralNetwork::NeuralNetwork( std::string ticker ) {
+NeuralNetwork::NeuralNetwork( std::string name ) {
   this->ticker = ticker;
   layerList.clear();
 }
@@ -85,15 +85,15 @@ dMatrix NeuralNetwork::process( dMatrix data ) {
 //!         approximate complexity.
 unsigned int NeuralNetwork::getTotalNodes( void ) {
   unsigned int nodeCount = 0;
-  for each ( LayerBase* layer in layerList ) {
-    nodeCount += layer->getNodeCount();
-  }
+  //for each ( LayerBase* layer in layerList ) {
+  //  nodeCount += layer->getNodeCount();
+  //}
   return nodeCount;
 }
 
 void NeuralNetwork::train( void ) {
-  for each ( LayerBase* layer in layerList ) {
-    dMatrix gradient;
-    layer->train( 0.0, gradient );
-  }
+  //for each ( LayerBase* layer in layerList ) {
+  //  dMatrix gradient;
+  //  layer->train( 0.0, gradient );
+  //}
 }
