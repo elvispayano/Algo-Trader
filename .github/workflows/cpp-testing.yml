@@ -12,8 +12,8 @@ name: C++ Testing
 on:
   push:
     paths:
-    - **.cpp
-    - **.h
+    - '**.cpp'
+    - '**.h'
   pull_request:
     branches:
     - master
