@@ -17,7 +17,7 @@ on:
 jobs:
   trader:
     runs-on: ubuntu-latest
-    container: elvispayano/documentation
+    container: elvispayano/documentation:1.0
     steps:
     # Checkout source
     - uses: actions/checkout@v2
