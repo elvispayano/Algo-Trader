@@ -22,7 +22,7 @@ jobs:
   build:
     # Ensure Ubuntu runner
     runs-on: ubuntu-latest
-    container: elvispayano/algo-trader-build:1.0
+    container: elvispayano/algo-trader-build:2.0
     steps:
     # Checkout source
     - uses: actions/checkout@v2
