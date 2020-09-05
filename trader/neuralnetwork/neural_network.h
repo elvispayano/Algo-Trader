@@ -50,6 +50,9 @@ private:
   // Layer Elements
   std::vector<LayerBase*> layerList;
   std::string             ticker;
+
+  unsigned int inputCount;
+  unsigned int outputCount;
 };
 
 #endif /* NEURAL_NETWORK_H */

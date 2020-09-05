@@ -21,6 +21,9 @@
 NeuralNetwork::NeuralNetwork( std::string name ) {
   this->ticker = ticker;
   layerList.clear();
+
+  inputCount  = 0;
+  outputCount = 0;
 }
 
 //! @fn     ~NeuralNetwork( string ticker )
@@ -38,11 +41,11 @@ NeuralNetwork::~NeuralNetwork( void ) {
 //! @brief  Add a new layer to the network. The configuration type contains all
 //!         the required elements to select the type of layer, implemented
 //!         activation, and the size of the layer.
-void NeuralNetwork::addLayer( LayerConfiguration config) {
+void NeuralNetwork::addLayer( LayerConfiguration config ) {
   LayerBase* newLayer;
   switch ( config.layer ) {
   case LayerTypes::FULLYCONNECTED:
-    newLayer = new FullyConnectedLayer();
+    newLayer = new FullyConnectedLayer(config.activation);
     break;
 
   default:
@@ -54,17 +57,10 @@ void NeuralNetwork::addLayer( LayerConfiguration config) {
   }
 
   // Layer configuration
-  newLayer->reconfigure( config.nodes, 0, config.hyperparams );
-  // newLayer->setTF( configuration.Activation );
-  // newLayer->setInputCount( configuration.layerWidth );
-  // newLayer->setNodeCount( configuration.layerHeight );
-  //
-  //// Process new configuration
-  // newLayer->reconfigure();
-  //
-  //// Apply weights & biases
-  // newLayer->setWeight( configuration.weight );
-  // newLayer->setBias( configuration.bias );
+  unsigned int inputs =
+      ( layerList.size() > 0 ) ? layerList.back()->getNodeCount() : inputCount;
+
+  newLayer->reconfigure( config.nodes, inputs, config.hyperparams );
 
   if ( !layerList.empty() )
     if ( layerList.back()->getNodeCount() != newLayer->getInputCount() )
@@ -93,7 +89,7 @@ unsigned int NeuralNetwork::getTotalNodes( void ) {
 }
 
 void NeuralNetwork::train( void ) {
-  //for each ( LayerBase* layer in layerList ) {
+  // for each ( LayerBase* layer in layerList ) {
   //  dMatrix gradient;
   //  layer->train( 0.0, gradient );
   //}
