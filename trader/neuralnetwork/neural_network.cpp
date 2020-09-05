@@ -45,7 +45,7 @@ void NeuralNetwork::addLayer( LayerConfiguration config ) {
   LayerBase* newLayer;
   switch ( config.layer ) {
   case LayerTypes::FULLYCONNECTED:
-    newLayer = new FullyConnectedLayer(config.activation);
+    newLayer = new FullyConnectedLayer( config.activation );
     break;
 
   default:
@@ -61,10 +61,6 @@ void NeuralNetwork::addLayer( LayerConfiguration config ) {
       ( layerList.size() > 0 ) ? layerList.back()->getNodeCount() : inputCount;
 
   newLayer->reconfigure( config.nodes, inputs, config.hyperparams );
-
-  if ( !layerList.empty() )
-    if ( layerList.back()->getNodeCount() != newLayer->getInputCount() )
-      return;
 
   layerList.push_back( newLayer );
 }
@@ -82,9 +78,9 @@ dMatrix NeuralNetwork::process( dMatrix data ) {
 //!         approximate complexity.
 unsigned int NeuralNetwork::getTotalNodes( void ) {
   unsigned int nodeCount = 0;
-  //for each ( LayerBase* layer in layerList ) {
-  //  nodeCount += layer->getNodeCount();
-  //}
+  for (LayerBase* layer : layerList) {
+    nodeCount += layer->getNodeCount();
+  }
   return nodeCount;
 }
 
