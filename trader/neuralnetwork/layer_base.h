@@ -56,16 +56,11 @@ public:
   //!                           dMatrix bias )
   //! @param  numNodes    Number of nodes present in the layer
   //! @param  numInputs   Number of inputs that will be provided to the layer
-  //! @param  weight      Matrix defining the weights that will be assigned to
-  //!                     the layer
-  //! @param  bias        Matrix defining the biases that will be assigned to
-  //!                     the layer
+  //! @param  hyperparams Matrix containing all hyperparameters
   //! @brief  Update the layer with the provided hyperparameters that define the
   //!         required parameters for the layer
-  void reconfigure( size_t  numNodes,
-                    size_t  numInputs,
-                    dMatrix weight,
-                    dMatrix bias );
+  virtual void
+  reconfigure( size_t numNodes, size_t numInputs, dMatrix hyperparams );
 
   //! @fn     size_t getInputCount( void )
   //! @brief  Return the layers configured input size
@@ -75,28 +70,17 @@ public:
   //! @brief  Return the layers configured node size
   size_t getNodeCount( void ) { return nodeCount; }
 
-  //! @fn     dMatrix getWeight( void )
-  //! @brief  Return the layers configured weight hyperparameters
-  dMatrix getWeight( void ) { return weight; }
-
-  //! @fn     dMatrix getBias( void )
-  //! @brief  Return the layers configured bias hyperparameters
-  dMatrix getBias( void ) { return bias; }
+  //! @fn     dMatrix getHyperparams( void )
+  //! @brief  Return the layers hyperparameters
+  dMatrix getHyperparams( void ) { return hyperparameters; }
 
 protected:
   Activation* pActivation;
 
-  dMatrix weight;
-  dMatrix bias;
-  size_t  inputCount;
-  size_t  nodeCount;
+  size_t inputCount;
+  size_t nodeCount;
 
-  dMatrix inputs;
-  dMatrix outputs;
-  dMatrix intermediate;
-
-  dMatrix updateRate;
-  dMatrix outputRate;
+  dMatrix hyperparameters;
 };
 
 #endif /* LAYER_BASE_H */

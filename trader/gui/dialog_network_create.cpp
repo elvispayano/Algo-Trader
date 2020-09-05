@@ -146,35 +146,35 @@ void DialogNetworkCreate::networkAccepted( void ) {
     QString layer =
         static_cast< QComboBox* >( ui->tableNetwork->cellWidget( layerInd, 0 ) )
             ->currentText();
-    if ( layerMap.find( layer ) != layerMap.end() )
-      config.Layer = layerMap[layer];
-    else
-      config.Layer = LayerTypes::UNKNOWN;
-
-    // Activation Type
-    QString activation =
-        static_cast< QComboBox* >( ui->tableNetwork->cellWidget( layerInd, 1 ) )
-            ->currentText();
-    if ( activationMap.find( activation ) != activationMap.end() )
-      config.Activation = activationMap[activation];
-    else
-      config.Activation = ActivationTypes::UNKNOWN;
-
-    // Inputs
-    if ( layerInd == 0 )
-      config.layerWidth = 4;
-    else
-      config.layerWidth = config.layerHeight;
-
-    // Nodes
-    if ( layerInd == totalLayerCount )
-      config.layerHeight = 3;
-    else
-      config.layerHeight = static_cast< QSpinBox* >(
-                               ui->tableNetwork->cellWidget( layerInd, 2 ) )
-                               ->value();
-
-    network->addLayer( config );
+    //if ( layerMap.find( layer ) != layerMap.end() )
+    //  config.Layer = layerMap[layer];
+    //else
+    //  config.Layer = LayerTypes::UNKNOWN;
+    //
+    //// Activation Type
+    //QString activation =
+    //    static_cast< QComboBox* >( ui->tableNetwork->cellWidget( layerInd, 1 ) )
+    //        ->currentText();
+    //if ( activationMap.find( activation ) != activationMap.end() )
+    //  config.Activation = activationMap[activation];
+    //else
+    //  config.Activation = ActivationTypes::UNKNOWN;
+    //
+    //// Inputs
+    //if ( layerInd == 0 )
+    //  config.layerWidth = 4;
+    //else
+    //  config.layerWidth = config.layerHeight;
+    //
+    //// Nodes
+    //if ( layerInd == totalLayerCount )
+    //  config.layerHeight = 3;
+    //else
+    //  config.layerHeight = static_cast< QSpinBox* >(
+    //                           ui->tableNetwork->cellWidget( layerInd, 2 ) )
+    //                           ->value();
+    //
+    //network->addLayer( config );
   }
 
   newNetwork = true;
@@ -191,3 +191,4 @@ void DialogNetworkCreate::networkRejected( void ) {
 
   this->close();
 }
+

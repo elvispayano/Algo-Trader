@@ -1,18 +1,12 @@
-/*
-  Title:
-    Neural Network
-
-  Description:
-    This Neural Network class is responsible for generating
-    and configuring all neural network layers. This class will
-    be the main interface for outside implementations.
-
-  Tests:
-    test_neural_network.cc
-
-  Author:
-    Elvis Payano
-*/
+//! Neural Network
+//!
+//! This class is responsible for generating and configuring all the neural
+//! network layers. This class is also the main interface for the outside
+//! implementation.
+//!
+//! \author   Elvis Payano
+//! \date     04/09/2020
+//! \version  0.0.1
 
 // Neural Network Includes
 #include "neural_network.h"
@@ -21,49 +15,37 @@
 #include "fully_connected_layer.h"
 #include "layer_base.h"
 
-/*
-  Constructor:    Neural Network
-  Inputs:         None (void)
-
-  Description:
-    Initialize a neural network and initialize layer workspace
-    that will be later configured.
-*/
-NeuralNetwork::NeuralNetwork( std::string ticker ) {
+//! @fn     NeuralNetwork( string name )
+//! @brief  Initializa a neural network and layer workspace that will later be
+//!         configured
+NeuralNetwork::NeuralNetwork( std::string name ) {
   this->ticker = ticker;
-  layers.clear();
+  layerList.clear();
+
+  inputCount  = 0;
+  outputCount = 0;
 }
 
-/*
-  Destructor:   ~Neural Network
-  Inputs:       None (void)
-
-  Description:
-    Neural Network is composed of various layer pointers that are
-    created. Upon destruction of the Neural Network class, the
-    created pointers must be deleated to prevent a memory leak.
-*/
+//! @fn     ~NeuralNetwork( string ticker )
+//! @brief  The neural network is composed of various layer pointers that are
+//!         created. Upon destruction of the class, the created pointers must be
+//!         deleted.
 NeuralNetwork::~NeuralNetwork( void ) {
-  for ( size_t i = 0; i < layers.size(); ++i ) {
-    delete layers[i];
+  for ( size_t i = 0; i < layerList.size(); ++i ) {
+    delete layerList[i];
   }
-  layers.clear();
+  layerList.clear();
 }
 
-/*
-  Function:     addLayer
-  Inputs:       configuration (LayerConfiguration)
-
-  Description:
-    Add a new layer to the neural network. The configuration type
-    contains all the required elements to select the type of layer,
-    the implemented activation, and the size of the layer.
-*/
-void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
+//! @fn     void addLayer( LayerConfiguration configuration )
+//! @brief  Add a new layer to the network. The configuration type contains all
+//!         the required elements to select the type of layer, implemented
+//!         activation, and the size of the layer.
+void NeuralNetwork::addLayer( LayerConfiguration config ) {
   LayerBase* newLayer;
-  switch ( configuration.Layer ) {
+  switch ( config.layer ) {
   case LayerTypes::FULLYCONNECTED:
-    newLayer = new FullyConnectedLayer();
+    newLayer = new FullyConnectedLayer( config.activation );
     break;
 
   default:
@@ -75,51 +57,36 @@ void NeuralNetwork::addLayer( LayerConfiguration configuration ) {
   }
 
   // Layer configuration
-  //newLayer->setTF( configuration.Activation );
-  //newLayer->setInputCount( configuration.layerWidth );
-  //newLayer->setNodeCount( configuration.layerHeight );
-  //
-  //// Process new configuration
-  //newLayer->reconfigure();
-  //
-  //// Apply weights & biases
-  //newLayer->setWeight( configuration.weight );
-  //newLayer->setBias( configuration.bias );
+  unsigned int inputs =
+      ( layerList.size() > 0 ) ? layerList.back()->getNodeCount() : inputCount;
 
-  if ( !layers.empty() )
-    if ( layers.back()->getNodeCount() != newLayer->getInputCount() )
-      return;
+  newLayer->reconfigure( config.nodes, inputs, config.hyperparams );
 
-  layers.push_back( newLayer );
+  layerList.push_back( newLayer );
 }
 
-/*
-  Function:     Process
-  Inputs:       Data (dMatrix)
-  Outputs:      Action (dMatrix)
-
-  Description:
-    Process input data through each layer and return a processed
-    matrix containing the desired action to be performed
-*/
+//! @fn     dMatrix process( dMatrix data )
+//! @brief  Process input data through each layer and return a proccessed matrix
+//!         containing the desired action to be performed.
 dMatrix NeuralNetwork::process( dMatrix data ) {
   dMatrix action;
   return action;
 }
 
-/*
-  Function:     getTotalNodes
-  Input:        None (void)
-  Output:       Node Count (unsigned int)
-
-  Description:
-    Total nodes used within the network. Is used to determine approximate
-    complexity
-*/
+//! @fn     unsigned int getTotalNodes( void )
+//! @brief  Total nodes used within the network. It is used to determine
+//!         approximate complexity.
 unsigned int NeuralNetwork::getTotalNodes( void ) {
   unsigned int nodeCount = 0;
-  for ( unsigned int ind = 0; ind < layers.size(); ++ind ) {
-    nodeCount += layers[ind]->getNodeCount();
+  for (LayerBase* layer : layerList) {
+    nodeCount += layer->getNodeCount();
   }
   return nodeCount;
+}
+
+void NeuralNetwork::train( void ) {
+  // for each ( LayerBase* layer in layerList ) {
+  //  dMatrix gradient;
+  //  layer->train( 0.0, gradient );
+  //}
 }

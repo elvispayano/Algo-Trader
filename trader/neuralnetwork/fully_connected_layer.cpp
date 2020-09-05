@@ -18,14 +18,28 @@
 //!         activation type. If activation type is not set at initialization it
 //!         can be set later using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( void )
-    : LayerBase( ActivationTypes::LINEAR ) {}
+    : LayerBase( ActivationTypes::LINEAR ) {
+  weight.clear( 0.0 );
+  bias.clear( 0.0 );
+
+  outputs.clear( 0.0 );
+  intermediate.clear( 0.0 );
+  inputs.clear( 0.0 );
+}
 
 //! @fn     FullyConnectedLayer( ActivationTypes )
 //! @param  selectTF    ActivationTypes to be utilized in the layer
 //! @brief  Create the layer with the provided activation type. selectTF can
 //!         be reset at anytime using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
-    : LayerBase( selectTF ) {}
+    : LayerBase( selectTF ) {
+  weight.clear( 0.0 );
+  bias.clear( 0.0 );
+
+  outputs.clear( 0.0 );
+  intermediate.clear( 0.0 );
+  inputs.clear( 0.0 );
+}
 
 //! @fn     ~FullyConnectedLayer( void )
 //! @brief  Clear any memory allocated in this layer.
@@ -42,6 +56,28 @@ dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
   intermediate = weight * inputs + bias;
   outputs      = pActivation->performTF( intermediate );
   return outputs;
+}
+
+//! @fn     void reconfigure( size_t nodes,
+//!                           size_t inputs,
+//!                           dMatrix hyperparams )
+//! @param  nodes       Number of nodes present in layer
+//! @param  inputs      Number of inputs present in layer
+//! @param  hyperparam  Matrix of hyperparameters containing all weight and
+//!                     bias values
+//! @brief  Update the layer with the provided hyperparameters that define the
+//!         required configuration of the layer
+void FullyConnectedLayer::reconfigure( size_t  nodes,
+                                       size_t  inputs,
+                                       dMatrix hyperparams ) {
+  LayerBase::reconfigure( nodes, inputs, hyperparams );
+
+  weight.resize( nodes, inputs, 0.0 );
+  bias.resize( nodes, 1, 0.0 );
+
+  outputs.resize( nodes, 1, 0.0 );
+  intermediate.resize( nodes, 1, 0.0 );
+  this->inputs.resize( inputs, 1, 0.0 );
 }
 
 //! @fn     void train( double learnRate, dMatrix gradient)

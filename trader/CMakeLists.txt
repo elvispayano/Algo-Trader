@@ -18,6 +18,7 @@ project(algo-trader VERSION 0.20.08)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
 endif()
+add_compile_definitions(${CMAKE_BUILD_TYPE})
 
 # Project build directories
 add_subdirectory(util)

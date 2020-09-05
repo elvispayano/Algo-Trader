@@ -49,17 +49,11 @@ TEST_F( LayerBaseTest, Reconfigure ) {
   int nodes  = (int)rng->random( 1, 5 );
   int inputs = (int)rng->random( 1, 5 );
 
-  dMatrix weight( nodes, inputs, 0.0 );
-  dMatrix bias( nodes, 1, 0.0 );
+  unsigned int  totalparams = nodes * inputs + inputs;
+  dMatrix hyperparams(totalparams, 1, 0.0 );
 
-  weight.randomize();
-  bias.randomize();
-
-  mLayer->reconfigure( nodes, inputs, weight, bias );
+  mLayer->reconfigure( nodes, inputs, hyperparams );
 
   EXPECT_EQ( nodes, mLayer->getNodeCount() );
   EXPECT_EQ( inputs, mLayer->getInputCount() );
-
-  EXPECT_THAT( weight, EqMatrix( mLayer->getWeight() ) );
-  EXPECT_THAT( bias, EqMatrix( mLayer->getBias() ) );
 }

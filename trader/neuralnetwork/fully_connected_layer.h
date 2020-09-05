@@ -20,51 +20,84 @@
 
 class FullyConnectedLayer : public LayerBase {
 public:
-
   //! @fn     FullyConnectedLayer( void )
-  //! @brief  An empty constructor that creates the layer with a predefined (Linear)
-  //!         activation type. If activation type is not set at initialization it can
-  //!         be set later using the setTF function.
+  //! @brief  An empty constructor that creates the layer with a predefined
+  //!         (Linear) activation type. If activation type is not set at
+  //!         initialization it can be set later using the setTF function.
   FullyConnectedLayer( void );
 
   //! @fn     FullyConnectedLayer( ActivationTypes )
   //! @param  selectTF    ActivationTypes to be utilized in the layer
   //! @brief  Create the layer with the provided activation type. selectTF can
   //!         be reset at anytime using the setTF function.
-  FullyConnectedLayer( ActivationTypes selectTF);
+  FullyConnectedLayer( ActivationTypes selectTF );
 
   //! @fn     ~FullyConnectedLayer( void )
   //! @brief  Clear any memory allocated in this layer.
   ~FullyConnectedLayer( void );
 
+  //! @fn     void reconfigure( size_t nodes,
+  //!                           size_t inputs,
+  //!                           dMatrix hyperparams )
+  //! @param  nodes       Number of nodes present in layer
+  //! @param  inputs      Number of inputs present in layer
+  //! @param  hyperparam  Matrix of hyperparameters containing all weight and
+  //!                     bias values
+  //! @brief  Update the layer with the provided hyperparameters that define the
+  //!         required configuration of the layer
+  void reconfigure( size_t nodes, size_t inputs, dMatrix hyperparams ) override;
+
   //! @fn     dMatrix process( dMatrix input)
-  //!         Perform the forward propagation functionality through the layer and
-  //!         generate an output that can be fed to the preceding layer. Applying the
-  //!         following function:
+  //!         Perform the forward propagation functionality through the layer
+  //!         and generate an output that can be fed to the preceding layer.
+  //!         Applying the following function:
   //!           f(x) =  tf([weight]*[input] + bias)
   //!         where f(x) is a matrix and tf is the configured transfer function.
   dMatrix process( dMatrix input ) override;
 
   //! @fn     void train( double learnRate, dMatrix gradient)
-  //! @param  learnRate   Measurement of how much to adjust hyperparameters in response to gradient
-  //! @param  gradient    Description of how to modify hyperparameters in response to training error
+  //! @param  learnRate   Measurement of how much to adjust hyperparameters in
+  //!                     response to gradient
+  //! @param  gradient    Description of how to modify hyperparameters in
+  //!                     response to training error
   //! @brief  Run the training algorithm on this layer using the backpropagation
-  //!         gradient calculated from all preceding layers. Applying the following
-  //!         function:
+  //!         gradient calculated from all preceding layers. Applying the
+  //!         following function:
   //!           weight = weight - learnRate * gradient
   void train( double learnRate, dMatrix gradient ) override;
 
   //! @fn     dMatrix getIntermediateRate( void )
-  //! @brief  The derivative of the function applied by the layer in its calculation
+  //! @brief  The derivative of the function applied by the layer in its
+  //!         calculation
   dMatrix getIntermediateRate( void ) { return dIntdIn; }
 
   //! @fn     dMatrix getOutputRate( void )
-  //! @brief  The derivative of the transfer function applied on the output of the layer
+  //! @brief  The derivative of the transfer function applied on the output of
+  //!         the layer
   dMatrix getOutputRate( void ) { return dOutdInt; }
 
+  //! @fn     dMatrix getWeight( void )
+  //! @brief  Return the layers configured weight hyperparameters
+  dMatrix getWeight( void ) { return weight; }
+
+  //! @fn     dMatrix getBias( void )
+  //! @brief  Return the layers configured bias hyperparameters
+  dMatrix getBias( void ) { return bias; }
+
 private:
+  // Hyperparameters
+  dMatrix weight;
+  dMatrix bias;
+
   dMatrix dIntdIn;
   dMatrix dOutdInt;
+
+  dMatrix inputs;
+  dMatrix outputs;
+  dMatrix intermediate;
+
+  dMatrix updateRate;
+  dMatrix outputRate;
 };
 
 #endif /* FULLY_CONNECTED_LAYER_H */

@@ -10,11 +10,13 @@ name: C++ Development
 # Triggers
 # Run pipeline on all merges & updates to master
 on:
-  push:
-    paths:
-    - **.cpp
-    - **.h
   pull_request:
+    paths:
+    - '**.cpp'
+    - '**.h'
+    branches:
+    - master
+  push:
     branches:
     - master
 
