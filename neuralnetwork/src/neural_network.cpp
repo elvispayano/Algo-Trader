@@ -15,9 +15,17 @@
 #include "neuralnetwork/fully_connected_layer.h"
 #include "neuralnetwork/layer_base.h"
 
+//! @fn     NeuralNetwork( void )
+//! @brief  Initialize a neural network and layer workspace that will later be
+//!         configured.
+NeuralNetwork::NeuralNetwork( void ) {
+  inputCount  = 0;
+  outputCount = 0;
+}
+
 //! @fn     NeuralNetwork( string name )
 //! @brief  Initializa a neural network and layer workspace that will later be
-//!         configured
+//!         configured.
 NeuralNetwork::NeuralNetwork( std::string name ) {
   this->ticker = ticker;
   layerList.clear();
@@ -78,7 +86,7 @@ dMatrix NeuralNetwork::process( dMatrix data ) {
 //!         approximate complexity.
 unsigned int NeuralNetwork::getTotalNodes( void ) {
   unsigned int nodeCount = 0;
-  for (LayerBase* layer : layerList) {
+  for ( LayerBase* layer : layerList ) {
     nodeCount += layer->getNodeCount();
   }
   return nodeCount;

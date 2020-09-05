@@ -24,22 +24,43 @@ class LayerBase;
 
 class NeuralNetwork {
 public:
-  // Constructor
-  NeuralNetwork( void ) {}
+  //! @fn     NeuralNetwork( void )
+  //! @brief  Initialize a neural network and layer workspace that will later be
+  //!         configured.
+  NeuralNetwork( void );
+
+  //! @fn     NeuralNetwork( string name )
+  //! @brief  Initialize a neural network and layer workspace that will later be
+  //!         configured.
   NeuralNetwork( std::string name );
 
-  // Destructor
+  //! @fn     ~NeuralNetwork( string ticker )
+  //! @brief  The neural network is composed of various layer pointers that are
+  //!         created. Upon destruction of the class, the created pointers must
+  //!         be deleted.
   ~NeuralNetwork( void );
 
-  // Layer Configuration
-  void         addLayer( LayerConfiguration configuration );
-  size_t       getLayerCount( void ) { return layerList.size(); }
+  //! @fn     void addLayer( LayerConfiguration configuration )
+  //! @brief  Add a new layer to the network. The configuration type contains
+  //!         all the required elements to select the type of layer, implemented
+  //!         activation, and the size of the layer.
+  void addLayer( LayerConfiguration configuration );
+
+  //! @fn     unsigned int getLayerCount( void )
+  //! @brief  Total layers used within the network.
+  size_t getLayerCount( void ) { return layerList.size(); }
+
+  //! @fn     unsigned int getTotalNodes( void )
+  //! @brief  Total nodes used within the network. It is used to determine
+  //!         approximate complexity.
   unsigned int getTotalNodes( void );
 
   // Network Identification
   virtual std::string getTicker( void ) { return ticker; }
 
-  // Process Network Inputs
+  //! @fn     dMatrix process( dMatrix data )
+  //! @brief  Process input data through each layer and return a proccessed
+  //!         matrix containing the desired action to be performed.
   virtual dMatrix process( dMatrix data );
 
   //! @fn     train(void)
