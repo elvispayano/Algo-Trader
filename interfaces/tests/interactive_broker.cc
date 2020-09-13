@@ -214,3 +214,9 @@ TEST_F( InteractiveBrokerTest, BrokerResponse ) {
   EXPECT_DOUBLE_EQ( output1.getLow(), capture.getLow() );
   EXPECT_DOUBLE_EQ( output1.getHigh(), capture.getHigh() );
 }
+
+int main( int argc, char** argv ) {
+  testing::InitGoogleTest( &argc, argv );
+
+  return RUN_ALL_TESTS();
+}
