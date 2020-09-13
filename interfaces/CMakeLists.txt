@@ -53,3 +53,18 @@ if(${PostgreSQL_FOUND})
 endif()
 
 target_include_directories(interfaces PUBLIC "${IB_SOURCE_DIR}")
+
+#----------------------------------------------------------------------
+# Testing
+#----------------------------------------------------------------------
+set(INTERFACE_TEST_SRC
+  "tests/database_base.cc"
+  "tests/interactive_broker.cc"
+  "tests/test_main.cc"
+)
+
+add_executable(interfaces_test ${INTERFACE_TEST_SRC})
+target_link_libraries(interfaces_test PRIVATE interfaces utilities gtest_main gmock)
+include_directories(interfaces_test ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+target_link_directories(interfaces_test PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+add_test(NAME interfaces_test COMMAND "$<TARGET_FILE:interfaces_test>")

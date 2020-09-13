@@ -14,13 +14,13 @@
 #define MOCK_INTERFACES_H
 
 // Interface Includes
-#include "broker_base.h"
-#include "database_base.h"
-#include "ib_wrapper.h"
+#include "interfaces/broker_base.h"
+#include "interfaces/database_base.h"
+#include "interfaces/ib_wrapper.h"
 
 // Utility Includes
-#include "broker_types.h"
-#include "stock.h"
+#include "utilities/broker_types.h"
+#include "utilities/stock.h"
 
 // Google Mock Includes
 #include <gmock/gmock.h>

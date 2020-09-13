@@ -19,7 +19,6 @@ cmake_minimum_required(VERSION 3.8)
 #----------------------------------------------------------------------
 # Build
 #----------------------------------------------------------------------
-
 set(UTILITIES_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(${UTILITIES_INCLUDE_DIRS})
 
@@ -35,8 +34,6 @@ target_include_directories(utilities SYSTEM INTERFACE "$<BUILD_INTERFACE:${UTILI
 #----------------------------------------------------------------------
 # Testing
 #----------------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/cmake/gtest.cmake)
-
 set(UTIL_TEST_SRC
   "tests/matrix.cc"
   "tests/stock.cc"
