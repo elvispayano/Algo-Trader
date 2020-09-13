@@ -21,7 +21,7 @@
 #include <string>
 
 // Utilities Includes
-#include "network_types.h"
+#include "utilities/network_types.h"
 
 class DatabaseBase {
 public:

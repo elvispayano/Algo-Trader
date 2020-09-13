@@ -12,7 +12,7 @@
 */
 
 // Interface Includes
-#include "postgres.h"
+#include "interfaces/postgres.h"
 
 // Postgres (External) Includes
 #include <libpq-fe.h>

@@ -30,7 +30,6 @@ set(UTIL_SRC
 )
 
 add_library(utilities ${UTIL_SRC})
-
 target_include_directories(utilities SYSTEM INTERFACE "$<BUILD_INTERFACE:${UTILITIES_INCLUDE_DIRS}>")
 
 #----------------------------------------------------------------------

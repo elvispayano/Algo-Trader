@@ -15,10 +15,10 @@
 #define POSTGRES_H
 
 // Interface Includes
-#include "database_base.h"
+#include "interfaces/database_base.h"
 
 // Utilities Includes
-#include "network_types.h"
+#include "utilities/network_types.h"
 
 // Forward Declaration
 struct pg_conn;

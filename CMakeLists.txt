@@ -9,4 +9,5 @@ set(ALGO_TRADER_VERSION 0.0.1)
 
 enable_testing()
 
+add_subdirectory(interfaces)
 add_subdirectory(utilities)

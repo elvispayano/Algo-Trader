@@ -18,8 +18,8 @@
 #define BROKER_BASE_H
 
 // Utility Includes
-#include "broker_types.h"
-#include "stock.h"
+#include "utilities/broker_types.h"
+#include "utilities/stock.h"
 
 // Standard Includes
 #include <string>

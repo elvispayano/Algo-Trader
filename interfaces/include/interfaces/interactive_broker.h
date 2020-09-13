@@ -18,11 +18,11 @@
 #define INTERACTIVE_BROKER_H
 
 // Interface Includes
-#include "broker_base.h"
+#include "interfaces/broker_base.h"
 
 // Utility Includes
-#include "broker_types.h"
-#include "stock.h"
+#include "utilities/broker_types.h"
+#include "utilities/stock.h"
 
 // Standard Includes
 #include <map>

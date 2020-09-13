@@ -16,7 +16,7 @@
 #define IB_WRAPPER_H
 
 // Utility Includes
-#include "stock.h"
+#include "utilities/stock.h"
 
 // Standard Includes
 #include <map>
