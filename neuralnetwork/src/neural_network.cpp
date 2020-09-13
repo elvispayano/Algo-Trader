@@ -19,19 +19,26 @@
 //! @brief  Initialize a neural network and layer workspace that will later be
 //!         configured.
 NeuralNetwork::NeuralNetwork( void ) {
+  layerList.clear();
   inputCount  = 0;
   outputCount = 0;
+
+  inputLayer  = 0;
+  outputLayer = 0;
 }
 
 //! @fn     NeuralNetwork( string name )
 //! @brief  Initializa a neural network and layer workspace that will later be
 //!         configured.
 NeuralNetwork::NeuralNetwork( std::string name ) {
-  this->ticker = ticker;
+  ticker = name;
   layerList.clear();
 
   inputCount  = 0;
   outputCount = 0;
+
+  inputLayer  = 0;
+  outputLayer = 0;
 }
 
 //! @fn     ~NeuralNetwork( string ticker )
@@ -50,10 +57,48 @@ NeuralNetwork::~NeuralNetwork( void ) {
 //!         the required elements to select the type of layer, implemented
 //!         activation, and the size of the layer.
 void NeuralNetwork::addLayer( LayerConfiguration config ) {
-  LayerBase* newLayer;
-  switch ( config.layer ) {
+  LayerBase* layerCreated = newLayer( config.activation, config.layer );
+  if ( !layerCreated )
+    return;
+
+  // Layer configuration
+  unsigned int inputs =
+      ( layerList.size() > 0 ) ? layerList.back()->getNodeCount() : inputCount;
+
+  layerCreated->reconfigure( config.nodes, inputs, config.hyperparams );
+
+  layerList.push_back( layerCreated );
+}
+
+//! @fn     void addInputLayer( LayerConfiguration config )
+//! @brief  Configure the input layer to the network. The configuration type
+//!         contains the required elements to select the type of layer,
+//!         implemented activation, and the size of the layer.
+void NeuralNetwork::addInputLayer( unsigned int       inputs,
+                                   LayerConfiguration config ) {
+  inputCount = inputs;
+  inputLayer = newLayer( config.activation, config.layer );
+  inputLayer->reconfigure( inputs, inputs, config.hyperparams );
+}
+
+void NeuralNetwork::addOutputLayer( unsigned int       outputs,
+                                    LayerConfiguration config ) {
+  outputCount = outputs;
+  outputLayer = newLayer( config.activation, config.layer );
+  if ( layerList.size() > 0 ) {
+    outputLayer->reconfigure(
+        outputs, layerList.back()->getNodeCount(), config.hyperparams );
+    return;
+  }
+  outputLayer->reconfigure( outputs, 0, config.hyperparams );
+}
+
+LayerBase* NeuralNetwork::newLayer( ActivationTypes activation,
+                                    LayerTypes      layer ) {
+  LayerBase* layerCreated;
+  switch ( layer ) {
   case LayerTypes::FULLYCONNECTED:
-    newLayer = new FullyConnectedLayer( config.activation );
+    layerCreated = new FullyConnectedLayer( activation );
     break;
 
   default:
@@ -61,16 +106,9 @@ void NeuralNetwork::addLayer( LayerConfiguration config ) {
     // Unknown layer types are not added to the stack and the return
     // keyword ensures function breaks out and no configuration is
     // attempted
-    return;
+    layerCreated = 0;
   }
-
-  // Layer configuration
-  unsigned int inputs =
-      ( layerList.size() > 0 ) ? layerList.back()->getNodeCount() : inputCount;
-
-  newLayer->reconfigure( config.nodes, inputs, config.hyperparams );
-
-  layerList.push_back( newLayer );
+  return layerCreated;
 }
 
 //! @fn     dMatrix process( dMatrix data )
@@ -90,6 +128,18 @@ unsigned int NeuralNetwork::getTotalNodes( void ) {
     nodeCount += layer->getNodeCount();
   }
   return nodeCount;
+}
+
+//! @fn     setInputs( unsigned int count )
+//! @brief  Set the number of inputs for the neural network
+void NeuralNetwork::setInputs( unsigned int count ) {
+  inputCount = count;
+}
+
+//! @fn     setOutputs( unsigned int count )
+//! @brief  Set the number of outputs for the neural network
+void NeuralNetwork::setOutputs( unsigned int count ) {
+  outputCount = count;
 }
 
 void NeuralNetwork::train( void ) {
