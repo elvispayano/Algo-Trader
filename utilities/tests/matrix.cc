@@ -12,7 +12,7 @@
 */
 
 // Utility Includes
-#include "matrix.h"
+#include "utilities/matrix.h"
 
 // Google Test Includes
 #include "gtest/gtest.h"

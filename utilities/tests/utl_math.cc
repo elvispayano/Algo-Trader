@@ -12,10 +12,10 @@
 */
 
 // Utility Includes
-#include "utl_math.h"
+#include "utilities/utl_math.h"
+#include "utilities/random_number.h"
 
 // Google Test Includes
-#include "random_number.h"
 #include <gtest/gtest.h>
 
 class MathTest : public ::testing::Test {

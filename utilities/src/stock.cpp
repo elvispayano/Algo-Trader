@@ -8,7 +8,7 @@
 //! \version  0.0.1
 
 // Utility Includes
-#include "stock.h"
+#include "utilities/stock.h"
 
 //! @fn     Stock( void )
 //! @brief  Empty stock information list.

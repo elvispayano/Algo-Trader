@@ -11,7 +11,7 @@
 */
 
 // Utility Includes
-#include "stock.h"
+#include "utilities/stock.h"
 
 // Google Test Includes
 #include <gtest/gtest.h>
