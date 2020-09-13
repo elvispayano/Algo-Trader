@@ -34,13 +34,8 @@ target_include_directories(utilities SYSTEM INTERFACE "$<BUILD_INTERFACE:${UTILI
 #----------------------------------------------------------------------
 # Testing
 #----------------------------------------------------------------------
-set(UTIL_TEST_SRC
-  "tests/matrix.cc"
-  "tests/stock.cc"
-  "tests/utl_math.cc"
-)
+include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
-add_executable(utilities_test ${UTIL_TEST_SRC})
-target_link_libraries(utilities_test PRIVATE utilities gtest_main)
-target_link_directories(utilities_test PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-add_test(NAME utilities_test COMMAND "$<TARGET_FILE:utilities_test>")
+cxx_test(matrix   utilities gtest_main)
+cxx_test(stock    utilities gtest_main)
+cxx_test(utl_math utilities gtest_main)

@@ -59,5 +59,5 @@ target_include_directories(interfaces PUBLIC "${IB_SOURCE_DIR}")
 #----------------------------------------------------------------------
 include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
-cxx_test(database_base interfaces utilities gtest_main gmock)
+cxx_test(database_base      interfaces utilities gtest_main gmock)
 cxx_test(interactive_broker interfaces utilities gtest_main gmock)

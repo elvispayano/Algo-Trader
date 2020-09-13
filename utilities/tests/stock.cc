@@ -82,3 +82,9 @@ TEST_F( StockTest, GetterSetter ) {
   data->setHigh( 5.4f );
   EXPECT_FLOAT_EQ( 5.4, data->getHigh() );
 }
+
+int main( int argc, char** argv ) {
+  testing::InitGoogleTest( &argc, argv );
+
+  return RUN_ALL_TESTS();
+}
