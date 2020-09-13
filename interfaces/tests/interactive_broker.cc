@@ -14,11 +14,11 @@
 #include "interfaces/interactive_broker.h"
 
 // Test Includes
-#include "mock_interfaces.h"
+#include "mock_ib_wrapper.h"
 
 // Google Test Includes
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 // Standard Includes
 #include <chrono>

@@ -11,7 +11,7 @@
 */
 
 // Interface Includes
-#include "mock_interfaces.h"
+#include "mock_database_base.h"
 
 // Google Test Includes
 #include <gtest/gtest.h>
