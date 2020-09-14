@@ -113,9 +113,3 @@ TEST_F( MathTest, Linear ) {
 TEST_F( MathTest, LinearDerivative ) {
   EXPECT_DOUBLE_EQ( 1, Math::linear_d( rng->random( -10, 10 ) ) );
 }
-
-int main( int argc, char** argv ) {
-  testing::InitGoogleTest( &argc, argv );
-
-  return RUN_ALL_TESTS();
-}
