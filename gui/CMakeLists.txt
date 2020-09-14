@@ -1,85 +1,72 @@
-# Trader Main CMake
+# Interfaces CMake
 #
 # Description:
-# This CMake file will generate the Trader Main library and link the appropriate libraries
-#
-# Library Dependencies:
-# - None
+# CMake build script for interfaces
 #
 # Author: Elvis Payano
 
-# CMake Configuration
+#----------------------------------------------------------------------
+# Options
+#----------------------------------------------------------------------
+
+#----------------------------------------------------------------------
+# Settings
+#----------------------------------------------------------------------
+project(gui CXX)
+set(PROJECT_VERSION ${ALGO_TRADER_VERSION})
 cmake_minimum_required(VERSION 3.8)
 
 #----------------------------------------------------------------------
-# Configure Project Source/Header Files
+# External Interfaces
 #----------------------------------------------------------------------
 
-message(STATUS "Default Setting for Qt5")
-if(WIN32)
-  if(NOT Qt5_DIR)
-    set(Qt5_DIR "C:\\Qt\\5.15.0\\msvc2019_64\\lib\\cmake\\Qt5")
-  endif()
-else()
-  set(QT_UIC_EXECUTABLE "/usr/bin/uic-qt5")
-endif()
+# Qt5 API
+include(cmake/qt.cmake)
 
-find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+#----------------------------------------------------------------------
+# Build
+#----------------------------------------------------------------------
+set(GUI_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE_DIR}/include")
+include_directories(${GUI_INCLUDE_DIRS})
 
 # Library header files
 set(HEADERS
-  "dialog_interactivebroker.h"
-  "dialog_network_create.h"
-  "dialog_postgres.h"
-  "window_main.h"
+  "src/dialog_interactivebroker.h"
+  "src/dialog_network_create.h"
+  "src/dialog_postgres.h"
+  "src/window_main.h"
  )
 
 # Library source files
 set(SRC
-  "dialog_interactivebroker.cpp"
-  "dialog_network_create.cpp"
-  "dialog_postgres.cpp"
-  "window_main.cpp"
-  "window_main_connections.cpp"
-  "window_main_run.cpp"
+  "src/dialog_interactivebroker.cpp"
+  "src/dialog_network_create.cpp"
+  "src/dialog_postgres.cpp"
+  "src/window_main.cpp"
+  "src/window_main_connections.cpp"
+  "src/window_main_run.cpp"
 )
 
 # Library UI files
 set(UI
-  "dialog_interactivebroker.ui"
-  "dialog_network_create.ui"
-  "dialog_postgres.ui"
-  "window_main.ui"
+  "src/dialog_interactivebroker.ui"
+  "src/dialog_network_create.ui"
+  "src/dialog_postgres.ui"
+  "src/window_main.ui"
 )
 
 qt5_wrap_ui(UI_WRAPPED ${UI})
 qt5_wrap_cpp(MOC_WRAPPED ${HEADERS})
 
-#----------------------------------------------------------------------
-# Configure Project Interface Settings
-#----------------------------------------------------------------------
-
 # Define library requirements
-add_library(gui ${HEADERS} ${SRC} ${UI_WRAPPED} ${MOC_WRAPPED})
+add_library(gui ${SRC} ${UI_WRAPPED} ${MOC_WRAPPED})
+target_include_directories(gui SYSTEM INTERFACE "$<BUILD_INTERFACE:${INTERFACES_INCLUDE_DIRS}>")
 
-# Provide dependents with header include directory
-target_include_directories(gui PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-
-# Configure library properties
-set_target_properties(gui PROPERTIES LINKER_LANGUAGE CXX)
-
-#----------------------------------------------------------------------
-# Link Libraries
-#----------------------------------------------------------------------
-
-# Link library dependencies
+target_link_libraries(gui PRIVATE utilities)
 target_link_libraries(gui PUBLIC Qt5::Core)
 target_link_libraries(gui PUBLIC Qt5::Gui)
 target_link_libraries(gui PUBLIC Qt5::Widgets)
 
-target_link_libraries(gui PUBLIC tests)
 target_link_libraries(gui PUBLIC interfaces)
 target_link_libraries(gui PUBLIC neuralnetwork)
 target_link_libraries(gui PUBLIC utilities)

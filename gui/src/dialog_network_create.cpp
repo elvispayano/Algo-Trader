@@ -1,8 +1,8 @@
 // Neural Network Includes
-#include "neural_network.h"
+#include "neuralnetwork/neural_network.h"
 
 // Utility Includes
-#include "network_types.h"
+#include "utilities/network_types.h"
 
 // QT Includes
 #include "dialog_network_create.h"
