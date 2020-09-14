@@ -1,3 +1,6 @@
+#ifndef MOCK_IB_WRAPPER
+#define MOCK_IB_WRAPPER
+
 // Interface Includes
 #include "interfaces/ib_wrapper.h"
 
@@ -19,3 +22,5 @@ public:
   MOCK_METHOD0( responseReady, bool( void ) );
   MOCK_METHOD0( getResponse, Stock( void ) );
 };
+
+#endif /* MOCK_IB_WRAPPER */

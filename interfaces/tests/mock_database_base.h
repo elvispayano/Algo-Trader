@@ -1,3 +1,5 @@
+#ifndef MOCK_DATABASE_BASE_H
+#define MOCK_DATABASE_BASE_H
 // Interface Includes
 #include "interfaces/database_base.h"
 
@@ -14,3 +16,5 @@ public:
   MOCK_METHOD1( getLayerCount, int( std::string ) );
   MOCK_METHOD2( getLayer, LayerConfiguration( std::string, unsigned int ) );
 };
+
+#endif /* MOCK_DATABASE_BASE_H */
