@@ -9,14 +9,7 @@ name: C++ Testing
 
 # Triggers
 # Run pipeline on all merges & updates to master
-on:
-  push:
-    paths:
-    - '**.cpp'
-    - '**.h'
-  pull_request:
-    branches:
-    - master
+on: push
 
 jobs:
   build-tests:
@@ -29,28 +22,7 @@ jobs:
     
     # Run CMake
     - name: Build Linux
-      working-directory: ./trader
       run: |
-        cmake . -DCI=1
-        cmake --build .
-
-    - name: Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-exe
-        path: ./trader/algo-trader
-
-  run-tests:
-    runs-on: ubuntu-latest
-    container: elvispayano/algo-trader-build:2.0
-    needs: build-tests
-    steps:
-    - name: Download Test Executable
-      uses: actions/download-artifact@v2
-      with:
-        name: test-exe
-
-    - name: Run Test
-      run: |
-        chmod u+x ./algo-trader
-        ./algo-trader
+        cmake .
+        make -j $(nproc)
+        ctest . -V
