@@ -54,15 +54,18 @@ TEST_F( NeuralNetworkTest, AddLayer ) {
 }
 
 TEST_F( NeuralNetworkTest, InputLayer ) {
-  unsigned int       inputs       = rng.random( 3, 10 );
-  LayerConfiguration config       = rng.layerConfig();
-  unsigned int       hiddenLayers = rng.random( 3, 7 );
-
+  unsigned int       inputs = rng.random( 3, 10 );
+  LayerConfiguration config = rng.layerConfig();
   network->addInputLayer( inputs, config );
+
+  LayerConfiguration hiddenLayerConfig = rng.layerConfig();
+  network->addLayer( hiddenLayerConfig );
 
   LayerBase* inputLayer = network->getInputLayer();
   EXPECT_EQ( inputs, inputLayer->getInputCount() );
-  EXPECT_EQ( inputs, inputLayer->getNodeCount() );
+
+  EXPECT_EQ( network->getInputLayer()->getNodeCount(),
+             network->getLayer( 1 )->getInputCount() );
 }
 
 TEST_F( NeuralNetworkTest, OutputLayer ) {
