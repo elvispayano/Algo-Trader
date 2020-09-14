@@ -11,11 +11,11 @@
 */
 
 // Interface Includes
-#include "broker_base.h"
-#include "database_base.h"
-#include "ib_wrapper.h"
-#include "interactive_broker.h"
-#include "postgres.h"
+#include "interfaces/broker_base.h"
+#include "interfaces/database_base.h"
+#include "interfaces/ib_wrapper.h"
+#include "interfaces/interactive_broker.h"
+#include "interfaces/postgres.h"
 
 // QT Includes
 #include "dialog_interactivebroker.h"

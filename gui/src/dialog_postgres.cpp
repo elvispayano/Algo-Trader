@@ -11,7 +11,7 @@
 */
 
 // Interface Includes
-#include "postgres.h"
+#include "interfaces/postgres.h"
 
 // QT Includes
 #include "dialog_postgres.h"

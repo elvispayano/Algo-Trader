@@ -11,11 +11,11 @@
 */
 
 // Interface Includes
-#include "broker_base.h"
-#include "database_base.h"
+#include "interfaces/broker_base.h"
+#include "interfaces/database_base.h"
 
 // Neural Networks
-#include "neural_network.h"
+#include "neuralnetwork/neural_network.h"
 
 // GUI Includes
 #include "dialog_network_create.h"

@@ -2,7 +2,7 @@
 #define DIALOG_NETWORK_CREATE_H
 
 // Utility Includes
-#include "network_types.h"
+#include "utilities/network_types.h"
 
 // QT Includes
 #include <QDialog>

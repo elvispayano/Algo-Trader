@@ -11,8 +11,8 @@
 */
 
 // Interface Includes
-#include "ib_wrapper.h"
-#include "interactive_broker.h"
+#include "interfaces/ib_wrapper.h"
+#include "interfaces/interactive_broker.h"
 
 // QT Includes
 #include "dialog_interactivebroker.h"
