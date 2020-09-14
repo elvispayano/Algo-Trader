@@ -10,10 +10,12 @@
 */
 
 // Neural Network Includes
-#include "fully_connected_layer.h"
+#include "neuralnetwork/fully_connected_layer.h"
+
+// Utility Includes
+#include "utilities/random_number.h"
 
 // Google Test Includes
-#include "random_number.h"
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup

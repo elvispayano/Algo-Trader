@@ -13,10 +13,12 @@
 */
 
 // Neural Network Includes
-#include "activation.h"
+#include "neuralnetwork/activation.h"
+
+// Utility Include
+#include "utilities/random_number.h"
 
 // Test Includes
-#include "random_number.h"
 #include <gtest/gtest.h>
 
 class ActivationTest : public ::testing::Test {

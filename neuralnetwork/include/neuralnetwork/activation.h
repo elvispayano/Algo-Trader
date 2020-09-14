@@ -12,8 +12,8 @@
 #define ACTIVATION_H
 
 // Utility Includes
-#include "matrix.h"
-#include "network_types.h"
+#include "utilities/matrix.h"
+#include "utilities/network_types.h"
 
 class Activation {
 public:

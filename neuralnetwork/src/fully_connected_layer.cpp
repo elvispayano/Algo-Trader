@@ -9,8 +9,8 @@
 //! \version  0.0.1
 
 // Neural Network Includes
-#include "fully_connected_layer.h"
-#include "activation.h"
+#include "neuralnetwork/fully_connected_layer.h"
+#include "neuralnetwork/activation.h"
 
 //! @fn     FullyConnectedLayer( void )
 //! @brief  An empty constructor that creates the layer with a predefined

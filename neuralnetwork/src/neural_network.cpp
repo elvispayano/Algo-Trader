@@ -9,11 +9,11 @@
 //! \version  0.0.1
 
 // Neural Network Includes
-#include "neural_network.h"
+#include "neuralnetwork/neural_network.h"
 
 // Layer Forward Declaration
-#include "fully_connected_layer.h"
-#include "layer_base.h"
+#include "neuralnetwork/fully_connected_layer.h"
+#include "neuralnetwork/layer_base.h"
 
 //! @fn     NeuralNetwork( string name )
 //! @brief  Initializa a neural network and layer workspace that will later be

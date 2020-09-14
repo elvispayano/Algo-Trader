@@ -9,8 +9,8 @@
 //! \version  0.0.1
 
 // Neural Network Includes
-#include "layer_base.h"
-#include "activation.h"
+#include "neuralnetwork/layer_base.h"
+#include "neuralnetwork/activation.h"
 
 //! @fn     LayerBase( void )
 //! @brief  An empty constructor that creates the layer with a predefine

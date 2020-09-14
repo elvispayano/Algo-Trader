@@ -11,12 +11,13 @@
 */
 
 // Neural Network Includes
-#include "layer_base.h"
+#include "neuralnetwork/layer_base.h"
+
+// Utilities
+#include "utilities/random_number.h"
 
 // Google Test Includes
-#include "mock_matchers.h"
-#include "mock_neuralnetwork.h"
-#include "random_number.h"
+#include "mock_layer_base.h"
 #include <gtest/gtest.h>
 
 // Unit Test Framework Setup

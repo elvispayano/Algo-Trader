@@ -12,8 +12,8 @@
 #define LAYER_BASE_H
 
 // Utilities Inclues
-#include "matrix.h"
-#include "network_types.h"
+#include "utilities/matrix.h"
+#include "utilities/network_types.h"
 
 // Forward Declaration
 class Activation;

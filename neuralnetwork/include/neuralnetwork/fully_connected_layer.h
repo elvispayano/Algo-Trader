@@ -12,11 +12,11 @@
 #define FULLY_CONNECTED_LAYER_H
 
 // Neural Network Includes
-#include "layer_base.h"
+#include "neuralnetwork/layer_base.h"
 
 // Utilities Includes
-#include "matrix.h"
-#include "network_types.h"
+#include "utilities/matrix.h"
+#include "utilities/network_types.h"
 
 class FullyConnectedLayer : public LayerBase {
 public:

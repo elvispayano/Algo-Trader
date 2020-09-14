@@ -9,10 +9,10 @@
 //! \version  0.0.1
 
 // Neural Network Includes
-#include "activation.h"
+#include "neuralnetwork/activation.h"
 
 // Utility Includes
-#include "utl_math.h"
+#include "utilities/utl_math.h"
 
 //! @fn     Activation( void )
 //! @brief  An empty constructor assigned the activation class to have a

@@ -11,4 +11,5 @@ enable_testing()
 include(cmake/gtest.cmake)
 
 add_subdirectory(interfaces)
+add_subdirectory(neuralnetwork)
 add_subdirectory(utilities)

@@ -10,13 +10,15 @@
     Elvis Payano
 */
 
+// Neural Network Includes
+#include "neuralnetwork/neural_network.h"
+
 // Utility Includes
-#include "matrix.h"
-#include "network_types.h"
-#include "neural_network.h"
+#include "utilities/matrix.h"
+#include "utilities/network_types.h"
+#include "utilities/random_number.h"
 
 // Google Test Includes
-#include "random_number.h"
 #include <gtest/gtest.h>
 
 // Unit test framework setup
