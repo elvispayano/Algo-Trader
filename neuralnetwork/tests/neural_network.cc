@@ -12,6 +12,7 @@
 
 // Neural Network Includes
 #include "neuralnetwork/neural_network.h"
+#include "neuralnetwork/layer_base.h"
 
 // Utility Includes
 #include "utilities/matrix.h"
@@ -39,15 +40,39 @@ public:
 //! @test     Add Layer
 //! Ensure configured layers are added to the network
 TEST_F( NeuralNetworkTest, AddLayer ) {
-  unsigned int nodes = 0;
-  unsigned int totalLayer = rng.random( 3, 7 );
+  unsigned int nodes        = 0;
+  unsigned int hiddenLayers = rng.random( 3, 7 );
 
-  for ( size_t iter = 0; iter < totalLayer; ++iter ) {
+  for ( size_t iter = 0; iter < hiddenLayers; ++iter ) {
     LayerConfiguration config = rng.layerConfig();
     nodes += config.nodes;
     network->addLayer( config );
   }
 
-  EXPECT_EQ( totalLayer, network->getLayerCount() );
+  EXPECT_EQ( hiddenLayers, network->getLayerCount() );
   EXPECT_EQ( nodes, network->getTotalNodes() );
+}
+
+TEST_F( NeuralNetworkTest, InputLayer ) {
+  unsigned int       inputs = rng.random( 3, 10 );
+  LayerConfiguration config = rng.layerConfig();
+  network->addInputLayer( inputs, config );
+
+  LayerConfiguration hiddenLayerConfig = rng.layerConfig();
+  network->addLayer( hiddenLayerConfig );
+
+  LayerBase* inputLayer = network->getInputLayer();
+  EXPECT_EQ( inputs, inputLayer->getInputCount() );
+
+  EXPECT_EQ( network->getInputLayer()->getNodeCount(),
+             network->getLayer( 1 )->getInputCount() );
+}
+
+TEST_F( NeuralNetworkTest, OutputLayer ) {
+  unsigned int       outputs = rng.random( 3, 10 );
+  LayerConfiguration config  = rng.layerConfig();
+
+  network->addOutputLayer( outputs, config );
+
+  EXPECT_EQ( outputs, network->getOutputLayer()->getNodeCount() );
 }
