@@ -8,12 +8,15 @@
 #----------------------------------------------------------------------
 # Options
 #----------------------------------------------------------------------
+option(BUILD_SAMPLES "Build Algo-Trader's sample programs" OFF)
+option(BUILD_TESTS   "Build Algo-Trader's test programs"   OFF)
+
+include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
 #----------------------------------------------------------------------
 # Settings
 #----------------------------------------------------------------------
-project(neuralnetwork CXX)
-set(PROJECT_VERSION ${ALGO_TRADER_VERSION})
+project(neuralnetwork VERSION ${ALGO_TRADER_VERSION} LANGUAGES CXX C)
 cmake_minimum_required(VERSION 3.8)
 
 #----------------------------------------------------------------------
@@ -36,11 +39,18 @@ target_include_directories(neuralnetwork SYSTEM INTERFACE "$<BUILD_INTERFACE:${N
 target_link_libraries(neuralnetwork PRIVATE utilities)
 
 #----------------------------------------------------------------------
+# Samples
+#----------------------------------------------------------------------
+if(BUILD_SAMPLES)
+  cxx_sample(neural_network neuralnetwork utilities)
+endif()
+
+#----------------------------------------------------------------------
 # Testing
 #----------------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
-
-cxx_test(activation            neuralnetwork utilities gtest_main)
-cxx_test(fully_connected_layer neuralnetwork utilities gtest_main)
-cxx_test(layer_base            neuralnetwork utilities gtest_main gmock)
-cxx_test(neural_network        neuralnetwork utilities gtest_main)
+if(BUILD_TESTS)
+  cxx_test(activation            neuralnetwork utilities gtest_main)
+  cxx_test(fully_connected_layer neuralnetwork utilities gtest_main)
+  cxx_test(layer_base            neuralnetwork utilities gtest_main gmock)
+  cxx_test(neural_network        neuralnetwork utilities gtest_main)
+endif()

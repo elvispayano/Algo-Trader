@@ -8,6 +8,10 @@
 #----------------------------------------------------------------------
 # Options
 #----------------------------------------------------------------------
+option(BUILD_SAMPLES "Build Algo-Trader's sample programs" OFF)
+option(BUILD_TESTS   "Build Algo-Trader's test programs"   OFF)
+
+include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
 #----------------------------------------------------------------------
 # Settings
@@ -23,6 +27,7 @@ set(UTILITIES_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SO
 include_directories(${UTILITIES_INCLUDE_DIRS})
 
 set(UTIL_SRC
+  "src/csv_reader.cpp"
   "src/random_number.cpp"
   "src/stock.cpp"
   "src/utl_math.cpp"
@@ -32,10 +37,17 @@ add_library(utilities ${UTIL_SRC})
 target_include_directories(utilities SYSTEM INTERFACE "$<BUILD_INTERFACE:${UTILITIES_INCLUDE_DIRS}>")
 
 #----------------------------------------------------------------------
+# Samples
+#----------------------------------------------------------------------
+if(BUILD_SAMPLES)
+  cxx_sample(csv_reader utilities)
+endif()
+
+#----------------------------------------------------------------------
 # Testing
 #----------------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
-
-cxx_test(matrix   utilities gtest_main)
-cxx_test(stock    utilities gtest_main)
-cxx_test(utl_math utilities gtest_main)
+if(BUILD_TESTS)
+  cxx_test(matrix   utilities gtest_main)
+  cxx_test(stock    utilities gtest_main)
+  cxx_test(utl_math utilities gtest_main)
+endif()
