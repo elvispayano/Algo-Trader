@@ -27,7 +27,7 @@ set(UTILITIES_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SO
 include_directories(${UTILITIES_INCLUDE_DIRS})
 
 set(UTIL_SRC
-  "src/csv_reader.cpp"
+  "src/delimited_io.cpp"
   "src/random_number.cpp"
   "src/stock.cpp"
   "src/utl_math.cpp"
@@ -40,7 +40,7 @@ target_include_directories(utilities SYSTEM INTERFACE "$<BUILD_INTERFACE:${UTILI
 # Samples
 #----------------------------------------------------------------------
 if(BUILD_SAMPLES)
-  cxx_sample(csv_reader utilities)
+  
 endif()
 
 #----------------------------------------------------------------------

@@ -1,28 +1,46 @@
+/// Delimited IO
+///
+/// A class that allows for reading, writing, and parsing delimited data files
+///
+/// \author   Elvis Payano
+/// \date     18/09/2020
+/// \version  0.0.1
+
 // Utility Includes
-#include "utilities/csv_reader.h"
+#include "utilities/delimited_io.h"
 
 // Standard Includes
 #include <iostream>
 
-/// @fn     CSVReader( string filename )
-/// @param  filename  File to be parsed
+/// @fn     DelimitedIO( string delimiter )
 /// @param  delimiter Expected file delimeter
 /// @brief  Construct the object that will read in and parse the data file
-CSVReader::CSVReader( std::string filename, std::string delimiter )
-    : delimeter( delimeter ) {
-  csv.open( filename.c_str(), std::ios::in );
+DelimitedIO::DelimitedIO( std::string delimiter )
+    : delimiter( delimiter ) {}
+
+/// @fn     ~DelimitedIO( void )
+/// @brief  Clear memory and close files
+DelimitedIO::~DelimitedIO( void ) {
+  if ( datafile.is_open() ) {
+    datafile.close();
+  }
 }
 
-/// @fn     ~CSVReader( void )
-/// @brief  Clear memory and close files
-CSVReader::~CSVReader( void ) {
-  csv.close();
+/// @fn     openFile ( string filename, string mode )
+/// @param  filename  File to be opened
+/// @param  mode      Mode in which to open the file
+/// @brief  Open a file that can be read or written to
+void DelimitedIO::openFile( std::string filename, std::ios::_Openmode mode ) {
+  if ( datafile.is_open() ) {
+    return;
+  }
+  datafile.open( filename, mode );
 }
 
 /// @fn     parseData( unsigned int elements )
 /// @param  elements  Number of elements expected in the dataset
 /// @brief  Read in and parse the dataset
-DataIn CSVReader::parseData( unsigned int elements ) {
+DataIn DelimitedIO::parseData( unsigned int elements ) {
   // Initialize
   DataIn data;
 
@@ -32,7 +50,7 @@ DataIn CSVReader::parseData( unsigned int elements ) {
 
   // Process Headers
   std::string line;
-  std::getline( csv, line );
+  std::getline( datafile, line );
   for ( unsigned int iter = 0; iter < elements; ++iter ) {
     pos     = line.find( ',', pos );
     pos     = ( pos < line.length() ) ? pos : line.length();
@@ -42,7 +60,7 @@ DataIn CSVReader::parseData( unsigned int elements ) {
   }
 
   // Process Data
-  while ( std::getline( csv, line ) ) {
+  while ( std::getline( datafile, line ) ) {
     pos = prev = 0;
     for ( auto& field : data ) {
       pos     = line.find( ',', pos );
