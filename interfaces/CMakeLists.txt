@@ -8,12 +8,15 @@
 #----------------------------------------------------------------------
 # Options
 #----------------------------------------------------------------------
+option(BUILD_SAMPLES "Build Algo-Trader's sample programs" OFF)
+option(BUILD_TESTS   "Build Algo-Trader's test programs"   OFF)
+
+include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
 #----------------------------------------------------------------------
-# Settings
+# Project Settings
 #----------------------------------------------------------------------
-project(interfaces CXX)
-set(PROJECT_VERSION ${ALGO_TRADER_VERSION})
+project(interfaces VERSION ${ALGO_TRADER_VERSION} LANGUAGES CXX C)
 cmake_minimum_required(VERSION 3.8)
 
 #----------------------------------------------------------------------
@@ -55,9 +58,16 @@ endif()
 target_include_directories(interfaces PUBLIC "${IB_SOURCE_DIR}")
 
 #----------------------------------------------------------------------
+# Samples
+#----------------------------------------------------------------------
+if(BUILD_SAMPLES)
+  cxx_sample(interactive_broker interfaces utilities)
+endif()
+
+#----------------------------------------------------------------------
 # Testing
 #----------------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
-
-cxx_test(database_base      interfaces utilities gtest_main gmock)
-cxx_test(interactive_broker interfaces utilities gtest_main gmock)
+if(BUILD_TESTS)
+  cxx_test(database_base      interfaces utilities gtest_main gmock)
+  cxx_test(interactive_broker interfaces utilities gtest_main gmock)
+endif()
