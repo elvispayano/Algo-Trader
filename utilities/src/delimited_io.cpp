@@ -30,11 +30,22 @@ DelimitedIO::~DelimitedIO( void ) {
 /// @param  filename  File to be opened
 /// @param  mode      Mode in which to open the file
 /// @brief  Open a file that can be read or written to
-void DelimitedIO::openFile( std::string filename, std::ios::_Openmode mode ) {
+void DelimitedIO::openFile( std::string filename, IOMode mode ) {
   if ( datafile.is_open() ) {
     return;
   }
-  datafile.open( filename, mode );
+  std::ios::_Openmode temp;
+  switch ( mode ) {
+  case IOMode::WRITE:
+    temp = std::ios::out;
+    break;
+
+  default: // IOMode::READ
+    temp = std::ios::in;
+    break;
+  }
+
+  datafile.open( filename, temp );
 }
 
 /// @fn     parseData( unsigned int elements )

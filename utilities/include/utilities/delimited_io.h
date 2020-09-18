@@ -8,7 +8,6 @@
 
 // Standard Includes
 #include <fstream>
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -17,6 +16,8 @@ typedef std::map<std::string, std::vector<std::string>> DataIn;
 
 class DelimitedIO {
 public:
+  enum class IOMode {READ, WRITE};
+
   /// @fn     DelimitedIO( string delimiter )
   /// @param  delimiter Expected file delimeter
   /// @brief  Construct the object that will read in and parse the data file
@@ -30,7 +31,7 @@ public:
   /// @param  filename  File to be opened
   /// @param  mode      Mode in which to open the file
   /// @brief  Open a file that can be read or written to
-  void openFile( std::string filename, std::ios::_Openmode mode );
+  void openFile( std::string filename, IOMode mode );
 
   /// @fn     parseData( unsigned int elements )
   /// @param  elements  Number of elements expected in the dataset
