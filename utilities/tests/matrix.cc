@@ -13,251 +13,10 @@
 
 // Utility Includes
 #include "utilities/matrix.h"
+#include "utilities/random_number.h"
 
 // Google Test Includes
 #include "gtest/gtest.h"
-
-// Unit test framework setup
-class MatrixTest : public ::testing::Test {
-protected:
-  void SetUp( void ) override {
-    matA.resize( 2, 2, 2.0 );
-    matB.resize( 2, 2, 4.0 );
-  }
-
-public:
-  dMatrix matA;
-  dMatrix matB;
-};
-
-/*
-  Test:         Constructor Default
-  Description:
-    Create a default matrix object
-*/
-TEST_F( MatrixTest, ConstructorDefault ) {
-  dMatrix mat;
-  EXPECT_EQ( 1, mat.rows() );
-  EXPECT_EQ( 1, mat.cols() );
-}
-
-/*
-  Test:         Constructor Size
-  Description:
-    Create a matrix object with a defined size, but
-    no defined initial value
-*/
-TEST_F( MatrixTest, ConstructorSize ) {
-  dMatrix mat( 2, 4, 0.0 );
-  EXPECT_EQ( 2, mat.rows() );
-  EXPECT_EQ( 4, mat.cols() );
-}
-
-/*
-  Test:         Constructor Value
-  Description:
-    Create a matrix object with a defined size and a
-    define initial value
-*/
-TEST_F( MatrixTest, ConstructorValue ) {
-  dMatrix mat( 4, 2, 2.0 );
-  EXPECT_EQ( 4, mat.rows() );
-  EXPECT_EQ( 2, mat.cols() );
-  EXPECT_DOUBLE_EQ( 2.0, mat( 0, 0 ) );
-}
-
-/*
-  Test:         Clear Default
-  Description:
-    Clear all elements of a matrix to a default of zero
-*/
-TEST_F( MatrixTest, ClearDefault ) {
-  dMatrix mat( 2, 2, 2.0 );
-  EXPECT_DOUBLE_EQ( 2.0, mat( 0, 0 ) );
-
-  mat.clear( 0.0 );
-  EXPECT_DOUBLE_EQ( 0.0, mat( 0, 0 ) );
-}
-
-/*
-  Test:         Clear Value
-  Description:
-    Clear all elements and reset all values to the provided
-    input
-*/
-TEST_F( MatrixTest, ClearValue ) {
-  dMatrix mat( 2, 2, 2.0 );
-  EXPECT_DOUBLE_EQ( 2.0, mat( 0, 0 ) );
-
-  mat.clear( 4.0 );
-  EXPECT_DOUBLE_EQ( 4.0, mat( 0, 0 ) );
-}
-
-/*
-  Test:         For Each
-  Description:
-    Each element in matrix is modified by inserted function
-*/
-double add2( double x ) {
-  return x + 2;
-}
-TEST_F( MatrixTest, ForEach ) {
-  dMatrix mat( 2, 2, 2.0 );
-  mat.forEach( add2 );
-  EXPECT_DOUBLE_EQ( 4.0, mat( 0, 0 ) );
-}
-
-/*
-  Test:         Matrix Addition
-  Description:
-    Perform addition of 2 matrices
-*/
-TEST_F( MatrixTest, MatrixAddition ) {
-  dMatrix matAdd( matA + matB );
-  EXPECT_DOUBLE_EQ( matAdd( 0, 0 ), 6.0 );
-}
-
-/*
-  Test:         Matrix Addition Assignment
-  Description:
-    Perform addition assignment with a matrix
-*/
-TEST_F( MatrixTest, MatrixAdditionAssignment ) {
-  matA += matB;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), 6.0 );
-}
-
-/*
-  Test:         Scalar Addition
-  Description:
-    Perform scalar addition of a matrix and a scalar
-*/
-TEST_F( MatrixTest, ScalarAddition ) {
-  dMatrix scaAdd( matA + 2.0 );
-  EXPECT_DOUBLE_EQ( scaAdd( 0, 0 ), 4.0 );
-}
-
-/*
-  Test:         Scalar Addition Assignment
-  Description:
-    Perform scalar addition assignment with a scalar value
-*/
-TEST_F( MatrixTest, ScalarAdditionAssignment ) {
-  matA += 2.0;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), 4.0 );
-}
-
-/*
-  Test:         Matrix Subtraction
-  Description:
-    Perform subtraction of 2 matrices
-*/
-TEST_F( MatrixTest, MatrixSubtraction ) {
-  dMatrix mat( matA - matB );
-  EXPECT_DOUBLE_EQ( mat( 0, 0 ), -2.0 );
-}
-
-/*
-  Test:         Matrix Subtraction Assignment
-  Description:
-    Perform subtraction assignment with a matrix
-*/
-TEST_F( MatrixTest, MatrixSubtractionAssignment ) {
-  matA -= matB;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), -2.0 );
-}
-
-/*
-  Test:         Scalar Subtraction
-  Description:
-    Perform subtraction of 2 matrices
-*/
-TEST_F( MatrixTest, ScalarSubtraction ) {
-  dMatrix mat( matA - 4.0 );
-  EXPECT_DOUBLE_EQ( mat( 0, 0 ), -2.0 );
-}
-
-/*
-  Test:         Scalar Subtraction Assignment
-  Description:
-    Perform subtraction assignment with a matrix
-*/
-TEST_F( MatrixTest, ScalarSubtractionAssignment ) {
-  matA -= 4.0;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), -2.0 );
-}
-
-/*
-  Test:         Matrix Multiplication
-  Description:
-    Perform multiplication of 2 matrices
-*/
-TEST_F( MatrixTest, MatrixMultiplication ) {
-  dMatrix mat1( 3, 2, 2.0 );
-  dMatrix mat2( 2, 3, 4.0 );
-  dMatrix mat( mat1 * mat2 );
-
-  EXPECT_EQ( mat.rows(), 3 );
-  EXPECT_EQ( mat.cols(), 3 );
-  EXPECT_DOUBLE_EQ( mat( 0, 0 ), 16 );
-}
-
-/*
-  Test:         Matrix Multiplication Assignment
-  Description:
-    Perform multiplication assignment with matrix
-*/
-TEST_F( MatrixTest, MatrixMultiplicationAssignment ) {
-  dMatrix mat1( 3, 2, 2.0 );
-  dMatrix mat2( 2, 3, 4.0 );
-  mat1 *= mat2;
-
-  EXPECT_EQ( mat1.rows(), 3 );
-  EXPECT_EQ( mat1.cols(), 3 );
-  EXPECT_DOUBLE_EQ( mat1( 0, 0 ), 16 );
-}
-
-/*
-  Test:         Scalar Multiplication
-  Description:
-    Perform multiplication with a scalar
-*/
-TEST_F( MatrixTest, ScalarMultiplication ) {
-  dMatrix mat( matA * 2 );
-  EXPECT_DOUBLE_EQ( mat( 0, 0 ), 4.0 );
-}
-
-/*
-  Test:         Scalar Multiplication Assignment
-  Description:
-    Perform multiplication assignment with a scalar
-*/
-TEST_F( MatrixTest, ScalarMultiplicationAssignment ) {
-  matA *= 2;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), 4.0 );
-}
-
-/*
-  Test:         Scalar Division
-  Description:
-    Perform division with a scalar
-*/
-TEST_F( MatrixTest, ScalarDivision ) {
-  dMatrix mat( matA / 2 );
-  EXPECT_DOUBLE_EQ( mat( 0, 0 ), 1.0 );
-}
-
-/*
-  Test:         Scalar Division Assignment
-  Description:
-    Perform division assignment with a scalar
-*/
-TEST_F( MatrixTest, ScalarDivisionAssignment ) {
-  matA /= 2;
-  EXPECT_DOUBLE_EQ( matA( 0, 0 ), 1.0 );
-}
-
-#include "utilities/random_number.h"
 #include <gmock/gmock.h>
 
 MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
@@ -275,7 +34,7 @@ MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
   return equal;
 }
 
-MATCHER_P( NeqMatrix, other, "Matrix Equality Matcher" ) {
+MATCHER_P( NeqMatrix, other, "Matrix Inequality Matcher" ) {
   matrix in   = static_cast<matrix>( arg );
   matrix comp = static_cast<matrix>( other );
   if ( ( comp.rows() != in.rows() ) || ( comp.cols() != in.cols() ) )
@@ -399,11 +158,8 @@ TEST_F( MatrixValueTest, Clear ) {
   mat.clear();
 
   // Evaluation
-  for ( unsigned int r = 0; r < mat.rows(); ++r ) {
-    for ( unsigned int c = 0; r < mat.cols(); ++c ) {
-      EXPECT_DOUBLE_EQ( 0.0, mat( r, c ) );
-    }
-  }
+  EXPECT_EQ( 0, mat.rows() );
+  EXPECT_EQ( 0, mat.cols() );
 }
 
 TEST_F( MatrixValueTest, Randomize ) {
@@ -434,7 +190,7 @@ TEST_F( MatrixValueTest, Transpose ) {
   }
 }
 
-class MatrixAdditionTest : public ::testing::Test {
+class MatrixArithmeticTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
     rng            = new RandomNumber();
@@ -442,11 +198,24 @@ protected:
     unsigned int c = rng->random();
 
     A.resize( r, c );
-    B.resize( r, c );
-    C.resize( r, c );
     A.randomize();
+    ASSERT_TRUE( A.rows() > 0 ) << "A: Non-Zero amount of rows required";
+    ASSERT_TRUE( A.cols() > 0 ) << "A: Non-Zero amount of columns required";
+
+    B.resize( r, c );
     B.randomize();
+    ASSERT_TRUE( B.rows() > 0 ) << "B: Non-Zero amount of rows required";
+    ASSERT_TRUE( B.cols() > 0 ) << "B: Non-Zero amount of columns required";
+
+    C.resize( r, c );
     C.randomize();
+    ASSERT_TRUE( C.rows() > 0 ) << "C: Non-Zero amount of rows required";
+    ASSERT_TRUE( C.cols() > 0 ) << "C: Non-Zero amount of columns required";
+
+    D.resize( c, r );
+    D.randomize();
+    ASSERT_TRUE( D.rows() > 0 ) << "D: Non-Zero amount of rows required";
+    ASSERT_TRUE( D.cols() > 0 ) << "D: Non-Zero amount of columns required";
   }
 
   void TearDown( void ) override {
@@ -461,72 +230,69 @@ public:
   matrix A;
   matrix B;
   matrix C;
+  matrix D;
 };
 
-TEST_F( MatrixAdditionTest, Commutative ) {
+// Matrix Addition
+TEST_F( MatrixArithmeticTest, AdditionCommutative ) {
   EXPECT_THAT( A + B, EqMatrix( B + A ) );
 }
 
-TEST_F( MatrixAdditionTest, Associative ) {
+TEST_F( MatrixArithmeticTest, AdditionAssociative ) {
   EXPECT_THAT( A + ( B + C ), EqMatrix( ( A + B ) + C ) );
 }
 
-TEST_F( MatrixAdditionTest, Identity ) {
-  B.clear();
+TEST_F( MatrixArithmeticTest, AdditionIdentity ) {
+  B.reset( 0.0 );
   EXPECT_THAT( A + B, EqMatrix( A ) );
 }
 
-class MatrixSubtractionTest : public ::testing::Test {
+TEST_F( MatrixArithmeticTest, AdditionSizing ) {
+  EXPECT_EQ( A.rows(), ( A + B ).rows() );
+  EXPECT_EQ( A.cols(), ( A + B ).cols() );
+}
+
+// Matrix Subtraction
+TEST_F( MatrixArithmeticTest, SubtractionAnticommutative ) {
+  EXPECT_THAT( A - B, EqMatrix( ( B - A ) * -1 ) );
+}
+
+TEST_F( MatrixArithmeticTest, SubtractionNonAssociative ) {
+  EXPECT_THAT( ( A - B ) - C, NeqMatrix( A - ( B - C ) ) );
+}
+
+TEST_F( MatrixArithmeticTest, SubtractionSizing ) {
+  EXPECT_EQ( A.rows(), ( A - B ).rows() );
+  EXPECT_EQ( A.cols(), ( A - B ).cols() );
+}
+
+// TODO: Matrix Multiplication
+TEST_F( MatrixArithmeticTest, MultiplicationSizing ) {
+  EXPECT_EQ( A.rows(), ( A * D ).rows() );
+  EXPECT_EQ( D.cols(), ( A * D ).cols() );
+}
+
+// TODO: Matrix Division
+
+class MatrixScalarArithmeticTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
     rng            = new RandomNumber();
     unsigned int r = rng->random();
     unsigned int c = rng->random();
 
-    A.resize( r, c );
-    B.resize( r, c );
-    C.resize( r, c );
-    A.randomize();
-    B.randomize();
-    C.randomize();
-  }
-
-  void TearDown( void ) override {
-    if ( rng ) {
-      delete rng;
-    }
-  }
-
-public:
-  RandomNumber* rng;
-
-  matrix A;
-  matrix B;
-  matrix C;
-};
-
-TEST_F( MatrixSubtractionTest, Anticommutative ) {
-  EXPECT_THAT( A - B, EqMatrix( ( B - A )*-1 ) );
-}
-
-TEST_F(MatrixSubtractionTest, NonAssociative) {
-  EXPECT_THAT( (A - B) - C, NeqMatrix( A - (B - C) ) );
-}
-
-class MatrixScalarMultiplicationTest : public ::testing::Test {
-protected:
-  void SetUp( void ) override {
-    rng            = new RandomNumber();
-    unsigned int r = rng->random();
-    unsigned int c = rng->random();
-
+    j = rng->random( -100, 100 );
     k = rng->random( -100, 100 );
-    c = rng->random( -100, 100 );
 
     A.resize( r, c );
-    B.resize( r, c );
     A.randomize();
+    ASSERT_TRUE( A.rows() > 0 ) << "A: Non-Zero amount of rows required";
+    ASSERT_TRUE( A.cols() > 0 ) << "A: Non-Zero amount of columns required";
+
+    B.resize( r, c );
     B.randomize();
+    ASSERT_TRUE( B.rows() > 0 ) << "B: Non-Zero amount of rows required";
+    ASSERT_TRUE( B.cols() > 0 ) << "B: Non-Zero amount of columns required";
   }
 
   void TearDown( void ) override {
@@ -541,22 +307,94 @@ public:
   matrix A;
   matrix B;
 
+  double j;
   double k;
-  double c;
 };
 
-TEST_F( MatrixScalarMultiplicationTest, Distributive ) {
+// Scalar Addition
+// TODO:  Add missing operator overload
+TEST_F( MatrixScalarArithmeticTest, AdditionAssociative ) {
+  FAIL();
+  // EXPECT_THAT( ( k + A ) + j, EqMatrix( k + (A + j) ) );
+}
+
+// TODO:  Add missing operator overload
+TEST_F( MatrixScalarArithmeticTest, AdditionCommutative ) {
+  FAIL();
+  // EXPECT_THAT( A + k, EqMatrix( k + A ) );
+}
+
+TEST_F( MatrixScalarArithmeticTest, AdditionIdentity ) {
+  EXPECT_THAT( A + 0, EqMatrix( A ) );
+}
+
+TEST_F( MatrixScalarArithmeticTest, AdditionSizing ) {
+  EXPECT_EQ( A.rows(), ( A + k ).rows() );
+  EXPECT_EQ( A.cols(), ( A + k ).cols() );
+}
+
+// Scalar Subtraction
+// TODO:  Add missing operator overload
+TEST_F( MatrixScalarArithmeticTest, SubtractionAnticommutative ) {
+  FAIL();
+  // EXPECT_THAT( A - k, EqMatrix( ( k - A ) * -1 ) );
+}
+
+// TODO:  Add missing operator overload
+TEST_F( MatrixScalarArithmeticTest, SubtractionNonAssociative ) {
+  FAIL();
+  // EXPECT_THAT( ( j - A ) - k, NeqMatrix( j - ( A - k ) ) );
+}
+
+TEST_F( MatrixScalarArithmeticTest, SubtractionSizing ) {
+  EXPECT_EQ( A.rows(), ( A - k ).rows() );
+  EXPECT_EQ( A.cols(), ( A - k ).cols() );
+}
+
+// Scalar Multiplication
+TEST_F( MatrixScalarArithmeticTest, MultiplicationDistributive ) {
   EXPECT_THAT( ( A + B ) * k, EqMatrix( A * k + B * k ) );
 }
 
-TEST_F( MatrixScalarMultiplicationTest, Commulative ) {
-  EXPECT_THAT( A * ( k + c ), EqMatrix( A * k + A * c ) );
+TEST_F( MatrixScalarArithmeticTest, MultiplicationCommulative ) {
+  EXPECT_THAT( A * ( k + j ), EqMatrix( A * k + A * j ) );
 }
 
-TEST_F( MatrixScalarMultiplicationTest, Associative ) {
-  EXPECT_THAT( A * ( k * c ), EqMatrix( ( A * k ) * c ) );
+TEST_F( MatrixScalarArithmeticTest, MultiplicationAssociative ) {
+  EXPECT_THAT( A * ( k * j ), EqMatrix( ( A * k ) * j ) );
 }
 
-TEST_F( MatrixScalarMultiplicationTest, Identity ) {
+TEST_F( MatrixScalarArithmeticTest, MultiplicationIdentity ) {
   EXPECT_THAT( A, EqMatrix( A * 1 ) );
 }
+
+TEST_F( MatrixScalarArithmeticTest, MultiplicationSizing ) {
+  EXPECT_EQ( A.rows(), ( A * k ).rows() );
+  EXPECT_EQ( A.cols(), ( A * k ).cols() );
+}
+
+// Scalar Division
+TEST_F( MatrixScalarArithmeticTest, DivisionInverse ) {
+  A.reset( k );
+  B.reset( 1.0 );
+  EXPECT_THAT( B, EqMatrix( A / k ) );
+}
+
+TEST_F( MatrixScalarArithmeticTest, DivisionIdentity ) {
+  EXPECT_THAT( A, EqMatrix( A / 1 ) );
+}
+
+TEST_F( MatrixScalarArithmeticTest, DivisionSizing ) {
+  EXPECT_EQ( A.rows(), ( A / k ).rows() );
+  EXPECT_EQ( A.cols(), ( A / k ).cols() );
+}
+
+// TODO: Assignment Matrix +
+// TODO: Assignment Matrix -
+// TODO: Assignment Matrix *
+// TODO: Assignment Matrix /
+
+// TODO: Assignment Scalar +
+// TODO: Assignment Scalar -
+// TODO: Assignment Scalar *
+// TODO: Assignment Scalar /
