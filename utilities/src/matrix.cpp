@@ -118,16 +118,13 @@ void matrix::resize( unsigned int        r,
 }
 
 matrix matrix::subMatrix( unsigned int r, unsigned int c ) {
-  matrix temp;
-  return temp;
+  return *this;
 }
 matrix matrix::getRow( unsigned int r ) {
-  matrix temp;
-  return temp;
+  return *this;
 }
 matrix matrix::getCol( unsigned int c ) {
-  matrix temp;
-  return temp;
+  return *this;
 }
 void matrix::setRow( unsigned int r, matrix row ) {}
 void matrix::setRow( unsigned int r, std::vector<double> row ) {}
@@ -154,52 +151,150 @@ matrix matrix::transpose( void ) {
   return temp;
 }
 
-/// @fn     double&
-///
-/// </summary>
-/// <param name="r"></param>
-/// <param name="c"></param>
-/// <returns></returns>
+/// @fn     double& operator()( unsigned int r, unsigned int c )
+/// @param  r   Matrix row index
+/// @param  c   Matrix column index
+/// @brief  Matrix element selection using a 0 based index
 double& matrix::operator()( unsigned int r, unsigned int c ) {
   if ( r >= mr || c >= mc )
     return junk;
   unsigned int element = r + mr * c;
   return mat[element];
 }
-void matrix::operator=( matrix mat ) {}
-void matrix::operator=( std::vector<double> mat ) {}
-matrix matrix::operator+( matrix rh ) {
-  matrix temp;
-  return temp;
+
+/// @fn     operator=( matrix mat )
+/// @param  mat   RHS matrix input
+/// @brief  Set the matrix as the equivalent of the input matrix if they are
+///         equivalent in structure
+void matrix::operator=( matrix mat ) {
+  if ( mr != mat.rows() || mc != mat.cols() ) {
+    return;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      this->operator()( r, c ) = mat( r, c );
+    }
+  }
 }
+
+/// @fn     operator=( vector<double> vec )
+/// @param  vec   Vector input to be formatted
+/// @brief  Convert the input vector into a matrix format with the current
+///         matrix's structure
+void matrix::operator=( std::vector<double> vec ) {
+  unsigned int elements = mr * mc;
+  if ( elements != vec.size() ) {
+    return;
+  }
+
+  unsigned int r = 0;
+  unsigned int c = 0;
+  for ( double element : vec ) {
+    this->operator()( r, c ) = element;
+    ++r;
+    if ( r > mr ) {
+      ++c;
+    }
+  }
+}
+
+/// @fn     matrix operator+( matrix rh )
+/// @param  rh  Right-hand matrix element
+/// @brief  Matrix addition of two matrices
+matrix matrix::operator+( matrix rh ) {
+  matrix output( mr, mc );
+  if ( mr != rh.rows() || mc != rh.cols() ) {
+    return output;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) + rh( r, c );
+    }
+  }
+  return output;
+}
+
+/// @fn     matrix operator-( matrix rh )
+/// @param  rh  Right-hand matrix element
+/// @brief  Matrix subtraction of two matrices
 matrix matrix::operator-( matrix rh ) {
-  matrix temp;
-  return temp;
+  matrix output( mr, mc );
+  if ( mr != rh.rows() || mc != rh.cols() ) {
+    return output;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) - rh( r, c );
+    }
+  }
+  return output;
 }
 matrix matrix::operator*( matrix rh ) {
-  matrix temp;
-  return temp;
+  return *this;
 }
 matrix matrix::operator/( matrix rh ) {
-  matrix temp;
-  return temp;
+  return *this;
 }
+
+/// @fn     matrix operator+( double rh )
+/// @param  rh  Right-hand scalar element
+/// @brief  Matrix addition with a scalar value
 matrix matrix::operator+( double rh ) {
-  matrix temp;
-  return temp;
+  matrix output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) + rh;
+    }
+  }
+  return output;
 }
+
+/// @fn     matrix operator-( double rh )
+/// @param  rh  Right-hand scalar element
+/// @brief  Matrix subtraction with a scalar value
 matrix matrix::operator-( double rh ) {
-  matrix temp;
-  return temp;
+  matrix output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) - rh;
+    }
+  }
+  return output;
 }
+
+/// @fn     matrix operator*( double rh )
+/// @param  rh  Right-hand scalar element
+/// @brief  Matrix multiplication with a scalar value
 matrix matrix::operator*( double rh ) {
-  matrix temp;
-  return temp;
+  matrix output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) * rh;
+    }
+  }
+  return output;
 }
+
+/// @fn     matrix operator/( double rh )
+/// @param  rh  Right-hand scalar element
+/// @brief  Matrix division with a scalar value
 matrix matrix::operator/( double rh ) {
-  matrix temp;
-  return temp;
+  matrix output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = this->operator()( r, c ) / rh;
+    }
+  }
+  return output;
 }
+
 void matrix::operator+=( matrix rh ) {}
 void matrix::operator-=( matrix rh ) {}
 void matrix::operator*=( matrix rh ) {}
