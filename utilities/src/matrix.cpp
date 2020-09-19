@@ -63,7 +63,7 @@ void matrix::clear( void ) {
 /// @fn     void randomize( void )
 /// @brief  Set all elements in matrix to random values
 void matrix::randomize( void ) {
-  RandomNumber rng;
+  static RandomNumber rng;
   for ( double& element : mat )
     element = rng.random( -100, 100 );
 }
@@ -304,14 +304,14 @@ void matrix::operator-=( double rh ) {}
 void matrix::operator*=( double rh ) {}
 void matrix::operator/=( double rh ) {}
 
-matrix operator+(double lh, matrix rh) {
+matrix operator+( double lh, matrix rh ) {
   unsigned int mr = rh.rows();
   unsigned int mc = rh.cols();
-  matrix output( mr, mc );
+  matrix       output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = rh( r, c ) + lh;
+      output( r, c ) = lh + rh( r, c );
     }
   }
   return output;
@@ -324,7 +324,7 @@ matrix operator-( double lh, matrix rh ) {
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = rh( r, c ) - lh;
+      output( r, c ) = lh - rh( r, c );
     }
   }
   return output;
@@ -337,7 +337,7 @@ matrix operator*( double lh, matrix rh ) {
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = rh( r, c ) * lh;
+      output( r, c ) = lh * rh( r, c );
     }
   }
   return output;
@@ -350,7 +350,7 @@ matrix operator/( double lh, matrix rh ) {
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = rh( r, c ) / lh;
+      output( r, c ) = lh / rh( r, c );
     }
   }
   return output;

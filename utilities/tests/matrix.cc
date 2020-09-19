@@ -331,10 +331,9 @@ TEST_F( MatrixScalarArithmeticTest, AdditionSizing ) {
 
 // Scalar Subtraction
 TEST_F( MatrixScalarArithmeticTest, SubtractionAnticommutative ) {
-  EXPECT_THAT( A - k, EqMatrix( ( k - A ) * -1 ) );
+  EXPECT_THAT( A - k, EqMatrix( -1 * ( k - A ) ) );
 }
 
-// TODO:  Add missing operator overload
 TEST_F( MatrixScalarArithmeticTest, SubtractionNonAssociative ) {
   EXPECT_THAT( ( j - A ) - k, NeqMatrix( j - ( A - k ) ) );
 }
