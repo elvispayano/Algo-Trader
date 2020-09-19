@@ -34,7 +34,8 @@ void DelimitedIO::openFile( std::string filename, IOMode mode ) {
   if ( datafile.is_open() ) {
     return;
   }
-  std::ios::_Openmode temp;
+
+  auto temp = std::ios::in;
   switch ( mode ) {
   case IOMode::WRITE:
     temp = std::ios::out;
