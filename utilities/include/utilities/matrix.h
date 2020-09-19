@@ -627,7 +627,7 @@ template<typename T> void Matrix<T>::operator/=( T scalar ) {
 template<typename T> void Matrix<T>::randomize( void ) {
   for ( size_t r = 0; r < mr; ++r ) {
     for ( size_t c = 0; c < mc; ++c ) {
-      this->operator()( r, c ) = rand();
+      //this->operator()( r, c ) = rand();
     }
   }
 }
