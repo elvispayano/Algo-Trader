@@ -275,6 +275,21 @@ MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
   return equal;
 }
 
+MATCHER_P( NeqMatrix, other, "Matrix Equality Matcher" ) {
+  matrix in   = static_cast<matrix>( arg );
+  matrix comp = static_cast<matrix>( other );
+  if ( ( comp.rows() != in.rows() ) || ( comp.cols() != in.cols() ) )
+    return true;
+
+  bool equal = false;
+  for ( unsigned int r = 0; r < comp.rows(); ++r ) {
+    for ( unsigned int c = 0; c < comp.cols(); ++c ) {
+      equal |= ( comp( r, c ) - in( r, c ) ) > 1E-8;
+    }
+  }
+  return equal;
+}
+
 class MatrixResizeTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
@@ -461,9 +476,41 @@ TEST_F( MatrixAdditionTest, Identity ) {
   EXPECT_THAT( A + B, EqMatrix( A ) );
 }
 
-TEST_F( MatrixAdditionTest, Inverse ) {
-  B.clear();
-  EXPECT_THAT( B, EqMatrix( A - A ) );
+class MatrixSubtractionTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng            = new RandomNumber();
+    unsigned int r = rng->random();
+    unsigned int c = rng->random();
+
+    A.resize( r, c );
+    B.resize( r, c );
+    C.resize( r, c );
+    A.randomize();
+    B.randomize();
+    C.randomize();
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  matrix A;
+  matrix B;
+  matrix C;
+};
+
+TEST_F( MatrixSubtractionTest, Anticommutative ) {
+  EXPECT_THAT( A - B, EqMatrix( ( B - A )*-1 ) );
+}
+
+TEST_F(MatrixSubtractionTest, NonAssociative) {
+  EXPECT_THAT( (A - B) - C, NeqMatrix( A - (B - C) ) );
 }
 
 class MatrixScalarMultiplicationTest : public ::testing::Test {
