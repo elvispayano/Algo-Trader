@@ -47,7 +47,7 @@ endif()
 # Testing
 #----------------------------------------------------------------------
 if(BUILD_TESTS)
-  cxx_test(matrix   utilities gtest_main)
+  cxx_test(matrix   utilities gtest_main gmock)
   cxx_test(stock    utilities gtest_main)
   cxx_test(utl_math utilities gtest_main)
 endif()

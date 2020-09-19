@@ -258,8 +258,23 @@ TEST_F( MatrixTest, ScalarDivisionAssignment ) {
 }
 
 #include "utilities/random_number.h"
+#include <gmock/gmock.h>
 
-// Unit test framework setup
+MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
+  matrix in   = static_cast<matrix>( arg );
+  matrix comp = static_cast<matrix>( other );
+  if ( ( comp.rows() != in.rows() ) || ( comp.cols() != in.cols() ) )
+    return false;
+
+  bool equal = true;
+  for ( unsigned int r = 0; r < comp.rows(); ++r ) {
+    for ( unsigned int c = 0; c < comp.cols(); ++c ) {
+      equal &= ( comp( r, c ) - in( r, c ) ) < 1E-8;
+    }
+  }
+  return equal;
+}
+
 class MatrixResizeTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
@@ -324,7 +339,6 @@ TEST_F( MatrixResizeTest, InitVector ) {
   EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
 }
 
-// Unit test framework setup
 class MatrixValueTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
@@ -403,4 +417,99 @@ TEST_F( MatrixValueTest, Transpose ) {
       EXPECT_EQ( mat( r, c ), temp( c, r ) );
     }
   }
+}
+
+class MatrixAdditionTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng            = new RandomNumber();
+    unsigned int r = rng->random();
+    unsigned int c = rng->random();
+
+    A.resize( r, c );
+    B.resize( r, c );
+    C.resize( r, c );
+    A.randomize();
+    B.randomize();
+    C.randomize();
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  matrix A;
+  matrix B;
+  matrix C;
+};
+
+TEST_F( MatrixAdditionTest, Commutative ) {
+  EXPECT_THAT( A + B, EqMatrix( B + A ) );
+}
+
+TEST_F( MatrixAdditionTest, Associative ) {
+  EXPECT_THAT( A + ( B + C ), EqMatrix( ( A + B ) + C ) );
+}
+
+TEST_F( MatrixAdditionTest, Identity ) {
+  B.clear();
+  EXPECT_THAT( A + B, EqMatrix( A ) );
+}
+
+TEST_F( MatrixAdditionTest, Inverse ) {
+  B.clear();
+  EXPECT_THAT( B, EqMatrix( A - A ) );
+}
+
+class MatrixScalarMultiplicationTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng            = new RandomNumber();
+    unsigned int r = rng->random();
+    unsigned int c = rng->random();
+
+    k = rng->random( -100, 100 );
+    c = rng->random( -100, 100 );
+
+    A.resize( r, c );
+    B.resize( r, c );
+    A.randomize();
+    B.randomize();
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  matrix A;
+  matrix B;
+
+  double k;
+  double c;
+};
+
+TEST_F( MatrixScalarMultiplicationTest, Distributive ) {
+  EXPECT_THAT( ( A + B ) * k, EqMatrix( A * k + B * k ) );
+}
+
+TEST_F( MatrixScalarMultiplicationTest, Commulative ) {
+  EXPECT_THAT( A * ( k + c ), EqMatrix( A * k + A * c ) );
+}
+
+TEST_F( MatrixScalarMultiplicationTest, Associative ) {
+  EXPECT_THAT( A * ( k * c ), EqMatrix( ( A * k ) * c ) );
+}
+
+TEST_F( MatrixScalarMultiplicationTest, Identity ) {
+  EXPECT_THAT( A, EqMatrix( A * 1 ) );
 }
