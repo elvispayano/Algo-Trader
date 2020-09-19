@@ -303,3 +303,55 @@ void matrix::operator+=( double rh ) {}
 void matrix::operator-=( double rh ) {}
 void matrix::operator*=( double rh ) {}
 void matrix::operator/=( double rh ) {}
+
+matrix operator+(double lh, matrix rh) {
+  unsigned int mr = rh.rows();
+  unsigned int mc = rh.cols();
+  matrix output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = rh( r, c ) + lh;
+    }
+  }
+  return output;
+}
+
+matrix operator-( double lh, matrix rh ) {
+  unsigned int mr = rh.rows();
+  unsigned int mc = rh.cols();
+  matrix       output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = rh( r, c ) - lh;
+    }
+  }
+  return output;
+}
+
+matrix operator*( double lh, matrix rh ) {
+  unsigned int mr = rh.rows();
+  unsigned int mc = rh.cols();
+  matrix       output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = rh( r, c ) * lh;
+    }
+  }
+  return output;
+}
+
+matrix operator/( double lh, matrix rh ) {
+  unsigned int mr = rh.rows();
+  unsigned int mc = rh.cols();
+  matrix       output( mr, mc );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      output( r, c ) = rh( r, c ) / lh;
+    }
+  }
+  return output;
+}

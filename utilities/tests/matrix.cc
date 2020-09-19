@@ -312,16 +312,12 @@ public:
 };
 
 // Scalar Addition
-// TODO:  Add missing operator overload
 TEST_F( MatrixScalarArithmeticTest, AdditionAssociative ) {
-  FAIL();
-  // EXPECT_THAT( ( k + A ) + j, EqMatrix( k + (A + j) ) );
+  EXPECT_THAT( ( k + A ) + j, EqMatrix( k + ( A + j ) ) );
 }
 
-// TODO:  Add missing operator overload
 TEST_F( MatrixScalarArithmeticTest, AdditionCommutative ) {
-  FAIL();
-  // EXPECT_THAT( A + k, EqMatrix( k + A ) );
+  EXPECT_THAT( A + k, EqMatrix( k + A ) );
 }
 
 TEST_F( MatrixScalarArithmeticTest, AdditionIdentity ) {
@@ -334,16 +330,13 @@ TEST_F( MatrixScalarArithmeticTest, AdditionSizing ) {
 }
 
 // Scalar Subtraction
-// TODO:  Add missing operator overload
 TEST_F( MatrixScalarArithmeticTest, SubtractionAnticommutative ) {
-  FAIL();
-  // EXPECT_THAT( A - k, EqMatrix( ( k - A ) * -1 ) );
+  EXPECT_THAT( A - k, EqMatrix( ( k - A ) * -1 ) );
 }
 
 // TODO:  Add missing operator overload
 TEST_F( MatrixScalarArithmeticTest, SubtractionNonAssociative ) {
-  FAIL();
-  // EXPECT_THAT( ( j - A ) - k, NeqMatrix( j - ( A - k ) ) );
+  EXPECT_THAT( ( j - A ) - k, NeqMatrix( j - ( A - k ) ) );
 }
 
 TEST_F( MatrixScalarArithmeticTest, SubtractionSizing ) {
@@ -361,7 +354,7 @@ TEST_F( MatrixScalarArithmeticTest, MultiplicationCommulative ) {
 }
 
 TEST_F( MatrixScalarArithmeticTest, MultiplicationAssociative ) {
-  EXPECT_THAT( A * ( k * j ), EqMatrix( ( A * k ) * j ) );
+  EXPECT_THAT( k * ( A * j ), EqMatrix( ( k * A ) * j ) );
 }
 
 TEST_F( MatrixScalarArithmeticTest, MultiplicationIdentity ) {

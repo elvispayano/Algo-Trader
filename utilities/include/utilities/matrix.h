@@ -78,6 +78,12 @@ private:
   std::vector<double> mat;
 };
 
+matrix operator+( double lh, matrix rh );
+matrix operator-( double lh, matrix rh );
+matrix operator*( double lh, matrix rh );
+matrix operator/( double lh, matrix rh );
+
+
 template<typename T> class Matrix {
 public:
   // Constructors
