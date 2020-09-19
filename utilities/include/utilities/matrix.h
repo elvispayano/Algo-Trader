@@ -17,7 +17,7 @@ public:
   matrix( void );
   matrix( unsigned int r, unsigned int c );
   matrix( unsigned int r, unsigned int c, double initVal );
-  matrix( unsigned int r, unsigned int c, std::vector<double> initMat );
+  matrix( unsigned int r, unsigned int c, std::vector<double> initVec );
 
   ~matrix( void );
 
@@ -40,7 +40,7 @@ public:
   void   setCol( unsigned int c, matrix col );
   void   setCol( unsigned int c, std::vector<double> col );
 
-  void set( matrix mat );
+  void set( matrix input );
 
   matrix transpose();
 

@@ -110,7 +110,7 @@ TEST_F( MatrixResizeTest, InitVector ) {
   EXPECT_EQ( c, mat.cols() );
   EXPECT_DOUBLE_EQ( val[floor( r / 2 ) + r * floor( c / 2 )],
                     mat( floor( r / 2 ), floor( c / 2 ) ) );
-  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c * 2 ) );
 }
 
 class MatrixValueTest : public ::testing::Test {
@@ -146,7 +146,7 @@ TEST_F( MatrixValueTest, Reset ) {
 
   // Evaluation
   for ( unsigned int r = 0; r < mat.rows(); ++r ) {
-    for ( unsigned int c = 0; r < mat.cols(); ++c ) {
+    for ( unsigned int c = 0; c < mat.cols(); ++c ) {
       EXPECT_DOUBLE_EQ( randomValue, mat( r, c ) );
     }
   }
