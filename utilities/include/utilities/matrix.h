@@ -1,24 +1,82 @@
-/*
-  Title:
-    Matrix
-
-  Description:
-    This matrix template class contains all the functionality
-    for processing matrix data.
-
-  Tests:
-    test_matrix.cc
-
-  Author:
-    Elvis Payano
-*/
+/// Matrix
+///
+/// Functionality for processing matrix data
+///
+/// \author   Elvis Payano
+/// \date     18/09/2020
+/// \version  0.0.1
 
 #ifndef MATRIX_H
 #define MATRIX_H
 
 // Standard Includes
-#include <stdlib.h>
 #include <vector>
+
+class matrix {
+public:
+  matrix( void );
+  matrix( unsigned int r, unsigned int c );
+  matrix( unsigned int r, unsigned int c, double initVal );
+  matrix( unsigned int r, unsigned int c, std::vector<double> initMat );
+
+  ~matrix( void );
+
+  void reset( double initVal );
+  void clear( void );
+  void randomize( void );
+
+  void resize( unsigned int r, unsigned int c );
+  void resize( unsigned int r, unsigned int c, double initVal );
+  void resize( unsigned int r, unsigned int c, std::vector<double> initMat );
+
+  unsigned int rows( void ) { return mr; }
+  unsigned int cols( void ) { return mc; }
+
+  matrix subMatrix( unsigned int r, unsigned int c );
+  matrix getRow( unsigned int r );
+  matrix getCol( unsigned int c );
+  void   setRow( unsigned int r, matrix row );
+  void   setRow( unsigned int r, std::vector<double> row );
+  void   setCol( unsigned int c, matrix col );
+  void   setCol( unsigned int c, std::vector<double> col );
+
+  void set( matrix mat );
+
+  matrix transpose();
+
+  double& operator()( unsigned int r, unsigned int c );
+
+  void operator=( matrix mat );
+  void operator=( std::vector<double> mat );
+
+  matrix operator+( matrix rh );
+  matrix operator-( matrix rh );
+  matrix operator*( matrix rh );
+  matrix operator/( matrix rh );
+
+  matrix operator+( double rh );
+  matrix operator-( double rh );
+  matrix operator*( double rh );
+  matrix operator/( double rh );
+
+  void operator+=( matrix rh );
+  void operator-=( matrix rh );
+  void operator*=( matrix rh );
+  void operator/=( matrix rh );
+
+  void operator+=( double rh );
+  void operator-=( double rh );
+  void operator*=( double rh );
+  void operator/=( double rh );
+
+private:
+  unsigned int mr;
+  unsigned int mc;
+
+  double junk = 0;
+
+  std::vector<double> mat;
+};
 
 template<typename T> class Matrix {
 public:
@@ -575,7 +633,5 @@ template<typename T> void Matrix<T>::randomize( void ) {
 }
 
 typedef Matrix<double> dMatrix;
-typedef Matrix<int>    iMatrix;
-typedef Matrix<float>  fMatrix;
 
 #endif  // MATRIX_H

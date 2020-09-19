@@ -5,6 +5,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 set(ALGO_TRADER_VERSION 0.0.1)
+set(ALGO_TRADER_MIN_CMAKE 3.8)
 project(algorithmic-trader VERSION ${ALGO_TRADER_VERSION} LANGUAGES CXX C)
 
 enable_testing()

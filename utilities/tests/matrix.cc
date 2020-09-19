@@ -94,39 +94,6 @@ TEST_F( MatrixTest, ClearValue ) {
 }
 
 /*
-  Test:         Resize Default
-  Description:
-    Resize a matrix and default all values to zero
-*/
-TEST_F( MatrixTest, ResizeDefault ) {
-  dMatrix mat( 2, 2, 2.0 );
-  EXPECT_EQ( 2, mat.rows() );
-  EXPECT_EQ( 2, mat.cols() );
-
-  mat.resize( 4, 3, 0.0 );
-  EXPECT_EQ( 4, mat.rows() );
-  EXPECT_EQ( 3, mat.cols() );
-  EXPECT_DOUBLE_EQ( 0.0, mat( 0, 0 ) );
-}
-
-/*
-  Test:         Resize Value
-  Description:
-    Clear all elements of a matrix and reset to a provided
-    value
-*/
-TEST_F( MatrixTest, ResizeValue ) {
-  dMatrix mat( 2, 2, 2.0 );
-  EXPECT_EQ( 2, mat.rows() );
-  EXPECT_EQ( 2, mat.cols() );
-
-  mat.resize( 4, 3, 3.0 );
-  EXPECT_EQ( 4, mat.rows() );
-  EXPECT_EQ( 3, mat.cols() );
-  EXPECT_DOUBLE_EQ( 3.0, mat( 0, 0 ) );
-}
-
-/*
   Test:         For Each
   Description:
     Each element in matrix is modified by inserted function
@@ -288,4 +255,152 @@ TEST_F( MatrixTest, ScalarDivision ) {
 TEST_F( MatrixTest, ScalarDivisionAssignment ) {
   matA /= 2;
   EXPECT_DOUBLE_EQ( matA( 0, 0 ), 1.0 );
+}
+
+#include "utilities/random_number.h"
+
+// Unit test framework setup
+class MatrixResizeTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng = new RandomNumber();
+    r   = rng->random();
+    c   = rng->random();
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  matrix mat;
+
+  unsigned int r;
+  unsigned int c;
+};
+
+TEST_F( MatrixResizeTest, NoValue ) {
+  // Action
+  mat.resize( r, c );
+
+  // Evaluation
+  EXPECT_EQ( r, mat.rows() );
+  EXPECT_EQ( c, mat.cols() );
+  EXPECT_DOUBLE_EQ( 0.0, mat( floor( r / 2 ), floor( c / 2 ) ) );
+  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+}
+
+TEST_F( MatrixResizeTest, InitValue ) {
+  double val = rng->random( -100, 100 );
+
+  // Action
+  mat.resize( r, c, val );
+
+  // Evaluation
+  EXPECT_EQ( r, mat.rows() );
+  EXPECT_EQ( c, mat.cols() );
+  EXPECT_DOUBLE_EQ( val, mat( floor( r / 2 ), floor( c / 2 ) ) );
+  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+}
+
+TEST_F( MatrixResizeTest, InitVector ) {
+  std::vector<double> val;
+  for ( unsigned int i = 0; i < ( r * c ); ++i ) {
+    val.push_back( rng->random( -100, 100 ) );
+  }
+
+  // Action
+  mat.resize( r, c, val );
+
+  // Evaluation
+  EXPECT_EQ( r, mat.rows() );
+  EXPECT_EQ( c, mat.cols() );
+  EXPECT_DOUBLE_EQ( val[floor( r / 2 ) + r * floor( c / 2 )],
+                    mat( floor( r / 2 ), floor( c / 2 ) ) );
+  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+}
+
+// Unit test framework setup
+class MatrixValueTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng            = new RandomNumber();
+    unsigned int r = rng->random();
+    unsigned int c = rng->random();
+    mat.resize( r, c );
+    ASSERT_TRUE( mat.rows() > 0 ) << "Non-Zero amount of rows required";
+    ASSERT_TRUE( mat.cols() > 0 ) << "Non-Zero amount of columns required";
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  matrix mat;
+};
+
+TEST_F( MatrixValueTest, Reset ) {
+  // Setup
+  mat.randomize();
+  double randomValue = rng->random();
+
+  // Action
+  mat.reset( randomValue );
+
+  // Evaluation
+  for ( unsigned int r = 0; r < mat.rows(); ++r ) {
+    for ( unsigned int c = 0; r < mat.cols(); ++c ) {
+      EXPECT_DOUBLE_EQ( randomValue, mat( r, c ) );
+    }
+  }
+}
+
+TEST_F( MatrixValueTest, Clear ) {
+  // Action
+  mat.randomize();
+  mat.clear();
+
+  // Evaluation
+  for ( unsigned int r = 0; r < mat.rows(); ++r ) {
+    for ( unsigned int c = 0; r < mat.cols(); ++c ) {
+      EXPECT_DOUBLE_EQ( 0.0, mat( r, c ) );
+    }
+  }
+}
+
+TEST_F( MatrixValueTest, Randomize ) {
+  // Setup
+  unsigned int r = mat.rows();
+  unsigned int c = mat.cols();
+
+  double       prevValue = mat( floor( r / 2 ), floor( c / 2 ) );
+  unsigned int limit     = rng->random( 3, 10 );
+  for ( unsigned int iter = 0; iter < limit; ++iter ) {
+    mat.randomize();
+    double matrixValue = mat( floor( r / 2 ), floor( c / 2 ) );
+    EXPECT_NE( prevValue, matrixValue );
+    prevValue = matrixValue;
+  }
+}
+
+TEST_F( MatrixValueTest, Transpose ) {
+  mat.randomize();
+  matrix temp = mat.transpose();
+
+  EXPECT_EQ( mat.rows(), temp.cols() );
+  EXPECT_EQ( mat.cols(), temp.rows() );
+  for ( unsigned int r = 0; r < mat.rows(); ++r ) {
+    for ( unsigned int c = 0; c < mat.cols(); ++c ) {
+      EXPECT_EQ( mat( r, c ), temp( c, r ) );
+    }
+  }
 }
