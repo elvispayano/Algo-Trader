@@ -71,14 +71,14 @@ void Trader::perform( void ) {
 
     // Capture broker response in Neural Network input format
     Stock   response = broker->getResponse( order.ticker );
-    dMatrix input( 4, 1, 0.0 );
+    Matrix input( 4, 1, 0.0 );
     input( 0, 0 ) = response.getAsk();
     input( 1, 0 ) = response.getBid();
     input( 2, 0 ) = response.getLow();
     input( 3, 0 ) = response.getHigh();
 
     // Run inputs through network
-    dMatrix output( 3, 1, 0.0 );
+    Matrix output( 3, 1, 0.0 );
     output = networks[ind]->process( input );
     // Convert inputs to broker actions
     order.request    = Requests::MARKET;

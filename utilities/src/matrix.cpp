@@ -1,9 +1,17 @@
+/// Matrix
+///
+/// Functionality for processing matrix data
+///
+/// \author   Elvis Payano
+/// \date     18/09/2020
+/// \version  0.0.1
+
 #include "utilities/matrix.h"
 #include "utilities/random_number.h"
 
 /// @fn     Matrix( void )
 /// @brief  Initialize an empty 0-by-0 matrix
-matrix::matrix( void ) {
+Matrix::Matrix( void ) {
   clear();
 }
 
@@ -11,7 +19,7 @@ matrix::matrix( void ) {
 /// @param  r   Number of rows in matrix
 /// @param  c   Number of columns in matrix
 /// @brief  Initialize an empty r-by-c matrix
-matrix::matrix( unsigned int r, unsigned int c ) {
+Matrix::Matrix( unsigned int r, unsigned int c ) {
   resize( r, c );
 }
 
@@ -20,7 +28,7 @@ matrix::matrix( unsigned int r, unsigned int c ) {
 /// @param  c       Number of columns in matrix
 /// @param  initVal Initial value of all elements in matrix
 /// @brief  Initialize an r-by-c matrix with all elments set to an initial value
-matrix::matrix( unsigned int r, unsigned int c, double initVal ) {
+Matrix::Matrix( unsigned int r, unsigned int c, double initVal ) {
   resize( r, c, initVal );
 }
 
@@ -29,20 +37,20 @@ matrix::matrix( unsigned int r, unsigned int c, double initVal ) {
 /// @param  c       Number of columns in matrix
 /// @param  initVec Vector containing all elements in matrix
 /// @brief  Initialize an r-by-c matrix set with provided elements
-matrix::matrix( unsigned int r, unsigned int c, std::vector<double> initVec ) {
+Matrix::Matrix( unsigned int r, unsigned int c, std::vector<double> initVec ) {
   resize( r, c, initVec );
 }
 
 /// @fn     ~Matrix( void )
 /// @brief  Clear memory and reset values
-matrix::~matrix( void ) {
+Matrix::~Matrix( void ) {
   clear();
 }
 
 /// @fn     void reset( double initVal )
 /// @param  initVal   Desired initial value
 /// @brief  Reset matrix and set every element in matrix to value provided
-void matrix::reset( double initVal ) {
+void Matrix::reset( double initVal ) {
   if ( mr == 0 || mc == 0 ) {
     return;
   }
@@ -54,7 +62,7 @@ void matrix::reset( double initVal ) {
 
 /// @fn     void clear( void )
 /// @brief  Clear the matrix of any data stored
-void matrix::clear( void ) {
+void Matrix::clear( void ) {
   mr = 0;
   mc = 0;
   mat.clear();
@@ -62,7 +70,7 @@ void matrix::clear( void ) {
 
 /// @fn     void randomize( void )
 /// @brief  Set all elements in matrix to random values
-void matrix::randomize( void ) {
+void Matrix::randomize( void ) {
   static RandomNumber rng;
   for ( double& element : mat )
     element = rng.random( -100, 100 );
@@ -73,7 +81,7 @@ void matrix::randomize( void ) {
 /// @param  c   Desired column count in resized matrix
 /// @brief  Resize the matrix to a new desired size. Removes all data currently
 ///         in matrix
-void matrix::resize( unsigned int r, unsigned int c ) {
+void Matrix::resize( unsigned int r, unsigned int c ) {
   resize( r, c, 0.0 );
 }
 
@@ -83,7 +91,7 @@ void matrix::resize( unsigned int r, unsigned int c ) {
 /// @param  initVal   Initial value to set matrix elements
 /// @brief  Resize the matrix to a new desired size. Removes all data currently
 ///         in matrix
-void matrix::resize( unsigned int r, unsigned int c, double initVal ) {
+void Matrix::resize( unsigned int r, unsigned int c, double initVal ) {
   unsigned int totalElements = r * c;
   mat.resize( totalElements );
 
@@ -100,7 +108,7 @@ void matrix::resize( unsigned int r, unsigned int c, double initVal ) {
 /// @param  initVec   Initial vector of values to set matrix elements
 /// @brief  Resize the matrix to a new desired size. Removes all data currently
 ///         in matrix
-void matrix::resize( unsigned int        r,
+void Matrix::resize( unsigned int        r,
                      unsigned int        c,
                      std::vector<double> initVec ) {
   unsigned int totalElements = r * c;
@@ -117,48 +125,100 @@ void matrix::resize( unsigned int        r,
   }
 }
 
-matrix matrix::subMatrix( unsigned int r, unsigned int c ) {
+Matrix Matrix::subMatrix( unsigned int r, unsigned int c ) {
   return *this;
 }
 
-/// @fn     matrix getRow( unsigned int r )
+/// @fn     Matrix getRow( unsigned int r )
 /// @param  r   Row index
 /// @brief  Get a single row from within the matrix
-matrix matrix::getRow( unsigned int r ) {
-  matrix row( mr, 1 );
+Matrix Matrix::getRow( unsigned int r ) {
+  Matrix row( 1, mc );
   for ( unsigned int c = 0; c < mc; ++c ) {
     row( 0, c ) = this->operator()( r, c );
   }
   return row;
 }
 
-/// @fn     matrix getCol( unsigned int c )
+/// @fn     Matrix getCol( unsigned int c )
 /// @param  c   Column index
 /// @brief  Get a single column from within the matrix
-matrix matrix::getCol( unsigned int c ) {
-  matrix column( 1, mc );
+Matrix Matrix::getCol( unsigned int c ) {
+  Matrix column( mr, 1 );
   for ( unsigned int r = 0; r < mr; ++r ) {
     column( r, 0 ) = this->operator()( r, c );
   }
   return column;
 }
-void matrix::setRow( unsigned int r, matrix row ) {}
-void matrix::setRow( unsigned int r, std::vector<double> row ) {}
-void matrix::setCol( unsigned int c, matrix col ) {}
-void matrix::setCol( unsigned int c, std::vector<double> col ) {}
 
-/// @fn     void set( matrix input )
+/// @fn     void setRow( unsigned int r, Matrix row )
+/// @param  r     Row index
+/// @param  row   Row matrix
+/// @brief  Set the row of the matrix with the provided data
+void Matrix::setRow( unsigned int r, Matrix row ) {
+  if ( row.cols() != mc ) {
+    return;
+  }
+
+  for ( unsigned int c = 0; c < mc; ++c ) {
+    this->operator()( r, c ) = row( 0, c );
+  }
+}
+
+/// @fn     void setRow( unsigned int r, vector<double> row )
+/// @param  r     Row index
+/// @param  row   Row vector
+/// @brief  Set the row of the matrix with the provided data
+void Matrix::setRow( unsigned int r, std::vector<double> row ) {
+  if ( row.size() != mc ) {
+    return;
+  }
+
+  for ( unsigned int c = 0; c < mc; ++c ) {
+    this->operator()( r, c ) = row[c];
+  }
+}
+
+/// @fn     void setCol( unsigned int c, Matrix column )
+/// @param  c     Column index
+/// @param  col   Column matrix
+/// @brief  Set the column of the matrix with the provided data
+void Matrix::setCol( unsigned int c, Matrix col ) {
+  if ( col.rows() != mr ) {
+    return;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    this->operator()( r, c ) = col( r, 0 );
+  }
+}
+
+/// @fn     void setCol( unsigned int c, vector<double> column )
+/// @param  c     Column index
+/// @param  col   Column vector
+/// @brief  Set the column of the matrix with the provided data
+void Matrix::setCol( unsigned int c, std::vector<double> col ) {
+  if ( col.size() != mr ) {
+    return;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    this->operator()( r, c ) = col[r];
+  }
+}
+
+/// @fn     void set( Matrix input )
 /// @param  input   Input matrix
 /// @brief  Set current matrix as copy of provided matrix
-void matrix::set( matrix input ) {
+void Matrix::set( Matrix input ) {
   resize( input.rows(), input.cols() );
   this->operator=( input );
 }
 
-/// @fn     matrix transpose( void )
+/// @fn     Matrix transpose( void )
 /// @brief  Generate a transpose of the current matrix
-matrix matrix::transpose( void ) {
-  matrix output( mc, mr );
+Matrix Matrix::transpose( void ) {
+  Matrix output( mc, mr );
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
       output( c, r ) = this->operator()( r, c );
@@ -167,22 +227,31 @@ matrix matrix::transpose( void ) {
   return output;
 }
 
+/// @fn     void forEach( double ( *function )( double ) )
+/// @param  function  Function Pointer
+/// @brief  Run a function over all elements within the matrix
+void Matrix::forEach( double ( *function )( double ) ) {
+  for ( double &element : mat ) {
+    element = function( element );
+  }
+}
+
 /// @fn     double& operator()( unsigned int r, unsigned int c )
 /// @param  r   Matrix row index
 /// @param  c   Matrix column index
 /// @brief  Matrix element selection using a 0 based index
-double& matrix::operator()( unsigned int r, unsigned int c ) {
+double& Matrix::operator()( unsigned int r, unsigned int c ) {
   if ( r >= mr || c >= mc )
     return junk;
   unsigned int element = r + mr * c;
   return mat[element];
 }
 
-/// @fn     operator=( matrix mat )
+/// @fn     operator=( Matrix mat )
 /// @param  mat   RHS matrix input
 /// @brief  Set the matrix as the equivalent of the input matrix if they are
 ///         equivalent in structure
-void matrix::operator=( matrix mat ) {
+void Matrix::operator=( Matrix mat ) {
   if ( mr != mat.rows() || mc != mat.cols() ) {
     return;
   }
@@ -198,7 +267,7 @@ void matrix::operator=( matrix mat ) {
 /// @param  vec   Vector input to be formatted
 /// @brief  Convert the input vector into a matrix format with the current
 ///         matrix's structure
-void matrix::operator=( std::vector<double> vec ) {
+void Matrix::operator=( std::vector<double> vec ) {
   unsigned int elements = mr * mc;
   if ( elements != vec.size() ) {
     return;
@@ -215,11 +284,11 @@ void matrix::operator=( std::vector<double> vec ) {
   }
 }
 
-/// @fn     matrix operator+( matrix rh )
+/// @fn     Matrix operator+( Matrix rh )
 /// @param  rh  Right-hand matrix element
 /// @brief  Sum of two matrices
-matrix matrix::operator+( matrix rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator+( Matrix rh ) {
+  Matrix output( mr, mc );
   if ( mr != rh.rows() || mc != rh.cols() ) {
     return output;
   }
@@ -232,11 +301,11 @@ matrix matrix::operator+( matrix rh ) {
   return output;
 }
 
-/// @fn     matrix operator-( matrix rh )
+/// @fn     Matrix operator-( Matrix rh )
 /// @param  rh  Right-hand matrix element
 /// @brief  Difference of two matrices
-matrix matrix::operator-( matrix rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator-( Matrix rh ) {
+  Matrix output( mr, mc );
   if ( mr != rh.rows() || mc != rh.cols() ) {
     return output;
   }
@@ -249,11 +318,11 @@ matrix matrix::operator-( matrix rh ) {
   return output;
 }
 
-/// @fn     matrix operator*( matrix rh )
+/// @fn     Matrix operator*( Matrix rh )
 /// @param  rh  Right-hand matrix element
 /// @brief  Product of two matrices
-matrix matrix::operator*( matrix rh ) {
-  matrix output( mr, rh.cols() );
+Matrix Matrix::operator*( Matrix rh ) {
+  Matrix output( mr, rh.cols() );
   if ( mc != rh.rows() )
     return output;
 
@@ -269,18 +338,19 @@ matrix matrix::operator*( matrix rh ) {
   return output;
 }
 
-/// @fn     matrix operator/( matrix rh )
+/// @fn     Matrix operator/( Matrix rh )
 /// @param  rh  Right-hand matrix element
 /// @brief  Quotient of two matrices
-matrix matrix::operator/( matrix rh ) {
+/// TODO: Implement
+Matrix Matrix::operator/( Matrix rh ) {
   return *this;
 }
 
-/// @fn     matrix operator+( double rh )
+/// @fn     Matrix operator+( double rh )
 /// @param  rh  Right-hand scalar element
 /// @brief  Sum of a matrix and scalar value
-matrix matrix::operator+( double rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator+( double rh ) {
+  Matrix output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
@@ -290,11 +360,11 @@ matrix matrix::operator+( double rh ) {
   return output;
 }
 
-/// @fn     matrix operator-( double rh )
+/// @fn     Matrix operator-( double rh )
 /// @param  rh  Right-hand scalar element
 /// @brief  Difference of a matrix and scalar value
-matrix matrix::operator-( double rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator-( double rh ) {
+  Matrix output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
@@ -304,11 +374,11 @@ matrix matrix::operator-( double rh ) {
   return output;
 }
 
-/// @fn     matrix operator*( double rh )
+/// @fn     Matrix operator*( double rh )
 /// @param  rh  Right-hand scalar element
 /// @brief  Product of a matrix and scalar value
-matrix matrix::operator*( double rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator*( double rh ) {
+  Matrix output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
@@ -318,11 +388,11 @@ matrix matrix::operator*( double rh ) {
   return output;
 }
 
-/// @fn     matrix operator/( double rh )
+/// @fn     Matrix operator/( double rh )
 /// @param  rh  Right-hand scalar element
 /// @brief  Quotient of a matrix and scalar value
-matrix matrix::operator/( double rh ) {
-  matrix output( mr, mc );
+Matrix Matrix::operator/( double rh ) {
+  Matrix output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
@@ -332,51 +402,51 @@ matrix matrix::operator/( double rh ) {
   return output;
 }
 
-void matrix::operator+=( matrix rh ) {}
-void matrix::operator-=( matrix rh ) {}
-void matrix::operator*=( matrix rh ) {}
-void matrix::operator/=( matrix rh ) {}
-void matrix::operator+=( double rh ) {}
-void matrix::operator-=( double rh ) {}
-void matrix::operator*=( double rh ) {}
-void matrix::operator/=( double rh ) {}
+void Matrix::operator+=( Matrix rh ) {}
+void Matrix::operator-=( Matrix rh ) {}
+void Matrix::operator*=( Matrix rh ) {}
+void Matrix::operator/=( Matrix rh ) {}
+void Matrix::operator+=( double rh ) {}
+void Matrix::operator-=( double rh ) {}
+void Matrix::operator*=( double rh ) {}
+void Matrix::operator/=( double rh ) {}
 
-/// @fn     operator+( double lh, matrix rh )
+/// @fn     operator+( double lh, Matrix rh )
 /// @param  lh  Left hand variable of operator
 /// @param  rh  Right hand variable of operator
 /// @brief  Sum of a matrix and a scalar where the scalar is the left hand
 ///         variable
-matrix operator+( double lh, matrix rh ) {
+Matrix operator+( double lh, Matrix rh ) {
   return rh + lh;
 }
 
-/// @fn     operator-( double lh, matrix rh )
+/// @fn     operator-( double lh, Matrix rh )
 /// @param  lh  Left hand variable of operator
 /// @param  rh  Right hand variable of operator
 /// @brief  Difference of a matrix and a scalar where the scalar is the left
 ///         hand variable
-matrix operator-( double lh, matrix rh ) {
+Matrix operator-( double lh, Matrix rh ) {
   return -1 * ( rh - lh );
 }
 
-/// @fn     operator*( double lh, matrix rh )
+/// @fn     operator*( double lh, Matrix rh )
 /// @param  lh  Left hand variable of operator
 /// @param  rh  Right hand variable of operator
 /// @brief  Product of a matrix and a scalar where the scalar is the left
 ///         hand variable
-matrix operator*( double lh, matrix rh ) {
+Matrix operator*( double lh, Matrix rh ) {
   return rh * lh;
 }
 
-/// @fn     operator/( double lh, matrix rh )
+/// @fn     operator/( double lh, Matrix rh )
 /// @param  lh  Left hand variable of operator
 /// @param  rh  Right hand variable of operator
 /// @brief  Quotient of a matrix and a scalar where the scalar is the left
 ///         hand variable
-matrix operator/( double lh, matrix rh ) {
+Matrix operator/( double lh, Matrix rh ) {
   unsigned int mr = rh.rows();
   unsigned int mc = rh.cols();
-  matrix       output( mr, mc );
+  Matrix       output( mr, mc );
 
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {

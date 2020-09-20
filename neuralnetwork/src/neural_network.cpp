@@ -90,6 +90,7 @@ void NeuralNetwork::addOutputLayer( unsigned int       outputs,
         outputs, layerList.back()->getNodeCount(), config.hyperparams );
     return;
   }
+  outputLayer->reconfigure( outputs, 0, config.hyperparams );
 }
 
 LayerBase* NeuralNetwork::newLayer( ActivationTypes activation,
@@ -110,19 +111,19 @@ LayerBase* NeuralNetwork::newLayer( ActivationTypes activation,
   return layerCreated;
 }
 
-//! @fn     dMatrix process( dMatrix data )
+//! @fn     Matrix process( Matrix data )
 //! @brief  Process input data through each layer and return a proccessed matrix
 //!         containing the desired action to be performed.
-dMatrix NeuralNetwork::process( dMatrix input ) {
-  dMatrix data = inputLayer->process( input );
+Matrix NeuralNetwork::process( Matrix input ) {
+  Matrix data = inputLayer->process( input );
 
   for ( auto layer : layerList ) {
-    dMatrix intermediate = layer->process( data );
+    Matrix intermediate = layer->process( data );
     data.resize( intermediate.rows(), intermediate.cols(), 0.0 );
     data = intermediate;
   }
 
-  dMatrix output = outputLayer->process( data );
+  Matrix output = outputLayer->process( data );
   return output;
 }
 
@@ -151,7 +152,7 @@ void NeuralNetwork::setOutputs( unsigned int count ) {
 
 void NeuralNetwork::train( void ) {
   // for each ( LayerBase* layer in layerList ) {
-  //  dMatrix gradient;
+  //  Matrix gradient;
   //  layer->train( 0.0, gradient );
   //}
 }

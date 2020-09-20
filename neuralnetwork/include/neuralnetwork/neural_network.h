@@ -62,10 +62,10 @@ public:
   // Network Identification
   virtual std::string getTicker( void ) { return ticker; }
 
-  //! @fn     dMatrix process( dMatrix data )
+  //! @fn     Matrix process( Matrix data )
   //! @brief  Process input data through each layer and return a proccessed
   //!         matrix containing the desired action to be performed.
-  virtual dMatrix process( dMatrix data );
+  virtual Matrix process( Matrix data );
 
   //! @fn     train( void )
   //! @brief  Train the neural network with the provided parameters

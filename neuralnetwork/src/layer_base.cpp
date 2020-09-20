@@ -41,14 +41,14 @@ LayerBase::~LayerBase( void ) {
 
 //! @fn     void reconfigure( size_t numNodes,
 //!                           size_t numInputs,
-//!                           dMatrix weight,
-//!                           dMatrix bias )
+//!                           Matrix weight,
+//!                           Matrix bias )
 //! @param  numNodes    Number of nodes present in the layer
 //! @param  numInputs   Number of inputs that will be provided to the layer
 //! @param  hyperparams Matrix containing all hyperparameters
 //! @brief  Update the layer with the provided hyperparameters that define the
 //!         required parameters for the layer
-void LayerBase::reconfigure(size_t nodes, size_t inputs, dMatrix hyperparams) {
+void LayerBase::reconfigure(size_t nodes, size_t inputs, Matrix hyperparams) {
   inputCount = inputs;
   nodeCount  = nodes;
 }

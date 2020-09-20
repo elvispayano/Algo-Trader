@@ -39,15 +39,15 @@ public:
   //! @brief  Return the current configured activation type.
   ActivationTypes getTF( void ) { return tfType; }
 
-  //! @fn     performTF( dMatrix )
+  //! @fn     performTF( Matrix )
   //! @param  input   Matrix used to apply transfer function
   //! @brief  Apply the configured transfer function to the provided matrix.
-  dMatrix performTF( dMatrix input );
+  Matrix performTF( Matrix input );
 
-  //! @fn     performBP( dMatrix )
+  //! @fn     performBP( Matrix )
   //! @param  input   Matrix used to apply backpropagation
   //! @brief  Calculate the transfer function derivative of the provided matrix.
-  dMatrix performBP( dMatrix input );
+  Matrix performBP( Matrix input );
 
 private:
   // Transfer function selection trigger

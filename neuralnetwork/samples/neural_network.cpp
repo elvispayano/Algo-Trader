@@ -27,8 +27,8 @@ int main( void ) {
   config.hyperparams.randomize();
   network.addOutputLayer( 3, config );
 
-  dMatrix input( 4, 1, 0.0 );
+  Matrix input( 4, 1, 0.0 );
   input.randomize();
-  dMatrix output = network.process( input );
+  Matrix output = network.process( input );
   return 0;
 }

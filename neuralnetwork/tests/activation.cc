@@ -43,7 +43,7 @@ public:
   Activation*   activation;
   RandomNumber* rng;
 
-  dMatrix input;
+  Matrix input;
 };
 
 TEST_F( ActivationTest, Configuration ) {
@@ -54,7 +54,7 @@ TEST_F( ActivationTest, Configuration ) {
 
 TEST_F( ActivationTest, TransferFunction ) {
   activation->setTF( rng->activation() );
-  dMatrix output = activation->performTF( input );
+  Matrix output = activation->performTF( input );
 
   EXPECT_EQ( output.rows(), input.rows() );
   EXPECT_EQ( output.cols(), input.cols() );
@@ -62,7 +62,7 @@ TEST_F( ActivationTest, TransferFunction ) {
 
 TEST_F( ActivationTest, Backpropagation ) {
   activation->setTF( rng->activation() );
-  dMatrix output = activation->performBP( input );
+  Matrix output = activation->performBP( input );
 
   EXPECT_EQ( output.rows(), input.rows() );
   EXPECT_EQ( output.cols(), input.cols() );
