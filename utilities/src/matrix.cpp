@@ -120,11 +120,27 @@ void matrix::resize( unsigned int        r,
 matrix matrix::subMatrix( unsigned int r, unsigned int c ) {
   return *this;
 }
+
+/// @fn     matrix getRow( unsigned int r )
+/// @param  r   Row index
+/// @brief  Get a single row from within the matrix
 matrix matrix::getRow( unsigned int r ) {
-  return *this;
+  matrix row( mr, 1 );
+  for ( unsigned int c = 0; c < mc;  ++c ) {
+    row( 0, c ) = this->operator()( r, c );
+  }
+  return row;
 }
+
+/// @fn     matrix getCol( unsigned int c )
+/// @param  c   Column index
+/// @brief  Get a single column from within the matrix
 matrix matrix::getCol( unsigned int c ) {
-  return *this;
+  matrix column( 1, mc );
+  for (unsigned int r = 0; r < mr; ++r) {
+    column( r, 0 ) = this->operator()(r, c);
+  }
+  return column;
 }
 void matrix::setRow( unsigned int r, matrix row ) {}
 void matrix::setRow( unsigned int r, std::vector<double> row ) {}
@@ -142,13 +158,13 @@ void matrix::set( matrix input ) {
 /// @fn     matrix transpose( void )
 /// @brief  Generate a transpose of the current matrix
 matrix matrix::transpose( void ) {
-  matrix temp( mc, mr );
+  matrix output( mc, mr );
   for ( unsigned int r = 0; r < mr; ++r ) {
     for ( unsigned int c = 0; c < mc; ++c ) {
-      temp( c, r ) = this->operator()( r, c );
+      output( c, r ) = this->operator()( r, c );
     }
   }
-  return temp;
+  return output;
 }
 
 /// @fn     double& operator()( unsigned int r, unsigned int c )
@@ -233,7 +249,20 @@ matrix matrix::operator-( matrix rh ) {
   return output;
 }
 matrix matrix::operator*( matrix rh ) {
-  return *this;
+  matrix output( mr, rh.cols() );
+  if ( mc != rh.rows() )
+    return output;
+
+  for ( unsigned int c = 0; c < rh.cols(); ++c ) {
+    for ( unsigned int r = 0; r < mr; ++r ) {
+      double sum = 0;
+      for ( unsigned int element = 0; element < mr; ++element ) {
+        sum += getRow( r )( 0, element ) * rh.getCol( c )( element, 0 );
+      }
+      output( r, c ) = sum;
+    }
+  }
+  return output;
 }
 matrix matrix::operator/( matrix rh ) {
   return *this;
