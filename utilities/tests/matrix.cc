@@ -28,7 +28,7 @@ MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
   bool equal = true;
   for ( unsigned int r = 0; r < comp.rows(); ++r ) {
     for ( unsigned int c = 0; c < comp.cols(); ++c ) {
-      equal &= ( comp( r, c ) - in( r, c ) ) < 1E-8;
+      equal &= abs( comp( r, c ) - in( r, c ) ) < 1E-8;
     }
   }
   return equal;
@@ -43,7 +43,7 @@ MATCHER_P( NeqMatrix, other, "Matrix Inequality Matcher" ) {
   bool equal = false;
   for ( unsigned int r = 0; r < comp.rows(); ++r ) {
     for ( unsigned int c = 0; c < comp.cols(); ++c ) {
-      equal |= ( comp( r, c ) - in( r, c ) ) > 1E-8;
+      equal |= abs( comp( r, c ) - in( r, c ) ) > 1E-8;
     }
   }
   return equal;
