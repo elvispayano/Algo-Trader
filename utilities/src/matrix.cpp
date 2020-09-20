@@ -133,7 +133,7 @@ Matrix Matrix::subMatrix( unsigned int r, unsigned int c ) {
 /// @param  r   Row index
 /// @brief  Get a single row from within the matrix
 Matrix Matrix::getRow( unsigned int r ) {
-  Matrix row( mr, 1 );
+  Matrix row( 1, mc );
   for ( unsigned int c = 0; c < mc; ++c ) {
     row( 0, c ) = this->operator()( r, c );
   }
@@ -144,7 +144,7 @@ Matrix Matrix::getRow( unsigned int r ) {
 /// @param  c   Column index
 /// @brief  Get a single column from within the matrix
 Matrix Matrix::getCol( unsigned int c ) {
-  Matrix column( 1, mc );
+  Matrix column( mr, 1 );
   for ( unsigned int r = 0; r < mr; ++r ) {
     column( r, 0 ) = this->operator()( r, c );
   }
@@ -155,29 +155,57 @@ Matrix Matrix::getCol( unsigned int c ) {
 /// @param  r     Row index
 /// @param  row   Row matrix
 /// @brief  Set the row of the matrix with the provided data
-/// TODO: Implement
-void Matrix::setRow( unsigned int r, Matrix row ) {}
+void Matrix::setRow( unsigned int r, Matrix row ) {
+  if ( row.cols() != mc ) {
+    return;
+  }
+
+  for ( unsigned int c = 0; c < mc; ++c ) {
+    this->operator()( r, c ) = row( 0, c );
+  }
+}
 
 /// @fn     void setRow( unsigned int r, vector<double> row )
 /// @param  r     Row index
 /// @param  row   Row vector
 /// @brief  Set the row of the matrix with the provided data
-/// TODO: Implement
-void Matrix::setRow( unsigned int r, std::vector<double> row ) {}
+void Matrix::setRow( unsigned int r, std::vector<double> row ) {
+  if ( row.size() != mc ) {
+    return;
+  }
+
+  for ( unsigned int c = 0; c < mc; ++c ) {
+    this->operator()( r, c ) = row[c];
+  }
+}
 
 /// @fn     void setCol( unsigned int c, Matrix column )
 /// @param  c     Column index
 /// @param  col   Column matrix
 /// @brief  Set the column of the matrix with the provided data
-/// TODO: Implement
-void Matrix::setCol( unsigned int c, Matrix col ) {}
+void Matrix::setCol( unsigned int c, Matrix col ) {
+  if ( col.rows() != mr ) {
+    return;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    this->operator()( r, c ) = col( r, 0 );
+  }
+}
 
 /// @fn     void setCol( unsigned int c, vector<double> column )
 /// @param  c     Column index
 /// @param  col   Column vector
 /// @brief  Set the column of the matrix with the provided data
-/// TODO: Implement
-void Matrix::setCol( unsigned int c, std::vector<double> col ) {}
+void Matrix::setCol( unsigned int c, std::vector<double> col ) {
+  if ( col.size() != mr ) {
+    return;
+  }
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    this->operator()( r, c ) = col[r];
+  }
+}
 
 /// @fn     void set( Matrix input )
 /// @param  input   Input matrix
@@ -202,8 +230,8 @@ Matrix Matrix::transpose( void ) {
 /// @fn     void forEach( double ( *function )( double ) )
 /// @param  function  Function Pointer
 /// @brief  Run a function over all elements within the matrix
-void Matrix::forEach(double (*function)(double)) {
-  for (double& element : mat) {
+void Matrix::forEach( double ( *function )( double ) ) {
+  for ( double &element : mat ) {
     element = function( element );
   }
 }
