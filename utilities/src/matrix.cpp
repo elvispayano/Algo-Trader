@@ -1,3 +1,11 @@
+/// Matrix
+///
+/// Functionality for processing matrix data
+///
+/// \author   Elvis Payano
+/// \date     18/09/2020
+/// \version  0.0.1
+
 #include "utilities/matrix.h"
 #include "utilities/random_number.h"
 
@@ -142,9 +150,33 @@ Matrix Matrix::getCol( unsigned int c ) {
   }
   return column;
 }
+
+/// @fn     void setRow( unsigned int r, Matrix row )
+/// @param  r     Row index
+/// @param  row   Row matrix
+/// @brief  Set the row of the matrix with the provided data
+/// TODO: Implement
 void Matrix::setRow( unsigned int r, Matrix row ) {}
+
+/// @fn     void setRow( unsigned int r, vector<double> row )
+/// @param  r     Row index
+/// @param  row   Row vector
+/// @brief  Set the row of the matrix with the provided data
+/// TODO: Implement
 void Matrix::setRow( unsigned int r, std::vector<double> row ) {}
+
+/// @fn     void setCol( unsigned int c, Matrix column )
+/// @param  c     Column index
+/// @param  col   Column matrix
+/// @brief  Set the column of the matrix with the provided data
+/// TODO: Implement
 void Matrix::setCol( unsigned int c, Matrix col ) {}
+
+/// @fn     void setCol( unsigned int c, vector<double> column )
+/// @param  c     Column index
+/// @param  col   Column vector
+/// @brief  Set the column of the matrix with the provided data
+/// TODO: Implement
 void Matrix::setCol( unsigned int c, std::vector<double> col ) {}
 
 /// @fn     void set( Matrix input )
@@ -281,6 +313,7 @@ Matrix Matrix::operator*( Matrix rh ) {
 /// @fn     Matrix operator/( Matrix rh )
 /// @param  rh  Right-hand matrix element
 /// @brief  Quotient of two matrices
+/// TODO: Implement
 Matrix Matrix::operator/( Matrix rh ) {
   return *this;
 }

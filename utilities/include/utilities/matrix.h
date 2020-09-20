@@ -80,9 +80,19 @@ public:
   ///         currently in matrix
   void resize( unsigned int r, unsigned int c, std::vector<double> initMat );
 
+  /// @fn     void rows( void )
+  /// @brief  Get the number of rows present in the matrix
   unsigned int rows( void ) { return mr; }
+
+  /// @fn     void cols( void )
+  /// @brief  Get the number of columns present in the matrix
   unsigned int cols( void ) { return mc; }
 
+  /// @fn     Matrix subMatrix( unsigned int r, unsigned int c )
+  /// @param  r   Row index
+  /// @param  c   Column index
+  /// @brief  Return a matrix that contains all elements minus what is present
+  ///         in the row and column indeces provided
   Matrix subMatrix( unsigned int r, unsigned int c );
 
   /// @fn     Matrix getRow( unsigned int r )
@@ -94,10 +104,30 @@ public:
   /// @param  c   Column index
   /// @brief  Get a single column from within the matrix
   Matrix getCol( unsigned int c );
-  void   setRow( unsigned int r, Matrix row );
-  void   setRow( unsigned int r, std::vector<double> row );
-  void   setCol( unsigned int c, Matrix col );
-  void   setCol( unsigned int c, std::vector<double> col );
+
+  /// @fn     void setRow( unsigned int r, Matrix row )
+  /// @param  r     Row index
+  /// @param  row   Row matrix
+  /// @brief  Set the row of the matrix with the provided data
+  void setRow( unsigned int r, Matrix row );
+
+  /// @fn     void setRow( unsigned int r, vector<double> row )
+  /// @param  r     Row index
+  /// @param  row   Row vector
+  /// @brief  Set the row of the matrix with the provided data
+  void setRow( unsigned int r, std::vector<double> row );
+
+  /// @fn     void setCol( unsigned int c, Matrix column )
+  /// @param  c     Column index
+  /// @param  col   Column matrix
+  /// @brief  Set the column of the matrix with the provided data
+  void setCol( unsigned int c, Matrix col );
+
+  /// @fn     void setCol( unsigned int c, vector<double> column )
+  /// @param  c     Column index
+  /// @param  col   Column vector
+  /// @brief  Set the column of the matrix with the provided data
+  void setCol( unsigned int c, std::vector<double> col );
 
   /// @fn     void set( Matrix input )
   /// @param  input   Input matrix

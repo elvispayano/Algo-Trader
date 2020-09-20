@@ -49,6 +49,72 @@ MATCHER_P( NeqMatrix, other, "Matrix Inequality Matcher" ) {
   return equal;
 }
 
+class MatrixSizeTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng = new RandomNumber();
+    mr  = rng->random();
+    mc  = rng->random();
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  unsigned int mr;
+  unsigned int mc;
+};
+
+TEST_F( MatrixSizeTest, Empty ) {
+  Matrix mat( mr, mc );
+
+  EXPECT_EQ( mr, mat.rows() );
+  EXPECT_EQ( mc, mat.cols() );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      EXPECT_DOUBLE_EQ( 0.0, mat( r, c ) );
+    }
+  }
+}
+
+TEST_F( MatrixSizeTest, Value ) {
+  double randomValue = rng->random();
+  Matrix mat( mr, mc, randomValue );
+
+  EXPECT_EQ( mr, mat.rows() );
+  EXPECT_EQ( mc, mat.cols() );
+
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    for ( unsigned int c = 0; c < mc; ++c ) {
+      EXPECT_DOUBLE_EQ( randomValue, mat( r, c ) );
+    }
+  }
+}
+
+TEST_F( MatrixSizeTest, Vector ) {
+  std::vector<double> vec;
+  for ( unsigned int iter = 0; iter < ( mr * mc ); ++iter ) {
+    vec.push_back( rng->random() );
+  }
+  Matrix mat( mr, mc, vec );
+
+  EXPECT_EQ( mr, mat.rows() );
+  EXPECT_EQ( mc, mat.cols() );
+
+  unsigned int element = 0;
+  for ( unsigned int c = 0; c < mc; ++c ) {
+    for ( unsigned int r = 0; r < mr; ++r ) {
+      EXPECT_DOUBLE_EQ( vec[element++], mat( r, c ) );
+    }
+  }
+}
+
 class MatrixResizeTest : public ::testing::Test {
 protected:
   void SetUp( void ) override {
@@ -79,8 +145,10 @@ TEST_F( MatrixResizeTest, NoValue ) {
   // Evaluation
   EXPECT_EQ( r, mat.rows() );
   EXPECT_EQ( c, mat.cols() );
-  EXPECT_DOUBLE_EQ( 0.0, mat( floor( r / 2 ), floor( c / 2 ) ) );
-  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+
+  unsigned int rEval = rng->random( 0, r - 1 );
+  unsigned int cEval = rng->random( 0, c - 1 );
+  EXPECT_DOUBLE_EQ( 0.0, mat( rEval, cEval ) );
 }
 
 TEST_F( MatrixResizeTest, InitValue ) {
@@ -92,8 +160,10 @@ TEST_F( MatrixResizeTest, InitValue ) {
   // Evaluation
   EXPECT_EQ( r, mat.rows() );
   EXPECT_EQ( c, mat.cols() );
-  EXPECT_DOUBLE_EQ( val, mat( floor( r / 2 ), floor( c / 2 ) ) );
-  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c / 2 ) );
+
+  unsigned int rEval = rng->random( 0, r - 1 );
+  unsigned int cEval = rng->random( 0, c - 1 );
+  EXPECT_DOUBLE_EQ( val, mat( rEval, cEval ) );
 }
 
 TEST_F( MatrixResizeTest, InitVector ) {
@@ -108,9 +178,10 @@ TEST_F( MatrixResizeTest, InitVector ) {
   // Evaluation
   EXPECT_EQ( r, mat.rows() );
   EXPECT_EQ( c, mat.cols() );
-  EXPECT_DOUBLE_EQ( val[floor( r / 2 ) + r * floor( c / 2 )],
-                    mat( floor( r / 2 ), floor( c / 2 ) ) );
-  EXPECT_DOUBLE_EQ( 0.0, mat( r * 2, c * 2 ) );
+
+  unsigned int rEval = rng->random( 0, r - 1 );
+  unsigned int cEval = rng->random( 0, c - 1 );
+  EXPECT_DOUBLE_EQ( val[rEval + r * cEval], mat( rEval, cEval ) );
 }
 
 class MatrixValueTest : public ::testing::Test {
@@ -167,11 +238,13 @@ TEST_F( MatrixValueTest, Randomize ) {
   unsigned int r = mat.rows();
   unsigned int c = mat.cols();
 
-  double       prevValue = mat( floor( r / 2 ), floor( c / 2 ) );
+  unsigned int rEval     = rng->random( 0, r - 1 );
+  unsigned int cEval     = rng->random( 0, c - 1 );
+  double       prevValue = mat( rEval , cEval );
   unsigned int limit     = rng->random( 3, 10 );
   for ( unsigned int iter = 0; iter < limit; ++iter ) {
     mat.randomize();
-    double matrixValue = mat( floor( r / 2 ), floor( c / 2 ) );
+    double matrixValue = mat( rEval, cEval );
     EXPECT_NE( prevValue, matrixValue );
     prevValue = matrixValue;
   }
@@ -390,3 +463,44 @@ TEST_F( MatrixScalarArithmeticTest, DivisionSizing ) {
 // TODO: Assignment Scalar -
 // TODO: Assignment Scalar *
 // TODO: Assignment Scalar /
+
+class MatrixSetTest : public ::testing::Test {
+protected:
+  void SetUp( void ) override {
+    rng            = new RandomNumber();
+    unsigned int r = rng->random();
+    unsigned int c = rng->random();
+
+    A.resize( r, c );
+    A.randomize();
+    ASSERT_TRUE( A.rows() > 0 ) << "A: Non-Zero amount of rows required";
+    ASSERT_TRUE( A.cols() > 0 ) << "A: Non-Zero amount of columns required";
+
+    B.resize( r, c );
+    B.randomize();
+    ASSERT_TRUE( B.rows() > 0 ) << "B: Non-Zero amount of rows required";
+    ASSERT_TRUE( B.cols() > 0 ) << "B: Non-Zero amount of columns required";
+  }
+
+  void TearDown( void ) override {
+    if ( rng ) {
+      delete rng;
+    }
+  }
+
+public:
+  RandomNumber* rng;
+
+  Matrix A;
+  Matrix B;
+};
+
+// TODO: Set Matrix
+// TODO: Set/Get Row (Matrix)
+// TODO: Set/Get Row (Vector)
+// TODO: Set/Get Col (Matrix)
+// TODO: Set/Get Col (Vector)
+
+// TODO: SubMatrix
+
+// TODO: ForEach
