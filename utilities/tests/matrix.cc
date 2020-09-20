@@ -20,8 +20,8 @@
 #include <gmock/gmock.h>
 
 MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
-  matrix in   = static_cast<matrix>( arg );
-  matrix comp = static_cast<matrix>( other );
+  Matrix in   = static_cast<Matrix>( arg );
+  Matrix comp = static_cast<Matrix>( other );
   if ( ( comp.rows() != in.rows() ) || ( comp.cols() != in.cols() ) )
     return false;
 
@@ -35,8 +35,8 @@ MATCHER_P( EqMatrix, other, "Matrix Equality Matcher" ) {
 }
 
 MATCHER_P( NeqMatrix, other, "Matrix Inequality Matcher" ) {
-  matrix in   = static_cast<matrix>( arg );
-  matrix comp = static_cast<matrix>( other );
+  Matrix in   = static_cast<Matrix>( arg );
+  Matrix comp = static_cast<Matrix>( other );
   if ( ( comp.rows() != in.rows() ) || ( comp.cols() != in.cols() ) )
     return true;
 
@@ -66,7 +66,7 @@ protected:
 public:
   RandomNumber* rng;
 
-  matrix mat;
+  Matrix mat;
 
   unsigned int r;
   unsigned int c;
@@ -133,7 +133,7 @@ protected:
 public:
   RandomNumber* rng;
 
-  matrix mat;
+  Matrix mat;
 };
 
 TEST_F( MatrixValueTest, Reset ) {
@@ -179,7 +179,7 @@ TEST_F( MatrixValueTest, Randomize ) {
 
 TEST_F( MatrixValueTest, Transpose ) {
   mat.randomize();
-  matrix temp = mat.transpose();
+  Matrix temp = mat.transpose();
 
   EXPECT_EQ( mat.rows(), temp.cols() );
   EXPECT_EQ( mat.cols(), temp.rows() );
@@ -227,10 +227,10 @@ protected:
 public:
   RandomNumber* rng;
 
-  matrix A;
-  matrix B;
-  matrix C;
-  matrix D;
+  Matrix A;
+  Matrix B;
+  Matrix C;
+  Matrix D;
 };
 
 // Matrix Addition
@@ -304,8 +304,8 @@ protected:
 public:
   RandomNumber* rng;
 
-  matrix A;
-  matrix B;
+  Matrix A;
+  Matrix B;
 
   double j;
   double k;

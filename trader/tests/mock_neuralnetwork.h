@@ -31,15 +31,15 @@ class MockNeuralNetwork : public NeuralNetwork {
 public:
   MockNeuralNetwork( std::string ticker )
       : NeuralNetwork( ticker ) {}
-  MOCK_METHOD1( process, dMatrix( dMatrix ) );
+  MOCK_METHOD1( process, Matrix( Matrix ) );
   MOCK_METHOD0( getTicker, std::string( void ) );
 };
 
 class MockLayerBase : public LayerBase {
 public:
   MockLayerBase( void ) {}
-  MOCK_METHOD1( process, dMatrix( dMatrix ) );
-  MOCK_METHOD2( train, void( double, dMatrix ) );
+  MOCK_METHOD1( process, Matrix( Matrix ) );
+  MOCK_METHOD2( train, void( double, Matrix ) );
   MOCK_METHOD0( getBP, void( void ) );
 };
 

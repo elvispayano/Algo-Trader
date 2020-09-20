@@ -28,8 +28,8 @@ protected:
     int nodes  = (int)rng->random( 1, 5 );
     int inputs = (int)rng->random( 1, 5 );
 
-    dMatrix weight( nodes, inputs, 0.0 );
-    dMatrix bias( nodes, 1, 0.0 );
+    Matrix weight( nodes, inputs, 0.0 );
+    Matrix bias( nodes, 1, 0.0 );
 
     weight.randomize();
     bias.randomize();
@@ -51,10 +51,10 @@ public:
 };
 
 TEST_F( FullyConnectedLayerTest, Processing ) {
-  dMatrix input( fc->getInputCount(), 1, 0.0 );
+  Matrix input( fc->getInputCount(), 1, 0.0 );
   input.randomize();
 
-  dMatrix output = fc->process( input );
+  Matrix output = fc->process( input );
 
   EXPECT_EQ( output.rows(), fc->getNodeCount() );
   EXPECT_EQ( output.cols(), 1 );

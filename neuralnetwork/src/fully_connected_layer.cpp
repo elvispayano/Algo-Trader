@@ -19,12 +19,12 @@
 //!         can be set later using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( void )
     : LayerBase( ActivationTypes::LINEAR ) {
-  weight.clear( 0.0 );
-  bias.clear( 0.0 );
+  weight.reset( 0.0 );
+  bias.reset( 0.0 );
 
-  outputs.clear( 0.0 );
-  intermediate.clear( 0.0 );
-  inputs.clear( 0.0 );
+  outputs.reset( 0.0 );
+  intermediate.reset( 0.0 );
+  inputs.reset( 0.0 );
 }
 
 //! @fn     FullyConnectedLayer( ActivationTypes )
@@ -33,25 +33,25 @@ FullyConnectedLayer::FullyConnectedLayer( void )
 //!         be reset at anytime using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
     : LayerBase( selectTF ) {
-  weight.clear( 0.0 );
-  bias.clear( 0.0 );
+  weight.reset( 0.0 );
+  bias.reset( 0.0 );
 
-  outputs.clear( 0.0 );
-  intermediate.clear( 0.0 );
-  inputs.clear( 0.0 );
+  outputs.reset( 0.0 );
+  intermediate.reset( 0.0 );
+  inputs.reset( 0.0 );
 }
 
 //! @fn     ~FullyConnectedLayer( void )
 //! @brief  Clear any memory allocated in this layer.
 FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 
-//! @fn     dMatrix process( dMatrix input)
+//! @fn     Matrix process( Matrix input)
 //!         Perform the forward propagation functionality through the layer and
 //!         generate an output that can be fed to the preceding layer. Applying
 //!         the following function:
 //!           f(x) =  tf([weight]*[input] + bias)
 //!         where f(x) is a matrix and tf is the configured transfer function.
-dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
+Matrix FullyConnectedLayer::process( Matrix inputs ) {
   this->inputs = inputs;
   intermediate = weight * inputs + bias;
   outputs      = pActivation->performTF( intermediate );
@@ -60,7 +60,7 @@ dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
 
 //! @fn     void reconfigure( size_t nodes,
 //!                           size_t inputs,
-//!                           dMatrix hyperparams )
+//!                           Matrix hyperparams )
 //! @param  nodes       Number of nodes present in layer
 //! @param  inputs      Number of inputs present in layer
 //! @param  hyperparam  Matrix of hyperparameters containing all weight and
@@ -69,7 +69,7 @@ dMatrix FullyConnectedLayer::process( dMatrix inputs ) {
 //!         required configuration of the layer
 void FullyConnectedLayer::reconfigure( size_t  nodes,
                                        size_t  inputs,
-                                       dMatrix hyperparams ) {
+                                       Matrix hyperparams ) {
   LayerBase::reconfigure( nodes, inputs, hyperparams );
 
   weight.resize( nodes, inputs, 0.0 );
@@ -80,7 +80,7 @@ void FullyConnectedLayer::reconfigure( size_t  nodes,
   this->inputs.resize( inputs, 1, 0.0 );
 }
 
-//! @fn     void train( double learnRate, dMatrix gradient)
+//! @fn     void train( double learnRate, Matrix gradient)
 //! @param  learnRate   Measurement of how much to adjust hyperparameters in
 //! response to gradient
 //! @param  gradient    Description of how to modify hyperparameters in response
@@ -89,7 +89,7 @@ void FullyConnectedLayer::reconfigure( size_t  nodes,
 //!         gradient calculated from all preceding layers. Applying the
 //!         following function:
 //!           weight = weight - learnRate * gradient
-void FullyConnectedLayer::train( double learnRate, dMatrix gradient ) {
+void FullyConnectedLayer::train( double learnRate, Matrix gradient ) {
   // Generate FC Layers
   dIntdIn  = inputs;
   dOutdInt = pActivation->performBP( intermediate );

@@ -23,8 +23,8 @@
 
 // Matrix Equality Matcher
 MATCHER_P( EqMatrix, other, "Equality matcher for Matrix" ) {
-  dMatrix in   = static_cast< dMatrix >( arg );
-  dMatrix comp = static_cast< dMatrix >( other );
+  Matrix in   = static_cast< Matrix >( arg );
+  Matrix comp = static_cast< Matrix >( other );
   if ( comp.rows() != in.rows() || comp.cols() != in.cols() )
     return false;
 

@@ -38,24 +38,24 @@ public:
 
   //! @fn     void reconfigure( size_t nodes,
   //!                           size_t inputs,
-  //!                           dMatrix hyperparams )
+  //!                           Matrix hyperparams )
   //! @param  nodes       Number of nodes present in layer
   //! @param  inputs      Number of inputs present in layer
   //! @param  hyperparam  Matrix of hyperparameters containing all weight and
   //!                     bias values
   //! @brief  Update the layer with the provided hyperparameters that define the
   //!         required configuration of the layer
-  void reconfigure( size_t nodes, size_t inputs, dMatrix hyperparams ) override;
+  void reconfigure( size_t nodes, size_t inputs, Matrix hyperparams ) override;
 
-  //! @fn     dMatrix process( dMatrix input)
+  //! @fn     Matrix process( Matrix input)
   //!         Perform the forward propagation functionality through the layer
   //!         and generate an output that can be fed to the preceding layer.
   //!         Applying the following function:
   //!           f(x) =  tf([weight]*[input] + bias)
   //!         where f(x) is a matrix and tf is the configured transfer function.
-  dMatrix process( dMatrix input ) override;
+  Matrix process( Matrix input ) override;
 
-  //! @fn     void train( double learnRate, dMatrix gradient)
+  //! @fn     void train( double learnRate, Matrix gradient)
   //! @param  learnRate   Measurement of how much to adjust hyperparameters in
   //!                     response to gradient
   //! @param  gradient    Description of how to modify hyperparameters in
@@ -64,40 +64,40 @@ public:
   //!         gradient calculated from all preceding layers. Applying the
   //!         following function:
   //!           weight = weight - learnRate * gradient
-  void train( double learnRate, dMatrix gradient ) override;
+  void train( double learnRate, Matrix gradient ) override;
 
-  //! @fn     dMatrix getIntermediateRate( void )
+  //! @fn     Matrix getIntermediateRate( void )
   //! @brief  The derivative of the function applied by the layer in its
   //!         calculation
-  dMatrix getIntermediateRate( void ) { return dIntdIn; }
+  Matrix getIntermediateRate( void ) { return dIntdIn; }
 
-  //! @fn     dMatrix getOutputRate( void )
+  //! @fn     Matrix getOutputRate( void )
   //! @brief  The derivative of the transfer function applied on the output of
   //!         the layer
-  dMatrix getOutputRate( void ) { return dOutdInt; }
+  Matrix getOutputRate( void ) { return dOutdInt; }
 
-  //! @fn     dMatrix getWeight( void )
+  //! @fn     Matrix getWeight( void )
   //! @brief  Return the layers configured weight hyperparameters
-  dMatrix getWeight( void ) { return weight; }
+  Matrix getWeight( void ) { return weight; }
 
-  //! @fn     dMatrix getBias( void )
+  //! @fn     Matrix getBias( void )
   //! @brief  Return the layers configured bias hyperparameters
-  dMatrix getBias( void ) { return bias; }
+  Matrix getBias( void ) { return bias; }
 
 private:
   // Hyperparameters
-  dMatrix weight;
-  dMatrix bias;
+  Matrix weight;
+  Matrix bias;
 
-  dMatrix dIntdIn;
-  dMatrix dOutdInt;
+  Matrix dIntdIn;
+  Matrix dOutdInt;
 
-  dMatrix inputs;
-  dMatrix outputs;
-  dMatrix intermediate;
+  Matrix inputs;
+  Matrix outputs;
+  Matrix intermediate;
 
-  dMatrix updateRate;
-  dMatrix outputRate;
+  Matrix updateRate;
+  Matrix outputRate;
 };
 
 #endif /* FULLY_CONNECTED_LAYER_H */

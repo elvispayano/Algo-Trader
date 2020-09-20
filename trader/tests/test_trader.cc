@@ -127,8 +127,8 @@ TEST_F( TraderTest, HoldAction ) {
       .Times( 1 )
       .WillOnce( ::testing::Return( response ) );
 
-  dMatrix input( 4, 1, 1.0 );
-  dMatrix output( 3, 1, 0.0 );
+  Matrix input( 4, 1, 1.0 );
+  Matrix output( 3, 1, 0.0 );
   output( 1, 0 ) = 1.0;
   EXPECT_CALL( *nn, process( EqMatrix( input ) ) )
       .Times( 1 )
@@ -166,8 +166,8 @@ TEST_F( TraderTest, PurchaseAction ) {
       .Times( 1 )
       .WillOnce( ::testing::Return( response ) );
 
-  dMatrix input( 4, 1, 1.0 );
-  dMatrix output( 3, 1, 0.0 );
+  Matrix input( 4, 1, 1.0 );
+  Matrix output( 3, 1, 0.0 );
   output( 0, 0 ) = 1.0;
   EXPECT_CALL( *nn, process( EqMatrix( input ) ) )
       .Times( 1 )
@@ -211,8 +211,8 @@ TEST_F( TraderTest, SellAction ) {
       .Times( 1 )
       .WillOnce( ::testing::Return( response ) );
 
-  dMatrix input( 4, 1, 1.0 );
-  dMatrix output( 3, 1, 0.0 );
+  Matrix input( 4, 1, 1.0 );
+  Matrix output( 3, 1, 0.0 );
   output( 2, 0 ) = 1.0;
   EXPECT_CALL( *nn, process( EqMatrix( input ) ) )
       .Times( 1 )

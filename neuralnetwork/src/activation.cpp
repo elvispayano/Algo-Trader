@@ -64,18 +64,18 @@ void Activation::setTF( ActivationTypes selector ) {
   }
 }
 
-//! @fn     performTF( dMatrix )
+//! @fn     performTF( Matrix )
 //! @param  input   Matrix used to apply transfer function
 //! @brief  Apply the configured transfer function to the provided matrix.
-dMatrix Activation::performTF( dMatrix input ) {
+Matrix Activation::performTF( Matrix input ) {
   input.forEach( transferFunction );
   return input;
 }
 
-//! @fn     performBP( dMatrix )
+//! @fn     performBP( Matrix )
 //! @param  input   Matrix used to apply backpropagation
 //! @brief  Calculate the transfer function derivative of the provided matrix.
-dMatrix Activation::performBP( dMatrix input ) {
+Matrix Activation::performBP( Matrix input ) {
   input.forEach( backpropFunction );
   return input;
 }

@@ -31,7 +31,7 @@ struct LayerConfiguration {
   LayerTypes      layer;        //! Type of layer to create
   ActivationTypes activation;   //! Activation function to assign within layer
   size_t          nodes;        //! Number of nodes present in layer
-  dMatrix         hyperparams;  //! Layers weight hyperparameters
+  Matrix         hyperparams;  //! Layers weight hyperparameters
 
   LayerConfiguration()
       : layer( LayerTypes::UNKNOWN )

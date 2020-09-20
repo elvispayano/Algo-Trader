@@ -51,7 +51,7 @@ TEST_F( LayerBaseTest, Reconfigure ) {
   int inputs = (int)rng->random( 1, 5 );
 
   unsigned int  totalparams = nodes * inputs + inputs;
-  dMatrix hyperparams(totalparams, 1, 0.0 );
+  Matrix hyperparams(totalparams, 1, 0.0 );
 
   mLayer->reconfigure( nodes, inputs, hyperparams );
 
