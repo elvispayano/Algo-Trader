@@ -14,11 +14,10 @@ option(BUILD_TESTS   "Build Algo-Trader's test programs"   OFF)
 include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
 
 #----------------------------------------------------------------------
-# Settings
+# Project Settings
 #----------------------------------------------------------------------
-project(utilities CXX)
-set(PROJECT_VERSION ${ALGO_TRADER_VERSION})
-cmake_minimum_required(VERSION 3.8)
+project(utilities VERSION ${ALGO_TRADER_VERSION} LANGUAGES CXX C)
+cmake_minimum_required(VERSION ${ALGO_TRADER_MIN_CMAKE})
 
 #----------------------------------------------------------------------
 # Build
@@ -28,6 +27,7 @@ include_directories(${UTILITIES_INCLUDE_DIRS})
 
 set(UTIL_SRC
   "src/delimited_io.cpp"
+  "src/matrix.cpp"
   "src/random_number.cpp"
   "src/stock.cpp"
   "src/utl_math.cpp"
@@ -47,7 +47,7 @@ endif()
 # Testing
 #----------------------------------------------------------------------
 if(BUILD_TESTS)
-  cxx_test(matrix   utilities gtest_main)
+  cxx_test(matrix   utilities gtest_main gmock)
   cxx_test(stock    utilities gtest_main)
   cxx_test(utl_math utilities gtest_main)
 endif()

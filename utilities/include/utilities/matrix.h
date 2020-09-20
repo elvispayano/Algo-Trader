@@ -1,24 +1,218 @@
-/*
-  Title:
-    Matrix
-
-  Description:
-    This matrix template class contains all the functionality
-    for processing matrix data.
-
-  Tests:
-    test_matrix.cc
-
-  Author:
-    Elvis Payano
-*/
+/// Matrix
+///
+/// Functionality for processing matrix data
+///
+/// \author   Elvis Payano
+/// \date     18/09/2020
+/// \version  0.0.1
 
 #ifndef MATRIX_H
 #define MATRIX_H
 
 // Standard Includes
-#include <stdlib.h>
 #include <vector>
+
+class matrix {
+public:
+  /// @fn     Matrix( void )
+  /// @brief  Initialize an empty 0-by-0 matrix
+  matrix( void );
+
+  /// @fn     Matrix( unsigned int r, unsigned int c )
+  /// @param  r   Number of rows in matrix
+  /// @param  c   Number of columns in matrix
+  /// @brief  Initialize an empty r-by-c matrix
+  matrix( unsigned int r, unsigned int c );
+
+  /// @fn     Matrix( unsigned int r, unsigned int c )
+  /// @param  r       Number of rows in matrix
+  /// @param  c       Number of columns in matrix
+  /// @param  initVal Initial value of all elements in matrix
+  /// @brief  Initialize an r-by-c matrix with all elments set to an initial
+  /// value
+  matrix( unsigned int r, unsigned int c, double initVal );
+
+  /// @fn     Matrix( unsigned int r, unsigned int c )
+  /// @param  r       Number of rows in matrix
+  /// @param  c       Number of columns in matrix
+  /// @param  initVec Vector containing all elements in matrix
+  /// @brief  Initialize an r-by-c matrix set with provided elements
+  matrix( unsigned int r, unsigned int c, std::vector<double> initVec );
+
+  /// @fn     ~Matrix( void )
+  /// @brief  Clear memory and reset values
+  ~matrix( void );
+
+  /// @fn     void reset( double initVal )
+  /// @param  initVal   Desired initial value
+  /// @brief  Reset matrix and set every element in matrix to value provided
+  void reset( double initVal );
+
+  /// @fn     void clear( void )
+  /// @brief  Clear the matrix of any data stored
+  void clear( void );
+
+  /// @fn     void randomize( void )
+  /// @brief  Set all elements in matrix to random values
+  void randomize( void );
+
+  /// @fn     void resize( unsigned int r, unsigned int c )
+  /// @param  r   Desired row count in resized matrix
+  /// @param  c   Desired column count in resized matrix
+  /// @brief  Resize the matrix to a new desired size. Removes all data
+  ///         currently in matrix
+  void resize( unsigned int r, unsigned int c );
+
+  /// @fn     void resize( unsigned int r, unsigned int c, double initVal )
+  /// @param  r         Desired row count in resized matrix
+  /// @param  c         Desired column count in resized matrix
+  /// @param  initVal   Initial value to set matrix elements
+  /// @brief  Resize the matrix to a new desired size. Removes all data
+  ///         currently in matrix
+  void resize( unsigned int r, unsigned int c, double initVal );
+
+  /// @fn     void resize( unsigned int r, unsigned int c, vector<double>
+  /// initVal
+  /// )
+  /// @param  r         Desired row count in resized matrix
+  /// @param  c         Desired column count in resized matrix
+  /// @param  initVec   Initial vector of values to set matrix elements
+  /// @brief  Resize the matrix to a new desired size. Removes all data
+  ///         currently in matrix
+  void resize( unsigned int r, unsigned int c, std::vector<double> initMat );
+
+  unsigned int rows( void ) { return mr; }
+  unsigned int cols( void ) { return mc; }
+
+  matrix subMatrix( unsigned int r, unsigned int c );
+
+  /// @fn     matrix getRow( unsigned int r )
+  /// @param  r   Row index
+  /// @brief  Get a single row from within the matrix
+  matrix getRow( unsigned int r );
+
+  /// @fn     matrix getCol( unsigned int c )
+  /// @param  c   Column index
+  /// @brief  Get a single column from within the matrix
+  matrix getCol( unsigned int c );
+  void   setRow( unsigned int r, matrix row );
+  void   setRow( unsigned int r, std::vector<double> row );
+  void   setCol( unsigned int c, matrix col );
+  void   setCol( unsigned int c, std::vector<double> col );
+
+  /// @fn     void set( matrix input )
+  /// @param  input   Input matrix
+  /// @brief  Set current matrix as copy of provided matrix
+  void set( matrix input );
+
+  /// @fn     matrix transpose( void )
+  /// @brief  Generate a transpose of the current matrix
+  matrix transpose();
+
+  /// @fn     double& operator()( unsigned int r, unsigned int c )
+  /// @param  r   Matrix row index
+  /// @param  c   Matrix column index
+  /// @brief  Matrix element selection using a 0 based index
+  double& operator()( unsigned int r, unsigned int c );
+
+  /// @fn     operator=( matrix mat )
+  /// @param  mat   RHS matrix input
+  /// @brief  Set the matrix as the equivalent of the input matrix if they are
+  ///         equivalent in structure
+  void operator=( matrix mat );
+
+  /// @fn     operator=( vector<double> vec )
+  /// @param  vec   Vector input to be formatted
+  /// @brief  Convert the input vector into a matrix format with the current
+  ///         matrix's structure
+  void operator=( std::vector<double> mat );
+
+  /// @fn     matrix operator+( matrix rh )
+  /// @param  rh  Right-hand matrix element
+  /// @brief  Sum of two matrices
+  matrix operator+( matrix rh );
+
+  /// @fn     matrix operator-( matrix rh )
+  /// @param  rh  Right-hand matrix element
+  /// @brief  Difference of two matrices
+  matrix operator-( matrix rh );
+
+  /// @fn     matrix operator*( matrix rh )
+  /// @param  rh  Right-hand matrix element
+  /// @brief  Product of two matrices
+  matrix operator*( matrix rh );
+
+  /// @fn     matrix operator/( matrix rh )
+  /// @param  rh  Right-hand matrix element
+  /// @brief  Quotient of two matrices
+  matrix operator/( matrix rh );
+
+  /// @fn     matrix operator+( double rh )
+  /// @param  rh  Right-hand scalar element
+  /// @brief  Sum of a matrix and scalar value
+  matrix operator+( double rh );
+
+  /// @fn     matrix operator-( double rh )
+  /// @param  rh  Right-hand scalar element
+  /// @brief  Matrix subtraction with a scalar value
+  matrix operator-( double rh );
+
+  /// @fn     matrix operator*( double rh )
+  /// @param  rh  Right-hand scalar element
+  /// @brief  Product of a matrix and scalar value
+  matrix operator*( double rh );
+
+  /// @fn     matrix operator/( double rh )
+  /// @param  rh  Right-hand scalar element
+  /// @brief  Quotient of a matrix and scalar value
+  matrix operator/( double rh );
+
+  void operator+=( matrix rh );
+  void operator-=( matrix rh );
+  void operator*=( matrix rh );
+  void operator/=( matrix rh );
+
+  void operator+=( double rh );
+  void operator-=( double rh );
+  void operator*=( double rh );
+  void operator/=( double rh );
+
+private:
+  unsigned int mr;
+  unsigned int mc;
+
+  double junk = 0;
+
+  std::vector<double> mat;
+};
+
+/// @fn     operator+( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Sum of a matrix and a scalar where the scalar is the left hand
+///         variable
+matrix operator+( double lh, matrix rh );
+
+/// @fn     operator-( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Difference of a matrix and a scalar where the scalar is the left
+///         hand variable
+matrix operator-( double lh, matrix rh );
+
+/// @fn     operator*( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Product of a matrix and a scalar where the scalar is the left
+///         hand variable
+matrix operator*( double lh, matrix rh );
+
+/// @fn     operator/( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Quotient of a matrix and a scalar where the scalar is the left
+///         hand variable
+matrix operator/( double lh, matrix rh );
 
 template<typename T> class Matrix {
 public:
@@ -569,13 +763,11 @@ template<typename T> void Matrix<T>::operator/=( T scalar ) {
 template<typename T> void Matrix<T>::randomize( void ) {
   for ( size_t r = 0; r < mr; ++r ) {
     for ( size_t c = 0; c < mc; ++c ) {
-      this->operator()( r, c ) = rand();
+      //this->operator()( r, c ) = rand();
     }
   }
 }
 
 typedef Matrix<double> dMatrix;
-typedef Matrix<int>    iMatrix;
-typedef Matrix<float>  fMatrix;
 
 #endif  // MATRIX_H

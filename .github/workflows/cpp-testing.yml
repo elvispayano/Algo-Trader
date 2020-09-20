@@ -23,6 +23,6 @@ jobs:
     # Run CMake
     - name: Build Linux
       run: |
-        cmake .
+        cmake -DBUILD_TESTS=ON .
         make -j $(nproc)
-        ctest . -V
+        ctest .
