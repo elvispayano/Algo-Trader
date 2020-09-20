@@ -126,7 +126,7 @@ matrix matrix::subMatrix( unsigned int r, unsigned int c ) {
 /// @brief  Get a single row from within the matrix
 matrix matrix::getRow( unsigned int r ) {
   matrix row( mr, 1 );
-  for ( unsigned int c = 0; c < mc;  ++c ) {
+  for ( unsigned int c = 0; c < mc; ++c ) {
     row( 0, c ) = this->operator()( r, c );
   }
   return row;
@@ -137,8 +137,8 @@ matrix matrix::getRow( unsigned int r ) {
 /// @brief  Get a single column from within the matrix
 matrix matrix::getCol( unsigned int c ) {
   matrix column( 1, mc );
-  for (unsigned int r = 0; r < mr; ++r) {
-    column( r, 0 ) = this->operator()(r, c);
+  for ( unsigned int r = 0; r < mr; ++r ) {
+    column( r, 0 ) = this->operator()( r, c );
   }
   return column;
 }
@@ -217,7 +217,7 @@ void matrix::operator=( std::vector<double> vec ) {
 
 /// @fn     matrix operator+( matrix rh )
 /// @param  rh  Right-hand matrix element
-/// @brief  Matrix addition of two matrices
+/// @brief  Sum of two matrices
 matrix matrix::operator+( matrix rh ) {
   matrix output( mr, mc );
   if ( mr != rh.rows() || mc != rh.cols() ) {
@@ -234,7 +234,7 @@ matrix matrix::operator+( matrix rh ) {
 
 /// @fn     matrix operator-( matrix rh )
 /// @param  rh  Right-hand matrix element
-/// @brief  Matrix subtraction of two matrices
+/// @brief  Difference of two matrices
 matrix matrix::operator-( matrix rh ) {
   matrix output( mr, mc );
   if ( mr != rh.rows() || mc != rh.cols() ) {
@@ -248,6 +248,10 @@ matrix matrix::operator-( matrix rh ) {
   }
   return output;
 }
+
+/// @fn     matrix operator*( matrix rh )
+/// @param  rh  Right-hand matrix element
+/// @brief  Product of two matrices
 matrix matrix::operator*( matrix rh ) {
   matrix output( mr, rh.cols() );
   if ( mc != rh.rows() )
@@ -264,13 +268,17 @@ matrix matrix::operator*( matrix rh ) {
   }
   return output;
 }
+
+/// @fn     matrix operator/( matrix rh )
+/// @param  rh  Right-hand matrix element
+/// @brief  Quotient of two matrices
 matrix matrix::operator/( matrix rh ) {
   return *this;
 }
 
 /// @fn     matrix operator+( double rh )
 /// @param  rh  Right-hand scalar element
-/// @brief  Matrix addition with a scalar value
+/// @brief  Sum of a matrix and scalar value
 matrix matrix::operator+( double rh ) {
   matrix output( mr, mc );
 
@@ -284,7 +292,7 @@ matrix matrix::operator+( double rh ) {
 
 /// @fn     matrix operator-( double rh )
 /// @param  rh  Right-hand scalar element
-/// @brief  Matrix subtraction with a scalar value
+/// @brief  Difference of a matrix and scalar value
 matrix matrix::operator-( double rh ) {
   matrix output( mr, mc );
 
@@ -298,7 +306,7 @@ matrix matrix::operator-( double rh ) {
 
 /// @fn     matrix operator*( double rh )
 /// @param  rh  Right-hand scalar element
-/// @brief  Matrix multiplication with a scalar value
+/// @brief  Product of a matrix and scalar value
 matrix matrix::operator*( double rh ) {
   matrix output( mr, mc );
 
@@ -312,7 +320,7 @@ matrix matrix::operator*( double rh ) {
 
 /// @fn     matrix operator/( double rh )
 /// @param  rh  Right-hand scalar element
-/// @brief  Matrix division with a scalar value
+/// @brief  Quotient of a matrix and scalar value
 matrix matrix::operator/( double rh ) {
   matrix output( mr, mc );
 
@@ -333,45 +341,38 @@ void matrix::operator-=( double rh ) {}
 void matrix::operator*=( double rh ) {}
 void matrix::operator/=( double rh ) {}
 
+/// @fn     operator+( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Sum of a matrix and a scalar where the scalar is the left hand
+///         variable
 matrix operator+( double lh, matrix rh ) {
-  unsigned int mr = rh.rows();
-  unsigned int mc = rh.cols();
-  matrix       output( mr, mc );
-
-  for ( unsigned int r = 0; r < mr; ++r ) {
-    for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = lh + rh( r, c );
-    }
-  }
-  return output;
+  return rh + lh;
 }
 
+/// @fn     operator-( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Difference of a matrix and a scalar where the scalar is the left
+///         hand variable
 matrix operator-( double lh, matrix rh ) {
-  unsigned int mr = rh.rows();
-  unsigned int mc = rh.cols();
-  matrix       output( mr, mc );
-
-  for ( unsigned int r = 0; r < mr; ++r ) {
-    for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = lh - rh( r, c );
-    }
-  }
-  return output;
+  return -1 * ( rh - lh );
 }
 
+/// @fn     operator*( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Product of a matrix and a scalar where the scalar is the left
+///         hand variable
 matrix operator*( double lh, matrix rh ) {
-  unsigned int mr = rh.rows();
-  unsigned int mc = rh.cols();
-  matrix       output( mr, mc );
-
-  for ( unsigned int r = 0; r < mr; ++r ) {
-    for ( unsigned int c = 0; c < mc; ++c ) {
-      output( r, c ) = lh * rh( r, c );
-    }
-  }
-  return output;
+  return rh * lh;
 }
 
+/// @fn     operator/( double lh, matrix rh )
+/// @param  lh  Left hand variable of operator
+/// @param  rh  Right hand variable of operator
+/// @brief  Quotient of a matrix and a scalar where the scalar is the left
+///         hand variable
 matrix operator/( double lh, matrix rh ) {
   unsigned int mr = rh.rows();
   unsigned int mc = rh.cols();
