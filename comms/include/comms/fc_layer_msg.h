@@ -1,3 +1,14 @@
+/// Fully Connected Layer Message
+///
+/// Message architecture for transfer packetized fully connected layer
+/// configuration
+///
+/// \author   Elvis Payano
+/// \date     02/10/2020
+/// \version  0.0.1
+
+#ifndef FC_LAYER_MSG_H
+#define FC_LAYER_MSG_H
 
 #include "layer_msg.h"
 #include "utilities/network_types.h"
@@ -50,3 +61,5 @@ private:
   void write( LayerMsg& msg );
   void read( LayerMsg& msg );
 };
+
+#endif /* FC_LAYER_MSG_H */

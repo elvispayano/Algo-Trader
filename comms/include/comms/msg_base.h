@@ -1,3 +1,16 @@
+/// Mesage Base
+///
+/// Base architecture to transfer packetized serialized data between multiple
+/// systems
+///
+/// \author   Elvis Payano
+/// \date     02/10/2020
+/// \version  0.0.1
+
+#ifndef MSG_BASE_H
+#define MSG_BASE_H
+
+// Standard Includes
 #include <string>
 
 static const unsigned int MAX_MSG_SIZE = 50;
@@ -11,13 +24,17 @@ public:
 
 class MsgBase {
 public:
+  /// @fn     MsgBase( void )
+  /// @brief  Initialize an empty message packet
   MsgBase( void );
+
+  /// @fn     ~MsgBase( void )
+  /// @brief  Clear and reset packet memory
   ~MsgBase( void ) {}
 
   typedef unsigned char uchar;
   typedef unsigned int  uint;
 
-  // Boolean Access
   template<uint BYTE, uint BIT>
   void read( Map<bool, BYTE, BIT, 0U> map, bool& out, MsgBase& msg ) {
     uchar outBuffer = '\0';
@@ -104,7 +121,8 @@ public:
     }
   }
 
-  // Default Access
+  /// @fn     void read( Map map, T& out, MsgBase& msg)
+  /// @brief  Deserialize the data from the message buffer
   template<typename T, uint BYTE, uint BIT>
   void read( Map<T, BYTE, BIT, 0> map, T& out, MsgBase& msg ) {
     uchar outBuffer = '\0';
@@ -112,6 +130,8 @@ public:
     out = static_cast<T>( outBuffer );
   }
 
+  /// @fn     void write( Map map, T& in, MsgBase& msg)
+  /// @brief  Serialize the current message and populate the message buffer
   template<typename T, uint BYTE, uint BIT>
   void write( Map<T, BYTE, BIT, 0> map, T& in, MsgBase& msg ) {
     uchar inBuffer = static_cast<uchar>( in );
@@ -121,3 +141,5 @@ public:
   uchar buffer[MAX_MSG_SIZE];
   uint  msgSize;
 };
+
+#endif /* MSG_BASE_H */
