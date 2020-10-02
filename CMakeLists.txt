@@ -11,6 +11,7 @@ project(algorithmic-trader VERSION ${ALGO_TRADER_VERSION} LANGUAGES CXX C)
 enable_testing()
 include(cmake/gtest.cmake)
 
+add_subdirectory(comms)
 add_subdirectory(gui)
 add_subdirectory(interfaces)
 add_subdirectory(neuralnetwork)
