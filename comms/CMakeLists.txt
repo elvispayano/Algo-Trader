@@ -26,13 +26,15 @@ set(COMMS_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE
 include_directories(${COMMS_INCLUDE_DIRS})
 
 set(COMMS_SRC
+  "src/fc_layer_msg.cpp"
   "src/layer_msg.cpp"
+  "src/msg_base.cpp"
 )
 
 add_library(comms ${COMMS_SRC})
 target_include_directories(comms SYSTEM INTERFACE "$<BUILD_INTERFACE:${COMMS_INCLUDE_DIRS}>")
 
-#target_link_libraries(comms PRIVATE utilities)
+target_link_libraries(comms PRIVATE utilities)
 
 #----------------------------------------------------------------------
 # Samples
@@ -45,5 +47,5 @@ endif()
 # Testing
 #----------------------------------------------------------------------
 if(BUILD_TESTS)
-  cxx_test(layer_msg comms utilities gtest_main) 
+  cxx_test(fc_layer_msg comms utilities gtest_main) 
 endif()
