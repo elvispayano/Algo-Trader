@@ -29,6 +29,7 @@ set(NN_SRC
   "src/activation.cpp"
   "src/fully_connected_layer.cpp"
   "src/layer_base.cpp"
+  "src/network_controller.cpp"
   "src/neural_network.cpp"
 )
 
@@ -37,6 +38,7 @@ target_include_directories(neuralnetwork SYSTEM INTERFACE "$<BUILD_INTERFACE:${N
 
 # Link Libraries
 target_link_libraries(neuralnetwork PRIVATE utilities)
+target_link_libraries(neuralnetwork PRIVATE comms)
 
 #----------------------------------------------------------------------
 # Samples
