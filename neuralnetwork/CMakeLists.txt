@@ -38,6 +38,7 @@ target_include_directories(neuralnetwork SYSTEM INTERFACE "$<BUILD_INTERFACE:${N
 
 # Link Libraries
 target_link_libraries(neuralnetwork PRIVATE utilities)
+target_link_libraries(neuralnetwork PRIVATE comms)
 
 #----------------------------------------------------------------------
 # Samples

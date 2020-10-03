@@ -13,6 +13,7 @@
 
 NetworkController::NetworkController( void ) {
   networkList.clear();
+  LayerInputMsg = 0;
 }
 
 NetworkController::~NetworkController( void ) {
@@ -22,4 +23,31 @@ NetworkController::~NetworkController( void ) {
   networkList.clear();
 }
 
-void NetworkController::perform( void ) {}
+void NetworkController::perform( void ) {
+  processInputs();
+
+  update();
+
+  processOutputs();
+}
+
+void NetworkController::processInputs( void ) {
+  LayerInputMsg;
+
+  LayerID ID = LayerInputMsg->getID();
+  switch ( ID ) {
+  case LayerID::FULLYCONNECTED:
+
+    break;
+
+  case LayerID::UNKNOWN:
+    break;
+
+    // default:
+    // No message to process
+  }
+}
+
+void NetworkController::update( void ) {}
+
+void NetworkController::processOutputs( void ) {}

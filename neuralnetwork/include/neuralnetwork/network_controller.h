@@ -13,6 +13,9 @@
 // Neural Network Includes
 #include "neural_network.h"
 
+// Comms Includes
+#include "comms/layer_msg.h"
+
 // Standard Includes
 #include <vector>
 
@@ -27,7 +30,13 @@ public:
   void perform( void );
 
 private:
+  void processInputs( void );
+  void update( void );
+  void processOutputs( void );
+
   std::vector<NeuralNetwork*> networkList;
+
+  LayerMsg* LayerInputMsg;
 };
 
 #endif /* NETWORK_CONTROLLER_H */
