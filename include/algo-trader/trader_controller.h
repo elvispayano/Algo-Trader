@@ -11,6 +11,8 @@
 #define TRADER_CONTROLLER_H
 
 // Forward Declarations
+class BrokerController;
+class DatabaseController;
 class NetworkController;
 
 class TraderController {
@@ -23,7 +25,9 @@ public:
 private:
   void initialize( void );
 
-  NetworkController* pNetwork;
+  BrokerController*   pBroker;
+  DatabaseController* pDatabase;
+  NetworkController*  pNetwork;
 };
 
 #endif /* TRADER_CONTROLLER_H */

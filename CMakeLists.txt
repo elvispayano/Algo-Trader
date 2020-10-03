@@ -47,6 +47,7 @@ add_executable(algorithmic-trader ${ALGO_TRADER_SRC})
 target_include_directories(algorithmic-trader SYSTEM INTERFACE "$<BUILD_INTERFACE:${ALGO_TRADER_INCLUDE_DIRS}>")
 
 target_link_libraries(algorithmic-trader PRIVATE comms)
+target_link_libraries(algorithmic-trader PRIVATE interfaces)
 target_link_libraries(algorithmic-trader PRIVATE neuralnetwork)
 target_link_libraries(algorithmic-trader PRIVATE utilities)
 
