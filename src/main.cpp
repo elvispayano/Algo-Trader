@@ -1,14 +1,18 @@
 #include <csignal>
 #include <iostream>
+#ifdef _WIN32
 #include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 #include "algo-trader/trader_controller.h"
 
-bool logic;
+bool             logic;
 TraderController trader;
 
 void killswitch( int signum ) {
-  printf( "Terminating Session\n");
+  printf( "Terminating Session\n" );
   logic = false;
 }
 
@@ -18,7 +22,11 @@ int main() {
   logic = true;
   while ( logic ) {
     trader.perform();
+#ifdef _WIN32
     Sleep( 1000 );
+#else
+    sleep( 1000 );
+#endif
   }
 
   return 0;
