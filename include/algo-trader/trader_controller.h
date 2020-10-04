@@ -25,9 +25,9 @@ public:
 private:
   void initialize( void );
 
-  BrokerController*   pBroker;
-  DatabaseController* pDatabase;
-  NetworkController*  pNetwork;
+  BrokerController*   pBrokerCntrl;
+  DatabaseController* pDatabaseCntrl;
+  NetworkController*  pNetworkCntrl;
 };
 
 #endif /* TRADER_CONTROLLER_H */

@@ -15,8 +15,8 @@
 */
 
 // Interface Includes
-#include "interfaces/interactive_broker.h"
-#include "interfaces/ib_wrapper.h"
+#include "interactive_broker.h"
+#include "ib_wrapper.h"
 
 // Standard Includes
 #include <chrono>
@@ -61,33 +61,23 @@ InteractiveBroker::~InteractiveBroker( void ) {
     configured parameters
 */
 bool InteractiveBroker::connect( void ) {
-  bool   connected = false;
-  size_t counter   = 0;
-
-  while ( !isConnected && !connected && counter < 3 ) {
-    ++counter;
-    connected = ib->connect();
-  }
-
-  isConnected = connected;
+  if ( !isConnected )
+    isConnected = ib->connect();
   return isConnected;
 }
 
-/*
-  Function:     connectionManager
-  Inputs:       None (void)
-
-  Description:
-    Start the broker connecion manager. Once started, keep the connection
-    established until signaled to terminate. Running connection on a separate
-    thread to allow for continuous updates
-*/
+/// @fn     void connectionManager
+/// @brief  Establish a new connection to the broker interface if one does not
+///         exist. If a connnection does exist, do no establish a new one. Runs
+///         continously to ensure a valid connection is always available.
 void InteractiveBroker::connectionManager( void ) {
-  if ( !connect() )
-    throw std::runtime_error(
-        "Connection Error: Unable to connect to Interactive Broker API" );
+  connect();
+}
 
-  tProcess = new std::thread( std::bind( &InteractiveBroker::process, this ) );
+/// @fn     void requestUpdate( void )
+/// @brief  Request a ticker update
+void InteractiveBroker::requestUpdate(void) {
+  ib->getCurrentPrice( "MSFT" );
 }
 
 /*
@@ -114,7 +104,14 @@ void InteractiveBroker::terminateConnection( void ) {
   }
 }
 
-/*
+/// @fn     void perform( void )
+/// @brief  Process request and response messages from Interactive Broker API
+void InteractiveBroker::perform(void) {
+  sendRequest();
+
+  recvResponse();
+}
+    /*
   Function:     process
   Inputs:       None (void)
 
@@ -130,7 +127,7 @@ void InteractiveBroker::process( void ) {
   // Process Loop
   while ( !disconnectTrigger ) {
     // Update Timer
-    std::chrono::duration< double > timeElapsed =
+    std::chrono::duration<double> timeElapsed =
         std::chrono::system_clock::now() - timePrev;
 
     // No processing at higher than allowed rate (100Hz)

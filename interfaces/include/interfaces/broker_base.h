@@ -30,8 +30,7 @@ public:
   ~BrokerBase( void ){};  // Destructor
 
   // Connection management
-  virtual void connectionManager( void )   = 0;
-  virtual void terminateConnection( void ) = 0;
+  virtual void connectionManager( void ) = 0;
 
   // Request Interface
   virtual void addToQueue( OrderConfig message ) = 0;
@@ -39,6 +38,21 @@ public:
   // Response Interface
   virtual bool  responseReady( std::string ) = 0;
   virtual Stock getResponse( std::string )   = 0;
+
+  virtual void perform( void ) = 0;
+
+
+  // New Interface
+  virtual void requestUpdate( void ) {}
+  virtual void requestMarketPurchase( void ) {}
+  virtual void requestMarketSell( void ) {}
+  virtual void requestLimitPurchase(void) {}
+  virtual void requestLimitSell(void) {}
+  virtual void requestStopPurchase( void ) {}
+  virtual void requestStopSell( void ) {}
+
+private:
+  virtual void terminateConnection( void ) = 0;
 };
 
 #endif /* BROKER_BASE_H */

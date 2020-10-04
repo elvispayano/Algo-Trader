@@ -53,7 +53,6 @@ public:
   // Request Interface
   void addToQueue( OrderConfig message ) override;
 
-private:
   // Connection Management
   bool connect( void );
 
@@ -61,6 +60,11 @@ private:
   void sendRequest( void );
   void recvResponse( void );
   void process( void );
+
+  void perform( void );
+  void requestUpdate( void );
+
+private:
 
   IBWrapper* ib;
   bool       isConnected;
