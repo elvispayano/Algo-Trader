@@ -25,13 +25,9 @@
 #include <chrono>
 #include <functional>
 
-/*
-  Constructor:  InteractiveBroker
-  Inputs:       wrapper (IBWrapper*), host (string), port (int), clientID (int)
-
-  Description:
-    Setup configuration for Interactive Broker connection
-*/
+/// @fn     InteractiveBroker( IBWrapper* wrapper )
+/// @param  wrapper   Interactive Broker API wrapper
+/// @brief  Setup configuration for the Interactive Broker connection
 InteractiveBroker::InteractiveBroker( IBWrapper* wrapper )
     : ib( wrapper ) {
   disconnectTrigger = false;
@@ -59,15 +55,9 @@ bool InteractiveBroker::isConnected( void ) {
   return ib->isConnected();
 }
 
-/*
-  Function:     connect
-  Inputs:       None (void)
-  Outputs:      connectionEstablished (bool)
-
-  Description:
-    Attempt to establish a connection to an Interactive Broker API using the
-    configured parameters
-*/
+/// @fn     void connect( void )
+/// @brief  Attempt to establish a connection to an Interactive Broker API using
+///         the configured parameters
 void InteractiveBroker::connect( void ) {
   if ( !isConnected() )
     ib->connect();
@@ -98,6 +88,13 @@ void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg* msg ) {
   ib->getCurrentPrice( ticker );
 }
 
+/// @fn     void perform( void )
+/// @brief  Process request and response messages from Interactive Broker API
+void InteractiveBroker::perform( void ) {
+  if ( !isConnected() )
+    return;
+}
+
 /*
   Function:     terminateConnection
   Inputs:       None (void)
@@ -121,16 +118,6 @@ void InteractiveBroker::terminateConnection( void ) {
   }
 }
 
-/// @fn     void perform( void )
-/// @brief  Process request and response messages from Interactive Broker API
-void InteractiveBroker::perform( void ) {
-  if ( !isConnected() )
-    return;
-
-  sendRequest();
-
-  recvResponse();
-}
 /*
 Function:     process
 Inputs:       None (void)

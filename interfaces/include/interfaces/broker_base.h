@@ -42,12 +42,22 @@ public:
   virtual bool  responseReady( std::string ) = 0;
   virtual Stock getResponse( std::string )   = 0;
 
+  /// @fn     void perform( void )
+  /// @brief  Perform the process required with the broker API
   virtual void perform( void ) = 0;
 
-  // New Interface
+  /// @fn     bool isConnected( void )
+  /// @brief  Check if a valid broker connection is established
   virtual bool isConnected( void )                          = 0;
+
+  /// @fn     void connect( void )
+  /// @brief  Create a new connection if one is not established
   virtual void connect( void )                              = 0;
+
+  /// @fn     void requestUpdate( BrokerRequestUpdateMsg* msg )
+  /// @brief  Request a ticker update from the broker
   virtual void requestUpdate( BrokerRequestUpdateMsg* msg ) = 0;
+
   virtual void requestMarketPurchase( void ) {}
   virtual void requestMarketSell( void ) {}
   virtual void requestLimitPurchase( void ) {}
