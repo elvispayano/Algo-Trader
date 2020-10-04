@@ -19,17 +19,17 @@ public:
   BrokerRequestUpdateMsg( void );
   ~BrokerRequestUpdateMsg( void ) {}
 
-  /// @fn     bool encode( BrokerRequestMsg& msg )
+  /// @fn     bool encode( BrokerRequestMsg* msg )
   /// @param  msg   Output message buffer
   /// @brief  Serialize the current message and write to the provided message
   ///         buffer
-  bool encode( BrokerRequestMsg& msg ) override;
+  bool encode( BrokerRequestMsg* msg ) override;
 
-  /// @fn     bool decode( BrokerRequestMsg& msg )
+  /// @fn     bool decode( BrokerRequestMsg* msg )
   /// @param  msg   Input message buffer
   /// @brief  Deserialize the provided message buffer and populate the current
   ///         message with the corresponding data
-  bool decode( BrokerRequestMsg& msg ) override;
+  bool decode( BrokerRequestMsg* msg ) override;
 
   struct {
     char s1;
@@ -50,13 +50,13 @@ private:
     Map<char, 5, 0, 0> s6;
   } x;
 
-  /// @fn     void write( BrokerRequestMsg& msg )
+  /// @fn     void write( BrokerRequestMsg* msg )
   /// @brief  Serialize data and write to the buffer
-  void write( BrokerRequestMsg& msg );
+  void write( BrokerRequestMsg* msg );
 
-  /// @fn     void read( BrokerRequestMsg& msg )
+  /// @fn     void read( BrokerRequestMsg* msg )
   /// @brief  Deserialize data and read from buffer
-  void read( BrokerRequestMsg& msg );
+  void read( BrokerRequestMsg* msg );
 };
 
 #endif /* BROKER_REQUEST_UPDATE_H */

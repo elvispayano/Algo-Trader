@@ -18,6 +18,9 @@
 #include "interactive_broker.h"
 #include "ib_wrapper.h"
 
+// Comms Includes
+#include "comms/broker_request_update_msg.h"
+
 // Standard Includes
 #include <chrono>
 #include <functional>
@@ -82,14 +85,14 @@ void InteractiveBroker::connectionManager( void ) {
 /// @fn     void requestUpdate(  BrokerRequestMsg& msg )
 /// @param  msg   Input Message
 /// @brief  Request a ticker update
-void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg& msg ) {
+void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg* msg ) {
   std::string ticker;
-  ticker.push_back( msg.s1 );
-  ticker.push_back( msg.s2 );
-  ticker.push_back( msg.s3 );
-  ticker.push_back( msg.s4 );
-  ticker.push_back( msg.s5 );
-  ticker.push_back( msg.s6 );
+  ticker.push_back( msg->s1 );
+  ticker.push_back( msg->s2 );
+  ticker.push_back( msg->s3 );
+  ticker.push_back( msg->s4 );
+  ticker.push_back( msg->s5 );
+  ticker.push_back( msg->s6 );
   ticker.erase( remove( ticker.begin(), ticker.end(), '\0' ), ticker.end() );
 
   ib->getCurrentPrice( ticker );

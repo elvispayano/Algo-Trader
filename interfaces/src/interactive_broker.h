@@ -64,7 +64,7 @@ public:
   bool isConnected( void );
 
   void perform( void );
-  void requestUpdate( BrokerRequestUpdateMsg& msg );
+  void requestUpdate( BrokerRequestUpdateMsg* msg );
 
 private:
 

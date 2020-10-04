@@ -1,4 +1,10 @@
 
+// Comms Includes
+#include "comms/broker_request_msg.h"
+#include "comms/broker_request_update_msg.h"
+#include "comms/broker_response_msg.h"
+#include "comms/broker_response_update_msg.h"
+
 // Interface Includes
 #include "interfaces/broker_controller.h"
 #include "ib_wrapper.h"
@@ -30,12 +36,12 @@ void BrokerController::processInputs( void ) {
   if ( !pBroker->isConnected() )
     return;
 
-  RequestID reqID = brokerMsg.getID();
+  RequestID reqID = bReqMsg->getID();
 
   switch ( reqID ) {
   case RequestID::UPDATE:
-    if (brokerUpdateMsg.decode(brokerMsg)) {
-      pBroker->requestUpdate( brokerUpdateMsg );
+    if ( bReqUpdateMsg->decode( bReqMsg ) ) {
+      pBroker->requestUpdate( bReqUpdateMsg );
     }
     break;
 

@@ -27,6 +27,7 @@ include_directories(${COMMS_INCLUDE_DIRS})
 
 set(COMMS_SRC
   "src/broker_request_update_msg.cpp"
+  "src/broker_response_update_msg.cpp"
   "src/fc_layer_msg.cpp"
 )
 

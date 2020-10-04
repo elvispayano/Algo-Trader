@@ -1,11 +1,12 @@
 #ifndef BROKER_CONTROLLER_H
 #define BROKER_CONTROLLER_H
 
-// Comms Includes
-#include "comms/broker_request_msg.h"
-#include "comms/broker_request_update_msg.h"
-
+// Forward Declarationi
 class BrokerBase;
+class BrokerRequestMsg;
+class BrokerRequestUpdateMsg;
+class BrokerResponseMsg;
+class BrokerResponseUpdateMsg;
 
 class BrokerController {
 public:
@@ -22,8 +23,11 @@ private:
 
   BrokerBase* pBroker;
 
-  BrokerRequestMsg       brokerMsg;
-  BrokerRequestUpdateMsg brokerUpdateMsg;
+  BrokerRequestMsg*       bReqMsg;
+  BrokerRequestUpdateMsg* bReqUpdateMsg;
+
+  BrokerResponseMsg*       bResMsg;
+  BrokerResponseUpdateMsg* bResUpdateMsg;
 };
 
 #endif /* BROKER_CONTROLLER_H */

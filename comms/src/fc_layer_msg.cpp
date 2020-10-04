@@ -27,7 +27,7 @@ FCLayer::FCLayer( void ) {
 
 FCLayer::~FCLayer( void ) {}
 
-void FCLayer::write( LayerMsg& msg ) {
+void FCLayer::write( LayerMsg* msg ) {
   MsgBase::write( x.activation, activation, msg );
   MsgBase::write( x.row, row, msg );
   MsgBase::write( x.rowMax, rowMax, msg );
@@ -45,7 +45,7 @@ void FCLayer::write( LayerMsg& msg ) {
   MsgBase::write( x.bias4, bias4, msg );
 }
 
-void FCLayer::read( LayerMsg& msg ) {
+void FCLayer::read( LayerMsg* msg ) {
   MsgBase::read( x.activation, activation, msg );
   MsgBase::read( x.row, row, msg );
   MsgBase::read( x.rowMax, rowMax, msg );
@@ -63,16 +63,16 @@ void FCLayer::read( LayerMsg& msg ) {
   MsgBase::read( x.bias4, bias4, msg );
 }
 
-bool FCLayer::encode( LayerMsg& msg ) {
-  if ( msg.msgSize > MAX_MSG_SIZE ) {
+bool FCLayer::encode( LayerMsg* msg ) {
+  if ( msg->msgSize > MAX_MSG_SIZE ) {
     return false;
   }
   write( msg );
   return true;
 }
 
-bool FCLayer::decode( LayerMsg& msg ) {
-  if ( msg.msgSize > MAX_MSG_SIZE ) {
+bool FCLayer::decode( LayerMsg* msg ) {
+  if ( msg->msgSize > MAX_MSG_SIZE ) {
     return false;
   }
 

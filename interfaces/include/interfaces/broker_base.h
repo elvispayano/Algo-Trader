@@ -17,15 +17,15 @@
 #ifndef BROKER_BASE_H
 #define BROKER_BASE_H
 
-// Comms Includes
-#include "comms/broker_request_update_msg.h"
-
 // Utility Includes
 #include "utilities/broker_types.h"
 #include "utilities/stock.h"
 
 // Standard Includes
 #include <string>
+
+// Forward Declaration
+class BrokerRequestUpdateMsg;
 
 class BrokerBase {
 public:
@@ -47,7 +47,7 @@ public:
   // New Interface
   virtual bool isConnected( void )                          = 0;
   virtual void connect( void )                              = 0;
-  virtual void requestUpdate( BrokerRequestUpdateMsg& msg ) = 0;
+  virtual void requestUpdate( BrokerRequestUpdateMsg* msg ) = 0;
   virtual void requestMarketPurchase( void ) {}
   virtual void requestMarketSell( void ) {}
   virtual void requestLimitPurchase( void ) {}

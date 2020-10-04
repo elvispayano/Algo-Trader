@@ -27,8 +27,8 @@ public:
   BrokerRequestMsg( void ) { id = RequestID::UNKNOWN; }
   ~BrokerRequestMsg( void ) {}
 
-  virtual bool encode( BrokerRequestMsg& msg ) { return false; }
-  virtual bool decode( BrokerRequestMsg& msg ) { return false; }
+  virtual bool encode( BrokerRequestMsg* msg ) { return false; }
+  virtual bool decode( BrokerRequestMsg* msg ) { return false; }
 
   RequestID getID( void ) { return id; }
   void      setID( RequestID in ) { id = in; }
