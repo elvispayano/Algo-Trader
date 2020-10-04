@@ -49,6 +49,7 @@ target_include_directories(interfaces SYSTEM INTERFACE "$<BUILD_INTERFACE:${INTE
 
 # Link Libraries
 target_link_libraries(interfaces PRIVATE broker)
+target_link_libraries(interfaces PRIVATE comms)
 target_link_libraries(interfaces PRIVATE utilities)
 
 # Postgres

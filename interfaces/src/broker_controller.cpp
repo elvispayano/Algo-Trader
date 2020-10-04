@@ -4,17 +4,6 @@
 #include "ib_wrapper.h"
 #include "interactive_broker.h"
 
-enum class RequestID {
-  UPDATE,
-  MARKETPURCHASE,
-  MARKETSELL,
-  LIMITPURCHASE,
-  LIMITSELL,
-  STOPPURCHASE,
-  STOPSELL,
-  UNKNOWN
-};
-
 BrokerController::BrokerController( void ) {
   pBroker = 0;
 
@@ -38,11 +27,16 @@ void BrokerController::perform( void ) {
 /// @fn     void processInputs
 /// @brief  Process messages from the trader platform to the broker API
 void BrokerController::processInputs( void ) {
-  RequestID   reqID = RequestID::UNKNOWN;
+  if ( !pBroker->isConnected() )
+    return;
+
+  RequestID reqID = brokerMsg.getID();
 
   switch ( reqID ) {
   case RequestID::UPDATE:
-    pBroker->requestUpdate();
+    if (brokerUpdateMsg.decode(brokerMsg)) {
+      pBroker->requestUpdate( brokerUpdateMsg );
+    }
     break;
 
   case RequestID::MARKETPURCHASE:
@@ -73,7 +67,7 @@ void BrokerController::processInputs( void ) {
 
 void BrokerController::update( void ) {
   // Check Connection Status
-  pBroker->connectionManager();
+  pBroker->connect();
 
   pBroker->perform();
 }

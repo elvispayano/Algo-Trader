@@ -31,7 +31,6 @@
 */
 InteractiveBroker::InteractiveBroker( IBWrapper* wrapper )
     : ib( wrapper ) {
-  isConnected       = false;
   disconnectTrigger = false;
   frame50           = true;
   tProcess          = 0;
@@ -51,6 +50,12 @@ InteractiveBroker::~InteractiveBroker( void ) {
   terminateConnection();
 }
 
+/// @fn     bool isConnected( void )
+/// @brief  Check if a valid connection to the broker exists
+bool InteractiveBroker::isConnected( void ) {
+  return ib->isConnected();
+}
+
 /*
   Function:     connect
   Inputs:       None (void)
@@ -60,10 +65,9 @@ InteractiveBroker::~InteractiveBroker( void ) {
     Attempt to establish a connection to an Interactive Broker API using the
     configured parameters
 */
-bool InteractiveBroker::connect( void ) {
-  if ( !isConnected )
-    isConnected = ib->connect();
-  return isConnected;
+void InteractiveBroker::connect( void ) {
+  if ( !isConnected() )
+    ib->connect();
 }
 
 /// @fn     void connectionManager
@@ -71,13 +75,24 @@ bool InteractiveBroker::connect( void ) {
 ///         exist. If a connnection does exist, do no establish a new one. Runs
 ///         continously to ensure a valid connection is always available.
 void InteractiveBroker::connectionManager( void ) {
-  connect();
+  if ( !ib->isConnected() )
+    ib->connect();
 }
 
-/// @fn     void requestUpdate( void )
+/// @fn     void requestUpdate(  BrokerRequestMsg& msg )
+/// @param  msg   Input Message
 /// @brief  Request a ticker update
-void InteractiveBroker::requestUpdate(void) {
-  ib->getCurrentPrice( "MSFT" );
+void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg& msg ) {
+  std::string ticker;
+  ticker.push_back( msg.s1 );
+  ticker.push_back( msg.s2 );
+  ticker.push_back( msg.s3 );
+  ticker.push_back( msg.s4 );
+  ticker.push_back( msg.s5 );
+  ticker.push_back( msg.s6 );
+  ticker.erase( remove( ticker.begin(), ticker.end(), '\0' ), ticker.end() );
+
+  ib->getCurrentPrice( ticker );
 }
 
 /*
@@ -88,9 +103,8 @@ void InteractiveBroker::requestUpdate(void) {
     Signal connection termination
 */
 void InteractiveBroker::terminateConnection( void ) {
-  if ( isConnected ) {
+  if ( isConnected() ) {
     disconnectTrigger = true;
-    isConnected       = false;
   }
 
   if ( tProcess ) {
@@ -106,19 +120,22 @@ void InteractiveBroker::terminateConnection( void ) {
 
 /// @fn     void perform( void )
 /// @brief  Process request and response messages from Interactive Broker API
-void InteractiveBroker::perform(void) {
+void InteractiveBroker::perform( void ) {
+  if ( !isConnected() )
+    return;
+
   sendRequest();
 
   recvResponse();
 }
-    /*
-  Function:     process
-  Inputs:       None (void)
+/*
+Function:     process
+Inputs:       None (void)
 
-  Description:
-    Main segment of connection management that will loop and through and
-    continuously send requests, receive responses, and handle potential
-    connectivity issues
+Description:
+Main segment of connection management that will loop and through and
+continuously send requests, receive responses, and handle potential
+connectivity issues
 */
 void InteractiveBroker::process( void ) {
   // Starting Timer

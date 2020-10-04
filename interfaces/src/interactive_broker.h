@@ -54,20 +54,21 @@ public:
   void addToQueue( OrderConfig message ) override;
 
   // Connection Management
-  bool connect( void );
+  void connect( void );
 
   // Response/Request Interface
   void sendRequest( void );
   void recvResponse( void );
   void process( void );
 
+  bool isConnected( void );
+
   void perform( void );
-  void requestUpdate( void );
+  void requestUpdate( BrokerRequestUpdateMsg& msg );
 
 private:
 
   IBWrapper* ib;
-  bool       isConnected;
   bool       disconnectTrigger;
   bool       frame50;
 

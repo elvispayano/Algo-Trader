@@ -17,6 +17,9 @@
 #ifndef BROKER_BASE_H
 #define BROKER_BASE_H
 
+// Comms Includes
+#include "comms/broker_request_update_msg.h"
+
 // Utility Includes
 #include "utilities/broker_types.h"
 #include "utilities/stock.h"
@@ -41,13 +44,14 @@ public:
 
   virtual void perform( void ) = 0;
 
-
   // New Interface
-  virtual void requestUpdate( void ) {}
+  virtual bool isConnected( void )                          = 0;
+  virtual void connect( void )                              = 0;
+  virtual void requestUpdate( BrokerRequestUpdateMsg& msg ) = 0;
   virtual void requestMarketPurchase( void ) {}
   virtual void requestMarketSell( void ) {}
-  virtual void requestLimitPurchase(void) {}
-  virtual void requestLimitSell(void) {}
+  virtual void requestLimitPurchase( void ) {}
+  virtual void requestLimitSell( void ) {}
   virtual void requestStopPurchase( void ) {}
   virtual void requestStopSell( void ) {}
 

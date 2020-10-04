@@ -26,9 +26,8 @@ set(COMMS_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE
 include_directories(${COMMS_INCLUDE_DIRS})
 
 set(COMMS_SRC
+  "src/broker_request_update_msg.cpp"
   "src/fc_layer_msg.cpp"
-  "src/layer_msg.cpp"
-  "src/msg_base.cpp"
 )
 
 add_library(comms ${COMMS_SRC})

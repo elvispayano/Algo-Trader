@@ -26,7 +26,10 @@ class MsgBase {
 public:
   /// @fn     MsgBase( void )
   /// @brief  Initialize an empty message packet
-  MsgBase( void );
+  MsgBase(void) {
+    memset( buffer, '\0', MAX_MSG_SIZE );
+    msgSize = 0;
+  }
 
   /// @fn     ~MsgBase( void )
   /// @brief  Clear and reset packet memory
