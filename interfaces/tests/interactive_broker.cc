@@ -11,7 +11,7 @@
 */
 
 // Interface Includes
-#include "interfaces/interactive_broker.h"
+#include "interactive_broker.h"
 
 // Test Includes
 #include "mock_ib_wrapper.h"

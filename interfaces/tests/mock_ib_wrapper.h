@@ -2,7 +2,7 @@
 #define MOCK_IB_WRAPPER
 
 // Interface Includes
-#include "interfaces/ib_wrapper.h"
+#include "ib_wrapper.h"
 
 // Google Mock Includes
 #include <gmock/gmock.h>
