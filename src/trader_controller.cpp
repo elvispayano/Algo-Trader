@@ -43,12 +43,14 @@ TraderController::~TraderController( void ) {
 void TraderController::initialize( void ) {
   // Create Controllers
   pBrokerCntrl = new BrokerController();
+  pNetworkCntrl = new NetworkController();
 
   // Initialize Ports
   pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
 
   // Port Installation
   pBrokerCntrl->install( pPortBroker );
+  pNetworkCntrl->install( pPortBroker );
 }
 
 void TraderController::perform( void ) {

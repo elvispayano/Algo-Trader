@@ -10,7 +10,7 @@
 // Utility Includes
 #include "utilities/fifo_bidirectional.h"
 
-// Forward Declarationi
+// Forward Declarations
 class BrokerBase;
 
 class BrokerController {
