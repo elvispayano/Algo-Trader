@@ -71,6 +71,6 @@ endif()
 # Testing
 #----------------------------------------------------------------------
 if(BUILD_TESTS)
-  cxx_test(database_base      interfaces utilities gtest_main gmock)
-  cxx_test(interactive_broker interfaces utilities gtest_main gmock)
+  #cxx_test(database_base      interfaces utilities gtest_main gmock)
+  #cxx_test(interactive_broker interfaces utilities gtest_main gmock)
 endif()

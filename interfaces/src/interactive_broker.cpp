@@ -147,7 +147,11 @@ void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg* msg ) {
   ticker.push_back( msg->s4 );
   ticker.push_back( msg->s5 );
   ticker.push_back( msg->s6 );
-  ticker.erase( remove( ticker.begin(), ticker.end(), '\0' ), ticker.end() );
+  for (unsigned int i = 0; i < ticker.size(); ++i) {
+    if ( ticker.back() == '\0' ) {
+      ticker.pop_back();
+    }
+  }
 
   ib->getCurrentPrice( ticker );
 }
