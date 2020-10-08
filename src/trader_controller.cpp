@@ -18,9 +18,13 @@
 #include "neuralnetwork/network_controller.h"
 
 TraderController::TraderController( void ) {
+  // Controllers
   pBrokerCntrl   = 0;
   pDatabaseCntrl = 0;
   pNetworkCntrl  = 0;
+
+  // FIFOs
+  pPortBroker = 0;
 
   initialize();
 }
@@ -37,7 +41,14 @@ TraderController::~TraderController( void ) {
 }
 
 void TraderController::initialize( void ) {
-  pBrokerCntrl   = new BrokerController();
+  // Create Controllers
+  pBrokerCntrl = new BrokerController();
+
+  // Initialize Ports
+  pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
+
+  // Port Installation
+  pBrokerCntrl->install( pPortBroker );
 }
 
 void TraderController::perform( void ) {
@@ -46,7 +57,7 @@ void TraderController::perform( void ) {
 
   if ( pDatabaseCntrl )
     pDatabaseCntrl->perform();
-  
+
   if ( pNetworkCntrl )
     pNetworkCntrl->perform();
 }

@@ -17,6 +17,9 @@
 #ifndef INTERACTIVE_BROKER_H
 #define INTERACTIVE_BROKER_H
 
+// Comms Includes
+#include "comms/broker_request_update_msg.h"
+
 // Interface Includes
 #include "interfaces/broker_base.h"
 
@@ -43,32 +46,56 @@ public:
   ~InteractiveBroker( void );
 
   // Connection management
-  void connectionManager( void ) override;
-  void terminateConnection( void ) override;
+  void connectionManager( void ); // TODO: Delete this line
+  void terminateConnection( void ); // TODO: Delete this line
 
   // Response Interface
-  bool  responseReady( std::string ) override;
-  Stock getResponse( std::string ) override;
+  bool  responseReady( std::string ); // TODO: Delete this line
+  Stock getResponse( std::string ); // TODO: Delete this line
 
-  // Request Interface
-  void addToQueue( OrderConfig message ) override;
-
-  // Connection Management
+  /// @fn     void connect( void )
+  /// @brief  Create a new connection if one is not established
   void connect( void );
 
-  // Response/Request Interface
-  void sendRequest( void );
-  void recvResponse( void );
-  void process( void );
-
+  /// @fn     bool isConnected( void )
+  /// @brief  Check if a valid broker connection is established
   bool isConnected( void );
 
-  void perform( void );
+  /// @fn     void performInput( void )
+  /// @brief  Process inputs from the broker API
+  void performInput( void );
+
+  /// @fn     void performOutput( void )
+  /// @brief  Process outputs from the broker API
+  void performOutput( void );
+
+  /// @fn     void requestUpdate( BrokerRequestUpdateMsg* msg )
+  /// @param  msg   Message sent to Broker API
+  /// @brief  Request a ticker update from the broker
   void requestUpdate( BrokerRequestUpdateMsg* msg );
+
+  void requestMarketPurchase() {}
+  void requestMarketSell() {}
+  void requestLimitPurchase() {}
+  void requestLimitSell() {}
+  void requestStopPurchase() {}
+  void requestStopSell() {}
+
+  /// @fn     void install( FIFOBidirectional< BrokerRequestMsg,
+  ///                       BrokerRequestMsg >* port )
+  /// @param  port  Installed broker port
+  /// @brief  Provide the broker interface with the installed communication
+  ///         port.
+  void install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port );
 
 private:
 
   IBWrapper* ib;
+  BrokerRequestUpdateMsg bReqUpdateMsg;
+
+  FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPort;
+
+
   bool       disconnectTrigger;
   bool       frame50;
 

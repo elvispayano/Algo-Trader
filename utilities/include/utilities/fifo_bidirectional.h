@@ -21,22 +21,22 @@ public:
   /// @fn     bool getInput( T* message )
   /// @param  message  Message from external system
   /// @brief  Read incoming message from buffer
-  bool getInput( T* message ) { return input.getMessage( message ); }
+  bool getInput( T& message ) { return input.getMessage( message ); }
 
   /// @fn     bool putInput( T* message )
   /// @param  message  Message from external system
   /// @brief  Write incoming message from buffer
-  bool putInput( T* message ) { return input.putMessage( message ); }
+  bool putInput( T& message ) { return input.putMessage( message ); }
 
   /// @fn     bool getOutput( T* message )
   /// @param  message  Message from internal system
   /// @brief  Read outgoing message from buffer
-  bool getOutput( U* message ) { return output.getMessage( message ); }
+  bool getOutput( U& message ) { return output.getMessage( message ); }
 
   /// @fn     bool putOutput( T* message )
   /// @param  message  Message from internal system
   /// @brief  Write outgoing message to buffer
-  bool putOutput( U* message ) { return output.putMessage( message ); }
+  bool putOutput( U& message ) { return output.putMessage( message ); }
 
 private:
   FIFOUnidirectional<T> input;

@@ -10,10 +10,17 @@
 #ifndef TRADER_CONTROLLER_H
 #define TRADER_CONTROLLER_H
 
-// Forward Declarations
+// Utility Includes
+#include "utilities/fifo_bidirectional.h"
+
+// Controller Forward Declarations
 class BrokerController;
 class DatabaseController;
 class NetworkController;
+
+// FIFO Forward Declarations
+class BrokerResponseMsg;
+class BrokerRequestMsg;
 
 class TraderController {
 public:
@@ -28,6 +35,8 @@ private:
   BrokerController*   pBrokerCntrl;
   DatabaseController* pDatabaseCntrl;
   NetworkController*  pNetworkCntrl;
+
+  FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
 };
 
 #endif /* TRADER_CONTROLLER_H */

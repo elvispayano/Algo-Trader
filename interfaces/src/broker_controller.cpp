@@ -1,10 +1,4 @@
 
-// Comms Includes
-#include "comms/broker_request_msg.h"
-#include "comms/broker_request_update_msg.h"
-#include "comms/broker_response_msg.h"
-#include "comms/broker_response_update_msg.h"
-
 // Interface Includes
 #include "interfaces/broker_controller.h"
 #include "ib_wrapper.h"
@@ -12,70 +6,40 @@
 
 BrokerController::BrokerController( void ) {
   pBroker = 0;
+  pPort   = 0;
 
   initialize();
 }
 
 BrokerController::~BrokerController( void ) {}
 
+/// @fn     void initialize( void )
+/// @brief  Initialize the broker controller with the configured settings
 void BrokerController::initialize( void ) {
   pBroker = new InteractiveBroker( new IBWrapper( "127.0.0.1", 6550, 0 ) );
 }
 
+/// @fn     void perform( void )
+/// @brief  Perform a broker controller update
 void BrokerController::perform( void ) {
-  processInputs();
-
-  update();
-
-  processOutputs();
-}
-
-/// @fn     void processInputs
-/// @brief  Process messages from the trader platform to the broker API
-void BrokerController::processInputs( void ) {
-  if ( !pBroker->isConnected() )
-    return;
-
-  RequestID reqID = bReqMsg->getID();
-
-  switch ( reqID ) {
-  case RequestID::UPDATE:
-    if ( bReqUpdateMsg->decode( bReqMsg ) ) {
-      pBroker->requestUpdate( bReqUpdateMsg );
-    }
-    break;
-
-  case RequestID::MARKETPURCHASE:
-    pBroker->requestMarketPurchase();
-    break;
-
-  case RequestID::MARKETSELL:
-    pBroker->requestMarketSell();
-    break;
-
-  case RequestID::LIMITPURCHASE:
-    pBroker->requestLimitPurchase();
-    break;
-
-  case RequestID::LIMITSELL:
-    pBroker->requestLimitSell();
-    break;
-
-  case RequestID::STOPPURCHASE:
-    pBroker->requestStopPurchase();
-    break;
-
-  case RequestID::STOPSELL:
-    pBroker->requestStopSell();
-    break;
-  }
-}
-
-void BrokerController::update( void ) {
   // Check Connection Status
-  pBroker->connect();
+  if ( !pBroker->isConnected() ) {
+    pBroker->connect();
+    return;
+  }
 
-  pBroker->perform();
+  pBroker->performInput();
+
+  pBroker->performOutput();
 }
 
-void BrokerController::processOutputs( void ) {}
+/// @fn     void install( FIFOBidirectional< BrokerRequestMsg,
+///                       BrokerRequestMsg >* port )
+/// @param  port  Installed broker port
+/// @brief  Provide the broker interface with the installed communication
+///         port.
+void BrokerController::install(
+    FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port ) {
+  pPort = port;
+  pBroker->install( pPort );
+}

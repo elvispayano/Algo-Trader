@@ -15,7 +15,12 @@
 #ifndef IB_WRAPPER_H
 #define IB_WRAPPER_H
 
+// Comms Includes
+#include "comms/broker_response_msg.h"
+#include "comms/broker_response_update_msg.h"
+
 // Utility Includes
+#include "utilities/fifo_unidirectional.h"
 #include "utilities/stock.h"
 
 // Standard Includes
@@ -133,8 +138,6 @@ public:
   virtual bool  connect( void );
   virtual void  disconnect( void );
   bool          isConnected( void ) const;
-  virtual bool  responseReady( void ) { return !responseMessage.empty(); }
-  virtual Stock getResponse( void );
 
   virtual void getCurrentPrice( std::string ticker );
   virtual void
@@ -148,6 +151,11 @@ public:
                           double      quantity,
                           double      price );
 
+  /// @fn     bool getResponse( BrokerResponseMsg& msg )
+  /// @param  msg  Message output
+  /// @brief  Get the response stored from the Interactive Broker API
+  bool getResponse( BrokerResponseMsg& msg );
+
 private:
   void clearOrder( void );
   void clearContract( void );
@@ -159,6 +167,12 @@ private:
 
   Contract contractRequest;
   Order    orderRequest;
+
+  FIFOUnidirectional<BrokerResponseMsg>* pPort;
+
+  BrokerResponseMsg       response;
+  BrokerResponseUpdateMsg updateMessage;
+  
 
   std::queue< Stock >          responseMessage;
   std::map< int, std::string > updateMap;

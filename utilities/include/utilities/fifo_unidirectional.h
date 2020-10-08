@@ -21,7 +21,7 @@ public:
       fifoBuffer.pop();
   }
 
-  bool putMessage( T* msg ) {
+  bool putMessage( T& msg ) {
     if ( counter >= MAX_BUFFER_SIZE )
       return false;
 
@@ -30,7 +30,7 @@ public:
     return true;
   }
 
-  bool getMessage( T* msg ) {
+  bool getMessage( T& msg ) {
     if ( fifoBuffer.empty() )
       return false;
 
@@ -40,7 +40,7 @@ public:
   }
 
 private:
-  std::queue<T*> fifoBuffer;
+  std::queue<T> fifoBuffer;
 
   unsigned int       counter;
   const unsigned int MAX_BUFFER_SIZE = 50;
