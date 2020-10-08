@@ -103,6 +103,10 @@ public:
   //! @brief  Configure the network output layer
   void addOutputLayer( unsigned int inputs, LayerConfiguration config );
 
+  /// @fn     bool checkConfiguration( void )
+  /// @brief  Check if the neural network has been completely configured
+  bool checkConfiguration( void ) { return false; }
+
 private:
   //! @fn     LayerBase* newLayer(ActivationTypes activation, LayerTypes layer)
   //! @param  activation  Defining layer activation type
