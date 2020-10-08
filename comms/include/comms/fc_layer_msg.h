@@ -18,8 +18,8 @@ public:
   FCLayer( void );
   ~FCLayer( void );
 
-  bool encode( LayerMsg& msg ) override;
-  bool decode( LayerMsg& msg ) override;
+  bool encode( LayerMsg* msg ) override;
+  bool decode( LayerMsg* msg ) override;
 
   struct {
     ActivationTypes activation;
@@ -58,8 +58,8 @@ private:
     Map<float, 45, 0, 1>          bias4;
   } x;
 
-  void write( LayerMsg& msg );
-  void read( LayerMsg& msg );
+  void write( LayerMsg* msg );
+  void read( LayerMsg* msg );
 };
 
 #endif /* FC_LAYER_MSG_H */

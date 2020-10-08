@@ -38,8 +38,8 @@ public:
 TEST_F( FCLayerMsgTest, Activation ) {
 
   in->activation = rng->activation();
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->activation, out->activation );
   EXPECT_NE( in->activation, ActivationTypes::UNKNOWN );
@@ -48,8 +48,8 @@ TEST_F( FCLayerMsgTest, Activation ) {
 
 TEST_F( FCLayerMsgTest, Row ) {
   in->row = rng->random( 300, 1000 );
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->row, out->row );
   EXPECT_NE( in->row, 0 );
@@ -58,8 +58,8 @@ TEST_F( FCLayerMsgTest, Row ) {
 
 TEST_F( FCLayerMsgTest, RowMax ) {
   in->rowMax = rng->random( 300, 1000 );
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->rowMax, out->rowMax );
   EXPECT_NE( in->rowMax, 0 );
@@ -68,8 +68,8 @@ TEST_F( FCLayerMsgTest, RowMax ) {
 
 TEST_F( FCLayerMsgTest, Col ) {
   in->col = rng->random( 300, 1000 );
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->col, out->col );
   EXPECT_NE( in->col, 0 );
@@ -78,8 +78,8 @@ TEST_F( FCLayerMsgTest, Col ) {
 
 TEST_F( FCLayerMsgTest, ColMax ) {
   in->colMax = rng->random( 300, 1000 );
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->colMax, out->colMax );
   EXPECT_NE( in->colMax, 0 );
@@ -98,8 +98,8 @@ TEST_F( FCLayerMsgTest, RowValues ) {
   in->bias3   = rng->random( -100, 100 );
   in->bias4   = rng->random( -100, 100 );
 
-  in->encode( *hold );
-  out->decode( *hold );
+  in->encode( hold );
+  out->decode( hold );
 
   EXPECT_EQ( in->weight0, out->weight0 );
   EXPECT_EQ( in->weight1, out->weight1 );

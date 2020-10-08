@@ -18,35 +18,46 @@
 #include "neuralnetwork/network_controller.h"
 
 TraderController::TraderController( void ) {
-  pBroker   = 0;
-  pDatabase = 0;
-  pNetwork  = 0;
+  // Controllers
+  pBrokerCntrl   = 0;
+  pDatabaseCntrl = 0;
+  pNetworkCntrl  = 0;
+
+  // FIFOs
+  pPortBroker = 0;
+
+  initialize();
 }
 
 TraderController::~TraderController( void ) {
-  if ( pBroker )
-    delete pBroker;
+  if ( pBrokerCntrl )
+    delete pBrokerCntrl;
 
-  if ( pDatabase )
-    delete pDatabase;
+  if ( pDatabaseCntrl )
+    delete pDatabaseCntrl;
 
-  if ( pNetwork )
-    delete pNetwork;
+  if ( pNetworkCntrl )
+    delete pNetworkCntrl;
 }
 
 void TraderController::initialize( void ) {
-  pBroker   = new BrokerController();
-  pDatabase = new DatabaseController();
-  pNetwork  = new NetworkController();
+  // Create Controllers
+  pBrokerCntrl = new BrokerController();
+
+  // Initialize Ports
+  pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
+
+  // Port Installation
+  pBrokerCntrl->install( pPortBroker );
 }
 
 void TraderController::perform( void ) {
-  if ( pBroker )
-    pBroker->perform();
+  if ( pBrokerCntrl )
+    pBrokerCntrl->perform();
 
-  if ( pDatabase )
-    pDatabase->perform();
+  if ( pDatabaseCntrl )
+    pDatabaseCntrl->perform();
 
-  if ( pNetwork )
-    pNetwork->perform();
+  if ( pNetworkCntrl )
+    pNetworkCntrl->perform();
 }

@@ -49,6 +49,7 @@ target_include_directories(interfaces SYSTEM INTERFACE "$<BUILD_INTERFACE:${INTE
 
 # Link Libraries
 target_link_libraries(interfaces PRIVATE broker)
+target_link_libraries(interfaces PRIVATE comms)
 target_link_libraries(interfaces PRIVATE utilities)
 
 # Postgres
@@ -70,6 +71,6 @@ endif()
 # Testing
 #----------------------------------------------------------------------
 if(BUILD_TESTS)
-  cxx_test(database_base      interfaces utilities gtest_main gmock)
-  cxx_test(interactive_broker interfaces utilities gtest_main gmock)
+  #cxx_test(database_base      interfaces utilities gtest_main gmock)
+  #cxx_test(interactive_broker interfaces utilities gtest_main gmock)
 endif()

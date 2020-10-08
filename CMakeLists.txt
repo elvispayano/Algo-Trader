@@ -27,7 +27,6 @@ cmake_minimum_required(VERSION 3.8)
 # Build Libraries
 #----------------------------------------------------------------------
 add_subdirectory(comms)
-add_subdirectory(gui)
 add_subdirectory(interfaces)
 add_subdirectory(neuralnetwork)
 add_subdirectory(utilities)

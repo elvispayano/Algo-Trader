@@ -13,7 +13,7 @@
 */
 
 // Interface Includes
-#include "interfaces/ib_wrapper.h"
+#include "ib_wrapper.h"
 
 // Interactive Broker Includes
 #include "CommissionReport.h"
@@ -57,6 +57,14 @@ IBWrapper::IBWrapper( std::string host, int port, int clientID )
   updateMap.empty();
 
   data.reset();
+  pPort = new FIFOUnidirectional<BrokerResponseMsg>;
+}
+
+/// @fn     bool getResponse( BrokerResponseMsg& msg )
+/// @param  msg  Message output
+/// @brief  Get the response stored from the Interactive Broker API
+bool IBWrapper::getResponse( BrokerResponseMsg& msg ) {
+  return pPort->getMessage( msg );
 }
 
 /*
@@ -470,19 +478,6 @@ void IBWrapper::clearContract( void ) {
   contractRequest.symbol = "";
 }
 
-/*
-  Function:     getResponse
-  Inputs:       None (void)
-
-  Description:
-    Capture and remove the first message recorded in the queue
-*/
-Stock IBWrapper::getResponse( void ) {
-  Stock response = responseMessage.front();
-  responseMessage.pop();
-  return response;
-}
-
 //! [error]
 void IBWrapper::error( int id, int errorCode, const std::string& errorString ) {
   printf( "Error. Id: %d, Code: %d, Msg: %s\n",
@@ -505,13 +500,13 @@ void IBWrapper::tickPrice( TickerId          tickerId,
 
   switch ( field ) {
   case DELAYED_HIGH:
+    updateMessage.high = price;
     data.setHigh( price );
-    printf( "%s Delayed High Price: %f\n", updateMap[tickerId].c_str(), price );
     break;
 
   case DELAYED_LOW:
+    updateMessage.low = price;
     data.setLow( price );
-    printf( "%s Delayed Low Price: %f\n", updateMap[tickerId].c_str(), price );
     break;
 
   case DELAYED_OPEN:
@@ -519,31 +514,45 @@ void IBWrapper::tickPrice( TickerId          tickerId,
     break;
 
   case DELAYED_CLOSE:
-    printf(
-        "%s Delayed Close Price: %f\n", updateMap[tickerId].c_str(), price );
+    printf( "%s Delayed Close Price: %f\n", updateMap[tickerId].c_str(), price );
     break;
 
   case DELAYED_BID:
+    updateMessage.bid = price;
     data.setBid( price );
-    printf( "%s Delayed Bid Price: %f\n", updateMap[tickerId].c_str(), price );
     break;
 
   case DELAYED_ASK:
+    updateMessage.ask = price;
     data.setAsk( price );
-    printf( "%s Delayed Ask Price: %f\n", updateMap[tickerId].c_str(), price );
     break;
 
   case DELAYED_LAST:
-    printf( "%s Delayed Last Price: %f\n", updateMap[tickerId].c_str(), price );
+    updateMessage.last = price;
     break;
 
   default:
-    printf( "%s Ticker Price: %f", updateMap[tickerId].c_str(), price );
+    printf( "%s Ticker Price: %f", updateMap[tickerId].c_str(), price );    
   }
 
   // Update response queue and clear stock capture variable
   if ( data.isComplete() ) {
-    responseMessage.push( data );
+    std::string ticker = updateMap[tickerId];
+    if ( ticker.size() >= 0 ) 
+      updateMessage.s1 = ticker.c_str()[0];
+    if ( ticker.size() > 1 )
+      updateMessage.s2 = ticker.c_str()[1];
+    if ( ticker.size() > 2 )
+      updateMessage.s3 = ticker.c_str()[2];
+    if ( ticker.size() > 3 )
+      updateMessage.s4 = ticker.c_str()[3];
+    if ( ticker.size() > 4 )
+      updateMessage.s5 = ticker.c_str()[4];
+    if ( ticker.size() > 5 )
+      updateMessage.s6 = ticker.c_str()[5];
+    if ( updateMessage.encode( &response ) ) {
+      pPort->putMessage( response );
+    }
     data.reset();
 
     // Remove Ticker ID from update queue
@@ -590,10 +599,10 @@ void IBWrapper::tickOptionComputation( TickerId tickerId,
 void IBWrapper::tickGeneric( TickerId tickerId,
                              TickType tickType,
                              double   value ) {
-  printf( "Tick Generic. Ticker Id: %ld, Type: %d, Value: %g\n",
-          tickerId,
-          ( int )tickType,
-          value );
+  //printf( "Tick Generic. Ticker Id: %ld, Type: %d, Value: %g\n",
+  //        tickerId,
+  //        ( int )tickType,
+  //        value );
 }
 //! [tickgeneric]
 
@@ -606,11 +615,11 @@ void IBWrapper::tickString( TickerId           tickerId,
     printf( "Delayed Volume: %s\n", value.c_str() );
     break;
 
-  default:
-    printf( "Tick String. Ticker Id: %ld, Type: %d, Value: %s\n",
-            tickerId,
-            ( int )tickType,
-            value.c_str() );
+  //default:
+  //  printf( "Tick String. Ticker Id: %ld, Type: %d, Value: %s\n",
+  //          tickerId,
+  //          ( int )tickType,
+  //          value.c_str() );
   }
 }
 //! [tickstring]
@@ -1073,7 +1082,7 @@ void IBWrapper::tickSnapshotEnd( int reqId ) {
 
 //! [marketdatatype]
 void IBWrapper::marketDataType( TickerId reqId, int marketDataType ) {
-  printf( "MarketDataType. ReqId: %ld, Type: %d\n", reqId, marketDataType );
+  //printf( "MarketDataType. ReqId: %ld, Type: %d\n", reqId, marketDataType );
 }
 //! [marketdatatype]
 
@@ -1356,12 +1365,12 @@ void IBWrapper::tickReqParams( int                tickerId,
                                double             minTick,
                                const std::string& bboExchange,
                                int                snapshotPermissions ) {
-  printf(
-      "tickerId: %d, minTick: %g, bboExchange: %s, snapshotPermissions: %u\n",
-      tickerId,
-      minTick,
-      bboExchange.c_str(),
-      snapshotPermissions );
+  //printf(
+  //    "tickerId: %d, minTick: %g, bboExchange: %s, snapshotPermissions: %u\n",
+  //    tickerId,
+  //    minTick,
+  //    bboExchange.c_str(),
+  //    snapshotPermissions );
 
   m_bboExchange = bboExchange;
 }
@@ -1706,3 +1715,4 @@ void IBWrapper::currentTime( long time ) {
     m_state = ST_PING_ACK;
   }
 }
+

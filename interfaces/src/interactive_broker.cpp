@@ -15,28 +15,28 @@
 */
 
 // Interface Includes
-#include "interfaces/interactive_broker.h"
-#include "interfaces/ib_wrapper.h"
+#include "interactive_broker.h"
+#include "ib_wrapper.h"
+
+// Comms Includes
+#include "comms/broker_request_update_msg.h"
 
 // Standard Includes
 #include <chrono>
 #include <functional>
 
-/*
-  Constructor:  InteractiveBroker
-  Inputs:       wrapper (IBWrapper*), host (string), port (int), clientID (int)
-
-  Description:
-    Setup configuration for Interactive Broker connection
-*/
+/// @fn     InteractiveBroker( IBWrapper* wrapper )
+/// @param  wrapper   Interactive Broker API wrapper
+/// @brief  Setup configuration for the Interactive Broker connection
 InteractiveBroker::InteractiveBroker( IBWrapper* wrapper )
     : ib( wrapper ) {
-  isConnected       = false;
   disconnectTrigger = false;
   frame50           = true;
   tProcess          = 0;
 
   messages.empty();
+
+  pPort = 0;
 }
 
 /*
@@ -51,43 +51,118 @@ InteractiveBroker::~InteractiveBroker( void ) {
   terminateConnection();
 }
 
-/*
-  Function:     connect
-  Inputs:       None (void)
-  Outputs:      connectionEstablished (bool)
-
-  Description:
-    Attempt to establish a connection to an Interactive Broker API using the
-    configured parameters
-*/
-bool InteractiveBroker::connect( void ) {
-  bool   connected = false;
-  size_t counter   = 0;
-
-  while ( !isConnected && !connected && counter < 3 ) {
-    ++counter;
-    connected = ib->connect();
-  }
-
-  isConnected = connected;
-  return isConnected;
+/// @fn     void install( FIFOBidirectional< BrokerRequestMsg,
+///                       BrokerRequestMsg >* port )
+/// @param  port  Installed broker port
+/// @brief  Provide the broker interface with the installed communication
+///         port.
+void InteractiveBroker::install(
+    FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port ) {
+  pPort = port;
 }
 
-/*
-  Function:     connectionManager
-  Inputs:       None (void)
+/// @fn     bool isConnected( void )
+/// @brief  Check if a valid connection to the broker exists
+bool InteractiveBroker::isConnected( void ) {
+  return ib->isConnected();
+}
 
-  Description:
-    Start the broker connecion manager. Once started, keep the connection
-    established until signaled to terminate. Running connection on a separate
-    thread to allow for continuous updates
-*/
+/// @fn     void connect( void )
+/// @brief  Attempt to establish a connection to an Interactive Broker API using
+///         the configured parameters
+void InteractiveBroker::connect( void ) {
+  if ( !isConnected() )
+    ib->connect();
+}
+
+/// @fn     void performInput( void )
+/// @brief  Process request messages from Interactive Broker API
+void InteractiveBroker::performInput( void ) {
+  BrokerRequestMsg msg;
+
+  if ( !isConnected() || !pPort->getOutput( msg ) ) {
+    return;
+  }
+
+  switch ( msg.getID() ) {
+  case RequestID::UPDATE:
+    if ( bReqUpdateMsg.decode( &msg ) ) {
+      requestUpdate( &bReqUpdateMsg );
+    }
+    break;
+
+  case RequestID::MARKETPURCHASE:
+    requestMarketPurchase();
+    break;
+
+  case RequestID::MARKETSELL:
+    requestMarketSell();
+    break;
+
+  case RequestID::LIMITPURCHASE:
+    requestLimitPurchase();
+    break;
+
+  case RequestID::LIMITSELL:
+    requestLimitSell();
+    break;
+
+  case RequestID::STOPPURCHASE:
+    requestStopPurchase();
+    break;
+
+  case RequestID::STOPSELL:
+    requestStopSell();
+    break;
+
+  default:
+    printf( "Unknown Message Request\n" );
+    break;
+  }
+}
+
+/// @fn     void performInput( void )
+/// @brief  Process response messages from Interactive Broker API
+void InteractiveBroker::performOutput( void ) {
+  if ( !isConnected() ) {
+    return;
+  }
+
+  ib->processMessages();
+
+  BrokerResponseMsg temp;
+  if ( ib->getResponse( temp ) ) {
+    pPort->putInput( temp );
+  }
+}
+
+/// @fn     void requestUpdate(  BrokerRequestMsg& msg )
+/// @param  msg   Input Message
+/// @brief  Request a ticker update
+void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg* msg ) {
+  std::string ticker;
+  ticker.push_back( msg->s1 );
+  ticker.push_back( msg->s2 );
+  ticker.push_back( msg->s3 );
+  ticker.push_back( msg->s4 );
+  ticker.push_back( msg->s5 );
+  ticker.push_back( msg->s6 );
+  for (unsigned int i = 0; i < ticker.size(); ++i) {
+    if ( ticker.back() == '\0' ) {
+      ticker.pop_back();
+    }
+  }
+
+  ib->getCurrentPrice( ticker );
+}
+
+/// @fn     void connectionManager
+/// @brief  Establish a new connection to the broker interface if one does not
+///         exist. If a connnection does exist, do no establish a new one. Runs
+///         continously to ensure a valid connection is always available.
 void InteractiveBroker::connectionManager( void ) {
-  if ( !connect() )
-    throw std::runtime_error(
-        "Connection Error: Unable to connect to Interactive Broker API" );
-
-  tProcess = new std::thread( std::bind( &InteractiveBroker::process, this ) );
+  if ( !ib->isConnected() )
+    ib->connect();
 }
 
 /*
@@ -98,9 +173,8 @@ void InteractiveBroker::connectionManager( void ) {
     Signal connection termination
 */
 void InteractiveBroker::terminateConnection( void ) {
-  if ( isConnected ) {
+  if ( isConnected() ) {
     disconnectTrigger = true;
-    isConnected       = false;
   }
 
   if ( tProcess ) {
@@ -112,124 +186,6 @@ void InteractiveBroker::terminateConnection( void ) {
     delete ib;
     ib = 0;
   }
-}
-
-/*
-  Function:     process
-  Inputs:       None (void)
-
-  Description:
-    Main segment of connection management that will loop and through and
-    continuously send requests, receive responses, and handle potential
-    connectivity issues
-*/
-void InteractiveBroker::process( void ) {
-  // Starting Timer
-  auto timePrev = std::chrono::system_clock::now();
-
-  // Process Loop
-  while ( !disconnectTrigger ) {
-    // Update Timer
-    std::chrono::duration< double > timeElapsed =
-        std::chrono::system_clock::now() - timePrev;
-
-    // No processing at higher than allowed rate (100Hz)
-    if ( timeElapsed.count() < 0.01 )
-      continue;
-
-    // Update time trigger
-    timePrev = std::chrono::system_clock::now();
-
-    // Prevent message processing if no connection is present
-    if ( !ib->connect() )
-      continue;
-
-    // Receive broker responses every frame
-    recvResponse();
-
-    // Send broker requests at 50Hz (max allowed by API)
-    if ( frame50 )
-      sendRequest();
-
-    // Flip 50Hz frame trigger
-    frame50 ^= true;
-  }
-
-  // Terminate broker connection when processing is complete
-  ib->disconnect();
-}
-
-/*
-  Function:     recvResponse
-  Inputs:       None (void)
-
-  Description:
-    Handling responses from the Interactive Broker API.
-*/
-void InteractiveBroker::recvResponse( void ) {
-  ib->processMessages();
-
-  if ( !ib->responseReady() )
-    return;
-
-  resMtx.lock();
-  Stock output                 = ib->getResponse();
-  response[output.getTicker()] = output;
-  resMtx.unlock();
-}
-
-/*
-  Function:     sendRequest
-  Inputs:       None (void)
-
-  Description:
-    Handling requests made from the trader plaform using the standardize
-    format and converting to the appropriate Interactive Broker request
-*/
-void InteractiveBroker::sendRequest( void ) {
-  reqMtx.lock();
-  if ( messages.empty() ) {
-    reqMtx.unlock();
-    return;
-  }
-
-  OrderConfig message = messages.front();
-  std::string action  = ( message.purchase ) ? "BUY" : "SELL";
-
-  switch ( message.request ) {
-  case Requests::UPDATE:
-    ib->getCurrentPrice( message.ticker );
-    break;
-
-  case Requests::MARKET:
-    ib->orderMarket( message.ticker, action, message.quantity );
-    break;
-
-  case Requests::LIMIT:
-    ib->orderLimit( message.ticker, action, message.quantity, message.price );
-    break;
-
-  case Requests::STOP:
-    ib->orderStop( message.ticker, action, message.quantity, message.price );
-    break;
-  }
-
-  messages.pop();
-  reqMtx.unlock();
-}
-
-/*
-  Function:     addToQueue
-  Inputs:       message (Stock)
-
-  Description:
-    Trading platforms interface to add message to queue. Messages
-    will be later read and acted upon by the connection manager
-*/
-void InteractiveBroker::addToQueue( OrderConfig message ) {
-  reqMtx.lock();
-  messages.push( message );
-  reqMtx.unlock();
 }
 
 /*

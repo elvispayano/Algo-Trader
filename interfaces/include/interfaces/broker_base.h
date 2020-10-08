@@ -19,26 +19,35 @@
 
 // Utility Includes
 #include "utilities/broker_types.h"
+#include "utilities/fifo_bidirectional.h"
 #include "utilities/stock.h"
 
 // Standard Includes
 #include <string>
+
+// Forward Declaration
+class BrokerRequestUpdateMsg;
+class BrokerRequestMsg;
+class BrokerResponseMsg;
 
 class BrokerBase {
 public:
   BrokerBase( void ){};   // Constructor
   ~BrokerBase( void ){};  // Destructor
 
-  // Connection management
-  virtual void connectionManager( void )   = 0;
-  virtual void terminateConnection( void ) = 0;
+  virtual void
+  install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port ) = 0;
 
-  // Request Interface
-  virtual void addToQueue( OrderConfig message ) = 0;
+  virtual void performInput( void ) = 0;
+  virtual void performOutput( void ) = 0;
 
-  // Response Interface
-  virtual bool  responseReady( std::string ) = 0;
-  virtual Stock getResponse( std::string )   = 0;
+  /// @fn     bool isConnected( void )
+  /// @brief  Check if a valid broker connection is established
+  virtual bool isConnected( void ) = 0;
+
+  /// @fn     void connect( void )
+  /// @brief  Create a new connection if one is not established
+  virtual void connect( void ) = 0;
 };
 
 #endif /* BROKER_BASE_H */
