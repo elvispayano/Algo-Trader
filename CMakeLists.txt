@@ -12,8 +12,11 @@ option(BUILD_SAMPLES "Build Algo-Trader's sample programs" OFF)
 option(BUILD_TESTS   "Build Algo-Trader's test programs"   OFF)
 
 include(${CMAKE_SOURCE_DIR}/cmake/internal_functions.cmake)
-include(${CMAKE_SOURCE_DIR}/cmake/gtest.cmake)
-enable_testing()
+
+if(BUILD_TESTS)
+  include(${CMAKE_SOURCE_DIR}/cmake/gtest.cmake)
+  enable_testing()
+endif()
 
 #----------------------------------------------------------------------
 # Project Settings

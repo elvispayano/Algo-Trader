@@ -42,8 +42,9 @@ TraderController::~TraderController( void ) {
 
 void TraderController::initialize( void ) {
   // Create Controllers
-  pBrokerCntrl = new BrokerController();
-  pNetworkCntrl = new NetworkController();
+  pBrokerCntrl   = new BrokerController();
+  pNetworkCntrl  = new NetworkController();
+  pDatabaseCntrl = new DatabaseController();
 
   // Initialize Ports
   pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;

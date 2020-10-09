@@ -38,7 +38,12 @@ public:
   virtual void
   install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port ) = 0;
 
+  /// @fn     void performInput( void )
+  /// @brief  Process all received inputs received from broker
   virtual void performInput( void ) = 0;
+
+  /// @fn     void performOutput( void )
+  /// @brief  Send all outgoing messages to broker
   virtual void performOutput( void ) = 0;
 
   /// @fn     bool isConnected( void )

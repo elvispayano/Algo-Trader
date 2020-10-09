@@ -12,7 +12,7 @@
 */
 
 // Interface Includes
-#include "interfaces/postgres.h"
+#include "postgres.h"
 
 // Postgres (External) Includes
 #include <libpq-fe.h>
@@ -58,48 +58,30 @@ Postgres::~Postgres( void ) {
   disconnect();
 }
 
-/*
-  Function:     connect
-  Inputs:       None (void)
-  Outputs:      connectionEstablished (bool)
-
-  Description:
-    Attempt to establish a connection to a postgres database using the
-  configured parameters.
-*/
-bool Postgres::connect( void ) {
-  // Limit to a maximum of 3 attempts
-  int counter = 0;
-  while ( counter < 3 ) {
-    // Attemp connection
-    connection = PQsetdbLogin( host.c_str(),
-                               port.c_str(),
-                               opt.c_str(),
-                               tty.c_str(),
-                               db.c_str(),
-                               user.c_str(),
-                               pass.c_str() );
-
-    // Check connection status
-    if ( PQstatus( connection ) == ConnStatusType::CONNECTION_OK )
-      return true;  // Connection established
-
-    // Update counter
-    ++counter;
-  }
-  return false;  // No connection established
+/// @fn     bool isConnected( void )
+/// @brief  Check the connection status to the database
+bool Postgres::isConnected( void ) {
+  return PQstatus( connection ) == ConnStatusType::CONNECTION_OK;
 }
 
-/*
-  Function:     disconnect
-  Inputs:       None (void)
+/// @fn     void connect( void )
+/// @brief  Attempt to establish a database connection using the configured
+///         parameters
+void Postgres::connect( void ) {
+  // Attemp connection
+  connection = PQsetdbLogin( host.c_str(),
+                             port.c_str(),
+                             opt.c_str(),
+                             tty.c_str(),
+                             db.c_str(),
+                             user.c_str(),
+                             pass.c_str() );
+}
 
-  Description:
-    Expected procedure for safe termination of a connection to the postgres
-    databse.
-*/
+/// @fn     void disconnect( void )
+/// @brief  Terminate the established connection to the database
 void Postgres::disconnect( void ) {
-  if ( PQstatus( connection ) == ConnStatusType::CONNECTION_OK )
+  if ( isConnected() )
     PQfinish( connection );
 }
 
@@ -289,10 +271,10 @@ ActivationTypes Postgres::getActivation( std::string ticker, int layerNum ) {
   std::string valueStr =
       execFunc( "layer_activation", ticker.c_str(), layerNum );
   int value = toInt( valueStr );
-  if ( value >= static_cast< int >( ActivationTypes::UNKNOWN ) ||
+  if ( value >= static_cast<int>( ActivationTypes::UNKNOWN ) ||
        valueStr.empty() )
     return ActivationTypes::UNKNOWN;
-  return static_cast< ActivationTypes >( value );
+  return static_cast<ActivationTypes>( value );
 }
 
 /*
@@ -305,9 +287,9 @@ ActivationTypes Postgres::getActivation( std::string ticker, int layerNum ) {
 LayerTypes Postgres::getLayerType( std::string ticker, int layerNum ) {
   std::string valueStr = execFunc( "layer_type", ticker.c_str(), layerNum );
   int         value    = toInt( valueStr );
-  if ( value >= static_cast< int >( LayerTypes::UNKNOWN ) || valueStr.empty() )
+  if ( value >= static_cast<int>( LayerTypes::UNKNOWN ) || valueStr.empty() )
     return LayerTypes::UNKNOWN;
-  return static_cast< LayerTypes >( value );
+  return static_cast<LayerTypes>( value );
 }
 
 /*
@@ -337,18 +319,18 @@ LayerConfiguration Postgres::getLayer( std::string  ticker,
   layer.layer      = getLayerType( ticker, layerNum );
 
   layer.nodes = getNodes( ticker, layerNum );
-  //layer.inputs  = getInputs( ticker, layerNum );
-  //layer.weight.resize( layer.nodes, layer.inputs, 0.0 );
-  //layer.bias.resize( layer.nodes, 1, 0.0 );
+  // layer.inputs  = getInputs( ticker, layerNum );
+  // layer.weight.resize( layer.nodes, layer.inputs, 0.0 );
+  // layer.bias.resize( layer.nodes, 1, 0.0 );
 
   int index = getIndex( ticker, layerNum );
-  //for ( size_t col = 0; col < layer.inputs; ++col ) {
+  // for ( size_t col = 0; col < layer.inputs; ++col ) {
   //  for ( size_t row = 0; row < layer.nodes; ++row ) {
   //    layer.weight( row, col ) = getWeightBias( ticker, index++ );
   //  }
   //}
-  //for ( size_t row = 0; row < layer.nodes; ++row )
-    //layer.bias( row, 0 ) = getWeightBias( ticker, index++ );
+  // for ( size_t row = 0; row < layer.nodes; ++row )
+  // layer.bias( row, 0 ) = getWeightBias( ticker, index++ );
 
   return layer;
 }

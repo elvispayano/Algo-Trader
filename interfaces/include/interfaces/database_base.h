@@ -31,9 +31,26 @@ public:
   // Destructor
   ~DatabaseBase( void ){};
 
-  // Connection management
-  virtual bool connect( void )    = 0;
+  /// @fn     bool isConnected( void )
+  /// @brief  Check the connection status to the database
+  virtual bool isConnected( void ) = 0;
+
+  /// @fn     void connect( void )
+  /// @brief  Attempt to establish a database connection using the configured
+  ///         parameters
+  virtual void connect( void ) = 0;
+
+  /// @fn     void disconnect( void )
+  /// @brief  Terminate the established connection to the database
   virtual void disconnect( void ) = 0;
+
+  /// @fn     void performInput( void )
+  /// @brief  Process all received inputs received from database
+  virtual void performInput( void ) = 0;
+
+  /// @fn     void performOutput( void )
+  /// @brief  Send all outgoing messages to database
+  virtual void performOutput( void ) = 0;
 
   // Network configuration
   virtual int         getNetworkCount( void )             = 0;

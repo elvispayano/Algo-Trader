@@ -35,9 +35,26 @@ public:
             char* pass );  // Constructor
   ~Postgres( void );       // Destructor
 
-  // Connection management
-  bool connect( void ) override;
+  /// @fn     bool isConnected( void )
+  /// @brief  Check the connection status to the database
+  bool isConnected( void ) override;
+
+  /// @fn     void connect( void )
+  /// @brief  Attempt to establish a database connection using the configured
+  ///         parameters
+  void connect( void ) override;
+
+  /// @fn     void disconnect( void )
+  /// @brief  Terminate the established connection to the databas
   void disconnect( void ) override;
+
+  /// @fn     void performInput( void )
+  /// @brief  Process all received inputs received from database
+  void performInput( void ) {}
+
+  /// @fn     void performOutput( void )
+  /// @brief  Send all outgoing messages to database
+  void performOutput( void ) {}
 
   // Network configuration
   int         getNetworkCount( void ) override;
