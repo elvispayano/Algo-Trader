@@ -85,6 +85,25 @@ void Postgres::disconnect( void ) {
     PQfinish( connection );
 }
 
+/// @fn     void performInput( void )
+/// @brief  Process all received inputs received from database
+void Postgres::performInput( void ) {
+  createNewNetworks();
+}
+
+/// @fn     void createNewNetworks( void )
+/// @brief  Check the database for any new networks to be created
+void Postgres::createNewNetworks( void ) {
+  static unsigned int networksLoaded = 0;
+  if (networksLoaded < getNetworkCount()) {
+    std::string temp = getNetwork( ++networksLoaded );
+  }
+}
+
+/// @fn     void performOutput( void )
+/// @brief  Send all outgoing messages to database
+void Postgres::performOutput( void ) {}
+
 /*
   Function:     clearQuery
   Inputs:       None (void)

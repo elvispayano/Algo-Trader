@@ -52,6 +52,10 @@ public:
   /// @brief  Send all outgoing messages to database
   virtual void performOutput( void ) = 0;
 
+  /// @fn     void update( void )
+  /// @brief  Update the processing state for the database
+  virtual void update( void ) = 0;
+
   // Network configuration
   virtual int         getNetworkCount( void )             = 0;
   virtual std::string getNetwork( size_t id )             = 0;

@@ -50,11 +50,15 @@ public:
 
   /// @fn     void performInput( void )
   /// @brief  Process all received inputs received from database
-  void performInput( void ) {}
+  void performInput( void );
 
   /// @fn     void performOutput( void )
   /// @brief  Send all outgoing messages to database
-  void performOutput( void ) {}
+  void performOutput( void );
+
+  /// @fn     void update( void )
+  /// @brief  Update the processing state for the database
+  void update( void ) {}
 
   // Network configuration
   int         getNetworkCount( void ) override;
@@ -66,6 +70,9 @@ public:
                                unsigned int layerNum ) override;
 
 private:
+  void createNewNetworks( void );
+
+
   int             getInputs( std::string ticker, int layerNum );
   int             getNodes( std::string ticker, int layerNum );
   int             getIndex( std::string ticker, int layerNum );

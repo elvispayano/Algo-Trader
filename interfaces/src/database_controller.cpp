@@ -31,5 +31,7 @@ void DatabaseController::perform( void ) {
 
   pDatabase->performInput();
 
+  pDatabase->update();
+
   pDatabase->performOutput();
 }
