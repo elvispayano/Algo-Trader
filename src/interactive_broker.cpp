@@ -15,8 +15,8 @@
 */
 
 // Interface Includes
-#include "interfaces/interactive_broker.h"
-#include "interfaces/ib_wrapper.h"
+#include "interactive_broker.h"
+#include "ib_wrapper.h"
 
 // Comms Includes
 #include "comms/broker_request_update_msg.h"

@@ -27,10 +27,19 @@ project(algorithmic-trader LANGUAGES CXX C)
 cmake_minimum_required(VERSION 3.8)
 
 #----------------------------------------------------------------------
+# External Interfaces
+#----------------------------------------------------------------------
+
+# Broker API
+include(${CMAKE_SOURCE_DIR}/cmake/broker.cmake)
+
+# Database API
+find_package(PostgreSQL REQUIRED)
+
+#----------------------------------------------------------------------
 # Build Libraries
 #----------------------------------------------------------------------
 add_subdirectory(comms)
-add_subdirectory(interfaces)
 add_subdirectory(neuralnetwork)
 add_subdirectory(utilities)
 
@@ -42,18 +51,26 @@ include_directories(${ALGO_TRADER_INCLUDE_DIRS})
 
 set(ALGO_TRADER_SRC
   "src/broker_controller.cpp"
+  "src/database_base.cpp"
   "src/database_controller.cpp"
+  "src/ib_wrapper.cpp"
+  "src/interactive_broker.cpp"
+  "src/postgres.cpp"
   "src/trader_controller.cpp"
   "src/main.cpp"
 )
 
 add_executable(algorithmic-trader ${ALGO_TRADER_SRC})
-target_include_directories(algorithmic-trader SYSTEM INTERFACE "$<BUILD_INTERFACE:${ALGO_TRADER_INCLUDE_DIRS}>")
 
+target_include_directories(algorithmic-trader SYSTEM INTERFACE "$<BUILD_INTERFACE:${ALGO_TRADER_INCLUDE_DIRS}>")
+target_include_directories(algorithmic-trader PRIVATE "${PostgreSQL_INCLUDE_DIR}")
+target_include_directories(algorithmic-trader PRIVATE "${IB_SOURCE_DIR}")
+
+target_link_libraries(algorithmic-trader PRIVATE broker)
 target_link_libraries(algorithmic-trader PRIVATE comms)
-target_link_libraries(algorithmic-trader PRIVATE interfaces)
 target_link_libraries(algorithmic-trader PRIVATE neuralnetwork)
 target_link_libraries(algorithmic-trader PRIVATE utilities)
+target_link_libraries(algorithmic-trader PRIVATE "${PostgreSQL_LIBRARY}")
 
 #----------------------------------------------------------------------
 # Samples

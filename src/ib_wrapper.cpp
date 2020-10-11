@@ -13,7 +13,7 @@
 */
 
 // Interface Includes
-#include "interfaces/ib_wrapper.h"
+#include "ib_wrapper.h"
 
 // Interactive Broker Includes
 #include "CommissionReport.h"

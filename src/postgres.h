@@ -15,7 +15,7 @@
 #define POSTGRES_H
 
 // Interface Includes
-#include "interfaces/database_base.h"
+#include "database_base.h"
 
 // Utilities Includes
 #include "utilities/network_types.h"

@@ -2,7 +2,7 @@
 #include "database_controller.h"
 
 // Interface Includes
-#include "interfaces/postgres.h"
+#include "postgres.h"
 
 DatabaseController::DatabaseController( void ) {
   pDatabase = 0;
