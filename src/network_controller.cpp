@@ -7,14 +7,18 @@
 /// \date     02/10/2020
 /// \version  0.0.1
 
+// Algo-Trader Includes
+#include "network_controller.h"
+#include "data_server.h"
+
 // Neural Network Includes
-#include "neuralnetwork/network_controller.h"
 #include "neuralnetwork/neural_network.h"
 
-NetworkController::NetworkController( void ) {
+NetworkController::NetworkController( DataServer* server )
+    : pServer( server ) {
   networkList.clear();
-  LayerInputMsg       = 0;
-  pBrokerPort         = 0;
+  LayerInputMsg = 0;
+  pBrokerPort   = 0;
 }
 
 NetworkController::~NetworkController( void ) {
@@ -48,6 +52,8 @@ void NetworkController::processInputs( void ) {
 }
 
 void NetworkController::update( void ) {
+  configure();
+  
   NeuralNetwork* network;
   Matrix         input;
 
@@ -70,7 +76,7 @@ void NetworkController::processOutputs( void ) {
   BrokerRequestMsg       requestMsg;
 
   for ( auto iter : networkList ) {
-    if (!iter.second->checkConfiguration()) {
+    if ( !iter.second->checkConfiguration() ) {
       continue;
     }
 
@@ -129,4 +135,13 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
   input( 4, 0 ) = msg.last;
 
   networkInputs[ticker].set( input );
+}
+
+void NetworkController::configure(void) {
+  std::string ticker = pServer->getNetwork();
+  if ( ( networkList.find( ticker ) == networkList.end() ) &&
+       ticker.size() > 0 ) {
+    networkList[ticker] = new NeuralNetwork( ticker );
+  }
+  pServer->setNumberNetworksLoaded( networkList.size() );
 }

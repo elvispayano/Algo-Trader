@@ -16,3 +16,13 @@ DataServer::DataServer( void ) {
 void DataServer::initialize( void ) {
   numberNetworksLoaded = 0;
 }
+
+std::string DataServer::getNetwork(void) {
+  std::string ticker;
+  if (networkList.size() == 0) {
+    return ticker;
+  }
+  ticker = networkList.back();
+  networkList.pop_back();
+  return ticker;
+}

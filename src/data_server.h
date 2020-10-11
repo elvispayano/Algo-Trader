@@ -22,12 +22,15 @@ public:
   void initialize( void );
 
   void addNetwork( std::string network ) { networkList.push_back( network ); }
+  std::string getNetwork( void );
 
   unsigned int getNumberNetworksLoaded( void ) { return numberNetworksLoaded; }
 
   void setNumberNetworksLoaded( unsigned int num ) {
     numberNetworksLoaded = num;
   }
+
+  
 
 private:
   unsigned int numberNetworksLoaded;

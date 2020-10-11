@@ -11,7 +11,7 @@
 #define NETWORK_CONTROLLER_H
 
 // Neural Network Includes
-#include "neural_network.h"
+#include "neuralnetwork/neural_network.h"
 
 // Comms Includes
 #include "comms/broker_request_msg.h"
@@ -28,11 +28,12 @@
 #include <vector>
 
 // Forward Declaration
+class DataServer;
 class NeuralNetwork;
 
 class NetworkController {
 public:
-  NetworkController( void );
+  NetworkController( DataServer* server );
   ~NetworkController( void );
 
   void perform( void );
@@ -58,6 +59,10 @@ private:
   /// @brief  Update neural network inputs
   void updateNetworkInputs( BrokerResponseUpdateMsg msg );
 
+  /// @fn     configure( void )
+  /// @breif  Configure what networks are loaded
+  void configure( void );
+
   std::map<std::string, NeuralNetwork*> networkList;
   std::map<std::string, Matrix>         networkInputs;
 
@@ -68,6 +73,8 @@ private:
   BrokerResponseUpdateMsg brokerResponseUpdate;
 
   LayerMsg* LayerInputMsg;
+
+  DataServer* pServer;
 };
 
 #endif /* NETWORK_CONTROLLER_H */

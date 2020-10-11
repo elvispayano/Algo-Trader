@@ -11,9 +11,7 @@
 #include "trader_controller.h"
 #include "broker_controller.h"
 #include "database_controller.h"
-
-// Neural Network Includes
-#include "neuralnetwork/network_controller.h"
+#include "network_controller.h"
 
 TraderController::TraderController( void ) {
   // Controllers
@@ -48,7 +46,7 @@ void TraderController::initialize( void ) {
 
   // Create Controllers
   pBrokerCntrl   = new BrokerController();
-  pNetworkCntrl  = new NetworkController();
+  pNetworkCntrl  = new NetworkController(pServer);
   pDatabaseCntrl = new DatabaseController(pServer);
 
   // Initialize Ports

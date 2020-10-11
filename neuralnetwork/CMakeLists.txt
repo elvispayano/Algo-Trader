@@ -29,7 +29,6 @@ set(NN_SRC
   "src/activation.cpp"
   "src/fully_connected_layer.cpp"
   "src/layer_base.cpp"
-  "src/network_controller.cpp"
   "src/neural_network.cpp"
 )
 
