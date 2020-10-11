@@ -353,3 +353,10 @@ LayerConfiguration Postgres::getLayer( std::string  ticker,
 
   return layer;
 }
+
+/// @fn     std::string getNextNetwork( void )
+/// @brief  Get the next available network that will be loaded
+std::string Postgres::getNextNetwork(void) {
+  static unsigned int networksLoaded = 0;
+  return getNetwork( ++networksLoaded );
+}

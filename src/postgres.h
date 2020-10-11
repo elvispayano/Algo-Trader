@@ -69,7 +69,11 @@ public:
   LayerConfiguration getLayer( std::string  ticker,
                                unsigned int layerNum ) override;
 
+  std::string getNextNetwork( void );
+
 private:
+  /// @fn     void createNewNetworks( void )
+  /// @brief  Create a new network
   void createNewNetworks( void );
 
 

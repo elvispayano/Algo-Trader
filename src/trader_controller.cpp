@@ -24,6 +24,8 @@ TraderController::TraderController( void ) {
   // FIFOs
   pPortBroker = 0;
 
+  pServer = 0;
+
   initialize();
 }
 
@@ -36,13 +38,18 @@ TraderController::~TraderController( void ) {
 
   if ( pNetworkCntrl )
     delete pNetworkCntrl;
+
+  if ( pServer )
+    delete pServer;
 }
 
 void TraderController::initialize( void ) {
+  pServer = new DataServer();
+
   // Create Controllers
   pBrokerCntrl   = new BrokerController();
   pNetworkCntrl  = new NetworkController();
-  pDatabaseCntrl = new DatabaseController();
+  pDatabaseCntrl = new DatabaseController(pServer);
 
   // Initialize Ports
   pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;

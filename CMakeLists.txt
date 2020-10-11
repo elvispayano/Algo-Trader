@@ -53,6 +53,7 @@ set(ALGO_TRADER_SRC
   "src/broker_controller.cpp"
   "src/database_base.cpp"
   "src/database_controller.cpp"
+  "src/data_server.cpp"
   "src/ib_wrapper.cpp"
   "src/interactive_broker.cpp"
   "src/postgres.cpp"

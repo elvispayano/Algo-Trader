@@ -3,10 +3,11 @@
 
 // Forward Declarations
 class Postgres;
+class DataServer;
 
 class DatabaseController {
 public:
-  DatabaseController( void );
+  DatabaseController( DataServer* server );
   ~DatabaseController( void );
 
   /// @fn     void initialize( void )
@@ -18,7 +19,8 @@ public:
   void perform( void );
 
 private:
-  Postgres* pDatabase;
+  DataServer* pServer;
+  Postgres*   pDatabase;
 };
 
 #endif /* DATABASE_CONTROLLER_H */

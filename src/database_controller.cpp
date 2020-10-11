@@ -1,10 +1,12 @@
 // Algo-Trader Includes
 #include "database_controller.h"
+#include "data_server.h"
 
 // Interface Includes
 #include "postgres.h"
 
-DatabaseController::DatabaseController( void ) {
+DatabaseController::DatabaseController( DataServer* server )
+    : pServer( server ) {
   pDatabase = 0;
 
   initialize();
@@ -30,6 +32,10 @@ void DatabaseController::perform( void ) {
   if ( !pDatabase->isConnected() ) {
     pDatabase->connect();
     return;
+  }
+
+  if ( pServer->getNumberNetworksLoaded() < pDatabase->getNetworkCount() ) {
+    pServer->addNetwork( pDatabase->getNextNetwork() );
   }
 
   pDatabase->performInput();
