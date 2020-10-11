@@ -8,11 +8,9 @@
 /// \version  0.0.1
 
 // Algo Trader Includes
-#include "algo-trader/trader_controller.h"
-
-// Interface Includes
-#include "interfaces/broker_controller.h"
-#include "interfaces/database_controller.h"
+#include "trader_controller.h"
+#include "broker_controller.h"
+#include "database_controller.h"
 
 // Neural Network Includes
 #include "neuralnetwork/network_controller.h"

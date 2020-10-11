@@ -41,6 +41,8 @@ set(ALGO_TRADER_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_
 include_directories(${ALGO_TRADER_INCLUDE_DIRS})
 
 set(ALGO_TRADER_SRC
+  "src/broker_controller.cpp"
+  "src/database_controller.cpp"
   "src/trader_controller.cpp"
   "src/main.cpp"
 )

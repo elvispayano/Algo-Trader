@@ -1,8 +1,8 @@
+#include "broker_controller.h"
 
 // Interface Includes
-#include "interfaces/broker_controller.h"
-#include "ib_wrapper.h"
-#include "interactive_broker.h"
+#include "interfaces/ib_wrapper.h"
+#include "interfaces/interactive_broker.h"
 
 BrokerController::BrokerController( void ) {
   pBroker = 0;

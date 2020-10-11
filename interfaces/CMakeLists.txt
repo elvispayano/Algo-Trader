@@ -36,8 +36,6 @@ set(INTERFACES_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_S
 include_directories(${INTERFACES_INCLUDE_DIRS})
 
 set(INTERFACE_SRC
-  "src/broker_controller.cpp"
-  "src/database_controller.cpp"
   "src/database_base.cpp"
   "src/ib_wrapper.cpp"
   "src/interactive_broker.cpp"

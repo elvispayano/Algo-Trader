@@ -1,5 +1,8 @@
-#include "interfaces/database_controller.h"
-#include "postgres.h"
+// Algo-Trader Includes
+#include "database_controller.h"
+
+// Interface Includes
+#include "interfaces/postgres.h"
 
 DatabaseController::DatabaseController( void ) {
   pDatabase = 0;

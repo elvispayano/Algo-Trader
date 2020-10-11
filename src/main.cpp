@@ -6,7 +6,7 @@
 #include <unistd.h>
 #endif
 
-#include "algo-trader/trader_controller.h"
+#include "trader_controller.h"
 
 bool             logic;
 TraderController trader;
