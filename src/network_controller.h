@@ -18,10 +18,12 @@
 #include "comms/broker_request_update_msg.h"
 #include "comms/broker_response_msg.h"
 #include "comms/broker_response_update_msg.h"
+#include "comms/fc_layer_msg.h"
 #include "comms/layer_msg.h"
 
 // Utility Includes
 #include "utilities/fifo_bidirectional.h"
+#include "utilities/fifo_unidirectional.h"
 
 // Standard Includes
 #include <map>
@@ -45,6 +47,12 @@ public:
   ///         port.
   void install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port );
 
+  /// @fn     void install( FIFOUnidirectional< LayerMsg >* port )
+  /// @param  port  Installed database port
+  /// @brief  Prove the database interface with the installed communication
+  /// port.
+  void install( FIFOUnidirectional<LayerMsg>* port );
+
 private:
   void processInputs( void );
   void update( void );
@@ -59,8 +67,20 @@ private:
   /// @brief  Update neural network inputs
   void updateNetworkInputs( BrokerResponseUpdateMsg msg );
 
+  /// @fn     void processDatabaseInputs( void )
+  /// @brief  Process responses from the database
+  void processDatabaseInputs( void );
+
+  /// @fn     void configure( FCLayer )
+  /// @brief  Reconfigure selected network
+  void reconfigure( FCLayer msg );
+
+  /// @fn     load( void )
+  /// @breif  Create a new network used within the system
+  void load( void );
+
   /// @fn     configure( void )
-  /// @breif  Configure what networks are loaded
+  /// @brief  Configure the loaded neural networks
   void configure( void );
 
   std::map<std::string, NeuralNetwork*> networkList;
@@ -69,10 +89,11 @@ private:
   // Port Definitions
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pBrokerPort;
 
-  BrokerResponseMsg       brokerResponse;
+  FIFOUnidirectional<LayerMsg>* pLayerPort;
+
   BrokerResponseUpdateMsg brokerResponseUpdate;
 
-  LayerMsg* LayerInputMsg;
+  FCLayer databaseResponseFC;
 
   DataServer* pServer;
 };

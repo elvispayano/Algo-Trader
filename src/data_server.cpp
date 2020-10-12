@@ -14,15 +14,11 @@ DataServer::DataServer( void ) {
 }
 
 void DataServer::initialize( void ) {
-  numberNetworksLoaded = 0;
+  networkList.clear();
 }
 
-std::string DataServer::getNetwork(void) {
-  std::string ticker;
-  if (networkList.size() == 0) {
-    return ticker;
+void DataServer::addNetwork( std::string name ) {
+  if ( networkList.find( name ) == networkList.end() ) {
+    networkList[name] = 0;
   }
-  ticker = networkList.back();
-  networkList.pop_back();
-  return ticker;
 }

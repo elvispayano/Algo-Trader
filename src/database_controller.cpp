@@ -34,8 +34,9 @@ void DatabaseController::perform( void ) {
     return;
   }
 
-  if ( pServer->getNumberNetworksLoaded() < pDatabase->getNetworkCount() ) {
-    pServer->addNetwork( pDatabase->getNextNetwork() );
+  for ( unsigned int i = 0; i < pDatabase->getNetworkCount();  ++i) {
+    unsigned int netID = i + 1;
+    pServer->addNetwork( pDatabase->getNetwork( netID ) );
   }
 
   pDatabase->performInput();

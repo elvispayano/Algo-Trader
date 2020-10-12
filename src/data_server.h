@@ -11,31 +11,28 @@
 #define DATA_SERVER_H
 
 // Standard Includes
+#include <map>
 #include <string>
-#include <vector>
+
+// Forward Declarations
+class NeuralNetwork;
 
 class DataServer {
 public:
+  typedef std::map<std::string, NeuralNetwork*> NetworkMap;
+
   DataServer( void );
   ~DataServer( void ) {}
 
   void initialize( void );
 
-  void addNetwork( std::string network ) { networkList.push_back( network ); }
-  std::string getNetwork( void );
+  void addNetwork( std::string name );
+  bool getNetwork( std::string& name );
 
-  unsigned int getNumberNetworksLoaded( void ) { return numberNetworksLoaded; }
-
-  void setNumberNetworksLoaded( unsigned int num ) {
-    numberNetworksLoaded = num;
-  }
-
-  
+  NetworkMap&  getNetworkList( void ) { return networkList; }
 
 private:
-  unsigned int numberNetworksLoaded;
-
-  std::vector<std::string> networkList;
+  NetworkMap networkList;
 };
 
 #endif /* DATA_SERVER_H */
