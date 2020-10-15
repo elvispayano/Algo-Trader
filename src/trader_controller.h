@@ -10,6 +10,9 @@
 #ifndef TRADER_CONTROLLER_H
 #define TRADER_CONTROLLER_H
 
+// Algo-Trader Includes
+#include "data_server.h"
+
 // Utility Includes
 #include "utilities/fifo_bidirectional.h"
 
@@ -37,6 +40,8 @@ private:
   NetworkController*  pNetworkCntrl;
 
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
+
+  DataServer* pServer;
 };
 
 #endif /* TRADER_CONTROLLER_H */

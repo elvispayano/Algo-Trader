@@ -7,14 +7,21 @@
 /// \date     02/10/2020
 /// \version  0.0.1
 
+// Algo-Trader Includes
+#include "network_controller.h"
+#include "data_server.h"
+
+// Comms Includes
+#include "comms/layer_msg.h"
+
 // Neural Network Includes
-#include "neuralnetwork/network_controller.h"
 #include "neuralnetwork/neural_network.h"
 
-NetworkController::NetworkController( void ) {
+NetworkController::NetworkController( DataServer* server )
+    : pServer( server ) {
   networkList.clear();
-  LayerInputMsg       = 0;
-  pBrokerPort         = 0;
+  pBrokerPort = 0;
+  pLayerPort  = 0;
 }
 
 NetworkController::~NetworkController( void ) {
@@ -34,6 +41,13 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
+/// @fn     void install( FIFOUnidirectional< LayerMsg >* port )
+/// @param  port  Installed database port
+/// @brief  Prove the database interface with the installed communication port.
+void NetworkController::install( FIFOUnidirectional<LayerMsg>* port ) {
+  pLayerPort = port;
+}
+
 void NetworkController::perform( void ) {
   processInputs();
 
@@ -45,9 +59,15 @@ void NetworkController::perform( void ) {
 void NetworkController::processInputs( void ) {
   // Processing Broker Inputs
   processBrokerInputs();
+
+  processDatabaseInputs();
 }
 
 void NetworkController::update( void ) {
+  load();
+
+  configure();
+
   NeuralNetwork* network;
   Matrix         input;
 
@@ -70,7 +90,7 @@ void NetworkController::processOutputs( void ) {
   BrokerRequestMsg       requestMsg;
 
   for ( auto iter : networkList ) {
-    if (!iter.second->checkConfiguration()) {
+    if ( !iter.second->checkConfiguration() ) {
       continue;
     }
 
@@ -93,6 +113,7 @@ void NetworkController::processOutputs( void ) {
 /// @fn     void processBrokerInputs( void )
 /// @brief  Process responses from broker API
 void NetworkController::processBrokerInputs( void ) {
+  BrokerResponseMsg brokerResponse;
   if ( !pBrokerPort->getInput( brokerResponse ) ) {
     return;
   }
@@ -129,4 +150,48 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
   input( 4, 0 ) = msg.last;
 
   networkInputs[ticker].set( input );
+}
+
+/// @fn     void processDatabaseInputs( void )
+/// @brief  Process responses from the database
+void NetworkController::processDatabaseInputs( void ) {
+  LayerMsg databaseResponse;
+  if ( !pLayerPort->getMessage( databaseResponse ) ) {
+    return;
+  }
+
+  switch ( databaseResponse.getID() ) {
+  case LayerID::FULLYCONNECTED:
+    if ( databaseResponseFC.decode( &databaseResponse ) ) {
+      reconfigure( databaseResponseFC );
+    }
+    break;
+  }
+}
+
+/// @fn     void configure( FCLayer )
+/// @brief  Reconfigure selected network
+void NetworkController::reconfigure( FCLayer msg ) {}
+
+/// @fn     void load( void )
+/// @brief  Load and create new networks
+void NetworkController::load( void ) {
+  std::string ticker;
+  for ( auto& network : pServer->getNetworkList() ) {
+    if ( !network.second ) {
+      network.second = new NeuralNetwork( network.first );
+    }
+  }
+}
+
+/// @fn     void configure( void )
+/// @brief  Reconfigure the created networks
+void NetworkController::configure( void ) {
+
+  for ( auto& network : pServer->getNetworkList() ) {
+    if ( network.second->checkConfiguration() ) {
+      continue;
+    }
+    network.second;
+  }
 }

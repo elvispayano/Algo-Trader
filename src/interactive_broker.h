@@ -21,7 +21,7 @@
 #include "comms/broker_request_update_msg.h"
 
 // Interface Includes
-#include "interfaces/broker_base.h"
+#include "broker_base.h"
 
 // Utility Includes
 #include "utilities/broker_types.h"

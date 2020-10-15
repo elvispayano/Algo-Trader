@@ -15,7 +15,7 @@
 #define POSTGRES_H
 
 // Interface Includes
-#include "interfaces/database_base.h"
+#include "database_base.h"
 
 // Utilities Includes
 #include "utilities/network_types.h"
@@ -35,9 +35,30 @@ public:
             char* pass );  // Constructor
   ~Postgres( void );       // Destructor
 
-  // Connection management
-  bool connect( void ) override;
+  /// @fn     bool isConnected( void )
+  /// @brief  Check the connection status to the database
+  bool isConnected( void ) override;
+
+  /// @fn     void connect( void )
+  /// @brief  Attempt to establish a database connection using the configured
+  ///         parameters
+  void connect( void ) override;
+
+  /// @fn     void disconnect( void )
+  /// @brief  Terminate the established connection to the databas
   void disconnect( void ) override;
+
+  /// @fn     void performInput( void )
+  /// @brief  Process all received inputs received from database
+  void performInput( void );
+
+  /// @fn     void performOutput( void )
+  /// @brief  Send all outgoing messages to database
+  void performOutput( void );
+
+  /// @fn     void update( void )
+  /// @brief  Update the processing state for the database
+  void update( void ) {}
 
   // Network configuration
   int         getNetworkCount( void ) override;
@@ -48,7 +69,14 @@ public:
   LayerConfiguration getLayer( std::string  ticker,
                                unsigned int layerNum ) override;
 
+  std::string getNextNetwork( void );
+
 private:
+  /// @fn     void createNewNetworks( void )
+  /// @brief  Create a new network
+  void createNewNetworks( void );
+
+
   int             getInputs( std::string ticker, int layerNum );
   int             getNodes( std::string ticker, int layerNum );
   int             getIndex( std::string ticker, int layerNum );

@@ -8,14 +8,10 @@
 /// \version  0.0.1
 
 // Algo Trader Includes
-#include "algo-trader/trader_controller.h"
-
-// Interface Includes
-#include "interfaces/broker_controller.h"
-#include "interfaces/database_controller.h"
-
-// Neural Network Includes
-#include "neuralnetwork/network_controller.h"
+#include "trader_controller.h"
+#include "broker_controller.h"
+#include "database_controller.h"
+#include "network_controller.h"
 
 TraderController::TraderController( void ) {
   // Controllers
@@ -25,6 +21,8 @@ TraderController::TraderController( void ) {
 
   // FIFOs
   pPortBroker = 0;
+
+  pServer = 0;
 
   initialize();
 }
@@ -38,12 +36,18 @@ TraderController::~TraderController( void ) {
 
   if ( pNetworkCntrl )
     delete pNetworkCntrl;
+
+  if ( pServer )
+    delete pServer;
 }
 
 void TraderController::initialize( void ) {
+  pServer = new DataServer();
+
   // Create Controllers
-  pBrokerCntrl = new BrokerController();
-  pNetworkCntrl = new NetworkController();
+  pBrokerCntrl   = new BrokerController();
+  pNetworkCntrl  = new NetworkController(pServer);
+  pDatabaseCntrl = new DatabaseController(pServer);
 
   // Initialize Ports
   pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
