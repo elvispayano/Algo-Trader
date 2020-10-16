@@ -18,6 +18,8 @@
 #include "comms/broker_request_update_msg.h"
 #include "comms/broker_response_msg.h"
 #include "comms/broker_response_update_msg.h"
+#include "comms/database_response_msg.h"
+#include "comms/database_response_network_msg.h"
 #include "comms/fc_layer_msg.h"
 #include "comms/layer_msg.h"
 
@@ -33,6 +35,9 @@
 class DataServer;
 class NeuralNetwork;
 
+// Port Declaration
+class DatabaseResponseMsg;
+
 class NetworkController {
 public:
   NetworkController( DataServer* server );
@@ -47,11 +52,12 @@ public:
   ///         port.
   void install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port );
 
-  /// @fn     void install( FIFOBidirectional<LayerMsg, LayerMsg>* port )
+  /// @fn     void install( FIFOBidirectional<LayerMsg, 
+  ///                       DatabaseResponseMsg>* port )
   /// @param  port  Installed database port
   /// @brief  Provide the database interface with the installed communication
   ///         port.
-  void install( FIFOBidirectional<LayerMsg, LayerMsg>* port );
+  void install( FIFOBidirectional<LayerMsg, DatabaseResponseMsg>* port );
 
 private:
   void processInputs( void );
@@ -88,7 +94,7 @@ private:
 
   // Port Definitions
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pBrokerPort;
-  FIFOBidirectional<LayerMsg, LayerMsg>*                  pDatabasePort;
+  FIFOBidirectional<LayerMsg, DatabaseResponseMsg>*       pDatabasePort;
 
   BrokerResponseUpdateMsg brokerResponseUpdate;
 

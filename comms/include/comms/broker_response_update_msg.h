@@ -1,4 +1,4 @@
-/// Broker Response Update MEssage
+/// Broker Response Update Message
 ///
 /// Message architecture for broker response with ticker updates
 ///

@@ -36,7 +36,10 @@ void DatabaseController::perform( void ) {
 
   for ( unsigned int i = 0; i < pDatabase->getNetworkCount();  ++i) {
     unsigned int netID = i + 1;
-    pServer->addNetwork( pDatabase->getNetwork( netID ) );
+
+    std::string ticker = pDatabase->getNetwork( netID );
+    pServer->addNetwork( ticker );
+    pDatabase->getLayerCount( ticker );
   }
 
   pDatabase->performInput();

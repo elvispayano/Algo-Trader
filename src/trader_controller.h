@@ -25,6 +25,7 @@ class NetworkController;
 // FIFO Forward Declarations
 class BrokerResponseMsg;
 class BrokerRequestMsg;
+class DatabaseResponseMsg;
 class LayerMsg;
 
 class TraderController {
@@ -42,7 +43,7 @@ private:
   NetworkController*  pNetworkCntrl;
 
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
-  FIFOBidirectional<LayerMsg, LayerMsg>*                  pPortDatabase;
+  FIFOBidirectional<LayerMsg, DatabaseResponseMsg>*       pPortDatabase;
 
   DataServer* pServer;
 };

@@ -26,7 +26,7 @@ class MsgBase {
 public:
   /// @fn     MsgBase( void )
   /// @brief  Initialize an empty message packet
-  MsgBase(void) {
+  MsgBase( void ) {
     memset( buffer, '\0', MAX_MSG_SIZE );
     msgSize = 0;
   }
@@ -121,6 +121,30 @@ public:
     uchar* inBuffer = reinterpret_cast<uchar*>( &in );
     for ( uint iter = 0; iter < 4; ++iter ) {
       memcpy( &msg->buffer[BYTE + iter], &inBuffer[iter], 1 );
+    }
+  }
+
+  // String
+  typedef std::string String;
+  template<uint BYTE, uint SCALE>
+  void read( Map<String, BYTE, 0, SCALE> map, String& out, MsgBase* msg ) {
+    for ( uint iter = 0; iter < SCALE; ++iter ) {
+      uchar* character;
+      memcpy( character, &msg->buffer[BYTE + iter], 1 );
+      if ( character != '\0' ) {
+        out.push_back( *character );
+      }
+    }
+  }
+
+  template<uint BYTE, uint SCALE>
+  void write( Map<String, BYTE, 0, SCALE> map, String& in, MsgBase* msg ) {
+    for ( uint iter = 0; iter < SCALE; ++iter ) {
+      if (iter > in.size()) {
+        msg->buffer[BYTE + iter] = '\0';
+      } else {
+        memcpy( &msg->buffer[BYTE + iter], &in[iter], 1 );
+      }
     }
   }
 

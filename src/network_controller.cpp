@@ -13,6 +13,7 @@
 
 // Comms Includes
 #include "comms/layer_msg.h"
+#include "comms/database_response_network_msg.h"
 
 // Neural Network Includes
 #include "neuralnetwork/neural_network.h"
@@ -41,11 +42,12 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
-/// @fn     void install( FIFOBidirectional<LayerMsg, LayerMsg>* port )
+/// @fn     void install( FIFOBidirectional<LayerMsg, DatabaseResponseMsg>* port )
 /// @param  port  Installed database port
 /// @brief  Provide the database interface with the installed communication
 ///         port.
-void NetworkController::install( FIFOBidirectional<LayerMsg, LayerMsg>* port ) {
+void NetworkController::install(
+    FIFOBidirectional<LayerMsg, DatabaseResponseMsg>* port ) {
   pDatabasePort = port;
 }
 
