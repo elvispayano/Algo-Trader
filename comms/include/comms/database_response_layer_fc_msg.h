@@ -1,25 +1,23 @@
-/// Database Response Network Message
+/// Database Response Layer Fully Connected Message
 ///
-/// Message architecture for database response with network structure
+/// Base message architecture for transferring packetized fully connected layer
+/// configuration data
 ///
 /// \author   Elvis Payano
 /// \date     16/10/2020
 /// \version  0.0.1
 
-#ifndef DATABASE_RESPONSE_NETWORK_MSG_H
-#define DATABASE_RESPONSE_NETWORK_MSG_H
+#ifndef DATABASE_RESPONSE_LAYER_FC_MSG_H
+#define DATABASE_RESPONSE_LAYER_FC_MSG_H
 
-// Comms Includes
-#include "database_response_msg.h"
+#include "database_response_layer_msg.h"
 
-enum class DbNetworkID { ADD, REMOVE, UNKNOWN };
-
-class DatabaseResponseNetworkMsg : public DatabaseResponseMsg {
+class DatabaseResponseLayerFCMsg : public DatabaseResponseLayerMsg {
 public:
-  /// @fn     DatabaseResponseNetworkMsg( void )
+  /// @fn     DatabaseResponseLayerFCMsg( void )
   /// @brief  Initialize an empty message structure
-  DatabaseResponseNetworkMsg( void );
-  ~DatabaseResponseNetworkMsg( void ) {}
+  DatabaseResponseLayerFCMsg( void );
+  ~DatabaseResponseLayerFCMsg( void ) {}
 
   /// @fn     bool encode( BrokerResponseMsg* msg )
   /// @param  msg   Output message buffer
@@ -34,16 +32,15 @@ public:
   bool decode( DatabaseResponseMsg* msg ) override;
 
   struct {
-    String      ticker;
-    uint        layerCount;
-    DbNetworkID action;
+    String ticker;
+    uint   layerNum;
   };
 
 private:
   struct MsgMap {
-    Map<String, 0, 0, 6>      ticker;
-    Map<uint, 6, 0, 0>        layerCount;
-    Map<DbNetworkID, 7, 0, 0> action;
+    Map<DbLayerID, 0, 0, 0> layerType;
+    Map<String, 1, 0, 6>    ticker;
+    Map<uint, 7, 0, 0>      layerNum;
   } x;
 
   /// @fn     void write( DatabaseResponseMsg* msg )
@@ -55,4 +52,4 @@ private:
   void read( DatabaseResponseMsg* msg );
 };
 
-#endif /* DATABASE_RESPONSE_NETWORK_MSG_H */
+#endif /* DATABASE_RESPONSE_LAYER_FC_MSG_H */

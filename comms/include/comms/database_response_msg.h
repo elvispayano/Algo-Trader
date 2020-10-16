@@ -9,9 +9,10 @@
 #ifndef DATABASE_RESPONSE_MSG_H
 #define DATABASE_RESPONSE_MSG_H
 
+// Comms Includes
 #include "msg_base.h"
 
-enum class DatabaseResponseID { NETWORK, UNKNOWN };
+enum class DatabaseResponseID { LAYER, NETWORK, UNKNOWN };
 
 class DatabaseResponseMsg : public MsgBase {
 public:

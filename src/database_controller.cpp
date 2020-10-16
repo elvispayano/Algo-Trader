@@ -60,24 +60,36 @@ void DatabaseController::updateNetworks( void ) {
   DatabaseResponseNetworkMsg            networkMsg;
   std::map<std::string, NeuralNetwork*> networkList = pServer->getNetworkList();
 
-  static unsigned int count      = 0;
-  unsigned int        netID      = networkList.size();
-  unsigned int        totalCount = pDatabase->getNetworkCount();
+  std::vector<std::string> dbList;
+  for ( unsigned int i = 1; i <= pDatabase->getNetworkCount(); ++i ) {
+    dbList.push_back( pDatabase->getNetwork( i ) );
+  }
 
-  // Find missing networks
-  if ( count < totalCount ) {
-    for ( unsigned int i = 1; i <= totalCount; ++i ) {
-      networkMsg.ticker = pDatabase->getNetwork( i );
-      if ( networkList.find( networkMsg.ticker ) != networkList.end() ) {
-        continue;
-      }
+  // Add networks
+  for ( std::string ticker : dbList ) {
+    if ( networkList.find( ticker ) != networkList.end() ) {
+      continue;
+    }
 
-      networkMsg.layerCount = pDatabase->getLayerCount( networkMsg.ticker );
-      networkMsg.action     = DbNetworkID::ADD;
-      if ( networkMsg.encode( &databaseResponse ) ) {
-        writeMessage( databaseResponse );
-      }
-      break;
+    networkMsg.ticker     = ticker;
+    networkMsg.layerCount = pDatabase->getLayerCount( networkMsg.ticker );
+    networkMsg.action     = DbNetworkID::ADD;
+    if ( networkMsg.encode( &databaseResponse ) ) {
+      writeMessage( databaseResponse );
+    }
+    break;
+  }
+
+  // Delete networks
+  for (auto& network : networkList) {
+    if (dbList.end() != std::find(dbList.begin(), dbList.end(), network.first) ) {
+      continue;
+    }
+
+    networkMsg.ticker     = network.first;
+    networkMsg.action     = DbNetworkID::REMOVE;
+    if ( networkMsg.encode( &databaseResponse ) ) {
+      writeMessage( databaseResponse );
     }
   }
 }
