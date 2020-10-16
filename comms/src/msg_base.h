@@ -129,10 +129,10 @@ public:
   template<uint BYTE, uint SCALE>
   void read( Map<String, BYTE, 0, SCALE> map, String& out, MsgBase* msg ) {
     for ( uint iter = 0; iter < SCALE; ++iter ) {
-      uchar* character;
-      memcpy( character, &msg->buffer[BYTE + iter], 1 );
+      uchar character = '\0';
+      memcpy( &character, &msg->buffer[BYTE + iter], 1 );
       if ( character != '\0' ) {
-        out.push_back( *character );
+        out.push_back( character );
       }
     }
   }

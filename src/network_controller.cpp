@@ -42,12 +42,12 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
-/// @fn     void install( FIFOBidirectional<LayerMsg, DatabaseResponseMsg>* port )
+/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port )
 /// @param  port  Installed database port
 /// @brief  Provide the database interface with the installed communication
 ///         port.
 void NetworkController::install(
-    FIFOBidirectional<LayerMsg, DatabaseResponseMsg>* port ) {
+    FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port ) {
   pDatabasePort = port;
 }
 
@@ -159,7 +159,7 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
 /// @brief  Process responses from the database
 void NetworkController::processDatabaseInputs( void ) {
   LayerMsg databaseResponse;
-  if ( !pDatabasePort->getInput( databaseResponse ) ) {
+  if ( !pDatabasePort->getOutput( databaseResponse ) ) {
     return;
   }
 

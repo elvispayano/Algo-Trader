@@ -51,12 +51,17 @@ void TraderController::initialize( void ) {
 
   // Initialize Ports
   pPortBroker   = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
-  pPortDatabase = new FIFOBidirectional<LayerMsg, DatabaseResponseMsg>;
+  pPortDatabase = new FIFOBidirectional<DatabaseResponseMsg, LayerMsg>;
 
-  // Port Installation
+  // Broker Port Installation
   pBrokerCntrl->install( pPortBroker );
+
+  // Neural Network Port Installation
   pNetworkCntrl->install( pPortBroker );
   pNetworkCntrl->install( pPortDatabase );
+
+  // Database Port Installation
+  pDatabaseCntrl->install( pPortDatabase );
 }
 
 void TraderController::perform( void ) {

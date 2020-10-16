@@ -43,7 +43,7 @@ private:
   NetworkController*  pNetworkCntrl;
 
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
-  FIFOBidirectional<LayerMsg, DatabaseResponseMsg>*       pPortDatabase;
+  FIFOBidirectional<DatabaseResponseMsg, LayerMsg>*       pPortDatabase;
 
   DataServer* pServer;
 };

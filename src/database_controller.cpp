@@ -2,6 +2,9 @@
 #include "database_controller.h"
 #include "data_server.h"
 
+// Comms Includes
+#include "comms/database_response_network_msg.h"
+
 // Interface Includes
 #include "postgres.h"
 
@@ -16,6 +19,16 @@ DatabaseController::~DatabaseController( void ) {
   if ( pDatabase ) {
     delete pDatabase;
   }
+}
+
+/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg,
+///                       LayerMsg>* port )
+/// @param  port  Installed database port
+/// @brief  Provide the database interface with the installed communication
+///         port.
+void DatabaseController::install(
+    FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port ) {
+  pBrokerPort = port;
 }
 
 /// @fn     void initialize( void )
@@ -34,17 +47,36 @@ void DatabaseController::perform( void ) {
     return;
   }
 
-  for ( unsigned int i = 0; i < pDatabase->getNetworkCount();  ++i) {
-    unsigned int netID = i + 1;
+  createNetworks();
+}
 
-    std::string ticker = pDatabase->getNetwork( netID );
-    pServer->addNetwork( ticker );
-    pDatabase->getLayerCount( ticker );
+void DatabaseController::writeMessage( DatabaseResponseMsg msg ) {
+  if ( !pBrokerPort->putInput( msg ) ) {
+    printf( "DatabaseCntl: Error Writing To Bus\n" );
   }
+}
 
-  pDatabase->performInput();
+void DatabaseController::createNetworks( void ) {
+  DatabaseResponseNetworkMsg            networkMsg;
+  std::map<std::string, NeuralNetwork*> networkList = pServer->getNetworkList();
 
-  pDatabase->update();
+  static unsigned int count      = 0;
+  unsigned int        netID      = networkList.size();
+  unsigned int        totalCount = pDatabase->getNetworkCount();
 
-  pDatabase->performOutput();
+  // Find missing networks
+  if ( count < totalCount ) {
+    for (unsigned int i = 1; i <= totalCount; ++i) {
+      networkMsg.ticker = pDatabase->getNetwork( i );
+      if ( networkList.find( networkMsg.ticker ) != networkList.end() ) {
+        continue;
+      }
+      
+      networkMsg.layerCount = pDatabase->getLayerCount( networkMsg.ticker );
+      if ( networkMsg.encode( &databaseResponse ) ) {
+        writeMessage( databaseResponse );
+      }
+      break;
+    }
+  }
 }

@@ -39,6 +39,7 @@ public:
 private:
   struct MsgMap {
     Map<String, 0, 0, 6> ticker;
+    Map<uint, 6, 0, 0>   layerCount;
   } x;
 
   /// @fn     void write( DatabaseResponseMsg* msg )

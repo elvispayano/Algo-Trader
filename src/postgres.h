@@ -50,11 +50,11 @@ public:
 
   /// @fn     void performInput( void )
   /// @brief  Process all received inputs received from database
-  void performInput( void );
+  void performInput( void ) {}
 
   /// @fn     void performOutput( void )
   /// @brief  Send all outgoing messages to database
-  void performOutput( void );
+  void performOutput( void ) {}
 
   /// @fn     void update( void )
   /// @brief  Update the processing state for the database

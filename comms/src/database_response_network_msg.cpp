@@ -50,10 +50,12 @@ bool DatabaseResponseNetworkMsg::decode( DatabaseResponseMsg* msg ) {
 /// @brief  Serialize data and write to the buffer
 void DatabaseResponseNetworkMsg::write( DatabaseResponseMsg* msg ) {
   MsgBase::write( x.ticker, ticker, msg );
+  MsgBase::write( x.layerCount, layerCount, msg );
 }
 
 /// @fn     void read( DatabaseResponseMsg* msg )
 /// @brief  Deserialize data and read from buffer
 void DatabaseResponseNetworkMsg::read( DatabaseResponseMsg* msg ) {
   MsgBase::read( x.ticker, ticker, msg );
+  MsgBase::read( x.layerCount, layerCount, msg );
 }
