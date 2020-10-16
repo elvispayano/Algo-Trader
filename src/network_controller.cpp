@@ -20,8 +20,8 @@
 NetworkController::NetworkController( DataServer* server )
     : pServer( server ) {
   networkList.clear();
-  pBrokerPort = 0;
-  pLayerPort  = 0;
+  pBrokerPort   = 0;
+  pDatabasePort = 0;
 }
 
 NetworkController::~NetworkController( void ) {
@@ -41,11 +41,12 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
-/// @fn     void install( FIFOUnidirectional< LayerMsg >* port )
+/// @fn     void install( FIFOBidirectional<LayerMsg, LayerMsg>* port )
 /// @param  port  Installed database port
-/// @brief  Prove the database interface with the installed communication port.
-void NetworkController::install( FIFOUnidirectional<LayerMsg>* port ) {
-  pLayerPort = port;
+/// @brief  Provide the database interface with the installed communication
+///         port.
+void NetworkController::install( FIFOBidirectional<LayerMsg, LayerMsg>* port ) {
+  pDatabasePort = port;
 }
 
 void NetworkController::perform( void ) {
@@ -156,7 +157,7 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
 /// @brief  Process responses from the database
 void NetworkController::processDatabaseInputs( void ) {
   LayerMsg databaseResponse;
-  if ( !pLayerPort->getMessage( databaseResponse ) ) {
+  if ( !pDatabasePort->getInput( databaseResponse ) ) {
     return;
   }
 
@@ -169,7 +170,7 @@ void NetworkController::processDatabaseInputs( void ) {
   }
 }
 
-/// @fn     void configure( FCLayer )
+/// @fn     void reconfigure( FCLayer )
 /// @brief  Reconfigure selected network
 void NetworkController::reconfigure( FCLayer msg ) {}
 
@@ -189,9 +190,13 @@ void NetworkController::load( void ) {
 void NetworkController::configure( void ) {
 
   for ( auto& network : pServer->getNetworkList() ) {
-    if ( network.second->checkConfiguration() ) {
+    if ( !network.second->checkLayerConfiguration() ) {
+      return;
+    }
+
+    if ( !network.second->checkConfiguration() ) {
+      // network.second->
       continue;
     }
-    network.second;
   }
 }

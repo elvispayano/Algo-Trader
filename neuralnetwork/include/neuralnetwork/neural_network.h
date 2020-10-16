@@ -105,7 +105,15 @@ public:
 
   /// @fn     bool checkConfiguration( void )
   /// @brief  Check if the neural network has been completely configured
-  bool checkConfiguration( void ) { return false; }
+  bool checkConfiguration( void );
+
+  /// @fn     bool checkLayerConfiguration( void )
+  /// @brief  Check if the neural network has had all its layers created
+  bool checkLayerConfiguration( void );
+
+  /// @fn     bool checkHyperparamConfiguration( unsigned int layerNum )
+  /// @brief  Check if the desired layer hyperparameters have been configured
+  bool checkHyperparamConfiguration( void );
 
 private:
   //! @fn     LayerBase* newLayer(ActivationTypes activation, LayerTypes layer)

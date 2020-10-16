@@ -156,3 +156,32 @@ void NeuralNetwork::train( void ) {
   //  layer->train( 0.0, gradient );
   //}
 }
+
+/// @fn     bool checkLayerConfiguration( void )
+/// @brief  Check if the neural network has had all its layers created
+bool NeuralNetwork::checkLayerConfiguration(void) {
+  return false;
+}
+
+/// @fn     bool checkHyperparamConfiguration( unsigned int layerNum )
+/// @brief  Check if the desired layer hyperparameters have been configured
+bool NeuralNetwork::checkHyperparamConfiguration( void ) {
+  return false;
+}
+
+/// @fn     bool checkConfiguration( void )
+/// @brief  Check if the neural network has been completely configured
+bool NeuralNetwork::checkConfiguration(void) {
+  if (layerList.size() <= 0) {
+    return false;
+  }
+
+  bool isConfigured = false;
+  for (auto layer : layerList) {
+    if (!layer->isConfigured()) {
+
+      return false;
+    }
+  }
+  return true;
+}

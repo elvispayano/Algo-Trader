@@ -16,7 +16,7 @@ BrokerController::~BrokerController( void ) {}
 /// @fn     void initialize( void )
 /// @brief  Initialize the broker controller with the configured settings
 void BrokerController::initialize( void ) {
-  pBroker = new InteractiveBroker( new IBWrapper( "127.0.0.1", 6550, 0 ) );
+  pBroker = new InteractiveBroker( new IBWrapper( "192.168.50.50", 6550, 0 ) );
 }
 
 /// @fn     void perform( void )

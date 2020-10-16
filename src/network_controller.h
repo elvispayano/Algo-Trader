@@ -47,11 +47,11 @@ public:
   ///         port.
   void install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port );
 
-  /// @fn     void install( FIFOUnidirectional< LayerMsg >* port )
+  /// @fn     void install( FIFOBidirectional<LayerMsg, LayerMsg>* port )
   /// @param  port  Installed database port
-  /// @brief  Prove the database interface with the installed communication
-  /// port.
-  void install( FIFOUnidirectional<LayerMsg>* port );
+  /// @brief  Provide the database interface with the installed communication
+  ///         port.
+  void install( FIFOBidirectional<LayerMsg, LayerMsg>* port );
 
 private:
   void processInputs( void );
@@ -88,8 +88,7 @@ private:
 
   // Port Definitions
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pBrokerPort;
-
-  FIFOUnidirectional<LayerMsg>* pLayerPort;
+  FIFOBidirectional<LayerMsg, LayerMsg>*                  pDatabasePort;
 
   BrokerResponseUpdateMsg brokerResponseUpdate;
 

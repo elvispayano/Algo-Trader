@@ -46,15 +46,17 @@ void TraderController::initialize( void ) {
 
   // Create Controllers
   pBrokerCntrl   = new BrokerController();
-  pNetworkCntrl  = new NetworkController(pServer);
-  pDatabaseCntrl = new DatabaseController(pServer);
+  pNetworkCntrl  = new NetworkController( pServer );
+  pDatabaseCntrl = new DatabaseController( pServer );
 
   // Initialize Ports
-  pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
+  pPortBroker   = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
+  pPortDatabase = new FIFOBidirectional<LayerMsg, LayerMsg>;
 
   // Port Installation
   pBrokerCntrl->install( pPortBroker );
   pNetworkCntrl->install( pPortBroker );
+  pNetworkCntrl->install( pPortDatabase );
 }
 
 void TraderController::perform( void ) {
