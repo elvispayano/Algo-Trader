@@ -47,7 +47,7 @@ void DatabaseController::perform( void ) {
     return;
   }
 
-  createNetworks();
+  updateNetworks();
 }
 
 void DatabaseController::writeMessage( DatabaseResponseMsg msg ) {
@@ -56,7 +56,7 @@ void DatabaseController::writeMessage( DatabaseResponseMsg msg ) {
   }
 }
 
-void DatabaseController::createNetworks( void ) {
+void DatabaseController::updateNetworks( void ) {
   DatabaseResponseNetworkMsg            networkMsg;
   std::map<std::string, NeuralNetwork*> networkList = pServer->getNetworkList();
 
@@ -66,13 +66,14 @@ void DatabaseController::createNetworks( void ) {
 
   // Find missing networks
   if ( count < totalCount ) {
-    for (unsigned int i = 1; i <= totalCount; ++i) {
+    for ( unsigned int i = 1; i <= totalCount; ++i ) {
       networkMsg.ticker = pDatabase->getNetwork( i );
       if ( networkList.find( networkMsg.ticker ) != networkList.end() ) {
         continue;
       }
-      
+
       networkMsg.layerCount = pDatabase->getLayerCount( networkMsg.ticker );
+      networkMsg.action     = DbNetworkID::ADD;
       if ( networkMsg.encode( &databaseResponse ) ) {
         writeMessage( databaseResponse );
       }

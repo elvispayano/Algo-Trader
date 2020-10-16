@@ -12,8 +12,8 @@
 #include "data_server.h"
 
 // Comms Includes
-#include "comms/layer_msg.h"
 #include "comms/database_response_network_msg.h"
+#include "comms/layer_msg.h"
 
 // Neural Network Includes
 #include "neuralnetwork/neural_network.h"
@@ -42,7 +42,8 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
-/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port )
+/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port
+/// )
 /// @param  port  Installed database port
 /// @brief  Provide the database interface with the installed communication
 ///         port.
@@ -67,10 +68,6 @@ void NetworkController::processInputs( void ) {
 }
 
 void NetworkController::update( void ) {
-  load();
-
-  configure();
-
   NeuralNetwork* network;
   Matrix         input;
 
@@ -158,34 +155,58 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
 /// @fn     void processDatabaseInputs( void )
 /// @brief  Process responses from the database
 void NetworkController::processDatabaseInputs( void ) {
-  LayerMsg databaseResponse;
-  if ( !pDatabasePort->getOutput( databaseResponse ) ) {
+  DatabaseResponseMsg response;
+  if ( !pDatabasePort->getInput( response ) ) {
     return;
   }
 
-  switch ( databaseResponse.getID() ) {
-  case LayerID::FULLYCONNECTED:
-    if ( databaseResponseFC.decode( &databaseResponse ) ) {
-      reconfigure( databaseResponseFC );
+  switch ( response.getID() ) {
+  case DatabaseResponseID::NETWORK:
+    if ( databaseResponseNetwork.decode( &response ) ) {
+      updateLoadedNetworks( databaseResponseNetwork );
     }
     break;
+  }
+
+  // LayerMsg databaseResponse;
+  // if ( !pDatabasePort->getOutput( databaseResponse ) ) {
+  //  return;
+  //}
+  //
+  // switch ( databaseResponse.getID() ) {
+  // case LayerID::FULLYCONNECTED:
+  //  if ( databaseResponseFC.decode( &databaseResponse ) ) {
+  //    reconfigure( databaseResponseFC );
+  //  }
+  //  break;
+  //}
+}
+
+void NetworkController::updateLoadedNetworks(
+    DatabaseResponseNetworkMsg& msg ) {
+
+  std::map<std::string, NeuralNetwork*>& networkList =
+      pServer->getNetworkList();
+  switch ( msg.action ) {
+  case DbNetworkID::ADD:
+    networkList[msg.ticker] = new NeuralNetwork( msg.ticker, msg.layerCount );
+    break;
+
+  case DbNetworkID::REMOVE:
+    if ( networkList[msg.ticker] ) {
+      delete networkList[msg.ticker];
+      networkList.erase( networkList.find( msg.ticker ) );
+    }
+    break;
+
+  default: /* DbNetworkID::UNKNOWN */
+    printf( "Unknown Network Request\n" );
   }
 }
 
 /// @fn     void reconfigure( FCLayer )
 /// @brief  Reconfigure selected network
 void NetworkController::reconfigure( FCLayer msg ) {}
-
-/// @fn     void load( void )
-/// @brief  Load and create new networks
-void NetworkController::load( void ) {
-  std::string ticker;
-  for ( auto& network : pServer->getNetworkList() ) {
-    if ( !network.second ) {
-      network.second = new NeuralNetwork( network.first );
-    }
-  }
-}
 
 /// @fn     void configure( void )
 /// @brief  Reconfigure the created networks

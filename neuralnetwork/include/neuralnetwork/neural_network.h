@@ -29,10 +29,12 @@ public:
   //!         configured.
   NeuralNetwork( void );
 
-  //! @fn     NeuralNetwork( string name )
-  //! @brief  Initialize a neural network and layer workspace that will later be
-  //!         configured.
-  NeuralNetwork( std::string name );
+  /// @fn     NeuralNetwork( string name, unsigned int layerCount )
+  /// @param  name        Associated ticker symbol
+  /// @param  layerCount  Total layers present in network
+  /// @brief  Initializa a neural network and layer workspace that will later be
+  ///         configured.
+  NeuralNetwork( std::string name, unsigned int layerCount );
 
   //! @fn     ~NeuralNetwork( string ticker )
   //! @brief  The neural network is composed of various layer pointers that are
@@ -126,6 +128,7 @@ private:
   LayerBase*              inputLayer;
   LayerBase*              outputLayer;
   std::vector<LayerBase*> layerList;
+  unsigned int            totalLayers;
 
   std::string ticker;
 

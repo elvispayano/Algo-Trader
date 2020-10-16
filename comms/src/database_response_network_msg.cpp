@@ -13,10 +13,11 @@
 /// @brief  Initialize an empty message structure
 DatabaseResponseNetworkMsg::DatabaseResponseNetworkMsg( void ) {
   id      = DatabaseResponseID::NETWORK;
-  msgSize = 6;
+  msgSize = 8;
 
   ticker.clear();
   layerCount = 0;
+  action     = DbNetworkID::UNKNOWN;
 }
 
 /// @fn     bool encode( DatabaseResponseMsg* msg )
@@ -51,6 +52,7 @@ bool DatabaseResponseNetworkMsg::decode( DatabaseResponseMsg* msg ) {
 void DatabaseResponseNetworkMsg::write( DatabaseResponseMsg* msg ) {
   MsgBase::write( x.ticker, ticker, msg );
   MsgBase::write( x.layerCount, layerCount, msg );
+  MsgBase::write( x.action, action, msg );
 }
 
 /// @fn     void read( DatabaseResponseMsg* msg )
@@ -58,4 +60,5 @@ void DatabaseResponseNetworkMsg::write( DatabaseResponseMsg* msg ) {
 void DatabaseResponseNetworkMsg::read( DatabaseResponseMsg* msg ) {
   MsgBase::read( x.ticker, ticker, msg );
   MsgBase::read( x.layerCount, layerCount, msg );
+  MsgBase::read( x.action, action, msg );
 }

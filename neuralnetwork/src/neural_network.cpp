@@ -25,20 +25,25 @@ NeuralNetwork::NeuralNetwork( void ) {
 
   inputLayer  = 0;
   outputLayer = 0;
+  totalLayers = 0;
 }
 
-//! @fn     NeuralNetwork( string name )
-//! @brief  Initializa a neural network and layer workspace that will later be
-//!         configured.
-NeuralNetwork::NeuralNetwork( std::string name ) {
+/// @fn     NeuralNetwork( string name, unsigned int layerCount )
+/// @param  name        Associated ticker symbol
+/// @param  layerCount  Total layers present in network
+/// @brief  Initializa a neural network and layer workspace that will later be
+///         configured.
+NeuralNetwork::NeuralNetwork( std::string name, unsigned int layerCount ) {
   ticker = name;
   layerList.clear();
+  totalLayers = layerCount;
 
   inputCount  = 0;
   outputCount = 0;
 
   inputLayer  = 0;
   outputLayer = 0;
+
 }
 
 //! @fn     ~NeuralNetwork( string ticker )

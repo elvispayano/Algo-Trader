@@ -74,13 +74,14 @@ private:
   /// @brief  Process responses from the database
   void processDatabaseInputs( void );
 
+  /// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
+  /// @brief  Update the networks being used
+  void updateLoadedNetworks( DatabaseResponseNetworkMsg& msg );
+  void updateNetworks( void ) {}
+
   /// @fn     void configure( FCLayer )
   /// @brief  Reconfigure selected network
   void reconfigure( FCLayer msg );
-
-  /// @fn     load( void )
-  /// @breif  Create a new network used within the system
-  void load( void );
 
   /// @fn     configure( void )
   /// @brief  Configure the loaded neural networks
@@ -93,7 +94,11 @@ private:
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pBrokerPort;
   FIFOBidirectional<DatabaseResponseMsg, LayerMsg>*       pDatabasePort;
 
+  // Broker Response Messages
   BrokerResponseUpdateMsg brokerResponseUpdate;
+
+  // Database Response Messages
+  DatabaseResponseNetworkMsg databaseResponseNetwork;
 
   FCLayer databaseResponseFC;
 

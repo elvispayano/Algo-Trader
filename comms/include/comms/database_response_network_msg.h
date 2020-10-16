@@ -12,6 +12,8 @@
 // Comms Includes
 #include "database_response_msg.h"
 
+enum class DbNetworkID { ADD, REMOVE, UNKNOWN };
+
 class DatabaseResponseNetworkMsg : public DatabaseResponseMsg {
 public:
   /// @fn     DatabaseResponseNetworkMsg( void )
@@ -34,12 +36,14 @@ public:
   struct {
     std::string ticker;
     uint        layerCount;
+    DbNetworkID action;
   };
 
 private:
   struct MsgMap {
-    Map<String, 0, 0, 6> ticker;
-    Map<uint, 6, 0, 0>   layerCount;
+    Map<String, 0, 0, 6>      ticker;
+    Map<uint, 6, 0, 0>        layerCount;
+    Map<DbNetworkID, 7, 0, 0> action;
   } x;
 
   /// @fn     void write( DatabaseResponseMsg* msg )

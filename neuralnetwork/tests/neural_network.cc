@@ -25,7 +25,7 @@
 // Unit test framework setup
 class NeuralNetworkTest : public ::testing::Test {
 protected:
-  void SetUp( void ) override { network = new NeuralNetwork( "XYZ" ); }
+  void SetUp( void ) override { network = new NeuralNetwork( "XYZ", 10 ); }
 
   void TearDown( void ) override {
     if ( network )

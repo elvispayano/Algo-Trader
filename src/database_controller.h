@@ -40,7 +40,7 @@ private:
   /// @fn     void writeMessage( DatabaseResponseMsg msg )
   void writeMessage( DatabaseResponseMsg msg );
 
-  void createNetworks( void );
+  void updateNetworks( void );
 
   DataServer* pServer;
   Postgres*   pDatabase;
