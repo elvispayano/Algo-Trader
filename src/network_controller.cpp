@@ -11,26 +11,16 @@
 #include "network_controller.h"
 #include "data_server.h"
 
-// Comms Includes
-#include "comms/database_response_network_msg.h"
-#include "comms/layer_msg.h"
-
 // Neural Network Includes
 #include "neuralnetwork/neural_network.h"
 
 NetworkController::NetworkController( DataServer* server )
     : pServer( server ) {
-  networkList.clear();
   pBrokerPort   = 0;
   pDatabasePort = 0;
 }
 
-NetworkController::~NetworkController( void ) {
-  for ( auto& iter : networkList ) {
-    delete iter.second;
-  }
-  networkList.clear();
-}
+NetworkController::~NetworkController( void ) {}
 
 /// @fn     void install( FIFOBidirectional< BrokerRequestMsg,
 ///                       BrokerRequestMsg >* port )
@@ -42,13 +32,14 @@ void NetworkController::install(
   pBrokerPort = port;
 }
 
-/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port
+/// @fn     void install( FIFOBidirectional<DatabaseResponseMsg,
+///                       DatabaseRequestMsg>* port
 /// )
 /// @param  port  Installed database port
 /// @brief  Provide the database interface with the installed communication
 ///         port.
 void NetworkController::install(
-    FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port ) {
+    FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* port ) {
   pDatabasePort = port;
 }
 
@@ -64,6 +55,7 @@ void NetworkController::processInputs( void ) {
   // Processing Broker Inputs
   processBrokerInputs();
 
+  // Processing Database Inputs
   processDatabaseInputs();
 }
 
@@ -71,6 +63,7 @@ void NetworkController::update( void ) {
   NeuralNetwork* network;
   Matrix         input;
 
+  NetworkMap networkList = pServer->getNetworkList();
   for ( auto& iter : networkList ) {
     std::string ticker = iter.first;
     network            = iter.second;
@@ -89,6 +82,7 @@ void NetworkController::processOutputs( void ) {
   BrokerRequestUpdateMsg requestUpdateMsg;
   BrokerRequestMsg       requestMsg;
 
+  NetworkMap& networkList = pServer->getNetworkList();
   for ( auto iter : networkList ) {
     if ( !iter.second->checkConfiguration() ) {
       continue;
@@ -108,6 +102,9 @@ void NetworkController::processOutputs( void ) {
       pBrokerPort->putOutput( requestMsg );
     }
   }
+
+  // Processing Database Outputs
+  processDatabaseOutputs();
 }
 
 /// @fn     void processBrokerInputs( void )
@@ -166,60 +163,82 @@ void NetworkController::processDatabaseInputs( void ) {
       updateLoadedNetworks( databaseResponseNetwork );
     }
     break;
-  }
 
-  // LayerMsg databaseResponse;
-  // if ( !pDatabasePort->getOutput( databaseResponse ) ) {
-  //  return;
-  //}
-  //
-  // switch ( databaseResponse.getID() ) {
-  // case LayerID::FULLYCONNECTED:
-  //  if ( databaseResponseFC.decode( &databaseResponse ) ) {
-  //    reconfigure( databaseResponseFC );
-  //  }
-  //  break;
-  //}
+  case DatabaseResponseID::LAYER:
+    if ( databaseResponseLayer.decode( &response ) ) {
+      configureNetwork( databaseResponseLayer );
+    }
+    break;
+
+  default: /* DatabaseResponseID::UNKNOWN */
+    printf( "Error: Unknown Database Response\n" );
+  }
 }
 
+/// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
+/// @param  msg   Input message
+/// @brief  Update the networks being used
 void NetworkController::updateLoadedNetworks(
     DatabaseResponseNetworkMsg& msg ) {
 
-  std::map<std::string, NeuralNetwork*>& networkList =
-      pServer->getNetworkList();
+  NetworkMap& networkList = pServer->getNetworkList();
   switch ( msg.action ) {
   case DbNetworkID::ADD:
     networkList[msg.ticker] = new NeuralNetwork( msg.ticker, msg.layerCount );
+    printf( "NetworkCtrl: Added new Network: %s\n", msg.ticker.c_str() );
     break;
 
   case DbNetworkID::REMOVE:
     if ( networkList[msg.ticker] ) {
       delete networkList[msg.ticker];
       networkList.erase( networkList.find( msg.ticker ) );
+      printf( "NetworkCtrl: Removed Network: %s\n", msg.ticker.c_str() );
     }
     break;
 
   default: /* DbNetworkID::UNKNOWN */
-    printf( "Unknown Network Request\n" );
+    printf( "Error: Unknown Network Action\n" );
   }
 }
 
-/// @fn     void reconfigure( FCLayer )
-/// @brief  Reconfigure selected network
-void NetworkController::reconfigure( FCLayer msg ) {}
+/// @fn     void configureNetwork( DatabaseResponseLayerMsg msg )
+/// @param  msg   Input message
+/// @brief  Create network layers
+void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
 
-/// @fn     void configure( void )
-/// @brief  Reconfigure the created networks
-void NetworkController::configure( void ) {
+  switch ( msg.getType() ) {
+    // case DbLayerID::FULLYCONNECTED:
+    //  break;
 
-  for ( auto& network : pServer->getNetworkList() ) {
-    if ( !network.second->checkLayerConfiguration() ) {
-      return;
+  default: /* DbLayerID::UNKNOWN */
+    printf( "Error: Unknown Layer Type\n" );
+  }
+}
+
+void NetworkController::processDatabaseOutputs( void ) {
+  NetworkMap networkList = pServer->getNetworkList();
+
+  for ( auto network : networkList ) {
+    if ( !network.second->layersAdded() ) {
+      requestConfiguration( network.first,
+                            network.second->getLayerCount() + 1 );
+      break;
     }
+  }
+}
 
-    if ( !network.second->checkConfiguration() ) {
-      // network.second->
-      continue;
-    }
+void NetworkController::requestConfiguration( std::string  ticker,
+                                              unsigned int layerNum ) {
+  DatabaseRequestLayerMsg msg;
+  msg.ticker      = ticker;
+  msg.layerNumber = layerNum;
+  if ( msg.encode( &databaseRequest ) ) {
+    writeMessage( databaseRequest );
+  }
+}
+
+void NetworkController::writeMessage( DatabaseRequestMsg msg ) {
+  if ( !pDatabasePort->putOutput( msg ) ) {
+    printf( "NetworkCntl: Error Writing To Database Bus\n" );
   }
 }

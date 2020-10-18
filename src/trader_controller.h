@@ -26,7 +26,7 @@ class NetworkController;
 class BrokerResponseMsg;
 class BrokerRequestMsg;
 class DatabaseResponseMsg;
-class LayerMsg;
+class DatabaseRequestMsg;
 
 class TraderController {
 public:
@@ -43,7 +43,7 @@ private:
   NetworkController*  pNetworkCntrl;
 
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
-  FIFOBidirectional<DatabaseResponseMsg, LayerMsg>*       pPortDatabase;
+  FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* pPortDatabase;
 
   DataServer* pServer;
 };

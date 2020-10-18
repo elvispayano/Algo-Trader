@@ -22,20 +22,25 @@ DatabaseController::~DatabaseController( void ) {
 }
 
 /// @fn     void install( FIFOBidirectional<DatabaseResponseMsg,
-///                       LayerMsg>* port )
+///                       DatabaseRequestMsg>* port )
 /// @param  port  Installed database port
 /// @brief  Provide the database interface with the installed communication
 ///         port.
 void DatabaseController::install(
-    FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port ) {
-  pBrokerPort = port;
+    FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* port ) {
+  pPort = port;
 }
 
 /// @fn     void initialize( void )
 /// @brief  Initialize the database controller with the configured settings
 void DatabaseController::initialize( void ) {
-  pDatabase = new Postgres(
-      "localhost", "5432", "", "", "dbname = trader", "postgres", "password" );
+  pDatabase = new Postgres( "192.168.50.50",
+                            "5432",
+                            "",
+                            "",
+                            "dbname = postgres",
+                            "postgres",
+                            "password" );
 }
 
 /// @fn     void perform( void )
@@ -47,15 +52,22 @@ void DatabaseController::perform( void ) {
     return;
   }
 
+  processInputs();
+
   updateNetworks();
 }
 
+/// @fn     void writeMessage( DatabaseResponseMsg msg )
+/// @param  msg   Message to write to buffer
+/// @brief  Write the database response message
 void DatabaseController::writeMessage( DatabaseResponseMsg msg ) {
-  if ( !pBrokerPort->putInput( msg ) ) {
+  if ( !pPort->putInput( msg ) ) {
     printf( "DatabaseCntl: Error Writing To Bus\n" );
   }
 }
 
+/// @fn     void updateNetworks( void )
+/// @brief  Determine which networks should be loaded by the project
 void DatabaseController::updateNetworks( void ) {
   DatabaseResponseNetworkMsg            networkMsg;
   std::map<std::string, NeuralNetwork*> networkList = pServer->getNetworkList();
@@ -81,15 +93,40 @@ void DatabaseController::updateNetworks( void ) {
   }
 
   // Delete networks
-  for (auto& network : networkList) {
-    if (dbList.end() != std::find(dbList.begin(), dbList.end(), network.first) ) {
+  for ( auto& network : networkList ) {
+    if ( dbList.end() !=
+         std::find( dbList.begin(), dbList.end(), network.first ) ) {
       continue;
     }
 
-    networkMsg.ticker     = network.first;
-    networkMsg.action     = DbNetworkID::REMOVE;
+    networkMsg.ticker = network.first;
+    networkMsg.action = DbNetworkID::REMOVE;
     if ( networkMsg.encode( &databaseResponse ) ) {
       writeMessage( databaseResponse );
     }
   }
+}
+
+/// @fn     void processInputs( void )
+/// @brief  Process broker and database inputs
+void DatabaseController::processInputs(void) {
+  DatabaseRequestMsg request;
+  if ( !pPort->getOutput( request ) ) {
+    return;
+  }
+
+  switch ( request.getID() ) {
+  case DatabaseRequestID::LAYER:
+    if (reqLayerMsg.decode(&request)) {
+      requestLayerConfiguration();
+    }
+    break;
+
+  default:
+    printf( "DatabaseCtrl: Invalid Request Message\n" );
+  }
+}
+
+void DatabaseController::requestLayerConfiguration(void) {
+  
 }

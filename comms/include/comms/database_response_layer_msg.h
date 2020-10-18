@@ -20,6 +20,8 @@ public:
   DatabaseResponseLayerMsg( void ) { layerType = DbLayerID::UNKNOWN; }
   ~DatabaseResponseLayerMsg( void ) {}
 
+  DbLayerID getType( void ) { return layerType; }
+
 protected:
   DbLayerID layerType;
 };

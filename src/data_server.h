@@ -22,12 +22,11 @@ public:
   typedef std::map<std::string, NeuralNetwork*> NetworkMap;
 
   DataServer( void );
-  ~DataServer( void ) {}
+  ~DataServer( void );
 
   void initialize( void );
 
   void addNetwork( std::string name );
-  bool getNetwork( std::string& name );
 
   NetworkMap&  getNetworkList( void ) { return networkList; }
 

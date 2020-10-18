@@ -18,6 +18,9 @@
 #include "comms/broker_request_update_msg.h"
 #include "comms/broker_response_msg.h"
 #include "comms/broker_response_update_msg.h"
+#include "comms/database_request_layer_msg.h"
+#include "comms/database_request_msg.h"
+#include "comms/database_response_layer_msg.h"
 #include "comms/database_response_msg.h"
 #include "comms/database_response_network_msg.h"
 #include "comms/fc_layer_msg.h"
@@ -49,17 +52,18 @@ public:
   ///         port.
   void install( FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* port );
 
-  /// @fn     void install( FIFOBidirectional<DatabaseResponseMsg, 
-  ///                       LayerMsg>* port )
+  /// @fn     void install( FIFOBidirectional<DatabaseResponseMsg,
+  ///                       DatabaseRequestMsg>* port )
   /// @param  port  Installed database port
   /// @brief  Provide the database interface with the installed communication
   ///         port.
-  void install( FIFOBidirectional<DatabaseResponseMsg, LayerMsg>* port );
+  void
+  install( FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* port );
 
 private:
+  /// @fn     void processInputs( void )
+  /// @brief  Process broker and database inputs
   void processInputs( void );
-  void update( void );
-  void processOutputs( void );
 
   /// @fn     void processBrokerInputs( void )
   /// @brief  Process responses from broker API
@@ -75,30 +79,42 @@ private:
   void processDatabaseInputs( void );
 
   /// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
+  /// @param  msg   Input message
   /// @brief  Update the networks being used
   void updateLoadedNetworks( DatabaseResponseNetworkMsg& msg );
-  void updateNetworks( void ) {}
 
-  /// @fn     void configure( FCLayer )
-  /// @brief  Reconfigure selected network
-  void reconfigure( FCLayer msg );
+  /// @fn     void configureNetwork( DatabaseResponseLayerMsg msg )
+  /// @param  msg   Input message
+  /// @brief  Create network layers
+  void configureNetwork( DatabaseResponseLayerMsg msg );
 
-  /// @fn     configure( void )
-  /// @brief  Configure the loaded neural networks
-  void configure( void );
+  void update( void );
 
-  std::map<std::string, NeuralNetwork*> networkList;
+  /// @fn     void processOutputs( void )
+  /// @brief  Process broker and database requests
+  void processOutputs( void );
+
+  void processDatabaseOutputs( void );
+
+  void requestConfiguration( std::string ticker, unsigned int layerNum );
+
+  void writeMessage( DatabaseRequestMsg msg );
+
+  typedef std::map<std::string, NeuralNetwork*> NetworkMap;
+
   std::map<std::string, Matrix>         networkInputs;
 
   // Port Definitions
-  FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pBrokerPort;
-  FIFOBidirectional<DatabaseResponseMsg, LayerMsg>*       pDatabasePort;
+  FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>*     pBrokerPort;
+  FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* pDatabasePort;
 
   // Broker Response Messages
   BrokerResponseUpdateMsg brokerResponseUpdate;
 
   // Database Response Messages
+  DatabaseRequestMsg         databaseRequest;
   DatabaseResponseNetworkMsg databaseResponseNetwork;
+  DatabaseResponseLayerMsg   databaseResponseLayer;
 
   FCLayer databaseResponseFC;
 

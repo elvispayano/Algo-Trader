@@ -50,8 +50,9 @@ void TraderController::initialize( void ) {
   pDatabaseCntrl = new DatabaseController( pServer );
 
   // Initialize Ports
-  pPortBroker   = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
-  pPortDatabase = new FIFOBidirectional<DatabaseResponseMsg, LayerMsg>;
+  pPortBroker = new FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>;
+  pPortDatabase =
+      new FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>;
 
   // Broker Port Installation
   pBrokerCntrl->install( pPortBroker );

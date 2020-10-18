@@ -31,16 +31,20 @@ public:
 
   /// @fn     NeuralNetwork( string name, unsigned int layerCount )
   /// @param  name        Associated ticker symbol
-  /// @param  layerCount  Total layers present in network
+  /// @param  layerCount  Total layers to be present in network
   /// @brief  Initializa a neural network and layer workspace that will later be
   ///         configured.
   NeuralNetwork( std::string name, unsigned int layerCount );
 
-  //! @fn     ~NeuralNetwork( string ticker )
-  //! @brief  The neural network is composed of various layer pointers that are
-  //!         created. Upon destruction of the class, the created pointers must
-  //!         be deleted.
+  /// @fn     ~NeuralNetwork( string ticker )
+  /// @brief  The neural network is composed of various layer pointers that are
+  ///         created. Upon destruction of the class, the created pointers must
+  ///         be deleted.
   ~NeuralNetwork( void );
+
+  /// @fn     bool layersAdded( void )
+  /// @brief  Check that all expected layers have been added
+  bool layersAdded( void ) { return layerList.size() == totalLayers; }
 
   //! @fn     void addLayer( LayerConfiguration configuration )
   //! @brief  Add a new layer to the network. The configuration type contains
