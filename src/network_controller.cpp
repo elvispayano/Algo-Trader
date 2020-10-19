@@ -205,12 +205,17 @@ void NetworkController::updateLoadedNetworks(
 /// @param  msg   Input message
 /// @brief  Create network layers
 void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
+  NetworkMap& networkList = pServer->getNetworkList();
+  if ( networkList.find( msg.ticker ) == networkList.end() ) {
+    return;
+  }
 
-  switch ( msg.getType() ) {
-    // case DbLayerID::FULLYCONNECTED:
-    //  break;
+  switch ( msg.layer ) {
+  case LayerTypes::FULLYCONNECTED:
+    printf( "Adding Fully Connected Layer to %s\n", msg.ticker.c_str() );
+    break;
 
-  default: /* DbLayerID::UNKNOWN */
+  default:
     printf( "Error: Unknown Layer Type\n" );
   }
 }

@@ -3,6 +3,7 @@
 #include "data_server.h"
 
 // Comms Includes
+#include "comms/database_response_layer_msg.h"
 #include "comms/database_response_network_msg.h"
 
 // Interface Includes
@@ -109,7 +110,7 @@ void DatabaseController::updateNetworks( void ) {
 
 /// @fn     void processInputs( void )
 /// @brief  Process broker and database inputs
-void DatabaseController::processInputs(void) {
+void DatabaseController::processInputs( void ) {
   DatabaseRequestMsg request;
   if ( !pPort->getOutput( request ) ) {
     return;
@@ -117,7 +118,7 @@ void DatabaseController::processInputs(void) {
 
   switch ( request.getID() ) {
   case DatabaseRequestID::LAYER:
-    if (reqLayerMsg.decode(&request)) {
+    if ( reqLayerMsg.decode( &request ) ) {
       requestLayerConfiguration();
     }
     break;
@@ -127,6 +128,19 @@ void DatabaseController::processInputs(void) {
   }
 }
 
-void DatabaseController::requestLayerConfiguration(void) {
-  
+void DatabaseController::requestLayerConfiguration( void ) {
+  DatabaseResponseLayerMsg response;
+
+  std::string  ticker   = reqLayerMsg.ticker;
+  unsigned int layerNum = reqLayerMsg.layerNumber;
+
+  response.ticker         = reqLayerMsg.ticker;
+  response.numberOfInputs = pDatabase->getInputs( ticker, layerNum );
+  response.numberOfNodes  = pDatabase->getNodes( ticker, layerNum );
+  response.activation     = pDatabase->getActivation( ticker, layerNum );
+  response.layer          = pDatabase->getLayerType( ticker, layerNum );
+
+  if ( response.encode( &databaseResponse ) ) {
+    writeMessage( databaseResponse );
+  }
 }

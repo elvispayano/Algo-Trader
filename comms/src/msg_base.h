@@ -128,6 +128,7 @@ public:
   typedef std::string String;
   template<uint BYTE, uint SCALE>
   void read( Map<String, BYTE, 0, SCALE> map, String& out, MsgBase* msg ) {
+    out.clear();
     for ( uint iter = 0; iter < SCALE; ++iter ) {
       uchar character = '\0';
       memcpy( &character, &msg->buffer[BYTE + iter], 1 );
