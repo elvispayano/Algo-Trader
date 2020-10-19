@@ -210,14 +210,8 @@ void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
     return;
   }
 
-  switch ( msg.layer ) {
-  case LayerTypes::FULLYCONNECTED:
-    printf( "Adding Fully Connected Layer to %s\n", msg.ticker.c_str() );
-    break;
-
-  default:
-    printf( "Error: Unknown Layer Type\n" );
-  }
+  networkList[msg.ticker]->addLayer(
+      msg.layer, msg.activation, msg.numberOfInputs, msg.numberOfNodes );
 }
 
 void NetworkController::processDatabaseOutputs( void ) {

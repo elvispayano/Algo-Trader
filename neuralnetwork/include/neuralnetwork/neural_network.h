@@ -1,12 +1,12 @@
-//! Neural Network
-//!
-//! This class is responsible for generating and configuring all the neural
-//! network layers. This class is also the main interface for the outside
-//! implementation.
-//!
-//! \author   Elvis Payano
-//! \date     04/09/2020
-//! \version  0.0.1
+/// Neural Network
+///
+/// This class is responsible for generating and configuring all the neural
+/// network layers. This class is also the main interface for the outside
+/// implementation.
+///
+/// \author   Elvis Payano
+/// \date     04/09/2020
+/// \version  0.0.1
 
 #ifndef NEURAL_NETWORK_H
 #define NEURAL_NETWORK_H
@@ -46,6 +46,20 @@ public:
   /// @brief  Check that all expected layers have been added
   bool layersAdded( void ) { return layerList.size() == totalLayers; }
 
+  /// @fn     void addLayer( LayerTypes layer, ActivationTypes activation,
+  ///                        unsigned int inputs, unsigned int nodes )
+  /// @param  layer       Type of layer to create
+  /// @param  activation  Activation function to use in layer
+  /// @param  inputs      Number of inputs present in layer
+  /// @param  nodes       Number of nodes present in layer
+  /// @brief  Add a new layer to the network. The configuration type contains
+  ///         all the required elements to select the type of layer, implemented
+  ///         activation, and the size of the layer.
+  void addLayer( LayerTypes      layer,
+                 ActivationTypes activation,
+                 unsigned int    inputs,
+                 unsigned int    nodes );
+
   //! @fn     void addLayer( LayerConfiguration configuration )
   //! @brief  Add a new layer to the network. The configuration type contains
   //!         all the required elements to select the type of layer, implemented
@@ -68,9 +82,9 @@ public:
   // Network Identification
   virtual std::string getTicker( void ) { return ticker; }
 
-  //! @fn     Matrix process( Matrix data )
-  //! @brief  Process input data through each layer and return a proccessed
-  //!         matrix containing the desired action to be performed.
+  /// @fn     Matrix process( Matrix data )
+  /// @brief  Process input data through each layer and return a proccessed
+  ///         matrix containing the desired action to be performed.
   virtual Matrix process( Matrix data );
 
   //! @fn     train( void )
@@ -125,7 +139,7 @@ private:
   //! @fn     LayerBase* newLayer(ActivationTypes activation, LayerTypes layer)
   //! @param  activation  Defining layer activation type
   //! @param  layer       Defining type of layer to create
-  //! @brief  
+  //! @brief
   LayerBase* newLayer( ActivationTypes activation, LayerTypes layer );
 
   // Layer Elements

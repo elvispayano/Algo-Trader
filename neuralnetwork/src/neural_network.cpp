@@ -1,12 +1,12 @@
-//! Neural Network
-//!
-//! This class is responsible for generating and configuring all the neural
-//! network layers. This class is also the main interface for the outside
-//! implementation.
-//!
-//! \author   Elvis Payano
-//! \date     04/09/2020
-//! \version  0.0.1
+/// Neural Network
+///
+/// This class is responsible for generating and configuring all the neural
+/// network layers. This class is also the main interface for the outside
+/// implementation.
+///
+/// \author   Elvis Payano
+/// \date     04/09/2020
+/// \version  0.0.1
 
 // Neural Network Includes
 #include "neuralnetwork/neural_network.h"
@@ -43,7 +43,6 @@ NeuralNetwork::NeuralNetwork( std::string name, unsigned int layerCount ) {
 
   inputLayer  = 0;
   outputLayer = 0;
-
 }
 
 //! @fn     ~NeuralNetwork( string ticker )
@@ -55,6 +54,28 @@ NeuralNetwork::~NeuralNetwork( void ) {
     delete layerList[i];
   }
   layerList.clear();
+}
+
+/// @fn     void addLayer( LayerTypes layer, ActivationTypes activation,
+///                        unsigned int inputs, unsigned int nodes )
+/// @param  layer       Type of layer to create
+/// @param  activation  Activation function to use in layer
+/// @param  inputs      Number of inputs present in layer
+/// @param  nodes       Number of nodes present in layer
+/// @brief  Add a new layer to the network. The configuration type contains
+///         all the required elements to select the type of layer, implemented
+///         activation, and the size of the layer.
+void NeuralNetwork::addLayer( LayerTypes      layer,
+                              ActivationTypes activation,
+                              unsigned int    inputs,
+                              unsigned int    nodes ) {
+
+  switch ( layer ) {
+  case LayerTypes::FULLYCONNECTED:
+    layerList.push_back( new FullyConnectedLayer( activation, inputs, nodes ) );
+    printf( "Neural Network: Fully Connected Layer Added\n" );
+    break;
+  }
 }
 
 //! @fn     void addLayer( LayerConfiguration configuration )
@@ -116,11 +137,11 @@ LayerBase* NeuralNetwork::newLayer( ActivationTypes activation,
   return layerCreated;
 }
 
-//! @fn     Matrix process( Matrix data )
-//! @brief  Process input data through each layer and return a proccessed matrix
-//!         containing the desired action to be performed.
+/// @fn     Matrix process( Matrix data )
+/// @brief  Process input data through each layer and return a proccessed matrix
+///         containing the desired action to be performed.
 Matrix NeuralNetwork::process( Matrix input ) {
-  Matrix data = inputLayer->process( input );
+  Matrix data = input;
 
   for ( auto layer : layerList ) {
     Matrix intermediate = layer->process( data );
@@ -128,7 +149,7 @@ Matrix NeuralNetwork::process( Matrix input ) {
     data = intermediate;
   }
 
-  Matrix output = outputLayer->process( data );
+  Matrix output = data;
   return output;
 }
 
@@ -164,7 +185,7 @@ void NeuralNetwork::train( void ) {
 
 /// @fn     bool checkLayerConfiguration( void )
 /// @brief  Check if the neural network has had all its layers created
-bool NeuralNetwork::checkLayerConfiguration(void) {
+bool NeuralNetwork::checkLayerConfiguration( void ) {
   return false;
 }
 
@@ -176,14 +197,14 @@ bool NeuralNetwork::checkHyperparamConfiguration( void ) {
 
 /// @fn     bool checkConfiguration( void )
 /// @brief  Check if the neural network has been completely configured
-bool NeuralNetwork::checkConfiguration(void) {
-  if (layerList.size() <= 0) {
+bool NeuralNetwork::checkConfiguration( void ) {
+  if ( layerList.size() <= 0 ) {
     return false;
   }
 
   bool isConfigured = false;
-  for (auto layer : layerList) {
-    if (!layer->isConfigured()) {
+  for ( auto layer : layerList ) {
+    if ( !layer->isConfigured() ) {
 
       return false;
     }
