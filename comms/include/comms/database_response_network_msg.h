@@ -33,11 +33,9 @@ public:
   ///         message with the corresponding data
   bool decode( DatabaseResponseMsg* msg ) override;
 
-  struct {
-    String      ticker;
-    uint        layerCount;
-    DbNetworkID action;
-  };
+  String      ticker;
+  uint        layerCount;
+  DbNetworkID action;
 
 private:
   struct MsgMap {

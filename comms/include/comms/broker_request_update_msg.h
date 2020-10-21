@@ -31,14 +31,12 @@ public:
   ///         message with the corresponding data
   bool decode( BrokerRequestMsg* msg ) override;
 
-  struct {
-    char s1;
-    char s2;
-    char s3;
-    char s4;
-    char s5;
-    char s6;
-  };
+  char s1;
+  char s2;
+  char s3;
+  char s4;
+  char s5;
+  char s6;
 
 private:
   struct MsgMap {

@@ -33,13 +33,11 @@ public:
   ///         message with the corresponding data
   bool decode( DatabaseResponseMsg* msg ) override;
 
-  struct {
-    String          ticker;
-    uint            numberOfInputs;
-    uint            numberOfNodes;
-    ActivationTypes activation;
-    LayerTypes      layer;
-  };
+  String          ticker;
+  uint            numberOfInputs;
+  uint            numberOfNodes;
+  ActivationTypes activation;
+  LayerTypes      layer;
 
 private:
   struct MsgMap {

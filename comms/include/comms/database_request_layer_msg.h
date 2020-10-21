@@ -31,10 +31,8 @@ public:
   ///         message with the corresponding data
   bool decode( DatabaseRequestMsg* msg ) override;
 
-  struct {
-    String ticker;
-    uint   layerNumber;
-  };
+  String ticker;
+  uint   layerNumber;
 
 private:
   struct MsgMap {
