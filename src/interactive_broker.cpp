@@ -140,20 +140,7 @@ void InteractiveBroker::performOutput( void ) {
 /// @param  msg   Input Message
 /// @brief  Request a ticker update
 void InteractiveBroker::requestUpdate( BrokerRequestUpdateMsg* msg ) {
-  std::string ticker;
-  ticker.push_back( msg->s1 );
-  ticker.push_back( msg->s2 );
-  ticker.push_back( msg->s3 );
-  ticker.push_back( msg->s4 );
-  ticker.push_back( msg->s5 );
-  ticker.push_back( msg->s6 );
-  for (unsigned int i = 0; i < ticker.size(); ++i) {
-    if ( ticker.back() == '\0' ) {
-      ticker.pop_back();
-    }
-  }
-
-  ib->getCurrentPrice( ticker );
+  ib->getCurrentPrice( msg->ticker );
 }
 
 /// @fn     void connectionManager

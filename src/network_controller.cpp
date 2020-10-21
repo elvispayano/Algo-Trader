@@ -88,16 +88,7 @@ void NetworkController::processOutputs( void ) {
       continue;
     }
 
-    std::string  ticker = iter.first;
-    unsigned int len    = ticker.size();
-
-    requestUpdateMsg.s1 = ( len > 0 ) ? ticker.c_str()[0] : '\0';
-    requestUpdateMsg.s2 = ( len > 0 ) ? ticker.c_str()[1] : '\0';
-    requestUpdateMsg.s3 = ( len > 1 ) ? ticker.c_str()[2] : '\0';
-    requestUpdateMsg.s4 = ( len > 2 ) ? ticker.c_str()[3] : '\0';
-    requestUpdateMsg.s5 = ( len > 3 ) ? ticker.c_str()[4] : '\0';
-    requestUpdateMsg.s6 = ( len > 4 ) ? ticker.c_str()[5] : '\0';
-
+    requestUpdateMsg.ticker = iter.first;
     if ( requestUpdateMsg.encode( &requestMsg ) ) {
       pBrokerPort->putOutput( requestMsg );
     }
