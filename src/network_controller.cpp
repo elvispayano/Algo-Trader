@@ -118,18 +118,6 @@ void NetworkController::processBrokerInputs( void ) {
 /// @param  msg   Formatted broker response message
 /// @brief  Update neural network inputs
 void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
-  std::string ticker;
-  ticker.push_back( msg.s1 );
-  ticker.push_back( msg.s2 );
-  ticker.push_back( msg.s3 );
-  ticker.push_back( msg.s4 );
-  ticker.push_back( msg.s5 );
-  ticker.push_back( msg.s6 );
-  for ( unsigned int i = 0; i < ticker.size(); ++i ) {
-    if ( ticker.back() == '\0' )
-      ticker.pop_back();
-  }
-
   Matrix input( 5, 1, 0.0 );
   input( 0, 0 ) = msg.ask;
   input( 1, 0 ) = msg.bid;
@@ -137,7 +125,7 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
   input( 3, 0 ) = msg.low;
   input( 4, 0 ) = msg.last;
 
-  networkInputs[ticker].set( input );
+  networkInputs[msg.ticker].set( input );
 }
 
 /// @fn     void processDatabaseInputs( void )

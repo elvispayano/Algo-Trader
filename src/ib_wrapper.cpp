@@ -537,19 +537,7 @@ void IBWrapper::tickPrice( TickerId          tickerId,
 
   // Update response queue and clear stock capture variable
   if ( data.isComplete() ) {
-    std::string ticker = updateMap[tickerId];
-    if ( ticker.size() >= 0 ) 
-      updateMessage.s1 = ticker.c_str()[0];
-    if ( ticker.size() > 1 )
-      updateMessage.s2 = ticker.c_str()[1];
-    if ( ticker.size() > 2 )
-      updateMessage.s3 = ticker.c_str()[2];
-    if ( ticker.size() > 3 )
-      updateMessage.s4 = ticker.c_str()[3];
-    if ( ticker.size() > 4 )
-      updateMessage.s5 = ticker.c_str()[4];
-    if ( ticker.size() > 5 )
-      updateMessage.s6 = ticker.c_str()[5];
+    updateMessage.ticker = updateMap[tickerId];
     if ( updateMessage.encode( &response ) ) {
       pPort->putMessage( response );
     }
