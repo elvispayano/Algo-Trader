@@ -76,6 +76,10 @@ public:
   ActivationTypes getActivation( std::string ticker, int layerNum ) override;
   LayerTypes      getLayerType( std::string ticker, int layerNum ) override;
 
+  float getHyperparam( std::string  ticker,
+                       unsigned int layerNum,
+                       unsigned int index ) override;
+
 private:
 
   int             getIndex( std::string ticker, int layerNum );
@@ -87,6 +91,7 @@ private:
   char* execFunc( std::string func, int num );
   char* execFunc( std::string func, std::string ticker );
   char* execFunc( std::string func, std::string ticker, int num );
+  char* execFunc( std::string func, std::string ticker, int num1, int num2 );
 
   char* exec( std::string in );
 

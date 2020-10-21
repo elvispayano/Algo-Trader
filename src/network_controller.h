@@ -20,6 +20,7 @@
 #include "comms/broker_response_update_msg.h"
 #include "comms/database_request_layer_msg.h"
 #include "comms/database_request_msg.h"
+#include "comms/database_request_hyperparam_msg.h"
 #include "comms/database_response_layer_msg.h"
 #include "comms/database_response_msg.h"
 #include "comms/database_response_network_msg.h"

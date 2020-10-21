@@ -2,8 +2,9 @@
 #define DATABASE_CONTROLLER_H
 
 // Comms Includes
-#include "comms/database_request_msg.h"
+#include "comms/database_request_hyperparam_msg.h"
 #include "comms/database_request_layer_msg.h"
+#include "comms/database_request_msg.h"
 #include "comms/database_response_msg.h"
 #include "comms/layer_msg.h"
 
@@ -36,7 +37,6 @@ public:
   install( FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* port );
 
 private:
-
   /// @fn     void processInputs( void )
   /// @brief  Process broker and database inputs
   void processInputs( void );
@@ -51,8 +51,12 @@ private:
   void updateNetworks( void );
 
   /// @fn     void requestLayerConfiguration( void )
-  /// @brief  
+  /// @brief
   void requestLayerConfiguration( void );
+
+  /// @fn     void requestHyperparam( void )
+  /// @brief
+  void requestHyperparam( void );
 
   DataServer* pServer;
   Postgres*   pDatabase;
@@ -61,7 +65,8 @@ private:
 
   DatabaseResponseMsg databaseResponse;
 
-  DatabaseRequestLayerMsg reqLayerMsg;
+  DatabaseRequestLayerMsg      reqLayerMsg;
+  DatabaseRequestHyperparamMsg reqHyperparamMsg;
 };
 
 #endif /* DATABASE_CONTROLLER_H */

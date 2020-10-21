@@ -93,7 +93,6 @@ void DatabaseController::updateNetworks( void ) {
     if ( networkMsg.encode( &databaseResponse ) ) {
       writeMessage( databaseResponse );
     }
-    break;
   }
 
   // Delete networks
@@ -115,19 +114,23 @@ void DatabaseController::updateNetworks( void ) {
 /// @brief  Process broker and database inputs
 void DatabaseController::processInputs( void ) {
   DatabaseRequestMsg request;
-  if ( !pPort->getOutput( request ) ) {
-    return;
-  }
 
-  switch ( request.getID() ) {
-  case DatabaseRequestID::LAYER:
-    if ( reqLayerMsg.decode( &request ) ) {
-      requestLayerConfiguration();
+  while ( pPort->getOutput( request ) ) {
+    switch ( request.getID() ) {
+    case DatabaseRequestID::LAYER:
+      if ( reqLayerMsg.decode( &request ) ) {
+        requestLayerConfiguration();
+      }
+      break;
+
+    case DatabaseRequestID::HYPERPARAM:
+      if ( reqHyperparamMsg.decode( &request ) ) {
+        requestHyperparam();
+      }
+      break;
+    default:
+      printf( "DatabaseCtrl: Invalid Request Message\n" );
     }
-    break;
-
-  default:
-    printf( "DatabaseCtrl: Invalid Request Message\n" );
   }
 }
 
@@ -146,4 +149,12 @@ void DatabaseController::requestLayerConfiguration( void ) {
   if ( response.encode( &databaseResponse ) ) {
     writeMessage( databaseResponse );
   }
+}
+
+void DatabaseController::requestHyperparam( void ) {
+  std::string  ticker   = reqHyperparamMsg.ticker;
+  unsigned int layerNum = reqHyperparamMsg.layerNum;
+  unsigned int index    = reqHyperparamMsg.index;
+
+  pDatabase->getHyperparam( ticker, layerNum, index );
 }

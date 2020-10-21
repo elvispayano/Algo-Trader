@@ -1,23 +1,24 @@
-/// Database Request Layer Message
+/// Database Request Hyperparam Message
 ///
-/// Message architecture for database request with network layer configuration
+/// Message architecture for database request for network layer hyperparameter
+/// configuration
 ///
 /// \author   Elvis Payano
-/// \date     18/10/2020
+/// \date     21/10/2020
 /// \version  0.0.1
 
-#ifndef DATABASE_REQUEST_LAYER_MSG_H
-#define DATABASE_REQUEST_LAYER_MSG_H
+#ifndef DATABASE_REQUEST_HYPERPARAM_MSG_H
+#define DATABASE_REQUEST_HYPERPARAM_MSG_H
 
 // Comms Includes
 #include "database_request_msg.h"
 
-class DatabaseRequestLayerMsg : public DatabaseRequestMsg {
+class DatabaseRequestHyperparamMsg : public DatabaseRequestMsg {
 public:
   /// @fn     DatabaseRequestLayerMsg( void )
   /// @brief  Initialize an empty message structure
-  DatabaseRequestLayerMsg( void );
-  ~DatabaseRequestLayerMsg( void ) {}
+  DatabaseRequestHyperparamMsg( void );
+  ~DatabaseRequestHyperparamMsg( void ) {}
 
   /// @fn     bool encode( DatabaseRequestMsg* msg )
   /// @param  msg   Output message buffer
@@ -32,12 +33,14 @@ public:
   bool decode( DatabaseRequestMsg* msg ) override;
 
   String ticker;
-  uint   layerNumber;
+  uint   index;
+  uint   layerNum;
 
 private:
   struct MsgMap {
     Map<String, 0, 0, 6> ticker;
-    Map<uint, 6, 0, 0>   layerNumber;
+    Map<uint, 6, 0, 0>   index;
+    Map<uint, 8, 0, 0>   layerNum;
   } x;
 
   /// @fn     void write( DatabaseRequestMsg* msg )
@@ -49,4 +52,4 @@ private:
   void read( DatabaseRequestMsg* msg );
 };
 
-#endif /* DATABASE_REQUEST_LAYER_MSG_H */
+#endif /* DATABASE_REQUEST_HYPERPARAM_MSG_H */

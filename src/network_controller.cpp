@@ -12,6 +12,7 @@
 #include "data_server.h"
 
 // Neural Network Includes
+#include "neuralnetwork/layer_base.h"
 #include "neuralnetwork/neural_network.h"
 
 NetworkController::NetworkController( DataServer* server )
@@ -132,25 +133,23 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
 /// @brief  Process responses from the database
 void NetworkController::processDatabaseInputs( void ) {
   DatabaseResponseMsg response;
-  if ( !pDatabasePort->getInput( response ) ) {
-    return;
-  }
+  while ( pDatabasePort->getInput( response ) ) {
+    switch ( response.getID() ) {
+    case DatabaseResponseID::NETWORK:
+      if ( databaseResponseNetwork.decode( &response ) ) {
+        updateLoadedNetworks( databaseResponseNetwork );
+      }
+      break;
 
-  switch ( response.getID() ) {
-  case DatabaseResponseID::NETWORK:
-    if ( databaseResponseNetwork.decode( &response ) ) {
-      updateLoadedNetworks( databaseResponseNetwork );
+    case DatabaseResponseID::LAYER:
+      if ( databaseResponseLayer.decode( &response ) ) {
+        configureNetwork( databaseResponseLayer );
+      }
+      break;
+
+    default: /* DatabaseResponseID::UNKNOWN */
+      printf( "Error: Unknown Database Response\n" );
     }
-    break;
-
-  case DatabaseResponseID::LAYER:
-    if ( databaseResponseLayer.decode( &response ) ) {
-      configureNetwork( databaseResponseLayer );
-    }
-    break;
-
-  default: /* DatabaseResponseID::UNKNOWN */
-    printf( "Error: Unknown Database Response\n" );
   }
 }
 
@@ -194,13 +193,29 @@ void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
 }
 
 void NetworkController::processDatabaseOutputs( void ) {
+  DatabaseRequestLayerMsg msg;
   NetworkMap networkList = pServer->getNetworkList();
 
   for ( auto network : networkList ) {
+    // Request Next Layer
     if ( !network.second->layersAdded() ) {
       requestConfiguration( network.first,
                             network.second->getLayerCount() + 1 );
-      break;
+    }
+
+    // Request Layer Hyperparam
+    unsigned int layerNum = 1;
+    for ( auto layer : network.second->getLayerList() ) {
+      if ( !layer->isConfigured() ) {
+        DatabaseRequestHyperparamMsg request;
+        request.ticker   = network.first;
+        request.index    = layer->nextIndex();
+        request.layerNum = layerNum;
+        if ( request.encode( &msg ) ) {
+          writeMessage( msg );
+        }
+      }
+      ++layerNum;
     }
   }
 }

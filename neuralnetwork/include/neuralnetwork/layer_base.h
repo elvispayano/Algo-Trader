@@ -34,7 +34,7 @@ public:
 
   //! @fn     ~LayerBase( void )
   //! @brief  Clear any memory allocated in this layer.
-  ~LayerBase( void );
+  virtual ~LayerBase( void );
 
   //! @fn     Matrix process( Matrix input)
   //!         Perform the forward propagation functionality through the layer
@@ -78,7 +78,14 @@ public:
   /// @brief  Check if the layer being access is fully configured
   bool isConfigured( void ) { return false; }
 
+  /// @fn     unsigned int nextIndex( void )
+  /// @brief  Request next layer index
+  unsigned int nextIndex( void ) { return index; }
+
 protected:
+  bool         configured;
+  unsigned int index;
+
   Activation* pActivation;
 
   size_t inputCount;

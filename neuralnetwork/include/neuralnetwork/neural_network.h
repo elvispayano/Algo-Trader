@@ -135,6 +135,10 @@ public:
   /// @brief  Check if the desired layer hyperparameters have been configured
   bool checkHyperparamConfiguration( void );
 
+  /// @fn     std::vector<LayerBase*>& getLayerList( void )
+  /// @brief  Get a list of layers present in the network
+  std::vector<LayerBase*>& getLayerList( void ) { return layerList; }
+
 private:
   //! @fn     LayerBase* newLayer(ActivationTypes activation, LayerTypes layer)
   //! @param  activation  Defining layer activation type
