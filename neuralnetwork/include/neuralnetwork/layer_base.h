@@ -74,6 +74,10 @@ public:
   //! @brief  Return the layers hyperparameters
   Matrix getHyperparams( void ) { return hyperparameters; }
 
+  /// @fn     bool isConfigured( void )
+  /// @brief  Check if the layer being access is fully configured
+  bool isConfigured( void ) { return false; }
+
 protected:
   Activation* pActivation;
 

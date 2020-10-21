@@ -32,6 +32,17 @@ public:
   //!         be reset at anytime using the setTF function.
   FullyConnectedLayer( ActivationTypes selectTF );
 
+  /// @fn     FullConnectedLayer( ActivationTypes activation, unsigned int
+  ///                             inputs, unsigned int nodes )
+  /// @param  activation
+  /// @param  inputs
+  /// @param  nodes
+  /// @brief  Create the layer with the provided activation type, and configure
+  /// the weight and biases appropriate for the expected inputs and nodes.
+  FullyConnectedLayer( ActivationTypes activation,
+                       unsigned int    inputs,
+                       unsigned int    nodes );
+
   //! @fn     ~FullyConnectedLayer( void )
   //! @brief  Clear any memory allocated in this layer.
   ~FullyConnectedLayer( void );

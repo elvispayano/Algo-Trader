@@ -13,6 +13,14 @@ DataServer::DataServer( void ) {
   initialize();
 }
 
+DataServer::~DataServer( void ) {
+  for ( auto& network : networkList ) {
+    delete network.second;
+    networkList.erase( networkList.find( network.first ) );
+  }
+  networkList.clear();
+}
+
 void DataServer::initialize( void ) {
   networkList.clear();
 }

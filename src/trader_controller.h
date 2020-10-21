@@ -15,6 +15,7 @@
 
 // Utility Includes
 #include "utilities/fifo_bidirectional.h"
+#include "utilities/fifo_unidirectional.h"
 
 // Controller Forward Declarations
 class BrokerController;
@@ -24,6 +25,8 @@ class NetworkController;
 // FIFO Forward Declarations
 class BrokerResponseMsg;
 class BrokerRequestMsg;
+class DatabaseResponseMsg;
+class DatabaseRequestMsg;
 
 class TraderController {
 public:
@@ -40,6 +43,7 @@ private:
   NetworkController*  pNetworkCntrl;
 
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>* pPortBroker;
+  FIFOBidirectional<DatabaseResponseMsg, DatabaseRequestMsg>* pPortDatabase;
 
   DataServer* pServer;
 };

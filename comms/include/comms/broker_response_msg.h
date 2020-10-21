@@ -1,4 +1,4 @@
-/// Broker Request Message
+/// Broker Response Message
 ///
 /// Base message architecture for transferring packetized broker response data
 ///

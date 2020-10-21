@@ -1,4 +1,4 @@
-/// Broker Response Update MEssage
+/// Broker Response Update Message
 ///
 /// Message architecture for broker response with ticker updates
 ///
@@ -31,19 +31,17 @@ public:
   ///         message with the corresponding data
   bool decode( BrokerResponseMsg* msg ) override;
 
-  struct {
-    float bid;
-    float ask;
-    float last;
-    float high;
-    float low;
-    char  s1;
-    char  s2;
-    char  s3;
-    char  s4;
-    char  s5;
-    char  s6;
-  };
+  float bid;
+  float ask;
+  float last;
+  float high;
+  float low;
+  char  s1;
+  char  s2;
+  char  s3;
+  char  s4;
+  char  s5;
+  char  s6;
 
 private:
   struct MsgMap {

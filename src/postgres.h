@@ -50,11 +50,11 @@ public:
 
   /// @fn     void performInput( void )
   /// @brief  Process all received inputs received from database
-  void performInput( void );
+  void performInput( void ) {}
 
   /// @fn     void performOutput( void )
   /// @brief  Send all outgoing messages to database
-  void performOutput( void );
+  void performOutput( void ) {}
 
   /// @fn     void update( void )
   /// @brief  Update the processing state for the database
@@ -71,18 +71,15 @@ public:
 
   std::string getNextNetwork( void );
 
+  int             getInputs( std::string ticker, int layerNum ) override;
+  int             getNodes( std::string ticker, int layerNum ) override;
+  ActivationTypes getActivation( std::string ticker, int layerNum ) override;
+  LayerTypes      getLayerType( std::string ticker, int layerNum ) override;
+
 private:
-  /// @fn     void createNewNetworks( void )
-  /// @brief  Create a new network
-  void createNewNetworks( void );
 
-
-  int             getInputs( std::string ticker, int layerNum );
-  int             getNodes( std::string ticker, int layerNum );
   int             getIndex( std::string ticker, int layerNum );
   double          getWeightBias( std::string ticker, int index );
-  ActivationTypes getActivation( std::string ticker, int layerNum );
-  LayerTypes      getLayerType( std::string ticker, int layerNum );
 
   void clearQuery( void );
 

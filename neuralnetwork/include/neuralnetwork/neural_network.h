@@ -1,12 +1,12 @@
-//! Neural Network
-//!
-//! This class is responsible for generating and configuring all the neural
-//! network layers. This class is also the main interface for the outside
-//! implementation.
-//!
-//! \author   Elvis Payano
-//! \date     04/09/2020
-//! \version  0.0.1
+/// Neural Network
+///
+/// This class is responsible for generating and configuring all the neural
+/// network layers. This class is also the main interface for the outside
+/// implementation.
+///
+/// \author   Elvis Payano
+/// \date     04/09/2020
+/// \version  0.0.1
 
 #ifndef NEURAL_NETWORK_H
 #define NEURAL_NETWORK_H
@@ -29,16 +29,36 @@ public:
   //!         configured.
   NeuralNetwork( void );
 
-  //! @fn     NeuralNetwork( string name )
-  //! @brief  Initialize a neural network and layer workspace that will later be
-  //!         configured.
-  NeuralNetwork( std::string name );
+  /// @fn     NeuralNetwork( string name, unsigned int layerCount )
+  /// @param  name        Associated ticker symbol
+  /// @param  layerCount  Total layers to be present in network
+  /// @brief  Initializa a neural network and layer workspace that will later be
+  ///         configured.
+  NeuralNetwork( std::string name, unsigned int layerCount );
 
-  //! @fn     ~NeuralNetwork( string ticker )
-  //! @brief  The neural network is composed of various layer pointers that are
-  //!         created. Upon destruction of the class, the created pointers must
-  //!         be deleted.
+  /// @fn     ~NeuralNetwork( string ticker )
+  /// @brief  The neural network is composed of various layer pointers that are
+  ///         created. Upon destruction of the class, the created pointers must
+  ///         be deleted.
   ~NeuralNetwork( void );
+
+  /// @fn     bool layersAdded( void )
+  /// @brief  Check that all expected layers have been added
+  bool layersAdded( void ) { return layerList.size() == totalLayers; }
+
+  /// @fn     void addLayer( LayerTypes layer, ActivationTypes activation,
+  ///                        unsigned int inputs, unsigned int nodes )
+  /// @param  layer       Type of layer to create
+  /// @param  activation  Activation function to use in layer
+  /// @param  inputs      Number of inputs present in layer
+  /// @param  nodes       Number of nodes present in layer
+  /// @brief  Add a new layer to the network. The configuration type contains
+  ///         all the required elements to select the type of layer, implemented
+  ///         activation, and the size of the layer.
+  void addLayer( LayerTypes      layer,
+                 ActivationTypes activation,
+                 unsigned int    inputs,
+                 unsigned int    nodes );
 
   //! @fn     void addLayer( LayerConfiguration configuration )
   //! @brief  Add a new layer to the network. The configuration type contains
@@ -62,9 +82,9 @@ public:
   // Network Identification
   virtual std::string getTicker( void ) { return ticker; }
 
-  //! @fn     Matrix process( Matrix data )
-  //! @brief  Process input data through each layer and return a proccessed
-  //!         matrix containing the desired action to be performed.
+  /// @fn     Matrix process( Matrix data )
+  /// @brief  Process input data through each layer and return a proccessed
+  ///         matrix containing the desired action to be performed.
   virtual Matrix process( Matrix data );
 
   //! @fn     train( void )
@@ -105,19 +125,28 @@ public:
 
   /// @fn     bool checkConfiguration( void )
   /// @brief  Check if the neural network has been completely configured
-  bool checkConfiguration( void ) { return false; }
+  bool checkConfiguration( void );
+
+  /// @fn     bool checkLayerConfiguration( void )
+  /// @brief  Check if the neural network has had all its layers created
+  bool checkLayerConfiguration( void );
+
+  /// @fn     bool checkHyperparamConfiguration( unsigned int layerNum )
+  /// @brief  Check if the desired layer hyperparameters have been configured
+  bool checkHyperparamConfiguration( void );
 
 private:
   //! @fn     LayerBase* newLayer(ActivationTypes activation, LayerTypes layer)
   //! @param  activation  Defining layer activation type
   //! @param  layer       Defining type of layer to create
-  //! @brief  
+  //! @brief
   LayerBase* newLayer( ActivationTypes activation, LayerTypes layer );
 
   // Layer Elements
   LayerBase*              inputLayer;
   LayerBase*              outputLayer;
   std::vector<LayerBase*> layerList;
+  unsigned int            totalLayers;
 
   std::string ticker;
 

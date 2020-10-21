@@ -65,6 +65,11 @@ public:
   virtual LayerConfiguration getLayer( std::string  ticker,
                                        unsigned int layerNum ) = 0;
 
+  virtual int             getInputs( std::string ticker, int layerNum )     = 0;
+  virtual int             getNodes( std::string ticker, int layerNum )      = 0;
+  virtual ActivationTypes getActivation( std::string ticker, int layerNum ) = 0;
+  virtual LayerTypes      getLayerType( std::string ticker, int layerNum )  = 0;
+
   // Support functions
   int   toInt( std::string in );
   float toFloat( std::string in );

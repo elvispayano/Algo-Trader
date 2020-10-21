@@ -14,9 +14,8 @@
 
 //! @fn     FullyConnectedLayer( void )
 //! @brief  An empty constructor that creates the layer with a predefined
-//! (Linear)
-//!         activation type. If activation type is not set at initialization it
-//!         can be set later using the setTF function.
+//!         (Linear) activation type. If activation type is not set at
+//!         initialization it can be set later using the setTF function.
 FullyConnectedLayer::FullyConnectedLayer( void )
     : LayerBase( ActivationTypes::LINEAR ) {
   weight.reset( 0.0 );
@@ -39,6 +38,20 @@ FullyConnectedLayer::FullyConnectedLayer( ActivationTypes selectTF )
   outputs.reset( 0.0 );
   intermediate.reset( 0.0 );
   inputs.reset( 0.0 );
+}
+
+/// @fn     FullConnectedLayer( ActivationTypes activation, unsigned int
+///                             inputs, unsigned int nodes )
+/// @param  activation
+/// @param  inputs
+/// @param  nodes
+/// @brief  Create the layer with the provided activation type, and configure
+/// the weight and biases appropriate for the expected inputs and nodes.
+FullyConnectedLayer::FullyConnectedLayer( ActivationTypes activation,
+                                          unsigned int    inputs,
+                                          unsigned int    nodes ) {
+  weight.resize( nodes, inputs, 0.0 );
+  bias.resize( nodes, 1, 0.0 );
 }
 
 //! @fn     ~FullyConnectedLayer( void )
@@ -67,8 +80,8 @@ Matrix FullyConnectedLayer::process( Matrix inputs ) {
 //!                     bias values
 //! @brief  Update the layer with the provided hyperparameters that define the
 //!         required configuration of the layer
-void FullyConnectedLayer::reconfigure( size_t  nodes,
-                                       size_t  inputs,
+void FullyConnectedLayer::reconfigure( size_t nodes,
+                                       size_t inputs,
                                        Matrix hyperparams ) {
   LayerBase::reconfigure( nodes, inputs, hyperparams );
 

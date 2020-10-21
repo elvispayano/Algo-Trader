@@ -26,7 +26,7 @@ class MsgBase {
 public:
   /// @fn     MsgBase( void )
   /// @brief  Initialize an empty message packet
-  MsgBase(void) {
+  MsgBase( void ) {
     memset( buffer, '\0', MAX_MSG_SIZE );
     msgSize = 0;
   }
@@ -55,6 +55,7 @@ public:
   typedef short unsigned int suint;
   template<uint BYTE, uint BIT>
   void read( Map<suint, BYTE, BIT, 0U> map, suint& out, MsgBase* msg ) {
+    out             = 0;
     uchar outBuffer = '\0';
     memcpy( &outBuffer, &msg->buffer[BYTE], 1 );
     out = static_cast<suint>( outBuffer );
@@ -69,6 +70,7 @@ public:
   // Unsigned Integer Access
   template<uint BYTE, uint BIT>
   void read( Map<uint, BYTE, BIT, 0U> map, uint& out, MsgBase* msg ) {
+    out             = 0;
     uchar outBuffer = '\0';
     for ( uint ind = 0; ind < 2; ++ind ) {
       memcpy( &outBuffer, &msg->buffer[BYTE + ind], 1 );
@@ -89,6 +91,7 @@ public:
   typedef short int sint;
   template<uint BYTE, uint BIT>
   void read( Map<sint, BYTE, BIT, 0U> map, sint& out, MsgBase* msg ) {
+    out             = 0;
     uchar outBuffer = '\0';
     for ( uint ind = 0; ind < 2; ++ind ) {
       memcpy( &outBuffer, &msg->buffer[BYTE + ind], 1 );
@@ -108,6 +111,7 @@ public:
   // Float
   template<uint BYTE, uint BIT, uint SCALE>
   void read( Map<float, BYTE, BIT, SCALE> map, float& out, MsgBase* msg ) {
+    out = 0;
     uchar outBuffer[4];
     memset( outBuffer, '\0', 4 );
     for ( uint iter = 0; iter < 4; ++iter ) {
@@ -124,10 +128,36 @@ public:
     }
   }
 
+  // String
+  typedef std::string String;
+  template<uint BYTE, uint SCALE>
+  void read( Map<String, BYTE, 0, SCALE> map, String& out, MsgBase* msg ) {
+    out.clear();
+    for ( uint iter = 0; iter < SCALE; ++iter ) {
+      uchar character = '\0';
+      memcpy( &character, &msg->buffer[BYTE + iter], 1 );
+      if ( character != '\0' ) {
+        out.push_back( character );
+      }
+    }
+  }
+
+  template<uint BYTE, uint SCALE>
+  void write( Map<String, BYTE, 0, SCALE> map, String& in, MsgBase* msg ) {
+    for ( uint iter = 0; iter < SCALE; ++iter ) {
+      if ( iter > in.size() ) {
+        msg->buffer[BYTE + iter] = '\0';
+      } else {
+        memcpy( &msg->buffer[BYTE + iter], &in[iter], 1 );
+      }
+    }
+  }
+
   /// @fn     void read( Map map, T& out, MsgBase& msg)
   /// @brief  Deserialize the data from the message buffer
   template<typename T, uint BYTE, uint BIT>
   void read( Map<T, BYTE, BIT, 0> map, T& out, MsgBase* msg ) {
+    out             = T(0);
     uchar outBuffer = '\0';
     memcpy( &outBuffer, &msg->buffer[BYTE], 1 );
     out = static_cast<T>( outBuffer );
