@@ -9,6 +9,9 @@
 // Interface Includes
 #include "postgres.h"
 
+// Standard Includes
+#include <algorithm>
+
 DatabaseController::DatabaseController( DataServer* server )
     : pServer( server ) {
   pDatabase = 0;
