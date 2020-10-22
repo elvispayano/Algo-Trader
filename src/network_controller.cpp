@@ -207,7 +207,7 @@ void NetworkController::configureLayer( void ) {
   float        value    = databaseResponseHyperparam.value;
 
   NetworkMap& networkList = pServer->getNetworkList();
-  networkList[ticker]->getLayerList()[layerNum]->configure( index, value );
+  networkList[ticker]->getLayerList()[layerNum-1]->configure( index, value );
 }
 
 void NetworkController::processDatabaseOutputs( void ) {

@@ -110,8 +110,22 @@ void FullyConnectedLayer::train( double learnRate, Matrix gradient ) {
   weight -= gradient * learnRate;
 }
 
-/// @fn     void configure( unsigned int index, float value )
+/// @fn     void configure( unsigned int ind, float value )
 /// @param  index
 /// @param  value
 /// @brief  Apply hyperparameters to layer
-void FullyConnectedLayer::configure( unsigned int index, float value ) {}
+void FullyConnectedLayer::configure( unsigned int ind, float value ) {
+  unsigned int weightSize = weight.rows() * weight.cols();
+  unsigned int location   = ind - 1;
+
+  if ( location <= weightSize ) {
+    unsigned int row   = location % weight.cols();
+    unsigned int col   = location / weight.cols();
+    weight( row, col ) = value;
+  } else {
+    unsigned int row = ( location - weightSize );
+    bias( row, 0 )   = value;
+  }
+  printf( "Configuring Index: %d\n", index );
+  configured = index++ > ( weightSize + bias.rows() );
+}

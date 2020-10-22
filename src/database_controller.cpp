@@ -3,6 +3,7 @@
 #include "data_server.h"
 
 // Comms Includes
+#include "comms/database_response_hyperparam_msg.h"
 #include "comms/database_response_layer_msg.h"
 #include "comms/database_response_network_msg.h"
 
@@ -152,9 +153,18 @@ void DatabaseController::requestLayerConfiguration( void ) {
 }
 
 void DatabaseController::requestHyperparam( void ) {
+  DatabaseResponseHyperparamMsg response;
+
   std::string  ticker   = reqHyperparamMsg.ticker;
   unsigned int layerNum = reqHyperparamMsg.layerNum;
   unsigned int index    = reqHyperparamMsg.index;
 
-  pDatabase->getHyperparam( ticker, layerNum, index );
+  response.value    = pDatabase->getHyperparam( ticker, layerNum, index );
+  response.ticker   = ticker;
+  response.layerNum = layerNum;
+  response.index    = index;
+
+  if ( response.encode( &databaseResponse ) ) {
+    writeMessage( databaseResponse );
+  }
 }
