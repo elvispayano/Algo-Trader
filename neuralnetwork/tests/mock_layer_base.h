@@ -13,6 +13,7 @@ public:
   MOCK_METHOD1( process, Matrix( Matrix ) );
   MOCK_METHOD2( train, void( double, Matrix ) );
   MOCK_METHOD0( getBP, void( void ) );
+  MOCK_METHOD2( configure, void( unsigned int, float ) );
 };
 
 #endif /* MOCK_LAYER_BASE_H */
