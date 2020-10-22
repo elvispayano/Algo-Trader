@@ -12,7 +12,7 @@
 // Comms Includes
 #include "msg_base.h"
 
-enum class DatabaseResponseID { LAYER, NETWORK, UNKNOWN };
+enum class DatabaseResponseID { HYPERPARAM, LAYER, NETWORK, UNKNOWN };
 
 class DatabaseResponseMsg : public MsgBase {
 public:

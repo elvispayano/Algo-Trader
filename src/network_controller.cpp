@@ -137,13 +137,19 @@ void NetworkController::processDatabaseInputs( void ) {
     switch ( response.getID() ) {
     case DatabaseResponseID::NETWORK:
       if ( databaseResponseNetwork.decode( &response ) ) {
-        updateLoadedNetworks( databaseResponseNetwork );
+        updateLoadedNetworks();
       }
       break;
 
     case DatabaseResponseID::LAYER:
       if ( databaseResponseLayer.decode( &response ) ) {
-        configureNetwork( databaseResponseLayer );
+        configureNetwork();
+      }
+      break;
+
+    case DatabaseResponseID::HYPERPARAM:
+      if ( databaseResponseHyperparam.decode( &response ) ) {
+        configureLayer();
       }
       break;
 
@@ -153,24 +159,24 @@ void NetworkController::processDatabaseInputs( void ) {
   }
 }
 
-/// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
-/// @param  msg   Input message
+/// @fn     void updateNetworks( void )
 /// @brief  Update the networks being used
-void NetworkController::updateLoadedNetworks(
-    DatabaseResponseNetworkMsg& msg ) {
+void NetworkController::updateLoadedNetworks( void ) {
 
-  NetworkMap& networkList = pServer->getNetworkList();
-  switch ( msg.action ) {
+  NetworkMap&  networkList = pServer->getNetworkList();
+  std::string  ticker      = databaseResponseNetwork.ticker;
+  unsigned int layerCount  = databaseResponseNetwork.layerCount;
+  switch ( databaseResponseNetwork.action ) {
   case DbNetworkID::ADD:
-    networkList[msg.ticker] = new NeuralNetwork( msg.ticker, msg.layerCount );
-    printf( "NetworkCtrl: Added new Network: %s\n", msg.ticker.c_str() );
+    networkList[ticker] = new NeuralNetwork( ticker, layerCount );
+    printf( "NetworkCtrl: Added new Network: %s\n", ticker.c_str() );
     break;
 
   case DbNetworkID::REMOVE:
-    if ( networkList[msg.ticker] ) {
-      delete networkList[msg.ticker];
-      networkList.erase( networkList.find( msg.ticker ) );
-      printf( "NetworkCtrl: Removed Network: %s\n", msg.ticker.c_str() );
+    if ( networkList[ticker] ) {
+      delete networkList[ticker];
+      networkList.erase( networkList.find( ticker ) );
+      printf( "NetworkCtrl: Removed Network: %s\n", ticker.c_str() );
     }
     break;
 
@@ -179,22 +185,34 @@ void NetworkController::updateLoadedNetworks(
   }
 }
 
-/// @fn     void configureNetwork( DatabaseResponseLayerMsg msg )
-/// @param  msg   Input message
+/// @fn     void configureNetwork( void )
 /// @brief  Create network layers
-void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
+void NetworkController::configureNetwork( void ) {
   NetworkMap& networkList = pServer->getNetworkList();
-  if ( networkList.find( msg.ticker ) == networkList.end() ) {
+  if ( networkList.find( databaseResponseLayer.ticker ) == networkList.end() ) {
     return;
   }
 
-  networkList[msg.ticker]->addLayer(
-      msg.layer, msg.activation, msg.numberOfInputs, msg.numberOfNodes );
+  networkList[databaseResponseLayer.ticker]->addLayer(
+      databaseResponseLayer.layer,
+      databaseResponseLayer.activation,
+      databaseResponseLayer.numberOfInputs,
+      databaseResponseLayer.numberOfNodes );
+}
+
+void NetworkController::configureLayer( void ) {
+  std::string ticker = databaseResponseHyperparam.ticker;
+  unsigned int layerNum = databaseResponseHyperparam.layerNum;
+  unsigned int index    = databaseResponseHyperparam.index;
+  float        value    = databaseResponseHyperparam.value;
+
+  NetworkMap& networkList = pServer->getNetworkList();
+  networkList[ticker]->getLayerList()[layerNum]->configure( index, value );
 }
 
 void NetworkController::processDatabaseOutputs( void ) {
   DatabaseRequestLayerMsg msg;
-  NetworkMap networkList = pServer->getNetworkList();
+  NetworkMap              networkList = pServer->getNetworkList();
 
   for ( auto network : networkList ) {
     // Request Next Layer

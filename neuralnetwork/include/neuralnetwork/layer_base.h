@@ -82,6 +82,12 @@ public:
   /// @brief  Request next layer index
   unsigned int nextIndex( void ) { return index; }
 
+  /// @fn     void configure( unsigned int index, float value )
+  /// @param  index
+  /// @param  value
+  /// @brief  Apply hyperparameters to layer
+  virtual void configure( unsigned int index, float value ) = 0;
+
 protected:
   bool         configured;
   unsigned int index;

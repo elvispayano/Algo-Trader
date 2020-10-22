@@ -95,6 +95,12 @@ public:
   //! @brief  Return the layers configured bias hyperparameters
   Matrix getBias( void ) { return bias; }
 
+  /// @fn     void configure( unsigned int index, float value )
+  /// @param  index
+  /// @param  value
+  /// @brief  Apply hyperparameters to layer
+  void configure( unsigned int index, float value );
+
 private:
   // Hyperparameters
   Matrix weight;

@@ -30,6 +30,7 @@ set(COMMS_SRC
   "src/broker_response_update_msg.cpp"
   "src/database_request_hyperparam_msg.cpp"
   "src/database_request_layer_msg.cpp"
+  "src/database_response_hyperparam_msg.cpp"
   "src/database_response_layer_msg.cpp"
   "src/database_response_network_msg.cpp"
   "src/fc_layer_msg.cpp"

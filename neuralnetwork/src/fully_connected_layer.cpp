@@ -109,3 +109,9 @@ void FullyConnectedLayer::train( double learnRate, Matrix gradient ) {
 
   weight -= gradient * learnRate;
 }
+
+/// @fn     void configure( unsigned int index, float value )
+/// @param  index
+/// @param  value
+/// @brief  Apply hyperparameters to layer
+void FullyConnectedLayer::configure( unsigned int index, float value ) {}
