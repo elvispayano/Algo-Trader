@@ -144,13 +144,10 @@ Matrix NeuralNetwork::process( Matrix input ) {
   Matrix data = input;
 
   for ( auto layer : layerList ) {
-    Matrix intermediate = layer->process( data );
-    data.resize( intermediate.rows(), intermediate.cols(), 0.0 );
-    data = intermediate;
+    data.set( layer->process( data ) );
   }
 
-  Matrix output = data;
-  return output;
+  return data;
 }
 
 //! @fn     unsigned int getTotalNodes( void )
@@ -183,29 +180,16 @@ void NeuralNetwork::train( void ) {
   //}
 }
 
-/// @fn     bool checkLayerConfiguration( void )
-/// @brief  Check if the neural network has had all its layers created
-bool NeuralNetwork::checkLayerConfiguration( void ) {
-  return false;
-}
-
-/// @fn     bool checkHyperparamConfiguration( unsigned int layerNum )
-/// @brief  Check if the desired layer hyperparameters have been configured
-bool NeuralNetwork::checkHyperparamConfiguration( void ) {
-  return false;
-}
-
 /// @fn     bool checkConfiguration( void )
 /// @brief  Check if the neural network has been completely configured
 bool NeuralNetwork::checkConfiguration( void ) {
-  if ( layerList.size() <= 0 ) {
+  // Check All Layers are present
+  if ( !layersAdded() ) {
     return false;
   }
 
-  bool isConfigured = false;
   for ( auto layer : layerList ) {
     if ( !layer->isConfigured() ) {
-
       return false;
     }
   }

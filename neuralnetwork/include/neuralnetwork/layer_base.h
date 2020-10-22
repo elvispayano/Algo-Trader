@@ -76,7 +76,7 @@ public:
 
   /// @fn     bool isConfigured( void )
   /// @brief  Check if the layer being access is fully configured
-  bool isConfigured( void ) { return false; }
+  bool isConfigured( void ) { return configured; }
 
   /// @fn     unsigned int nextIndex( void )
   /// @brief  Request next layer index

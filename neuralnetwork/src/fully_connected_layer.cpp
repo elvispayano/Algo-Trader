@@ -65,10 +65,7 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 //!           f(x) =  tf([weight]*[input] + bias)
 //!         where f(x) is a matrix and tf is the configured transfer function.
 Matrix FullyConnectedLayer::process( Matrix inputs ) {
-  this->inputs = inputs;
-  intermediate = weight * inputs + bias;
-  outputs      = pActivation->performTF( intermediate );
-  return outputs;
+  return pActivation->performTF( weight * inputs + bias );
 }
 
 //! @fn     void reconfigure( size_t nodes,
@@ -126,6 +123,5 @@ void FullyConnectedLayer::configure( unsigned int ind, float value ) {
     unsigned int row = ( location - weightSize );
     bias( row, 0 )   = value;
   }
-  printf( "Configuring Index: %d\n", index );
   configured = index++ > ( weightSize + bias.rows() );
 }
