@@ -182,6 +182,16 @@ char* Postgres::execFunc( std::string func, std::string ticker, int num ) {
   return exec( queryBuffer );
 }
 
+char* Postgres::execFunc( std::string func, std::string ticker, int num1, int num2) {
+  clearQuery();
+  sprintf( queryBuffer,
+           "SELECT * FROM %s('%s', %d, %d)",
+           func.c_str(),
+           ticker.c_str(),
+           num1, num2 );
+  return exec( queryBuffer );
+}
+
 /*
   Function:     getNetworkCount
   Inputs:       None (void)
@@ -290,6 +300,13 @@ LayerTypes Postgres::getLayerType( std::string ticker, int layerNum ) {
   if ( value >= static_cast<int>( LayerTypes::UNKNOWN ) || valueStr.empty() )
     return LayerTypes::UNKNOWN;
   return static_cast<LayerTypes>( value );
+}
+
+float Postgres::getHyperparam( std::string  ticker,
+  unsigned int layerNum,
+  unsigned int index) {
+  std::string valueStr = execFunc( "get_hyperparam", ticker.c_str(), index, layerNum );
+  return toFloat( valueStr );
 }
 
 /*

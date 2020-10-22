@@ -70,6 +70,10 @@ public:
   virtual ActivationTypes getActivation( std::string ticker, int layerNum ) = 0;
   virtual LayerTypes      getLayerType( std::string ticker, int layerNum )  = 0;
 
+  virtual float getHyperparam( std::string  ticker,
+                               unsigned int layerNum,
+                               unsigned int index ) = 0;
+
   // Support functions
   int   toInt( std::string in );
   float toFloat( std::string in );

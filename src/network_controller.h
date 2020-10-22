@@ -18,8 +18,10 @@
 #include "comms/broker_request_update_msg.h"
 #include "comms/broker_response_msg.h"
 #include "comms/broker_response_update_msg.h"
+#include "comms/database_request_hyperparam_msg.h"
 #include "comms/database_request_layer_msg.h"
 #include "comms/database_request_msg.h"
+#include "comms/database_response_hyperparam_msg.h"
 #include "comms/database_response_layer_msg.h"
 #include "comms/database_response_msg.h"
 #include "comms/database_response_network_msg.h"
@@ -78,15 +80,15 @@ private:
   /// @brief  Process responses from the database
   void processDatabaseInputs( void );
 
-  /// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
-  /// @param  msg   Input message
+  /// @fn     void updateNetworks( void )
   /// @brief  Update the networks being used
-  void updateLoadedNetworks( DatabaseResponseNetworkMsg& msg );
+  void updateLoadedNetworks( void );
 
-  /// @fn     void configureNetwork( DatabaseResponseLayerMsg msg )
-  /// @param  msg   Input message
+  /// @fn     void configureNetwork( void )
   /// @brief  Create network layers
-  void configureNetwork( DatabaseResponseLayerMsg msg );
+  void configureNetwork( void );
+
+  void configureLayer( void );
 
   void update( void );
 
@@ -102,7 +104,7 @@ private:
 
   typedef std::map<std::string, NeuralNetwork*> NetworkMap;
 
-  std::map<std::string, Matrix>         networkInputs;
+  std::map<std::string, Matrix> networkInputs;
 
   // Port Definitions
   FIFOBidirectional<BrokerResponseMsg, BrokerRequestMsg>*     pBrokerPort;
@@ -112,9 +114,11 @@ private:
   BrokerResponseUpdateMsg brokerResponseUpdate;
 
   // Database Response Messages
-  DatabaseRequestMsg         databaseRequest;
-  DatabaseResponseNetworkMsg databaseResponseNetwork;
-  DatabaseResponseLayerMsg   databaseResponseLayer;
+  DatabaseRequestMsg databaseRequest;
+
+  DatabaseResponseNetworkMsg    databaseResponseNetwork;
+  DatabaseResponseLayerMsg      databaseResponseLayer;
+  DatabaseResponseHyperparamMsg databaseResponseHyperparam;
 
   FCLayer databaseResponseFC;
 

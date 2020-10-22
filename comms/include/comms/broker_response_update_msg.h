@@ -31,31 +31,21 @@ public:
   ///         message with the corresponding data
   bool decode( BrokerResponseMsg* msg ) override;
 
-  float bid;
-  float ask;
-  float last;
-  float high;
-  float low;
-  char  s1;
-  char  s2;
-  char  s3;
-  char  s4;
-  char  s5;
-  char  s6;
+  float  bid;
+  float  ask;
+  float  last;
+  float  high;
+  float  low;
+  String ticker;
 
 private:
   struct MsgMap {
-    Map<float, 0, 0, 1>  bid;
-    Map<float, 4, 0, 1>  ask;
-    Map<float, 8, 0, 1>  last;
-    Map<float, 12, 0, 1> high;
-    Map<float, 16, 0, 1> low;
-    Map<char, 20, 0, 0>  s1;
-    Map<char, 21, 0, 0>  s2;
-    Map<char, 22, 0, 0>  s3;
-    Map<char, 23, 0, 0>  s4;
-    Map<char, 24, 0, 0>  s5;
-    Map<char, 25, 0, 0>  s6;
+    Map<float, 0, 0, 1>   bid;
+    Map<float, 4, 0, 1>   ask;
+    Map<float, 8, 0, 1>   last;
+    Map<float, 12, 0, 1>  high;
+    Map<float, 16, 0, 1>  low;
+    Map<String, 20, 0, 6> ticker;
   } x;
 
   /// @fn     void write( BrokerResponseMsg* msg )

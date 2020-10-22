@@ -21,12 +21,7 @@ BrokerResponseUpdateMsg::BrokerResponseUpdateMsg( void ) {
   high = 0.0f;
   last = 0.0f;
 
-  s1 = '\0';
-  s2 = '\0';
-  s3 = '\0';
-  s4 = '\0';
-  s5 = '\0';
-  s6 = '\0';
+  ticker.clear();
 }
 
 /// @fn     bool encode( BrokerRequestMsg& msg )
@@ -64,12 +59,7 @@ void BrokerResponseUpdateMsg::write( BrokerResponseMsg* msg ) {
   MsgBase::write( x.last, last, msg );
   MsgBase::write( x.high, high, msg );
   MsgBase::write( x.low, low, msg );
-  MsgBase::write( x.s1, s1, msg );
-  MsgBase::write( x.s2, s2, msg );
-  MsgBase::write( x.s3, s3, msg );
-  MsgBase::write( x.s4, s4, msg );
-  MsgBase::write( x.s5, s5, msg );
-  MsgBase::write( x.s6, s6, msg );
+  MsgBase::write( x.ticker, ticker, msg );
 }
 
 /// @fn     void read( BrokerRequestMsg& msg )
@@ -80,10 +70,5 @@ void BrokerResponseUpdateMsg::read( BrokerResponseMsg* msg ) {
   MsgBase::read( x.last, last, msg );
   MsgBase::read( x.high, high, msg );
   MsgBase::read( x.low, low, msg );
-  MsgBase::read( x.s1, s1, msg );
-  MsgBase::read( x.s2, s2, msg );
-  MsgBase::read( x.s3, s3, msg );
-  MsgBase::read( x.s4, s4, msg );
-  MsgBase::read( x.s5, s5, msg );
-  MsgBase::read( x.s6, s6, msg );
+  MsgBase::read( x.ticker, ticker, msg );
 }

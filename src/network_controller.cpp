@@ -12,6 +12,7 @@
 #include "data_server.h"
 
 // Neural Network Includes
+#include "neuralnetwork/layer_base.h"
 #include "neuralnetwork/neural_network.h"
 
 NetworkController::NetworkController( DataServer* server )
@@ -88,16 +89,7 @@ void NetworkController::processOutputs( void ) {
       continue;
     }
 
-    std::string  ticker = iter.first;
-    unsigned int len    = ticker.size();
-
-    requestUpdateMsg.s1 = ( len > 0 ) ? ticker.c_str()[0] : '\0';
-    requestUpdateMsg.s2 = ( len > 0 ) ? ticker.c_str()[1] : '\0';
-    requestUpdateMsg.s3 = ( len > 1 ) ? ticker.c_str()[2] : '\0';
-    requestUpdateMsg.s4 = ( len > 2 ) ? ticker.c_str()[3] : '\0';
-    requestUpdateMsg.s5 = ( len > 3 ) ? ticker.c_str()[4] : '\0';
-    requestUpdateMsg.s6 = ( len > 4 ) ? ticker.c_str()[5] : '\0';
-
+    requestUpdateMsg.ticker = iter.first;
     if ( requestUpdateMsg.encode( &requestMsg ) ) {
       pBrokerPort->putOutput( requestMsg );
     }
@@ -127,18 +119,6 @@ void NetworkController::processBrokerInputs( void ) {
 /// @param  msg   Formatted broker response message
 /// @brief  Update neural network inputs
 void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
-  std::string ticker;
-  ticker.push_back( msg.s1 );
-  ticker.push_back( msg.s2 );
-  ticker.push_back( msg.s3 );
-  ticker.push_back( msg.s4 );
-  ticker.push_back( msg.s5 );
-  ticker.push_back( msg.s6 );
-  for ( unsigned int i = 0; i < ticker.size(); ++i ) {
-    if ( ticker.back() == '\0' )
-      ticker.pop_back();
-  }
-
   Matrix input( 5, 1, 0.0 );
   input( 0, 0 ) = msg.ask;
   input( 1, 0 ) = msg.bid;
@@ -146,53 +126,57 @@ void NetworkController::updateNetworkInputs( BrokerResponseUpdateMsg msg ) {
   input( 3, 0 ) = msg.low;
   input( 4, 0 ) = msg.last;
 
-  networkInputs[ticker].set( input );
+  networkInputs[msg.ticker].set( input );
 }
 
 /// @fn     void processDatabaseInputs( void )
 /// @brief  Process responses from the database
 void NetworkController::processDatabaseInputs( void ) {
   DatabaseResponseMsg response;
-  if ( !pDatabasePort->getInput( response ) ) {
-    return;
-  }
+  while ( pDatabasePort->getInput( response ) ) {
+    switch ( response.getID() ) {
+    case DatabaseResponseID::NETWORK:
+      if ( databaseResponseNetwork.decode( &response ) ) {
+        updateLoadedNetworks();
+      }
+      break;
 
-  switch ( response.getID() ) {
-  case DatabaseResponseID::NETWORK:
-    if ( databaseResponseNetwork.decode( &response ) ) {
-      updateLoadedNetworks( databaseResponseNetwork );
+    case DatabaseResponseID::LAYER:
+      if ( databaseResponseLayer.decode( &response ) ) {
+        configureNetwork();
+      }
+      break;
+
+    case DatabaseResponseID::HYPERPARAM:
+      if ( databaseResponseHyperparam.decode( &response ) ) {
+        configureLayer();
+      }
+      break;
+
+    default: /* DatabaseResponseID::UNKNOWN */
+      printf( "Error: Unknown Database Response\n" );
     }
-    break;
-
-  case DatabaseResponseID::LAYER:
-    if ( databaseResponseLayer.decode( &response ) ) {
-      configureNetwork( databaseResponseLayer );
-    }
-    break;
-
-  default: /* DatabaseResponseID::UNKNOWN */
-    printf( "Error: Unknown Database Response\n" );
   }
 }
 
-/// @fn     void updateNetworks( DatabaseResponseNetworkMsg msg )
-/// @param  msg   Input message
+/// @fn     void updateNetworks( void )
 /// @brief  Update the networks being used
-void NetworkController::updateLoadedNetworks(
-    DatabaseResponseNetworkMsg& msg ) {
+void NetworkController::updateLoadedNetworks( void ) {
 
-  NetworkMap& networkList = pServer->getNetworkList();
-  switch ( msg.action ) {
+  NetworkMap&  networkList = pServer->getNetworkList();
+  std::string  ticker      = databaseResponseNetwork.ticker;
+  unsigned int layerCount  = databaseResponseNetwork.layerCount;
+  switch ( databaseResponseNetwork.action ) {
   case DbNetworkID::ADD:
-    networkList[msg.ticker] = new NeuralNetwork( msg.ticker, msg.layerCount );
-    printf( "NetworkCtrl: Added new Network: %s\n", msg.ticker.c_str() );
+    networkList[ticker] = new NeuralNetwork( ticker, layerCount );
+    printf( "NetworkCtrl: Added new Network: %s\n", ticker.c_str() );
     break;
 
   case DbNetworkID::REMOVE:
-    if ( networkList[msg.ticker] ) {
-      delete networkList[msg.ticker];
-      networkList.erase( networkList.find( msg.ticker ) );
-      printf( "NetworkCtrl: Removed Network: %s\n", msg.ticker.c_str() );
+    if ( networkList[ticker] ) {
+      delete networkList[ticker];
+      networkList.erase( networkList.find( ticker ) );
+      printf( "NetworkCtrl: Removed Network: %s\n", ticker.c_str() );
     }
     break;
 
@@ -201,27 +185,55 @@ void NetworkController::updateLoadedNetworks(
   }
 }
 
-/// @fn     void configureNetwork( DatabaseResponseLayerMsg msg )
-/// @param  msg   Input message
+/// @fn     void configureNetwork( void )
 /// @brief  Create network layers
-void NetworkController::configureNetwork( DatabaseResponseLayerMsg msg ) {
+void NetworkController::configureNetwork( void ) {
   NetworkMap& networkList = pServer->getNetworkList();
-  if ( networkList.find( msg.ticker ) == networkList.end() ) {
+  if ( networkList.find( databaseResponseLayer.ticker ) == networkList.end() ) {
     return;
   }
 
-  networkList[msg.ticker]->addLayer(
-      msg.layer, msg.activation, msg.numberOfInputs, msg.numberOfNodes );
+  networkList[databaseResponseLayer.ticker]->addLayer(
+      databaseResponseLayer.layer,
+      databaseResponseLayer.activation,
+      databaseResponseLayer.numberOfInputs,
+      databaseResponseLayer.numberOfNodes );
+}
+
+void NetworkController::configureLayer( void ) {
+  std::string ticker = databaseResponseHyperparam.ticker;
+  unsigned int layerNum = databaseResponseHyperparam.layerNum;
+  unsigned int index    = databaseResponseHyperparam.index;
+  float        value    = databaseResponseHyperparam.value;
+
+  NetworkMap& networkList = pServer->getNetworkList();
+  networkList[ticker]->getLayerList()[layerNum-1]->configure( index, value );
 }
 
 void NetworkController::processDatabaseOutputs( void ) {
-  NetworkMap networkList = pServer->getNetworkList();
+  DatabaseRequestLayerMsg msg;
+  NetworkMap              networkList = pServer->getNetworkList();
 
   for ( auto network : networkList ) {
+    // Request Next Layer
     if ( !network.second->layersAdded() ) {
       requestConfiguration( network.first,
                             network.second->getLayerCount() + 1 );
-      break;
+    }
+
+    // Request Layer Hyperparam
+    unsigned int layerNum = 1;
+    for ( auto layer : network.second->getLayerList() ) {
+      if ( !layer->isConfigured() ) {
+        DatabaseRequestHyperparamMsg request;
+        request.ticker   = network.first;
+        request.index    = layer->nextIndex();
+        request.layerNum = layerNum;
+        if ( request.encode( &msg ) ) {
+          writeMessage( msg );
+        }
+      }
+      ++layerNum;
     }
   }
 }

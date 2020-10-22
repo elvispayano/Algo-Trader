@@ -65,10 +65,7 @@ FullyConnectedLayer::~FullyConnectedLayer( void ) {}
 //!           f(x) =  tf([weight]*[input] + bias)
 //!         where f(x) is a matrix and tf is the configured transfer function.
 Matrix FullyConnectedLayer::process( Matrix inputs ) {
-  this->inputs = inputs;
-  intermediate = weight * inputs + bias;
-  outputs      = pActivation->performTF( intermediate );
-  return outputs;
+  return pActivation->performTF( weight * inputs + bias );
 }
 
 //! @fn     void reconfigure( size_t nodes,
@@ -108,4 +105,23 @@ void FullyConnectedLayer::train( double learnRate, Matrix gradient ) {
   dOutdInt = pActivation->performBP( intermediate );
 
   weight -= gradient * learnRate;
+}
+
+/// @fn     void configure( unsigned int ind, float value )
+/// @param  index
+/// @param  value
+/// @brief  Apply hyperparameters to layer
+void FullyConnectedLayer::configure( unsigned int ind, float value ) {
+  unsigned int weightSize = weight.rows() * weight.cols();
+  unsigned int location   = ind - 1;
+
+  if ( location <= weightSize ) {
+    unsigned int row   = location % weight.cols();
+    unsigned int col   = location / weight.cols();
+    weight( row, col ) = value;
+  } else {
+    unsigned int row = ( location - weightSize );
+    bias( row, 0 )   = value;
+  }
+  configured = index++ > ( weightSize + bias.rows() );
 }

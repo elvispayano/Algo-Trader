@@ -3,6 +3,7 @@
 #include "data_server.h"
 
 // Comms Includes
+#include "comms/database_response_hyperparam_msg.h"
 #include "comms/database_response_layer_msg.h"
 #include "comms/database_response_network_msg.h"
 
@@ -93,7 +94,6 @@ void DatabaseController::updateNetworks( void ) {
     if ( networkMsg.encode( &databaseResponse ) ) {
       writeMessage( databaseResponse );
     }
-    break;
   }
 
   // Delete networks
@@ -115,19 +115,23 @@ void DatabaseController::updateNetworks( void ) {
 /// @brief  Process broker and database inputs
 void DatabaseController::processInputs( void ) {
   DatabaseRequestMsg request;
-  if ( !pPort->getOutput( request ) ) {
-    return;
-  }
 
-  switch ( request.getID() ) {
-  case DatabaseRequestID::LAYER:
-    if ( reqLayerMsg.decode( &request ) ) {
-      requestLayerConfiguration();
+  while ( pPort->getOutput( request ) ) {
+    switch ( request.getID() ) {
+    case DatabaseRequestID::LAYER:
+      if ( reqLayerMsg.decode( &request ) ) {
+        requestLayerConfiguration();
+      }
+      break;
+
+    case DatabaseRequestID::HYPERPARAM:
+      if ( reqHyperparamMsg.decode( &request ) ) {
+        requestHyperparam();
+      }
+      break;
+    default:
+      printf( "DatabaseCtrl: Invalid Request Message\n" );
     }
-    break;
-
-  default:
-    printf( "DatabaseCtrl: Invalid Request Message\n" );
   }
 }
 
@@ -142,6 +146,23 @@ void DatabaseController::requestLayerConfiguration( void ) {
   response.numberOfNodes  = pDatabase->getNodes( ticker, layerNum );
   response.activation     = pDatabase->getActivation( ticker, layerNum );
   response.layer          = pDatabase->getLayerType( ticker, layerNum );
+
+  if ( response.encode( &databaseResponse ) ) {
+    writeMessage( databaseResponse );
+  }
+}
+
+void DatabaseController::requestHyperparam( void ) {
+  DatabaseResponseHyperparamMsg response;
+
+  std::string  ticker   = reqHyperparamMsg.ticker;
+  unsigned int layerNum = reqHyperparamMsg.layerNum;
+  unsigned int index    = reqHyperparamMsg.index;
+
+  response.value    = pDatabase->getHyperparam( ticker, layerNum, index );
+  response.ticker   = ticker;
+  response.layerNum = layerNum;
+  response.index    = index;
 
   if ( response.encode( &databaseResponse ) ) {
     writeMessage( databaseResponse );

@@ -31,21 +31,11 @@ public:
   ///         message with the corresponding data
   bool decode( BrokerRequestMsg* msg ) override;
 
-  char s1;
-  char s2;
-  char s3;
-  char s4;
-  char s5;
-  char s6;
+  String ticker;
 
 private:
   struct MsgMap {
-    Map<char, 0, 0, 0> s1;
-    Map<char, 1, 0, 0> s2;
-    Map<char, 2, 0, 0> s3;
-    Map<char, 3, 0, 0> s4;
-    Map<char, 4, 0, 0> s5;
-    Map<char, 5, 0, 0> s6;
+    Map<String, 0, 0, 6> ticker;
   } x;
 
   /// @fn     void write( BrokerRequestMsg* msg )

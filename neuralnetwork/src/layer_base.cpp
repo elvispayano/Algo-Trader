@@ -20,6 +20,8 @@ LayerBase::LayerBase( void )
     : pActivation( new Activation() ) {
   inputCount = 0;
   nodeCount  = 0;
+  configured = false;
+  index      = 1;
 }
 
 //! @fn     LayerBase( ActivationTypes )
@@ -30,6 +32,8 @@ LayerBase::LayerBase( ActivationTypes selectTF )
     : pActivation( new Activation( selectTF ) ) {
   inputCount = 0;
   nodeCount  = 0;
+  configured = false;
+  index      = 1;
 }
 
 //! @fn     ~LayerBase( void )
@@ -48,7 +52,7 @@ LayerBase::~LayerBase( void ) {
 //! @param  hyperparams Matrix containing all hyperparameters
 //! @brief  Update the layer with the provided hyperparameters that define the
 //!         required parameters for the layer
-void LayerBase::reconfigure(size_t nodes, size_t inputs, Matrix hyperparams) {
+void LayerBase::reconfigure( size_t nodes, size_t inputs, Matrix hyperparams ) {
   inputCount = inputs;
   nodeCount  = nodes;
 }

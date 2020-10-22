@@ -23,7 +23,7 @@ int main() {
   while ( logic ) {
     trader.perform();
 #ifdef _WIN32
-    Sleep( 1000 );
+    Sleep( 100 );
 #else
     sleep( 1000 );
 #endif
