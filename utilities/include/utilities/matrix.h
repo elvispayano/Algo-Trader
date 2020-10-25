@@ -18,6 +18,10 @@ public:
   /// @brief  Initialize an empty 0-by-0 matrix
   Matrix( void );
 
+  /// @fn     Matrix( const Matrix& in )
+  /// @brief  Copy constructor
+  Matrix( const Matrix& in );
+
   /// @fn     Matrix( unsigned int r, unsigned int c )
   /// @param  r   Number of rows in matrix
   /// @param  c   Number of columns in matrix
@@ -37,7 +41,7 @@ public:
   /// @param  c       Number of columns in matrix
   /// @param  initVec Vector containing all elements in matrix
   /// @brief  Initialize an r-by-c matrix set with provided elements
-  Matrix( unsigned int r, unsigned int c, std::vector<double> initVec );
+  Matrix( unsigned int r, unsigned int c, double* initVec );
 
   /// @fn     ~Matrix( void )
   /// @brief  Clear memory and reset values
@@ -78,7 +82,7 @@ public:
   /// @param  initVec   Initial vector of values to set matrix elements
   /// @brief  Resize the matrix to a new desired size. Removes all data
   ///         currently in matrix
-  void resize( unsigned int r, unsigned int c, std::vector<double> initMat );
+  void resize( unsigned int r, unsigned int c, double* initMat );
 
   /// @fn     void rows( void )
   /// @brief  Get the number of rows present in the matrix
@@ -217,7 +221,7 @@ private:
 
   double junk = 0;
 
-  std::vector<double> mat;
+  double* mat;
 };
 
 /// @fn     operator+( double lh, Matrix rh )

@@ -6,13 +6,30 @@
 /// \date     18/09/2020
 /// \version  0.0.1
 
+// Utility Includes
 #include "utilities/matrix.h"
 #include "utilities/random_number.h"
+
+// Standard Includes
+#include <string>
 
 /// @fn     Matrix( void )
 /// @brief  Initialize an empty 0-by-0 matrix
 Matrix::Matrix( void ) {
+  mr = 0;
+  mc = 0;
   clear();
+}
+
+/// @fn     Matrix( const Matrix& in )
+/// @param  in Initialization matrix
+/// @brief  Initialize a matrix by copying
+Matrix::Matrix( const Matrix& in ) {
+  mr = 0;
+  mc = 0;
+  resize( in.mr, in.mc );
+  unsigned int totalElements = mr * mc;
+  memcpy( mat, in.mat, sizeof( double ) * ( totalElements ) );
 }
 
 /// @fn     Matrix( unsigned int r, unsigned int c )
@@ -20,6 +37,8 @@ Matrix::Matrix( void ) {
 /// @param  c   Number of columns in matrix
 /// @brief  Initialize an empty r-by-c matrix
 Matrix::Matrix( unsigned int r, unsigned int c ) {
+  mr = 0;
+  mc = 0;
   resize( r, c );
 }
 
@@ -29,15 +48,19 @@ Matrix::Matrix( unsigned int r, unsigned int c ) {
 /// @param  initVal Initial value of all elements in matrix
 /// @brief  Initialize an r-by-c matrix with all elments set to an initial value
 Matrix::Matrix( unsigned int r, unsigned int c, double initVal ) {
+  mr = 0;
+  mc = 0;
   resize( r, c, initVal );
 }
 
-/// @fn     Matrix( unsigned int r, unsigned int c )
+/// @fn     Matrix( unsigned int r, unsigned int c, double* initVec )
 /// @param  r       Number of rows in matrix
 /// @param  c       Number of columns in matrix
 /// @param  initVec Vector containing all elements in matrix
 /// @brief  Initialize an r-by-c matrix set with provided elements
-Matrix::Matrix( unsigned int r, unsigned int c, std::vector<double> initVec ) {
+Matrix::Matrix( unsigned int r, unsigned int c, double* initVec ) {
+  mr = 0;
+  mc = 0;
   resize( r, c, initVec );
 }
 
@@ -55,25 +78,29 @@ void Matrix::reset( double initVal ) {
     return;
   }
 
-  for ( double& element : mat ) {
-    element = initVal;
+  for (unsigned int i = 0; i < mr * mc; ++i) {
+    mat[i] = initVal;
   }
 }
 
 /// @fn     void clear( void )
 /// @brief  Clear the matrix of any data stored
 void Matrix::clear( void ) {
+  if (mr * mc <= 0) {
+    return;
+  }
   mr = 0;
   mc = 0;
-  mat.clear();
+  free( mat );
 }
 
 /// @fn     void randomize( void )
 /// @brief  Set all elements in matrix to random values
 void Matrix::randomize( void ) {
   static RandomNumber rng;
-  for ( double& element : mat )
-    element = rng.random( -100, 100 );
+  for ( unsigned int i = 0; i < mr * mc; ++i ) {
+    mat[i] = rng.random( -100, 100 );
+  }
 }
 
 /// @fn     void resize( unsigned int r, unsigned int c )
@@ -92,12 +119,13 @@ void Matrix::resize( unsigned int r, unsigned int c ) {
 /// @brief  Resize the matrix to a new desired size. Removes all data currently
 ///         in matrix
 void Matrix::resize( unsigned int r, unsigned int c, double initVal ) {
+  clear();
   unsigned int totalElements = r * c;
-  mat.resize( totalElements );
+
+  mat = (double*)malloc( sizeof( double ) * totalElements );
 
   mr = r;
   mc = c;
-
   reset( initVal );
 }
 
@@ -105,17 +133,14 @@ void Matrix::resize( unsigned int r, unsigned int c, double initVal ) {
 /// )
 /// @param  r         Desired row count in resized matrix
 /// @param  c         Desired column count in resized matrix
-/// @param  initVec   Initial vector of values to set matrix elements
+/// @param  initArray Initial array of values to set matrix elements
 /// @brief  Resize the matrix to a new desired size. Removes all data currently
 ///         in matrix
-void Matrix::resize( unsigned int        r,
-                     unsigned int        c,
-                     std::vector<double> initVec ) {
+void Matrix::resize( unsigned int r, unsigned int c, double* initVec ) {
+  clear();
   unsigned int totalElements = r * c;
-  if ( ( initVec.size() != totalElements ) || ( totalElements == 0 ) ) {
-    return;
-  }
-  mat.resize( totalElements );
+
+  mat = (double*)malloc( sizeof( double ) * totalElements );
 
   mr = r;
   mc = c;
@@ -215,7 +240,7 @@ void Matrix::set( Matrix input ) {
   this->operator=( input );
 }
 
-/// @fn     Matrix transpose( void )
+/// @fn     Matrix& transpose( void )
 /// @brief  Generate a transpose of the current matrix
 Matrix Matrix::transpose( void ) {
   Matrix output( mc, mr );
@@ -231,8 +256,8 @@ Matrix Matrix::transpose( void ) {
 /// @param  function  Function Pointer
 /// @brief  Run a function over all elements within the matrix
 void Matrix::forEach( double ( *function )( double ) ) {
-  for ( double &element : mat ) {
-    element = function( element );
+  for ( unsigned int i = 0; i < ( mr * mc ); ++i ) {
+    mat[i] = function( mat[i] );
   }
 }
 

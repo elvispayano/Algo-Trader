@@ -28,7 +28,7 @@ protected:
     activation = new Activation();
     rng        = new RandomNumber();
 
-    input.resize( 2, 3, 0 );
+    input.resize( 2, 3, 0.0 );
   }
 
   void TearDown( void ) override {
