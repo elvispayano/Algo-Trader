@@ -1,3 +1,9 @@
+# Account Class
+#
+# An account model used to simulate updates to the brokerage account
+# as trades are made.
+#
+# Author: Elvis Payano
 
 class Account():
   def __init__(self, initial_balance = 0):

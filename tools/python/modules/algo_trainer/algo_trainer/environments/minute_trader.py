@@ -1,20 +1,21 @@
-# Local Imports
-from account import Account
-
-# Python Imports
-from tf_agents.environments import py_environment
-from tf_agents.environments import tf_environment
-from tf_agents.environments import tf_py_environment
-from tf_agents.environments import utils
-from tf_agents.specs import array_spec
-from tf_agents.trajectories import time_step as ts
-from tf_agents.environments import wrappers
-from tf_agents.specs        import array_spec
-from tf_agents.environments import utils
+# Minute Trade Environment
+#
+# An environment model that simulates an environment in which only
+# minute interval trades are allowed.
+#
+# Author: Elvis Payano
 
 import numpy as np
 from pandas import read_table
 import tensorflow as tf
+
+# Python Imports
+from tf_agents.environments import py_environment
+from tf_agents.environments import utils
+from tf_agents.trajectories import time_step as ts
+from tf_agents.specs        import array_spec
+
+from algo_trainer.account   import Account
 
 tf.compat.v1.enable_v2_behavior()
 
@@ -97,5 +98,5 @@ class MinuteTraderEnvironment(py_environment.PyEnvironment):
     return ts.transition(np.array(outputState, dtype=np.float32), reward=stepReward, discount=1.0)
 
 if __name__ == '__main__':
-  env = TraderEnvironment()
+  env = MinuteTraderEnvironment()
   utils.validate_py_environment(env, episodes=5)
