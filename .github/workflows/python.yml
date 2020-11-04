@@ -11,10 +11,10 @@ name: Python Development
 # Run pipeline on all merges to master
 on:
   pull_request:
-    branches:
-    - master
-    paths:
-    - '**.py'
+    branches: [ master ]
+    paths: ['**.py']
+  push:
+    paths: ['**.py']
 
 jobs:
   Testing:
