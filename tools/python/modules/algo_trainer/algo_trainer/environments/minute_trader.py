@@ -5,33 +5,27 @@
 #
 # Author: Elvis Payano
 
-import numpy as np
-from pandas import read_table
-import tensorflow as tf
-
 # Python Imports
 from tf_agents.environments import py_environment
 from tf_agents.environments import utils
 from tf_agents.trajectories import time_step as ts
 from tf_agents.specs        import array_spec
-
 from algo_trainer.account   import Account
+from random                 import sample
+import numpy                as np
+import tensorflow           as tf
 
 tf.compat.v1.enable_v2_behavior()
 
 class MinuteTraderEnvironment(py_environment.PyEnvironment):
-  def __init__(self, ticker='MSFT'):
+  def __init__(self, stockData):
     self._action_spec = array_spec.BoundedArraySpec(shape=(), dtype=np.int32,
       minimum=0, maximum=2, name='Trade Action')
 
     self._observation_spec = array_spec.BoundedArraySpec(
       shape=(4,), dtype=np.float32, name='Market/Account Data')
 
-    
-
     self._reset()
-
-    stockData = read_table('{0}.txt'.format(ticker),delimiter=',')
     self._Open  = stockData['Open']
     self._High  = stockData['High']
     self._Low   = stockData['Low']
@@ -79,9 +73,9 @@ class MinuteTraderEnvironment(py_environment.PyEnvironment):
       goodAction = self._account.sell(marketPrice)
 
     if goodAction:
-      stepReward = 1/6000
+      stepReward = 1/self._endIndex
     else:
-      stepReward = -1/6000
+      stepReward = -1/self._endIndex
 
     outputState = [
       self._account.getBalance(),
@@ -98,5 +92,11 @@ class MinuteTraderEnvironment(py_environment.PyEnvironment):
     return ts.transition(np.array(outputState, dtype=np.float32), reward=stepReward, discount=1.0)
 
 if __name__ == '__main__':
-  env = MinuteTraderEnvironment()
+  input = {
+    'Open': sample(range(10,30), 5),
+    'Close': sample(range(10,30), 5),
+    'High': sample(range(10,30), 5),
+    'Low': sample(range(10,30), 5),
+    }
+  env = MinuteTraderEnvironment(input)
   utils.validate_py_environment(env, episodes=5)
