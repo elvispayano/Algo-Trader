@@ -1,19 +1,35 @@
-# Algo Trainer Account (Tests)
-#
-# Run tests on the Algorithm Trader Training Account module
-#
-# Author: Elvis Payano
+'''
+Test Minute Trader Module
+
+Description:
+  Tests the implementation of the environment module
+
+Author:
+  Elvis Payano
+'''
 
 # Import Standard Modules
 from unittest import TestCase, main
-from random   import random, randint
+from random   import sample
 
 # Import Custom Modules
-from algo_trainer.environments import MinuteTraderEnvironment
+from algo_trainer.environments import minute_trader
 
 class TestMinuteTraderEnvironment(TestCase):
-  def test_temp(self):
-    pass
+  '''
+  Test the Minute Trader Environment class in the environment module
+  '''
+
+  def setUp(self):
+    '''
+    Setup the Minute Trader Environment class used for each test
+    '''
+    elements = ['High', 'Low', 'Open', 'Close']
+    data = dict()
+
+    for element in elements:
+      data[element] = sample(range(50, 100), 100)
+    self.env = minute_trader.MinuteTraderEnvironment(data)
 
 if __name__ == '__main__':
   main()

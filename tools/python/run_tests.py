@@ -1,9 +1,13 @@
-# Run Tests
-#
-# Generate test and coverage reports in the desired format for all python
-# modules used in the project.
-#
-# Author: Elvis Payano
+'''
+Run Tests
+
+Description:
+  Generate test and coverage reports in the desired format for all python
+  modules used in the project.
+
+Author:
+  Elvis Payano
+'''
 
 # Import Libraries
 from unittest import defaultTestLoader, TestSuite

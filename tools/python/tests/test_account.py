@@ -17,7 +17,7 @@ from algo_trainer.account import Account
 
 class TestAccount(TestCase):
   '''
-  Test the account class in the Account module
+  Test the Account class in the Account module
   '''
   def setUp(self):
     '''
