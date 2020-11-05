@@ -1,3 +1,12 @@
+'''
+Setup Module
+
+Description:
+  Setup and configure the Ticker Module
+
+Author:
+  Elvis Payano
+'''
 from setuptools import setup
 
 if __name__ == '__main__':

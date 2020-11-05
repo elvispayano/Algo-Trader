@@ -9,7 +9,9 @@ name: C++ Testing
 
 # Triggers
 # Run pipeline on all merges & updates to master
-on: push
+on:
+  push:
+    paths: ['**.cpp', '**.h', '**.cc', '**CMakeLists.txt']
 
 jobs:
   build-tests:
