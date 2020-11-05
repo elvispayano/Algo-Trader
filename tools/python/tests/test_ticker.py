@@ -1,8 +1,12 @@
-# Interface (Tests)
-#
-# Run tests and on the ticker interface functions
-#
-# Author: Elvis Payano
+'''
+Test Interface Module
+
+Description:
+  Tests the implementation of the interface module
+
+Author:
+  Elvis Payano
+'''
 
 # Import Standard Modules
 from unittest import TestCase, mock
@@ -12,8 +16,14 @@ from pandas.core.frame import DataFrame
 from ticker import interface
 
 class TestTickerInterface(TestCase):
+  '''
+  Test the Ticker Interface functionality
+  '''
 
   def setUp(self):
+    '''
+    Setup the data used in all tests
+    '''
     col = ["2020-05-18", "2020-05-18"]
     data = {
       "Open"  : [185.75, 185.75],
@@ -31,15 +41,15 @@ class TestTickerInterface(TestCase):
 
     self.m_hist_c = cell_data
 
-  def tearDown(self):
-    pass
-
   def test_fetch(self):
+    '''
+    Test the Fetch function
+    '''
     # Test invalid inputs
     with self.assertRaises(TypeError):
       interface.fetch(1)
-      interface.fetch("XYZ", fp=[1, 2, 3])
-      interface.fetch("XYZ", fi=[1, 2, 3])
+      interface.fetch("XYZ", per=[1, 2, 3])
+      interface.fetch("XYZ", inter=[1, 2, 3])
 
       # Test valid inputs
       with mock.patch('ticker.interface.yfinance.ticker.TickerBase.history') as m_history_fun:
@@ -47,10 +57,13 @@ class TestTickerInterface(TestCase):
         interface.fetch("XYZ")
         m_history_fun.assert_called_with(period='max', interval='1d')
 
-        interface.fetch("ABC", fp="1w", fi="1m")
+        interface.fetch("ABC", per="1w", inter="1m")
         m_history_fun.assert_called_with(period='1w', interval='1m')
 
   def test_hist2cell(self):
+    '''
+    Test the hist2cell function
+    '''
     # Test invalid input
     invalid_input = list()
     with self.assertRaises(TypeError):
