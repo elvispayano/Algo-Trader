@@ -10,6 +10,7 @@
 [run]
 source =
 	ticker
+	algo_trainer
 
 # Configure Report Generation
 [report] precision 2
