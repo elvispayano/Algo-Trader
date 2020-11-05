@@ -1,8 +1,12 @@
-# Algo Trainer Account (Tests)
-#
-# Run tests on the Algorithm Trader Training Account module
-#
-# Author: Elvis Payano
+'''
+Test Account Module
+
+Description:
+  Tests the implementation of the account module
+
+Author:
+  Elvis Payano
+'''
 
 # Import Standard Modules
 from unittest import TestCase, main
@@ -12,48 +16,63 @@ from random   import random, randint
 from algo_trainer.account import Account
 
 class TestAccount(TestCase):
+  '''
+  Test the account class in the Account module
+  '''
   def setUp(self):
-    self.initBal = random() * 1e3
-    self.account = Account(initial_balance=self.initBal)
+    '''
+    Setup the account class used for each test
+    '''
+    self.init_bal = random() * 1e3
+    self.account = Account(init_bal=self.init_bal)
 
   def test_initialization(self):
+    '''
+    Test initialization of Account class
+    '''
     acc = Account()
-    self.assertEqual(acc.getBalance() , 0)
-    self.assertEqual(acc.getHoldings(), 0)
-    self.assertEqual(acc.getPnL()     , 0)
+    self.assertEqual(acc.get_balance() , 0)
+    self.assertEqual(acc.get_holdings(), 0)
+    self.assertEqual(acc.get_pnl()     , 0)
 
-    self.assertEqual(self.account.getBalance() , self.initBal)
-    self.assertEqual(self.account.getHoldings(), 0)
-    self.assertEqual(self.account.getPnL()     , 0)
+    self.assertEqual(self.account.get_balance() , self.init_bal)
+    self.assertEqual(self.account.get_holdings(), 0)
+    self.assertEqual(self.account.get_pnl()     , 0)
 
   def test_good_trades(self):
-    totalShares = randint(5,10)
-    quantity = randint(1, totalShares)
-    marketPrice = self.initBal / (totalShares + 1)
-    self.assertTrue(self.account.purchase(marketPrice, quantity))
-    self.assertEqual(self.account.getHoldings(),  quantity)
-    self.assertAlmostEqual(self.account.getBalance(),   self.initBal - (marketPrice*quantity))
-    self.assertAlmostEqual(self.account.getPnL(),       0)
+    '''
+    Test functionality of successful trades
+    '''
+    total_shares = randint(5,10)
+    quantity = randint(1, total_shares)
+    market_price = self.init_bal / (total_shares + 1)
+    self.assertTrue(self.account.purchase(market_price, quantity))
+    self.assertEqual(self.account.get_holdings(),  quantity)
+    self.assertAlmostEqual(self.account.get_balance(),   self.init_bal - (market_price*quantity))
+    self.assertAlmostEqual(self.account.get_pnl(),       0)
 
-    priceChange = random()
-    priceDiff = marketPrice * priceChange
-    marketPrice *= (1 + priceChange)
-    self.assertTrue(self.account.sell(marketPrice, quantity))
-    self.assertEqual(self.account.getHoldings(),  0)
-    self.assertAlmostEqual(self.account.getBalance(),   self.initBal + priceDiff*quantity)
-    self.assertAlmostEqual(self.account.getPnL(),       priceDiff*quantity)
+    price_change = random()
+    price_diff = market_price * price_change
+    market_price *= (1 + price_change)
+    self.assertTrue(self.account.sell(market_price, quantity))
+    self.assertEqual(self.account.get_holdings(),  0)
+    self.assertAlmostEqual(self.account.get_balance(),   self.init_bal + price_diff*quantity)
+    self.assertAlmostEqual(self.account.get_pnl(),       price_diff*quantity)
 
   def test_bad_trades(self):
-    totalShares = randint(5,10)
-    quantity = randint(1, totalShares)
-    marketPrice = self.initBal * (totalShares + 1)
-    self.assertFalse(self.account.purchase(marketPrice, quantity))
-    self.assertEqual(self.account.getHoldings(),  0)
-    self.assertEqual(self.account.getBalance(),   self.initBal)
+    '''
+    Test functionality of unsuccessful trades
+    '''
+    total_shares = randint(5,10)
+    quantity = randint(1, total_shares)
+    market_price = self.init_bal * (total_shares + 1)
+    self.assertFalse(self.account.purchase(market_price, quantity))
+    self.assertEqual(self.account.get_holdings(),  0)
+    self.assertEqual(self.account.get_balance(),   self.init_bal)
 
-    self.assertFalse(self.account.sell(marketPrice, quantity))
-    self.assertEqual(self.account.getHoldings(),  0)
-    self.assertEqual(self.account.getBalance(),   self.initBal)
+    self.assertFalse(self.account.sell(market_price, quantity))
+    self.assertEqual(self.account.get_holdings(),  0)
+    self.assertEqual(self.account.get_balance(),   self.init_bal)
 
 if __name__ == '__main__':
   main()
