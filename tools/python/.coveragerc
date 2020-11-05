@@ -14,6 +14,6 @@ source =
 
 # Configure Report Generation
 [report] precision 2
-exclude_lines = 
+exclude_lines =
 	from
 	import

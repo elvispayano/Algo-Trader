@@ -56,4 +56,4 @@ jobs:
       with:
         path: ./tools/python/coverage.xml
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        minimum_coverage: 75
+        minimum_coverage: 70
